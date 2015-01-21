@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <style>
+
+        #container {
+            background-color: #008000;
+        }
+
+        .item {
+            width: 25%;
+            background-color: red;
+            height: 50px;
+        }
+
+        .item.w2 {
+            width: 50%;
+            background-color: blue
+        }
+
+        .component{
+            background-color: #ffff00;
+        }
+    </style>
+
+    <script type="application/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+
+    <script type="application/javascript" src="node_modules/packery/dist/packery.pkgd.js"></script>
+    <script type="application/javascript" src="node_modules/draggabilly/dist/draggabilly.pkgd.js"></script>
+
+</head>
+
+<body>
+<div id="container">
+
+    <div class="item">
+        <span class="handler">primo</span>
+        <div class="component"> c </div>
+    </div>
+
+
+
+    <div class="item"><span class="handler">secondo</span><div class="component"> c </div></div>
+    <div class="item w2"><span class="handler">terzo</span><div class="component"> c </div></div>
+</div>
+
+<script type="application/javascript">
+
+    $(document).ready(function () {
+
+        var $container = $('#container');
+        // init
+        $container.packery({
+            itemSelector: '.item', rowHeight: '.item'
+        });
+
+        $container.find('.item').each(function (i, itemElem) {
+            // make element draggable with Draggabilly
+            var draggie = new Draggabilly(itemElem, {
+                containment: '#container',
+                handle: '.handler'
+            });
+            // bind Draggabilly events to Packery
+            $container.packery('bindDraggabillyEvents', draggie);
+        });
+
+    })
+
+</script>
+
+</body>
+</html>
