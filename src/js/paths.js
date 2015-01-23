@@ -3,7 +3,7 @@ define(function () {
     var config = {
 
         paths: {
-//            'fx-filter': 'src/js',
+
             'fx-filter/filtercontroller': 'src/js/Fx-filter-controller',
             'fx-filter/fluidgrid': 'src/js/Fx-fluid-grid',
             'fx-filter/containerfactory': 'src/js/Fx-filter-containerFactory',
@@ -14,6 +14,7 @@ define(function () {
             'fx-filter/componentcreator': 'src/js/Fx-filter-component-creator',
             'fx-filter/widgetcommons': 'src/js/Fx-widgets-commons',
             'fx-filter/start': 'src/js/start',
+            'fx-filter/utils': 'src/js/Fx-filter-utils',
 //            'fx-filter/src': './src'
 
             //Third party libs
