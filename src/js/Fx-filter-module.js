@@ -1,7 +1,7 @@
 define([
     'jquery',
     'bootstrap',
-    'componentcreator'
+    'fx-filter/componentcreator'
 ], function ($) {
 
     'use strict';

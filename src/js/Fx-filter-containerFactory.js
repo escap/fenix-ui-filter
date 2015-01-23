@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'container1',
+    'fx-filter/container1',
     'bootstrap'
 ], function ($, Container1) {
 

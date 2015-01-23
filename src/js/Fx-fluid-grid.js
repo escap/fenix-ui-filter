@@ -4,7 +4,7 @@ define([
     'jquery',
     'packery',
     'draggabilly',
-    'widgetcommons'
+    'fx-filter/widgetcommons'
 ], function ($, Packery, Draggabilly, W_Commons) {
 
     var defaultOptions = {

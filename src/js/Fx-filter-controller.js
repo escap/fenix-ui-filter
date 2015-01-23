@@ -1,12 +1,12 @@
 define([
     'jquery',
-    'fluidgrid',
-    'containerfactory',
-    'componentfactory',
-    'filtermodule',
-    'container1',
-    'component1',
-    'componentcreator',
+    'fx-filter/fluidgrid',
+    'fx-filter/containerfactory',
+    'fx-filter/componentfactory',
+    'fx-filter/filtermodule',
+    'fx-filter/container1',
+    'fx-filter/component1',
+    'fx-filter/componentcreator',
     'bootstrap'
 ], function ($, FluidForm, ContainerFactory, ComponentFactory, FilterModule, Container1, Component1, ComponentCreator) {
 
@@ -46,6 +46,8 @@ define([
         module_id : 31,
         filter_module_array :[],
 
+        prefix_plugin_dir : '',
+
         container_plugin_dir : 'src/js/container_plugin/',
         component_plugin_dir : 'src/js/component_plugin/'
     },  componentCreator;
@@ -65,7 +67,7 @@ define([
         this.options.mainContent.appendChild(c);
 
         componentCreator = new ComponentCreator();
-        componentCreator.init({plugin_folder: this.options.component_plugin_dir});
+        componentCreator.init({plugin_folder: this.options.prefix_plugin_dir + this.options.component_plugin_dir});
     }
 
     FC.prototype.initEventListeners = function () {

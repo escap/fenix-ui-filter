@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'component1',
+    'fx-filter/component1',
     'bootstrap'
 ], function ($, Component1) {
 
