@@ -92,6 +92,7 @@ function Component1( o ) {
         if (items.length > 0) {
             for (var i = 0; i < items.length; i++) {
                 results.push({componentName : this.options.name, code : items[i].value, label: items[i].label});
+
             }
         }
         return results;

@@ -138,7 +138,7 @@ define([
                     for (var iValue = 0; iValue < values_code_type.length; iValue++) {
                         if (values_code_type[iValue].code && values_code_type[iValue].label) {
                             source.push({
-                                code: values_code_type[iValue].code.toString(),
+                                value: values_code_type[iValue].code.toString(),
                                 label: values_code_type[iValue].label[this.o.lang].toString()
                             })
                         } else {
@@ -156,7 +156,7 @@ define([
                 if (values_code_type.length > 1) {
                     for (var iValue = 0; iValue < values_code_type.length; iValue++) {
                         source.push({
-                            code: values_code_type[iValue].toString(),
+                            value: values_code_type[iValue].toString(),
                             label: values_code_type[iValue].toString()
                         });
                     }
@@ -175,7 +175,7 @@ define([
 
     };
 
-    Fx_filter_utils.prototype.filterData = function (item, filter) {
+    Fx_filter_utils.prototype.filterData = function (item, filter, exclusive) {
 
         if (!item.hasOwnProperty('data')) {
             throw new Error('FENIX resource does not contain data');
@@ -189,6 +189,16 @@ define([
             throw new Error('FENIX resource does not contain dsd');
         }
 
+        if (exclusive === true) {
+            return this.filterExclusiveData(item, filter);
+        } else {
+            return this.filterInclusiveData(item, filter);
+        }
+
+    };
+
+    Fx_filter_utils.prototype.filterExclusiveData = function (item, filter) {
+
         var data = item.data.slice(0),
             filterToIndex,
             result = [];
@@ -196,7 +206,7 @@ define([
         filterToIndex = this.createFilterToIndex(item.metadata.dsd, filter);
 
         for (var i = 0; i < data.length; i++) {
-            var row = this.filterRow(data[i], filterToIndex);
+            var row = this.filterExclusiveRow(data[i], filterToIndex);
             if (row !== false) {
                 result.push(row)
             }
@@ -205,6 +215,90 @@ define([
         item.data = result;
 
         return item;
+
+    };
+
+    Fx_filter_utils.prototype.filterExclusiveRow = function (row, filter) {
+
+        var valid = false;
+
+        for (var i = 0; i < row.length; i++) {
+
+            if (filter.hasOwnProperty('filter' + i)) {
+                if (this.toBeFilteredExclusive(filter['filter' + i], row[i])) {
+                    valid = true
+                }
+            }
+        }
+
+        return valid ? row : valid;
+    };
+
+    Fx_filter_utils.prototype.toBeFilteredExclusive = function (filter, cell) {
+
+        var valid = true;
+
+        for (var i = 0; i < filter.length; i++) {
+            if (filter[i].code.toString() === cell.toString()) {
+                valid = false;
+            }
+        }
+
+        return valid;
+    };
+
+    Fx_filter_utils.prototype.filterInclusiveData = function (item, filter) {
+
+        var data = item.data.slice(0),
+            filterToIndex,
+            result = [];
+
+        filterToIndex = this.createFilterToIndex(item.metadata.dsd, filter);
+
+        for (var i = 0; i < data.length; i++) {
+            var row = this.filterInclusiveRow(data[i], filterToIndex);
+            if (row !== false) {
+                result.push(row)
+            }
+        }
+
+        item.data = result;
+
+        return item;
+    };
+
+    Fx_filter_utils.prototype.filterInclusiveRow = function (row, filter) {
+
+        var valid = true;
+
+        for (var i = 0; i < row.length; i++) {
+
+            if (filter.hasOwnProperty('filter' + i)) {{
+                if (!this.toBeFilteredInclusive(filter['filter' + i], row[i]))
+                    valid = false
+                }
+            }
+        }
+
+        return valid ? row : valid;
+    };
+
+    Fx_filter_utils.prototype.toBeFilteredInclusive = function (filter, cell) {
+
+        var valid = false;
+
+        /*If the component has not selected values*/
+        if (filter.length === 0) {
+            return true;
+        }
+
+        for (var i = 0; i < filter.length; i++) {
+            if (filter[i].code.toString() === cell.toString()) {
+                valid = true;
+            }
+        }
+
+        return valid;
     };
 
     Fx_filter_utils.prototype.createFilterToIndex = function (dsd, filter) {
@@ -224,35 +318,6 @@ define([
         }
 
         return result;
-    };
-
-    Fx_filter_utils.prototype.filterRow = function (row, filter) {
-
-        var valid = false;
-
-        for (var i = 0; i < row.length; i++) {
-
-            if (filter.hasOwnProperty('filter' + i)) {
-                if (this.toBeFiltered(filter['filter' + i], row[i])) {
-                    valid = true
-                }
-            }
-        }
-
-        return valid ? row : valid;
-    };
-
-    Fx_filter_utils.prototype.toBeFiltered = function (filter, cell) {
-
-        var valid = true;
-
-        for (var i = 0; i < filter.length; i++) {
-            if (filter.code === cell) {
-                valid = false;
-            }
-        }
-
-        return valid;
     };
 
 
