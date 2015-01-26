@@ -1,0 +1,37 @@
+{
+  "containers": {
+    "baseContainer": {
+      "containerType": "container1",
+      "title": "_undefined",
+      "components": [ ]
+    }
+  },
+  "components": {
+    "list": {
+      "componentType": "component1",
+      "lang": "EN",
+      "title": {
+        "EN": "Component 1",
+        "ES": "ES List",
+        "FR": "FR List"
+      },
+      "multipleselection": true,
+      "name": "FirstComponent",
+      "component": {
+        "source": {
+          "datafields": [
+            {"name": "label"},
+            {"name": "value"}
+          ]
+        },
+        "rendering": {
+          "displayMember": "label",
+          "valueMember": "value",
+          "multiple": true,
+          "width": "100%",
+          "height": "100%"
+        }
+      }
+    }
+  }
+}

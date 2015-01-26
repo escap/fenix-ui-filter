@@ -15,6 +15,7 @@ define(function () {
             'fx-filter/widgetcommons': 'src/js/Fx-widgets-commons',
             'fx-filter/start': 'src/js/start',
             'fx-filter/utils': 'src/js/Fx-filter-utils',
+            'fx-filter/config' : 'config',
 //            'fx-filter/src': './src'
 
             //Third party libs

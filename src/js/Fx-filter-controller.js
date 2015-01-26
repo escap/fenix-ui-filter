@@ -153,7 +153,7 @@ define([
     }
 
     FC.prototype.getValues = function (components){
-        var results = [];
+        var results = {};
         var resultsCount = 0;
         if((components!=null)&&(typeof components!= "undefined")&&(components.length>0)){
             if((this.options.filter_module_array!=null)&&(typeof this.options.filter_module_array!="undefined")){
@@ -166,7 +166,7 @@ define([
                             var component = components[jComp];
                             var modulename = component.options.name;
                             if(componenName==modulename){
-                                results[resultsCount] = component.getValues();
+                                results[component.getName()] = component.getValues();
                                 resultsCount++;
                             }
                         }
@@ -183,7 +183,7 @@ define([
                         for(var jComp = 0; jComp<components.length; jComp++){
 //                            var component = this.options.filter_module_array[i].options.component;
                             var component = components[jComp];
-                            results[resultsCount] = component.getValues();
+                            results[component.getName()] = component.getValues();
                             resultsCount++;
                         }
                     }

@@ -51,6 +51,10 @@ function Component1( o ) {
         return true;
     };
 
+    Component1.prototype.getName = function() {
+        return this.options.name;
+    };
+
     Component1.prototype.render = function (e, component) {
 
         if ((e.source != null) && (typeof e.source != "undefined")) {
