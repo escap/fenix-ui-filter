@@ -25,6 +25,7 @@ define(function () {
             'jqueryui': 'src/lib/jquery-ui.min',
             'jqueryuicustom': '{FENIX_CDN}/js/jquery-ui/1.10.3/jquery-ui-1.10.3.custom.min',
             'nprogress': '{FENIX_CDN}/js/nprogress/0.1.6/nprogress',
+            'underscore': '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             'bootstrap': '{FENIX_CDN}/js/bootstrap/3.2/js/bootstrap.min',
             'isotope': "{FENIX_CDN}/js/isotope/2.1.0/dist/isotope.pkgd.min",
             'packery': '{FENIX_CDN}/js/packery/dist/packery.pkgd.min',

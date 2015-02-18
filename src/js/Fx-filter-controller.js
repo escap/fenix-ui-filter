@@ -62,6 +62,12 @@ define([
         //to put inside the filter content located in the
         //host application
 
+        var main_content = document.getElementById(this.options.mainContent);
+        if(main_content!=null && typeof main_content!="undefined"){
+            while (main_content.firstChild) {
+                main_content.removeChild(main_content.firstChild);
+            }
+        }
         var c = document.createElement('DIV');
         c.id = this.options.html_ids.MAIN_CONTAINER;
         this.options.mainContent.appendChild(c);
@@ -177,7 +183,6 @@ define([
         else{
             //Return the values for all the components
             if((this.options.filter_module_array!=null)&&(typeof this.options.filter_module_array!="undefined")){
-//                console.log(this.options.filter_module_array);
                     for(var i=0; i<this.options.filter_module_array.length; i++){
                         var components = this.options.filter_module_array[i].options.container.options.components;
                         for(var jComp = 0; jComp<components.length; jComp++){
@@ -189,7 +194,6 @@ define([
                     }
             }
         }
-
         return results;
     }
 
@@ -201,7 +205,12 @@ define([
 //        c.text = 'PROVA';
 
         var main_container = document.getElementById(this.options.html_ids.MAIN_CONTAINER);
-        main_container.appendChild(c);
+        if((main_container!=null)&&(typeof main_container != "undefined")){
+            while (main_container.firstChild) {
+                main_container.removeChild(main_container.firstChild);
+            }
+            main_container.appendChild(c);
+        }
 
         this.options.grid = new FluidForm();
 

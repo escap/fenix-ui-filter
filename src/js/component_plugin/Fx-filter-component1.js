@@ -59,19 +59,25 @@ function Component1( o ) {
 
         if ((e.source != null) && (typeof e.source != "undefined")) {
             if(e.multipleselection){
-                $(component).jqxListBox({source: e.source, width:"99%", multipleextended:true});
+                $(component).jqxListBox({source: e.source, width:"99%", multipleextended:true, multiple: true});
             }
             else{
-                $(component).jqxListBox({source: e.source, width:"99%"});
+                $(component).jqxListBox({source: e.source, width:"99%", multiple: true});
+            }
+            for(var i=0; i< e.source.length; i++){
+                if(e.source[i].selected){
+//                    $(component).jqxListBox({selectedIndex: i });
+                    $(component).jqxListBox('selectIndex', i);
+                }
             }
             this.options.source = e.source;
 
         } else {
             if(e.multipleselection){
-                $(component).jqxListBox({width:"99%", multipleextended:true});
+                $(component).jqxListBox({width:"99%", multipleextended:true, multiple: true});
             }
             else{
-                $(component).jqxListBox({width:"99%"});
+                $(component).jqxListBox({width:"99%", multiple: true});
             }
         }
 

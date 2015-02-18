@@ -62,7 +62,6 @@ require(['jquery', 'filtercontroller'], function ($, FC) {
     $("#jqxButton").on('click', function () {
 //        var ris = fc.getValues([{name: "FirstComponent3"}]);
         var ris = fc.getValues();
-        console.log(ris);
     });
 
     var filter_content = document.querySelector('#filter_content');

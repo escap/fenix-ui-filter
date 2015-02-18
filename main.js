@@ -6,7 +6,6 @@ require([
     'src/js/paths'
 ], function (Filter) {
 
-    console.log("Filter")
     var override = {
         'lib': './src/js/lib'
     };

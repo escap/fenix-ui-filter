@@ -1,7 +1,8 @@
 define([
     "jquery",
-    "text!fx-filter/config/fx_filter_base_config.json"
-], function ($, baseConfig) {
+    "text!fx-filter/config/fx_filter_base_config.json",
+    "underscore"
+], function ($, baseConfig, _) {
 
     var defaultOptions = {
         lang: 'EN',
@@ -30,38 +31,38 @@ define([
         if (!this.baseConfig.hasOwnProperty('components')) {
             throw new Error('FENIX Filter: base config does not contain components attribute');
         }
-
     }
 
     Fx_filter_utils.prototype.createConfiguration = function (item) {
 
         this.finalConfig = [];
 
-        if (!item.hasOwnProperty('metadata')) {
+        if (!item.original_data.hasOwnProperty('metadata')) {
             throw new Error('FENIX resource does not container metadata');
         }
 
-        if (!item.metadata.hasOwnProperty('dsd')) {
+        if (!item.original_data.metadata.hasOwnProperty('dsd')) {
             throw new Error('FENIX resource does not container DSD');
         }
 
-        if (!item.metadata.dsd.hasOwnProperty('columns')) {
+        if (!item.original_data.metadata.dsd.hasOwnProperty('columns')) {
             throw new Error('DSD does not container columns');
         }
 
+//        return this.compileConfiguration(item.original_data);
         return this.compileConfiguration(item);
     };
 
     Fx_filter_utils.prototype.compileConfiguration = function (item) {
 
-        var columns = item.metadata.dsd.columns,
+        var columns = item.original_data.metadata.dsd.columns,
             dimension;
 
         for (var i = 0; i < columns.length; i++) {
 
             //Enter only if column has values (No Value Column considered)
             if (columns[i].hasOwnProperty('values')) {
-                dimension = this.compileDimension(columns[i]);
+                dimension = this.compileDimension(columns[i], item.selected_data);
 
                 if (dimension !== false) {
                     this.finalConfig.push(dimension);
@@ -70,21 +71,20 @@ define([
         }
 
         return this.finalConfig;
-
     };
 
-    Fx_filter_utils.prototype.compileDimension = function (column) {
+    Fx_filter_utils.prototype.compileDimension = function (column, selected_data) {
 
         //Use this to choose the right base configuration
         var temp = "temp";
         switch (temp) {
             default:
-                return this.compileBaseContainer(column);
+                return this.compileBaseContainer(column, selected_data);
                 break;
         }
     };
 
-    Fx_filter_utils.prototype.compileBaseContainer = function (column) {
+    Fx_filter_utils.prototype.compileBaseContainer = function (column, selected_data) {
 
         var component;
 
@@ -94,29 +94,27 @@ define([
 
         var _config = $.extend(true, {}, this.baseConfig.containers.baseContainer);
         _config.title = column.title[this.o.lang];
-        component = this.compileComponent(column);
+        component = this.compileComponent(column, selected_data);
 
         if (component !== false) {
             _config.components.push(component);
-
         }
         return !component ? component : _config;
     };
 
-    Fx_filter_utils.prototype.compileComponent = function (column) {
+    Fx_filter_utils.prototype.compileComponent = function (column, selected_data) {
 
         //Use this to choose the right base configuration
         var temp = "temp";
 
         switch (temp) {
             default:
-                return this.compileListComponent(column);
+                return this.compileListComponent(column, selected_data);
                 break;
         }
-
     };
 
-    Fx_filter_utils.prototype.compileListComponent = function (column) {
+    Fx_filter_utils.prototype.compileListComponent = function (column, selected_data) {
 
         if (!this.baseConfig.components.hasOwnProperty('list')) {
             throw new Error('FENIX Filter: base config does not contain "list" component')
@@ -129,17 +127,34 @@ define([
         _config.title = column.title;
         _config.name = column.id;
 
+        var selected_data_flag = false;
+        if((selected_data!=null)&&(typeof selected_data!= "undefined")){
+            selected_data_flag = true;
+        }
+
         if ((values != null) && (typeof values != 'undefined')) {
 
             if (column.dataType == 'code') {
                 var values_code_type = values.codes[0].codes;
+                var column_id = column.id;
 
                 if (values_code_type.length > 1) {
                     for (var iValue = 0; iValue < values_code_type.length; iValue++) {
                         if (values_code_type[iValue].code && values_code_type[iValue].label) {
+                            var toSelect = false;
+                            if((selected_data_flag==true)&&((selected_data[column_id]!=null)&&(typeof selected_data[column_id]!="undefined"))){
+                                for(var i=0; i<selected_data[column_id].length; i++){
+                                    if(selected_data[column_id][i].code==values_code_type[iValue].code.toString())
+                                    {
+                                        toSelect = true;
+                                        break;
+                                    }
+                                }
+                            }
                             source.push({
                                 value: values_code_type[iValue].code.toString(),
-                                label: values_code_type[iValue].label[this.o.lang].toString()
+                                label: values_code_type[iValue].label[this.o.lang].toString(),
+                                selected:toSelect
                             })
                         } else {
                             console.log(values_code_type[iValue].code + 'does not contain a valid label and it can not be filtered')
@@ -152,12 +167,24 @@ define([
             //if column is time
             else {
                 var values_code_type = values.timeList;
+                var column_id = column.id;
 
                 if (values_code_type.length > 1) {
                     for (var iValue = 0; iValue < values_code_type.length; iValue++) {
+                        var toSelect = false;
+                        if((selected_data_flag==true)&&((selected_data[column_id]!=null)&&(typeof selected_data[column_id]!="undefined"))){
+                            for(var i=0; i<selected_data[column_id].length; i++){
+                                if(selected_data[column_id][i].code==values_code_type[iValue].toString())
+                                {
+                                    toSelect = true;
+                                    break;
+                                }
+                            }
+                        }
                         source.push({
                             value: values_code_type[iValue].toString(),
-                            label: values_code_type[iValue].toString()
+                            label: values_code_type[iValue].toString(),
+                            selected:toSelect
                         });
                     }
                 } else {
@@ -168,7 +195,6 @@ define([
         else {
             //Virtual column or Value column.... Ignore
         }
-
         _config.source = source;
 
         return valid ? $.extend(true, {}, _config) : valid;
@@ -177,45 +203,93 @@ define([
 
     Fx_filter_utils.prototype.filterData = function (item, filter, exclusive) {
 
-        if (!item.hasOwnProperty('data')) {
+        exclusive = true;
+        if (!item.original_data.hasOwnProperty('data')) {
             throw new Error('FENIX resource does not contain data');
         }
 
-        if (!item.hasOwnProperty('metadata')) {
+        if (!item.original_data.hasOwnProperty('metadata')) {
             throw new Error('FENIX resource does not contain metadata');
         }
 
-        if (!item.metadata.hasOwnProperty('dsd')) {
+        if (!item.original_data.metadata.hasOwnProperty('dsd')) {
             throw new Error('FENIX resource does not contain dsd');
         }
 
-        if (exclusive === true) {
-            return this.filterExclusiveData(item, filter);
-        } else {
-            return this.filterInclusiveData(item, filter);
-        }
+        var filter_util_item = {};
+        $.extend(true, filter_util_item, item);
 
+        if (exclusive === true) {
+            return this.filterExclusiveData(filter_util_item, filter);
+        } else {
+            return this.filterInclusiveData(filter_util_item, filter);
+        }
     };
 
     Fx_filter_utils.prototype.filterExclusiveData = function (item, filter) {
 
-        var data = item.data.slice(0),
+        var data = item.original_data.data.slice(0),
             filterToIndex,
-            result = [];
+            result = [],
+            dsd = $.extend(true, {}, item.original_data.metadata.dsd);
 
-        filterToIndex = this.createFilterToIndex(item.metadata.dsd, filter);
+        for(var i=0; i<item.original_data.metadata.dsd.columns.length; i++){
+            if(item.original_data.metadata.dsd.columns[i].values){
+
+                if(item.original_data.metadata.dsd.columns[i].values.codes){
+                    // dsdItem = item.original_data.metadata.dsd.columns[i].values.codes[0].codes;
+                    item.original_data.metadata.dsd.columns[i].values.codes[0].codes = [];
+                }
+                else if(item.original_data.metadata.dsd.columns[i].values.timeList){
+                    // dsdItem = item.original_data.metadata.dsd.columns[i].values.timeList;
+                    item.original_data.metadata.dsd.columns[i].values.timeList = [];
+                }
+            }
+        }
+
+//        filterToIndex = this.createFilterToIndex(item.original_data.metadata.dsd, filter);
+        filterToIndex = this.createFilterToIndex(dsd, filter);
 
         for (var i = 0; i < data.length; i++) {
             var row = this.filterExclusiveRow(data[i], filterToIndex);
             if (row !== false) {
                 result.push(row)
+
+                var el = _.filter(row, function(num, index){
+                    if(dsd.columns[index].values){
+                        if(dsd.columns[index].values.codes){
+                            if(dsd.columns[index].values.codes[0].codes!=-1){
+                                //  item.original_data.metadata.dsd.columns[i].values.codes[0].codes.push(dsd.columns[i].values.codes[0].codes);
+                                var foundElem = _.where(item.original_data.metadata.dsd.columns[index].values.codes[0].codes, {code: num})[0];
+                                if((foundElem!=null)&&(typeof foundElem!= "undefined")){
+                                }
+                                else{
+                                   // item.original_data.metadata.dsd.columns[index].values.codes[0].codes.push('3');
+                                    var elem = _.where(dsd.columns[index].values.codes[0].codes, {code: num})[0];
+                                    if((elem!=null)&&(typeof elem!= "undefined")){
+                                        item.original_data.metadata.dsd.columns[index].values.codes[0].codes.push(elem);
+                                    }
+                                    else{
+                                        //debugger
+                                    }
+                                }
+                            }
+                        }
+                        else if(dsd.columns[index].values.timeList){
+
+                            if(item.original_data.metadata.dsd.columns[index].values.timeList.indexOf(num)!=-1){
+                            }
+                            else{
+                                item.original_data.metadata.dsd.columns[index].values.timeList.push(num);
+                            }
+                        }
+                    }
+                    return num });
             }
         }
 
-        item.data = result;
-
+        item.original_data.data = result;
         return item;
-
     };
 
     Fx_filter_utils.prototype.filterExclusiveRow = function (row, filter) {
@@ -249,20 +323,62 @@ define([
 
     Fx_filter_utils.prototype.filterInclusiveData = function (item, filter) {
 
-        var data = item.data.slice(0),
+        var data = item.original_data.data.slice(0),
             filterToIndex,
-            result = [];
+            result = [],
+            dsd = $.extend(true, {}, item.original_data.metadata.dsd);
 
-        filterToIndex = this.createFilterToIndex(item.metadata.dsd, filter);
+        for(var i=0; i<item.original_data.metadata.dsd.columns.length; i++){
+            if(item.original_data.metadata.dsd.columns[i].values){
 
+                if(item.original_data.metadata.dsd.columns[i].values.codes){
+                   // dsdItem = item.original_data.metadata.dsd.columns[i].values.codes[0].codes;
+                    item.original_data.metadata.dsd.columns[i].values.codes[0].codes = [];
+                }
+                else if(item.original_data.metadata.dsd.columns[i].values.timeList){
+                   // dsdItem = item.original_data.metadata.dsd.columns[i].values.timeList;
+                    item.original_data.metadata.dsd.columns[i].values.timeList = [];
+                }
+            }
+        }
+
+//        filterToIndex = this.createFilterToIndex(item.original_data.metadata.dsd, filter);
+        filterToIndex = this.createFilterToIndex(dsd, filter);
+
+//        var j=0;
         for (var i = 0; i < data.length; i++) {
             var row = this.filterInclusiveRow(data[i], filterToIndex);
             if (row !== false) {
                 result.push(row)
+
+                    var el = _.filter(row, function(num, index){
+                        if(dsd.columns[index].values){
+                            if(dsd.columns[index].values.codes){
+                                if(dsd.columns[index].values.codes[0].codes!=-1){
+                                    //  item.original_data.metadata.dsd.columns[i].values.codes[0].codes.push(dsd.columns[i].values.codes[0].codes);
+                                    var foundElem = _.where(item.original_data.metadata.dsd.columns[index].values.codes[0].codes, {code: num})[0];
+                                    if((foundElem!=null)&&(typeof foundElem!= "undefined")){
+                                    }
+                                    else{
+                                        var elem = _.where(dsd.columns[index].values.codes[0].codes, {code: num})[0];
+                                        if((elem!=null)&&(typeof elem!= "undefined")){
+                                            item.original_data.metadata.dsd.columns[index].values.codes[0].codes.push(elem);
+                                        }
+                                    }
+                                }
+                            }
+                            else if(dsd.columns[index].values.timeList){
+                                if(item.original_data.metadata.dsd.columns[index].values.timeList.indexOf(num)!=-1){
+                                }
+                                else{
+                                    item.original_data.metadata.dsd.columns[index].values.timeList.push(num);
+                                }
+                            }
+                        }
+                    return num });
             }
         }
-
-        item.data = result;
+        item.original_data.data = result;
 
         return item;
     };
@@ -271,6 +387,7 @@ define([
 
         var valid = true;
 
+        //filter0     [Object { componentName="Country", code="4", label="Algeria"}, Object { componentName="Country", code="7", label="Angola"}, Object { componentName="Country", code="53", label="Benin"}, 39 altri elementi...]
         for (var i = 0; i < row.length; i++) {
 
             if (filter.hasOwnProperty('filter' + i)) {{
@@ -278,6 +395,10 @@ define([
                     valid = false
                 }
             }
+        }
+
+        if(valid){
+            //The row has to be added
         }
 
         return valid ? row : valid;
@@ -288,13 +409,15 @@ define([
         var valid = false;
 
         /*If the component has not selected values*/
-        if (filter.length === 0) {
-            return true;
-        }
-
+//        if (filter.length === 0) {
+//            return true;
+//        }
         for (var i = 0; i < filter.length; i++) {
-            if (filter[i].code.toString() === cell.toString()) {
-                valid = true;
+            if((filter[i].code!=null)&&(cell!=null)){
+                if (filter[i].code.toString() === cell.toString()) {
+                    // Object { componentName="Flag", code="A", label="A"}
+                    valid = true;
+                }
             }
         }
 
@@ -316,13 +439,11 @@ define([
                 result['filter' + i] = filter[cols[i].id];
             }
         }
-
         return result;
     };
 
 
     //to check if needed
-
     Fx_filter_utils.prototype.dataParser = function (item, selected_values) {
 
         this.original_data = item;
@@ -376,6 +497,7 @@ define([
             }
         }
     };
+
     Fx_filter_utils.prototype.createItem = function (item) {
 
         this.original_data = item;
@@ -504,6 +626,7 @@ define([
 
     //end to check if needed
 
-    return new Fx_filter_utils();
+//    return new Fx_filter_utils();
+    return Fx_filter_utils;
 
 });

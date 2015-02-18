@@ -31,7 +31,6 @@ define([
     Start.prototype.add = function (modules) {
 
         this.controller.add(modules);
-
     };
 
     return Start;
