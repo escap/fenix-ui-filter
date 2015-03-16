@@ -203,7 +203,7 @@ define([
 
     Fx_filter_utils.prototype.filterData = function (item, filter, exclusive) {
 
-        exclusive = true;
+        //exclusive = true;
         if (!item.original_data.hasOwnProperty('data')) {
             throw new Error('FENIX resource does not contain data');
         }
