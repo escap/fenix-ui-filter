@@ -8,7 +8,8 @@ define([
         lang: 'EN',
 
         events: {
-            REMOVE_MODULE: "fx.filter.module.remove"
+            REMOVE_MODULE: "fx.filter.module.remove",
+            FILTER_EMPTY: "filter_empty"
         },
 
         column_map_with_code_title: {},
@@ -552,7 +553,8 @@ define([
                 filter_empty = false;
             }
             if (filter_empty) {
-                $(o.container).trigger('filter_empty');
+                //$(o.container).trigger("filter_empty");
+                $(o.container).trigger(o.events.FILTER_EMPTY);
             }
         }
     };
@@ -617,7 +619,8 @@ define([
                 filter_empty = false;
             }
             if (filter_empty) {
-                $(o.container).trigger('filter_empty');
+                //$(o.container).trigger('filter_empty');
+                $(o.container).trigger(o.events.FILTER_EMPTY);
             }
         }
 

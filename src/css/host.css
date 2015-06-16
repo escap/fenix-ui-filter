@@ -3,6 +3,15 @@
     height: 800px;
 }
 
+.fx-catalog-form-module {
+    width: 50%;
+    border: 10px solid #f8f8f8;
+}
+
+.fx-catalog-form-module.fit {
+    width: 100%;
+}
+
 .fx-catalog-modular-form-holder {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;

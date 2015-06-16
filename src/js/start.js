@@ -16,21 +16,21 @@ define([
         $.extend(true, o, options);
 
         this.controller = new FC({
-            mainContent: document.querySelector(o.container),
+            //mainContent: document.querySelector(o.container),
+            mainContent: o.container,
             prefix_plugin_dir: o.plugin_prefix
         });
 
         this.controller.render();
-
     };
 
     Start.prototype.getValues = function () {
         return this.controller.getValues();
     };
 
-    Start.prototype.add = function (modules) {
+    Start.prototype.add = function (modules, adapterMap) {
 
-        this.controller.add(modules);
+        this.controller.add(modules, adapterMap);
     };
 
     return Start;

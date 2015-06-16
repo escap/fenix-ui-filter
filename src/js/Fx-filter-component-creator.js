@@ -234,37 +234,30 @@ define([
 
         var self = this;
         valid = true;
+        elems = config_element.components;
+        var componentslen = elems.length;
 
-        //if (inputValidation(o)) {
+        $(elems).each(function (index, element) {
 
-           // elems = JSON.parse(config_element.components);
-            elems = config_element.components;
-            var componentslen = elems.length;
-
-            $(elems).each(function (index, element) {
-
-                var widgetCreator = self.o.plugin_folder + "Fx-filter-" + element.componentType;
+            var widgetCreator = self.o.plugin_folder + "Fx-filter-" + element.componentType;
 //                widgetCreator = "http://168.202.28.26:8080/filter/src/js/component_plugin/Fx-filter-component1.js";
 //                widgetCreator = "http://168.202.28.26:10400/uae/submodules/fenix-ui-filter/src/js/component_plugin/Fx-filter-component1.js";
+            require([widgetCreator], function (Widget) {
+                valid = true;
+                var widget = new Widget({componentType : element.componentType});
+               module.options.container.options.components.push(widget);
 
-                require([widgetCreator], function (Widget) {
-                    valid = true;
-                    var widget = new Widget({componentType : element.componentType});
-//                    module.options.component = widget;
-                   module.options.container.options.components.push(widget);
-//                    $.extend(true, this.options, optionsDefault, o);
-//                    $.extend(true, this.options, optionsDefault, o);
+                //if (validateElement(element, widget)) {
 
-                    //if (validateElement(element, widget)) {
+                createElement(self.o, module, element, widget, index, componentslen);
+                //}
 
-                    createElement(self.o, module, element, widget, index, componentslen);
-                    //}
-
-                }, function (err) {
-                    handleError("UNKNOWN_TYPE");
-                });
+            }, function (err) {
+                console.log(err)
+                handleError("UNKNOWN_TYPE");
             });
-        //}
+        });
+
     };
 
     Fenix_ui_creator.prototype.init = function (o) {

@@ -9,6 +9,8 @@ define([
         title : '',
         grid : '',
         components : [],
+        //This is the name of the active tab
+        activeTab : '',
         widget: {
             lang: 'EN'
         },
@@ -90,6 +92,7 @@ define([
             $tabpanel.append($components);
 
             for(var iCompon=0; iCompon< components.length; iCompon++){
+                console.log(components[iCompon])
                 var $i_component = "";
                 var id_component = module.options.id+"_comp_"+iCompon;
                 var title = "";
@@ -97,11 +100,19 @@ define([
                     title = components[iCompon].title[components[iCompon].lang];
                 }
 
+                var comp_name = components[iCompon].name;
+                console.log(comp_name)
                 if(iCompon==0){
-                    $i_component =  $("<li class='active'><a href='#"+id_component+"' data-toggle='tab'>"+title+"</a></li>");
+                    $i_component =  $("<li class='active' componentname="+comp_name+"><a href='#"+id_component+"' data-toggle='tab'>"+title+"</a></li>");
+                    $i_component.click( function(e) {
+                        self.options.activeTab = $(this).attr("componentname");
+                    });
                 }
                 else{
-                    $i_component =  $("<li><a href='#"+id_component+"' data-toggle='tab'>"+title+"</a></li>");
+                    $i_component =  $("<li componentname="+comp_name+"><a href='#"+id_component+"' data-toggle='tab' >"+title+"</a></li>");
+                    $i_component.click( function(e) {
+                        self.options.activeTab = $(this).attr("componentname");
+                    });
                 }
                 $components.append($i_component);
             }
@@ -120,6 +131,7 @@ define([
                 }
                 $i_component_content.append($i_component);
             }
+            var self = this;
         }
         else{
             var id_component = module.options.id+"_comp_"+0;

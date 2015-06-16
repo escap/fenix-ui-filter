@@ -11,6 +11,9 @@ define([
         name : '',
         title : '',
         grid : '',
+        source :'',
+        //var fn = eval("var "+field+" = function(){ return "+fieldObj.validators.callback.callback+";}; "+field+"() ;") ;
+        adapter : null,
         widget: {
             lang: 'EN'
         },
@@ -33,20 +36,20 @@ define([
 
 // A constructor for defining new component
 function Component1( o ) {
-
     if (this.options === undefined) {this.options = {}; }
 
     $.extend(true, this.options, optionsDefault, o);
+    console.log(this)
 }
 
     Component1.prototype.validate = function (e) {
-        if (!e.hasOwnProperty("source")) {
-            throw new Error("ELEM_NOT_SOURCE");
-        } else {
-            if (!e.source.hasOwnProperty("datafields")) {
-                throw new Error("ELEM_NOT_DATAFIELDS");
-            }
-        }
+        //if (!e.hasOwnProperty("source")) {
+        //    throw new Error("ELEM_NOT_SOURCE");
+        //} else {
+        //    if (!e.source.hasOwnProperty("datafields")) {
+        //        throw new Error("ELEM_NOT_DATAFIELDS");
+        //    }
+        //}
 
         return true;
     };
@@ -55,30 +58,37 @@ function Component1( o ) {
         return this.options.name;
     };
 
+    Component1.prototype.getAdapter = function() {
+        return this.options.adapter;
+    };
+
     Component1.prototype.render = function (e, component) {
 
-        if ((e.source != null) && (typeof e.source != "undefined")) {
-            if(e.multipleselection){
-                $(component).jqxListBox({source: e.source, width:"99%", multipleextended:true, multiple: true});
+        if ((e.config.defaultsource != null) && (typeof e.config.defaultsource != "undefined")) {
+            if(e.config.multipleselection){
+                $(component).jqxListBox({source: e.config.defaultsource, width:"99%", multipleextended:true, multiple: true});
             }
             else{
-                $(component).jqxListBox({source: e.source, width:"99%", multiple: true});
+                $(component).jqxListBox({source: e.config.defaultsource, width:"99%", multiple: true});
             }
-            for(var i=0; i< e.source.length; i++){
-                if(e.source[i].selected){
-//                    $(component).jqxListBox({selectedIndex: i });
+            for(var i=0; i< e.config.defaultsource.length; i++){
+                if(e.config.defaultsource[i].selected){
                     $(component).jqxListBox('selectIndex', i);
                 }
             }
-            this.options.source = e.source;
+            this.options.source = e.config.defaultsource;
 
         } else {
-            if(e.multipleselection){
+            if(e.config.multipleselection){
                 $(component).jqxListBox({width:"99%", multipleextended:true, multiple: true});
             }
             else{
                 $(component).jqxListBox({width:"99%", multiple: true});
             }
+        }
+
+        if((e.adapter!=null)&&(typeof e.adapter!="undefined")){
+            this.options.adapter = e.adapter;
         }
 
         this.options.name = e.name;
@@ -90,6 +100,12 @@ function Component1( o ) {
     Component1.prototype.setDomain = function (source) {
         this.options.source = source;
         $('#'+this.options.componentid).jqxListBox({source: source});
+
+        for(var i=0; i< source.length; i++){
+            if(source[i].selected){
+                $('#'+this.options.componentid).jqxListBox('selectIndex', i);
+            }
+        }
     }
 
     Component1.prototype.getValues = function () {
@@ -98,7 +114,6 @@ function Component1( o ) {
         if (items.length > 0) {
             for (var i = 0; i < items.length; i++) {
                 results.push({componentName : this.options.name, code : items[i].value, label: items[i].label});
-
             }
         }
         return results;
@@ -118,18 +133,25 @@ function Component1( o ) {
         $(this.options.container).jqxListBox('unselectItem', item );
     };
 
-    Component1.prototype.getValue = function (e) {
-        var system = e.details.cl.system,
-            version = e.details.cl.version,
-            results = [];
-        var items = $("#" + e.id).jqxListBox('getSelectedItems');
-        if (items.length > 0) {
-            for (var i = 0; i < items.length; i++) {
-                results.push({code: {code : items[i].value, label: items[i].label, systemKey : system, systemVersion:version}});
-            }
+    //Component1.prototype.getValues = function (e) {
+    //    var system = e.details.cl.system,
+    //        version = e.details.cl.version,
+    //        results = [];
+    //    var items = $("#" + e.id).jqxListBox('getSelectedItems');
+    //    if (items.length > 0) {
+    //        for (var i = 0; i < items.length; i++) {
+    //            results.push({code: {code : items[i].value, label: items[i].label, systemKey : system, systemVersion:version}});
+    //        }
+    //    }
+    //    return results;
+    //};
+
+    Component1.prototype.refreshDomainByAdapter = function(filterModule){
+        if((this.options.adapter!=null)&&(typeof this.options.adapter!="undefined")){
+            var field;
+            this.options.adapter(filterModule, $.proxy(this.setDomain, this), 3);
         }
-        return results;
-    };
+    }
 
     Component1.prototype.bindEventListeners = function () {
 
@@ -145,17 +167,22 @@ function Component1( o ) {
         $(this.options.container).jqxListBox('unselectItem', item );
     };
 
-    Component1.prototype.getValue = function (e) {
-        var system = e.details.cl.system,
-            version = e.details.cl.version,
-            results = [];
-        var items = $("#" + e.id).jqxListBox('getSelectedItems');
-        if (items.length > 0) {
-            for (var i = 0; i < items.length; i++) {
-                results.push({code: {code : items[i].value, label: items[i].label, systemKey : system, systemVersion:version}});
-            }
-        }
-        return results;
+    //Component1.prototype.getValues = function (e) {
+    //    console.log(e)
+    //    var system = e.details.cl.system,
+    //        version = e.details.cl.version,
+    //        results = [];
+    //    var items = $("#" + e.id).jqxListBox('getSelectedItems');
+    //    if (items.length > 0) {
+    //        for (var i = 0; i < items.length; i++) {
+    //            results.push({code: {code : items[i].value, label: items[i].label, systemKey : system, systemVersion:version}});
+    //        }
+    //    }
+    //    return results;
+    //};
+
+    Component1.prototype.error = function (e) {
+        console.log("Component error: "+ error);
     };
 
     return Component1;

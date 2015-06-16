@@ -2,13 +2,11 @@ define([
     'jquery',
     'fx-filter/fluidgrid',
     'fx-filter/containerfactory',
-    'fx-filter/componentfactory',
     'fx-filter/filtermodule',
-    'fx-filter/container1',
-    'fx-filter/component1',
     'fx-filter/componentcreator',
     'bootstrap'
-], function ($, FluidForm, ContainerFactory, ComponentFactory, FilterModule, Container1, Component1, ComponentCreator) {
+//], function ($, FluidForm, ContainerFactory, ComponentFactory, FilterModule, Container1, Component1, ComponentCreator) {
+], function ($, FluidForm, ContainerFactory, FilterModule, ComponentCreator) {
 
     'use strict';
 
@@ -47,6 +45,7 @@ define([
         filter_module_array :[],
 
         prefix_plugin_dir : '',
+        plugin_subdir : '',
 
         container_plugin_dir : 'src/js/container_plugin/',
         component_plugin_dir : 'src/js/component_plugin/'
@@ -68,12 +67,16 @@ define([
                 main_content.removeChild(main_content.firstChild);
             }
         }
+
         var c = document.createElement('DIV');
+        //The Main Container is main container filter + host container id
+        this.options.html_ids.MAIN_CONTAINER = this.options.html_ids.MAIN_CONTAINER +"_"+this.options.mainContent;
         c.id = this.options.html_ids.MAIN_CONTAINER;
-        this.options.mainContent.appendChild(c);
+        main_content.appendChild(c);
 
         componentCreator = new ComponentCreator();
         componentCreator.init({plugin_folder: this.options.prefix_plugin_dir + this.options.component_plugin_dir});
+
     }
 
     FC.prototype.initEventListeners = function () {
@@ -94,7 +97,12 @@ define([
         var self = this;
         //This happen when the component has been rendered
         $('body').on(self.options.component_event.READY, function(event, properties){
+            alert("In controller READY")
 
+            if((properties!=null)&&(typeof properties!="undefined")&&(properties.name !=null)&&(typeof properties.name !="undefined")){
+                console.log("Before setDomainByAdapter "+properties.name)
+                self.setDomainByAdapter(properties.name);
+            }
             //The host can set now the domain
             $('body').trigger(self.options.host_event.COMPONENT_READY, properties);
         });
@@ -103,18 +111,22 @@ define([
     FC.prototype.renderComponents = function () {
     };
 
-    FC.prototype.add = function (modules_array) {
+    FC.prototype.add = function (modules_array, adapter_map) {
 
         if((modules_array!=null)&&(typeof modules_array!="undefined")&&(modules_array.length>0)){
+            console.log("MODULE ARRAY!!!!! ")
+            console.log("modules_array.length = "+modules_array.length)
             for(var i=0; i<modules_array.length; i++){
 
                 //Add in the DOM
                 var element = modules_array[i];
+                console.log("IN ADD .... i="+i)
+                console.log(element)
                 element.grid = this.options.grid;
                 if((element!=null)&&(element!= "undefined"))
                 {
                     //Creation of the Module
-                    var moduleObj = new FilterModule({id: "fenix_filter_module_"+this.options.module_id, grid: this.options.grid, container_plugin_dir: this.options.container_plugin_dir, component_plugin_dir: this.options.component_plugin_dir});
+                    var moduleObj = new FilterModule({id: "fenix_filter_module_"+this.options.mainContent+"_"+this.options.module_id, grid: this.options.grid, container_plugin_dir: this.options.container_plugin_dir, component_plugin_dir: this.options.component_plugin_dir});
                     this.options.module_id++;
 
                     //Creation of the Container
@@ -124,20 +136,30 @@ define([
 //            color: "yellow",
 //            doors: 6 } );
                     var containerFactoryInstance = '';
+                    //Active Tab could be undefined ... if the container contains only one component
                     if((element.title!=null)&&(typeof element.title!="undefined")){
-                        containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, title : element.title, grid : element.grid});
+                        containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, title : element.title, grid : element.grid, activeTab : element.activeTab});
                     }
                     else{
-                        containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, grid : element.grid});
+                        containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, grid : element.grid, activeTab : element.activeTab});
                     }
 
                     moduleObj.options.container = containerFactoryInstance;
                     //Get html code for module render
+                    if((element.components!=null)&&(typeof element.components!="undefined")){
+                        for(var j =0; j<element.components.length; j++){
+                            var component_name = element.components[j].name;
+                            if((adapter_map!=null)&&(typeof adapter_map!= "undefined")&&(adapter_map[component_name]!=-null)&&(typeof adapter_map[component_name]!="undefined")){
+                                element.components[j].adapter = adapter_map[component_name];
+                            }
+                        }
+                    }
                     var blank = moduleObj.options.container.getBlankContainer(moduleObj, element.components);
                     this.options.grid.addItem(blank.get(0));
                     componentCreator.render(moduleObj, element);
                     this.options.filter_module_array.push(moduleObj);
                 }
+                console.log("ADD end in moduleArray i= "+i)
             }
         }
     }
@@ -158,6 +180,33 @@ define([
         }
     }
 
+    //After the component render the host can decide to set the domain
+    FC.prototype.setDomainByAdapter = function (component_name) {
+        if((this.options.filter_module_array!=null)&&(typeof this.options.filter_module_array!="undefined")){
+            for(var i=0; i<this.options.filter_module_array.length; i++){
+//                var component = this.options.filter_module_array[i].options.component;
+                var components = this.options.filter_module_array[i].options.container.options.components;
+                for(var iComp = 0; iComp<components.length; iComp++){
+                    var modulename = components[iComp].getName();
+                    if(modulename==component_name){
+                        //var source = [{"value":"1234","label":"S3","selected":false},
+                        //    {"value":"12345","label":"S4","selected":false}];
+                        //components[iComp].setDomain(source);
+                        var adapter = components[iComp].getAdapter();
+                        if((adapter!=null)&&(typeof adapter!="undefined")){
+                            //Update the domain passing the filter module
+                            var filterModule = this.getValues();
+                            alert("refreshDomainByAdapter")
+                            components[iComp].refreshDomainByAdapter(filterModule);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //Each element in the results array is {componentName : this.options.name, code : items[i].value, label: items[i].label};
+    //By default getValues considers only the active tabs
     FC.prototype.getValues = function (components){
         var results = {};
         var resultsCount = 0;
@@ -167,11 +216,13 @@ define([
                     var componenName = components[iComp].name;
 
                     for(var i=0; i<this.options.filter_module_array.length; i++){
+                        var activeTab = this.options.filter_module_array[i].options.container.options.activeTab;
                         var components = this.options.filter_module_array[i].options.container.options.components;
                         for(var jComp = 0; jComp<components.length; jComp++){
                             var component = components[jComp];
-                            var modulename = component.options.name;
-                            if(componenName==modulename){
+                            var modulename = component.getName();
+                            // activeTab=="undefined" if there is one component for the container
+                            if((componenName==modulename)&&((activeTab==null)||(typeof activeTab=="undefined")||(activeTab.length==0)||(activeTab==modulename))){
                                 results[component.getName()] = component.getValues();
                                 resultsCount++;
                             }
@@ -184,14 +235,58 @@ define([
             //Return the values for all the components
             if((this.options.filter_module_array!=null)&&(typeof this.options.filter_module_array!="undefined")){
                     for(var i=0; i<this.options.filter_module_array.length; i++){
+                        var activeTab = this.options.filter_module_array[i].options.container.options.activeTab;
                         var components = this.options.filter_module_array[i].options.container.options.components;
                         for(var jComp = 0; jComp<components.length; jComp++){
 //                            var component = this.options.filter_module_array[i].options.component;
                             var component = components[jComp];
-                            results[component.getName()] = component.getValues();
-                            resultsCount++;
+                            if((activeTab==null)||(typeof activeTab=="undefined")||(activeTab.length==0)||(activeTab==component.getName())) {
+                                results[component.getName()] = component.getValues();
+                                resultsCount++;
+                            }
                         }
                     }
+            }
+        }
+        return results;
+    }
+
+    //Each element in the results array is {componentName : this.options.name, code : items[i].value, label: items[i].label};
+    //getAllValues considers ALL tabs, not only the active tab
+    FC.prototype.getAllValues = function (components){
+        var results = {};
+        var resultsCount = 0;
+        if((components!=null)&&(typeof components!= "undefined")&&(components.length>0)){
+            if((this.options.filter_module_array!=null)&&(typeof this.options.filter_module_array!="undefined")){
+                for(var iComp=0; iComp<components.length; iComp++){
+                    var componenName = components[iComp].name;
+
+                    for(var i=0; i<this.options.filter_module_array.length; i++){
+                        var components = this.options.filter_module_array[i].options.container.options.components;
+                        for(var jComp = 0; jComp<components.length; jComp++){
+                            var component = components[jComp];
+                            var modulename = component.getName();
+                            if(componenName==modulename){
+                                results[component.getName()] = component.getValues();
+                                resultsCount++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            //Return the values for all the components
+            if((this.options.filter_module_array!=null)&&(typeof this.options.filter_module_array!="undefined")){
+                for(var i=0; i<this.options.filter_module_array.length; i++){
+                    var components = this.options.filter_module_array[i].options.container.options.components;
+                    for(var jComp = 0; jComp<components.length; jComp++){
+//                            var component = this.options.filter_module_array[i].options.component;
+                        var component = components[jComp];
+                        results[component.getName()] = component.getValues();
+                        resultsCount++;
+                    }
+                }
             }
         }
         return results;
@@ -201,6 +296,7 @@ define([
 
         var c = document.createElement('DIV');
         c.className = 'fx-filter-container';
+        this.options.html_ids.GRID_CONTAINER = this.options.html_ids.GRID_CONTAINER + "_" +this.options.mainContent;
         c.id = this.options.html_ids.GRID_CONTAINER;
 //        c.text = 'PROVA';
 

@@ -1,8 +1,9 @@
 define([
     'jquery',
-    'fx-filter/component1',
+   // 'fx-filter/component1',
     'bootstrap'
-], function ($, Component1) {
+//], function ($, Component1) {
+], function ($) {
 
 // Define a skeleton vehicle factory
     function ComponentFactory() {
@@ -14,19 +15,19 @@ define([
     ComponentFactory.prototype.componentClass = '';
 
 // Our Factory method for creating new Vehicle instances
-    ComponentFactory.prototype.createComponent = function (options) {
-
-        switch (options.componentType) {
-            case "Component1":
-                this.componentClass = Component1;
-                break;
-            default :
-                this.componentClass = '';
-            //defaults to VehicleFactory.prototype.vehicleClass (Car)
-        }
-
-        return new this.componentClass(options);
-    };
+//    ComponentFactory.prototype.createComponent = function (options) {
+//
+//        switch (options.componentType) {
+//            case "Component1":
+//                this.componentClass = Component1;
+//                break;
+//            default :
+//                this.componentClass = '';
+//            //defaults to VehicleFactory.prototype.vehicleClass (Car)
+//        }
+//
+//        return new this.componentClass(options);
+//    };
 
     return ComponentFactory;
 });

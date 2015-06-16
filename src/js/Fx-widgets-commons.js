@@ -14,17 +14,17 @@ define(function () {
     }
 
     //Dispatch an event for Chrome, Firefox e IE
-    Fx_Commons.prototype.raiseCustomEvent = function (item, type, data) {
-
-        var self = this;
-
-        var evt = document.createEvent("CustomEvent");
-        evt.initCustomEvent(type, true, true, data);
-        if (self.isNode(item)) {
-            item.dispatchEvent(evt);
-        }
-
-    };
+    //Fx_Commons.prototype.raiseCustomEvent = function (item, type, data) {
+    //
+    //    var self = this;
+    //
+    //    var evt = document.createEvent("CustomEvent");
+    //    evt.initCustomEvent(type, true, true, data);
+    //    if (self.isNode(item)) {
+    //        item.dispatchEvent(evt);
+    //    }
+    //
+    //};
 
     //Returns true if it is a DOM node
     Fx_Commons.prototype.isNode = function (o) {
