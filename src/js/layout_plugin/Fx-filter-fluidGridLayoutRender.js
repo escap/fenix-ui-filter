@@ -1,7 +1,9 @@
 define([
     'jquery',
     'fx-filter/fluidgrid',
-], function ($, FluidForm) {
+    'fx-filter/filtermodule',
+    'fx-filter/containerfactory',
+], function ($, FluidForm, FilterModule, ContainerFactory) {
 
     'use strict';
 
@@ -54,6 +56,51 @@ define([
 
             this.options.grid.render();
     };
+
+    FluidGridLayoutRender.prototype.add = function (element, adapter_map, options, index, componentCreator) {
+
+        var module = '';
+        //Add in the DOM
+        element.grid = this.options.grid;
+        if((element!=null)&&(element!= "undefined"))
+        {
+            //Creation of the Module
+            var moduleObj = new FilterModule({id: "fenix_filter_module_"+options.mainContent+"_"+options.module_id, grid: this.options.grid, container_plugin_dir: options.container_plugin_dir, component_plugin_dir: options.component_plugin_dir});
+
+            //Creation of the Container
+            var containerFactory = new ContainerFactory();
+//        var containerFactoryInstance = containerFactory.createContainer( {
+//            vehicleType: "car",
+//            color: "yellow",
+//            doors: 6 } );
+            var containerFactoryInstance = '';
+            //Active Tab could be undefined ... if the container contains only one component
+            if((element.title!=null)&&(typeof element.title!="undefined")){
+                containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, title : element.title, grid : element.grid, activeTab : element.activeTab});
+            }
+            else{
+                containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, grid : element.grid, activeTab : element.activeTab});
+            }
+
+            moduleObj.options.container = containerFactoryInstance;
+            //Get html code for module render
+            if((element.components!=null)&&(typeof element.components!="undefined")){
+                for(var j =0; j<element.components.length; j++){
+                    var component_name = element.components[j].name;
+                    if((adapter_map!=null)&&(typeof adapter_map!= "undefined")&&(adapter_map[component_name]!=-null)&&(typeof adapter_map[component_name]!="undefined")){
+                        element.components[j].adapter = adapter_map[component_name];
+                    }
+                }
+            }
+            var blank = moduleObj.options.container.getBlankContainer(moduleObj, element.components);
+            this.options.grid.addItem(blank.get(0));
+            componentCreator.render(moduleObj, element);
+
+            module = moduleObj;
+        }
+
+        return module;
+    }
 
     FluidGridLayoutRender.prototype.getGrid = function () {
         return this.options.grid;

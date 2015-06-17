@@ -131,19 +131,6 @@ define([
         $(this.options.container).jqxListBox('unselectItem', item );
     };
 
-    //Component1.prototype.getValues = function (e) {
-    //    var system = e.details.cl.system,
-    //        version = e.details.cl.version,
-    //        results = [];
-    //    var items = $("#" + e.id).jqxListBox('getSelectedItems');
-    //    if (items.length > 0) {
-    //        for (var i = 0; i < items.length; i++) {
-    //            results.push({code: {code : items[i].value, label: items[i].label, systemKey : system, systemVersion:version}});
-    //        }
-    //    }
-    //    return results;
-    //};
-
     Component1.prototype.refreshDomainByAdapter = function(filterModule){
         if((this.options.adapter!=null)&&(typeof this.options.adapter!="undefined")){
             var field;
@@ -164,20 +151,6 @@ define([
         var item = $(this.options.container).jqxListBox('getItemByValue', obj.value);
         $(this.options.container).jqxListBox('unselectItem', item );
     };
-
-    //Component1.prototype.getValues = function (e) {
-    //    console.log(e)
-    //    var system = e.details.cl.system,
-    //        version = e.details.cl.version,
-    //        results = [];
-    //    var items = $("#" + e.id).jqxListBox('getSelectedItems');
-    //    if (items.length > 0) {
-    //        for (var i = 0; i < items.length; i++) {
-    //            results.push({code: {code : items[i].value, label: items[i].label, systemKey : system, systemVersion:version}});
-    //        }
-    //    }
-    //    return results;
-    //};
 
     Component1.prototype.error = function (e) {
         console.log("Component error: "+ error);

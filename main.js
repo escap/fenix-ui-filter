@@ -31,7 +31,7 @@ require([
 
         //var configuration =
         //[{
-        //            "containerType":"container1",
+        //            "containerType":"fluidGridBaseContainer",
         //            "title":"Container Region",
         //            "activeTab":"ResurceType",
         //            "components":[
@@ -102,7 +102,7 @@ require([
         //                //}
         //
         //                //{
-        //                //    "componentType":"component1",
+        //                //    "componentType":"baseList",
         //                //    "lang":"EN",
         //                //    "title":{"EN":"Region"},
         //                //    "name":"RegionC2",
@@ -124,7 +124,7 @@ require([
         //            ]
         //        },
         //        {
-        //            "containerType":"container1",
+        //            "containerType":"fluidGridBaseContainer",
         //            "title":"Container Region2",
         //            "activeTab":"ReferenceArea2",
         //            "components":[
@@ -144,7 +144,7 @@ require([
         //                    }
         //                },
         //                {
-        //                    "componentType":"component1",
+        //                    "componentType":"baseList",
         //                    "lang":"EN",
         //                    "title":{"EN":"Region"},
         //                    "name":"RegionC2",
@@ -170,7 +170,7 @@ require([
 
         var configuration =
         [{
-                    "containerType":"container1",
+                    "containerType":"fluidGridBaseContainer",
                     "title":"Container Region",
                     "activeTab":"ResurceType",
                     "components":[
@@ -241,7 +241,7 @@ require([
                         //}
 
                         //{
-                        //    "componentType":"component1",
+                        //    "componentType":"baseList",
                         //    "lang":"EN",
                         //    "title":{"EN":"Region"},
                         //    "name":"RegionC2",
@@ -263,7 +263,7 @@ require([
                     ]
                 },
                 {
-                    "containerType":"container1",
+                    "containerType":"fluidGridBaseContainer",
                     "title":"Container Region2",
                     "activeTab":"ReferenceArea2",
                     "components":[
@@ -283,7 +283,7 @@ require([
                             }
                         },
                         {
-                            "componentType":"component1",
+                            "componentType":"baseList",
                             "lang":"EN",
                             "title":{"EN":"Region"},
                             "name":"RegionC2",
@@ -335,8 +335,8 @@ require([
         //    plugin_prefix: ''
         //});
         //
-        ////var configuration = [{"containerType":"container1","title":"Region","components":[{"componentType":"component1","lang":"EN","title":{"EN":"Region"},"multipleselection":true,"name":"Region","component":{"source":{"datafields":[{"name":"label"},{"name":"value"}]},"rendering":{"displayMember":"label","valueMember":"value","multiple":true,"width":"100%","height":"100%"}},"source":[{"value":"51325","label":"Central","selected":false},{"value":"51326","label":"Coast","selected":false},{"value":"51327","label":"Eastern","selected":false},{"value":"51328","label":"Nairobi","selected":false},{"value":"51329","label":"North Eastern","selected":false},{"value":"51330","label":"Nyanza","selected":false},{"value":"51331","label":"Rift Valley","selected":false},{"value":"51332","label":"Western","selected":false}]}]}];
-        //var configuration2 = [{"containerType":"container1","title":"Region","components":[{"componentType":"component1","lang":"EN","title":{"EN":"Region"},"multipleselection":true,"name":"Region","component":{"source":{"datafields":[{"name":"label"},{"name":"value"}]},"rendering":{"displayMember":"label","valueMember":"value","multiple":true,"width":"100%","height":"100%"}},"source":[{"value":"51325","label":"Central","selected":false},{"value":"51326","label":"Coast","selected":false},{"value":"51327","label":"Eastern","selected":false},{"value":"51328","label":"Nairobi","selected":false},{"value":"51329","label":"North Eastern","selected":false},{"value":"51330","label":"Nyanza","selected":false},{"value":"51331","label":"Rift Valley","selected":false},{"value":"51332","label":"Western","selected":false}]}]}, {"containerType":"container1","title":"Region","components":[{"componentType":"component1","lang":"EN","title":{"EN":"Region"},"multipleselection":true,"name":"Region","component":{"source":{"datafields":[{"name":"label"},{"name":"value"}]},"rendering":{"displayMember":"label","valueMember":"value","multiple":true,"width":"100%","height":"100%"}},"source":[{"value":"51325","label":"Central","selected":false},{"value":"51326","label":"Coast","selected":false},{"value":"51327","label":"Eastern","selected":false},{"value":"51328","label":"Nairobi","selected":false},{"value":"51329","label":"North Eastern","selected":false},{"value":"51330","label":"Nyanza","selected":false},{"value":"51331","label":"Rift Valley","selected":false},{"value":"51332","label":"Western","selected":false}]}]}];
+        ////var configuration = [{"containerType":"container1","title":"Region","components":[{"componentType":"baseList","lang":"EN","title":{"EN":"Region"},"multipleselection":true,"name":"Region","component":{"source":{"datafields":[{"name":"label"},{"name":"value"}]},"rendering":{"displayMember":"label","valueMember":"value","multiple":true,"width":"100%","height":"100%"}},"source":[{"value":"51325","label":"Central","selected":false},{"value":"51326","label":"Coast","selected":false},{"value":"51327","label":"Eastern","selected":false},{"value":"51328","label":"Nairobi","selected":false},{"value":"51329","label":"North Eastern","selected":false},{"value":"51330","label":"Nyanza","selected":false},{"value":"51331","label":"Rift Valley","selected":false},{"value":"51332","label":"Western","selected":false}]}]}];
+        //var configuration2 = [{"containerType":"container1","title":"Region","components":[{"componentType":"baseList","lang":"EN","title":{"EN":"Region"},"multipleselection":true,"name":"Region","component":{"source":{"datafields":[{"name":"label"},{"name":"value"}]},"rendering":{"displayMember":"label","valueMember":"value","multiple":true,"width":"100%","height":"100%"}},"source":[{"value":"51325","label":"Central","selected":false},{"value":"51326","label":"Coast","selected":false},{"value":"51327","label":"Eastern","selected":false},{"value":"51328","label":"Nairobi","selected":false},{"value":"51329","label":"North Eastern","selected":false},{"value":"51330","label":"Nyanza","selected":false},{"value":"51331","label":"Rift Valley","selected":false},{"value":"51332","label":"Western","selected":false}]}]}, {"containerType":"container1","title":"Region","components":[{"componentType":"component1","lang":"EN","title":{"EN":"Region"},"multipleselection":true,"name":"Region","component":{"source":{"datafields":[{"name":"label"},{"name":"value"}]},"rendering":{"displayMember":"label","valueMember":"value","multiple":true,"width":"100%","height":"100%"}},"source":[{"value":"51325","label":"Central","selected":false},{"value":"51326","label":"Coast","selected":false},{"value":"51327","label":"Eastern","selected":false},{"value":"51328","label":"Nairobi","selected":false},{"value":"51329","label":"North Eastern","selected":false},{"value":"51330","label":"Nyanza","selected":false},{"value":"51331","label":"Rift Valley","selected":false},{"value":"51332","label":"Western","selected":false}]}]}];
         //filter2.add(configuration2);
     });
 });

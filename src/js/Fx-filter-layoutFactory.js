@@ -9,7 +9,7 @@ function LayoutFactory() {}
 
 // Define the prototypes and utilities for this factory
 
-// Our default containerClass is Car
+// Our default containerClass is FluidGridLayoutRender
 LayoutFactory.prototype.layoutClass = '';
 
 // Our Factory method for creating new Container instances
