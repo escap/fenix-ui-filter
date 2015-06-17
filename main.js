@@ -7,7 +7,6 @@ require([
 ], function (Path) {
 
     require.config(Path)
-    console.log(Path)
 
     require([
         'fx-filter/start',
@@ -25,9 +24,149 @@ require([
         var filter = new Filter();
         filter.init({
             container: FILTER_CONTAINER,
-            plugin_prefix: ''
+            plugin_prefix: '',
+            layout: 'fluidGrid'
           //  plugin_subdir: 'FENIX-plugin'
         });
+
+        //var configuration =
+        //[{
+        //            "containerType":"container1",
+        //            "title":"Container Region",
+        //            "activeTab":"ResurceType",
+        //            "components":[
+        //                {
+        //                    "componentType":"enumeration-FENIX",
+        //                    "lang":"EN",
+        //                    "title":{"EN": "ResurceType",
+        //                        "ES": "ResurceType",
+        //                        "FR": "ResurceType"},
+        //                    "name":"ResurceType",
+        //                    "component": {
+        //                        "source": {
+        //                            "uid": "RepresentationType"
+        //                        }
+        //                    }
+        //                },
+        //                {
+        //                    "componentType":"text-FENIX",
+        //                    "lang":"EN",
+        //                    "title":{"EN": "Uid",
+        //                        "DE": "Suche",
+        //                        "ES": "Búsqueda",
+        //                        "FR": "Recherchet"},
+        //                    "name":"Uid",
+        //                    "component": {
+        //                        "rendering": {
+        //                            "placeholder": {
+        //                                "EN": "Uid",
+        //                                "DE": "uid",
+        //                                "ES": "uid",
+        //                                "FR": "uid"
+        //                            },
+        //                            "htmlattributes": {
+        //                                "className": "form-control"
+        //                            }
+        //                        }
+        //                    }
+        //                },
+        //                {
+        //                    "componentType":"tree-FENIX",
+        //                    "lang":"EN",
+        //                    "title":{"EN": "Region",
+        //                        "ES": "ES List",
+        //                        "FR": "FR List"},
+        //                    "name":"Region",
+        //                    "component": {
+        //                        "source": {
+        //                            "uid": "GAUL",
+        //                            "version": "2014"
+        //                        }
+        //                    }
+        //                }
+        //                //,
+        //                //{
+        //                //    "componentType":"codes-FENIX",
+        //                //    "lang":"EN",
+        //                //    "title":{"EN": "Reference Area2",
+        //                //        "ES": "Intervalo de tiempo",
+        //                //        "DE": "Zeitbereich",
+        //                //        "FR": "Intervalle de temps"},
+        //                //    "name":"ReferenceArea2",
+        //                //    "component": {
+        //                //        "source": {
+        //                //            "uid": "GAUL_ReferenceArea",
+        //                //            "version": "1.0"
+        //                //        }
+        //                //    }
+        //                //}
+        //
+        //                //{
+        //                //    "componentType":"component1",
+        //                //    "lang":"EN",
+        //                //    "title":{"EN":"Region"},
+        //                //    "name":"RegionC2",
+        //                //    config:{
+        //                //        "multipleselection":true,
+        //                //        "defaultsource":[
+        //                //            {"value":"51325","label":"Central","selected":true},
+        //                //            {"value":"51326","label":"Coast","selected":true},
+        //                //            {"value":"51327","label":"Eastern","selected":false},
+        //                //            {"value":"51328","label":"Nairobi","selected":false},
+        //                //            {"value":"51329","label":"North Eastern","selected":false},
+        //                //            {"value":"51330","label":"Nyanza","selected":false},
+        //                //            {"value":"51331","label":"Rift Valley","selected":false},
+        //                //            {"value":"51332","label":"Western","selected":false}
+        //                //        ]
+        //                //        //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
+        //                //    }
+        //                //}
+        //            ]
+        //        },
+        //        {
+        //            "containerType":"container1",
+        //            "title":"Container Region2",
+        //            "activeTab":"ReferenceArea2",
+        //            "components":[
+        //                {
+        //                    "componentType":"codes-FENIX",
+        //                    "lang":"EN",
+        //                    "title":{"EN": "Reference Area2",
+        //                        "ES": "Intervalo de tiempo",
+        //                        "DE": "Zeitbereich",
+        //                        "FR": "Intervalle de temps"},
+        //                    "name":"ReferenceArea2",
+        //                    "component": {
+        //                        "source": {
+        //                            "uid": "GAUL_ReferenceArea",
+        //                            "version": "1.0"
+        //                        }
+        //                    }
+        //                },
+        //                {
+        //                    "componentType":"component1",
+        //                    "lang":"EN",
+        //                    "title":{"EN":"Region"},
+        //                    "name":"RegionC2",
+        //                    config:{
+        //                        "multipleselection":true,
+        //                        "defaultsource":[
+        //                            {"value":"51325","label":"Central","selected":true},
+        //                            {"value":"51326","label":"Coast","selected":true},
+        //                            {"value":"51327","label":"Eastern","selected":false},
+        //                            {"value":"51328","label":"Nairobi","selected":false},
+        //                            {"value":"51329","label":"North Eastern","selected":false},
+        //                            {"value":"51330","label":"Nyanza","selected":false},
+        //                            {"value":"51331","label":"Rift Valley","selected":false},
+        //                            {"value":"51332","label":"Western","selected":false}
+        //                        ]
+        //                        //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
+        //                    }
+        //                }
+        //            ]
+        //        }
+        //];
+
 
         var configuration =
         [{
@@ -167,154 +306,11 @@ require([
                 }
         ];
 
-
-        //var configuration =
-        //{
-        //    "layout": "fluid_grid",
-        //    "containers":[
-        //        {
-        //            "containerType":"container1",
-        //            "title":"Container Region",
-        //            "activeTab":"ResurceType",
-        //            "components":[
-        //                {
-        //                    "componentType":"enumeration-FENIX",
-        //                    "lang":"EN",
-        //                    "title":{"EN": "ResurceType",
-        //                        "ES": "ResurceType",
-        //                        "FR": "ResurceType"},
-        //                    "name":"ResurceType",
-        //                    "component": {
-        //                        "source": {
-        //                            "uid": "RepresentationType"
-        //                        }
-        //                    }
-        //                },
-        //                {
-        //                    "componentType":"text-FENIX",
-        //                    "lang":"EN",
-        //                    "title":{"EN": "Uid",
-        //                        "DE": "Suche",
-        //                        "ES": "Búsqueda",
-        //                        "FR": "Recherchet"},
-        //                    "name":"Uid",
-        //                    "component": {
-        //                        "rendering": {
-        //                            "placeholder": {
-        //                                "EN": "Uid",
-        //                                "DE": "uid",
-        //                                "ES": "uid",
-        //                                "FR": "uid"
-        //                            },
-        //                            "htmlattributes": {
-        //                                "className": "form-control"
-        //                            }
-        //                        }
-        //                    }
-        //                },
-        //                {
-        //                    "componentType":"tree-FENIX",
-        //                    "lang":"EN",
-        //                    "title":{"EN": "Region",
-        //                        "ES": "ES List",
-        //                        "FR": "FR List"},
-        //                    "name":"Region",
-        //                    "component": {
-        //                        "source": {
-        //                            "uid": "GAUL",
-        //                            "version": "2014"
-        //                        }
-        //                    }
-        //                }
-        //                //,
-        //                //{
-        //                //    "componentType":"codes-FENIX",
-        //                //    "lang":"EN",
-        //                //    "title":{"EN": "Reference Area2",
-        //                //        "ES": "Intervalo de tiempo",
-        //                //        "DE": "Zeitbereich",
-        //                //        "FR": "Intervalle de temps"},
-        //                //    "name":"ReferenceArea2",
-        //                //    "component": {
-        //                //        "source": {
-        //                //            "uid": "GAUL_ReferenceArea",
-        //                //            "version": "1.0"
-        //                //        }
-        //                //    }
-        //                //}
-        //
-        //                //{
-        //                //    "componentType":"component1",
-        //                //    "lang":"EN",
-        //                //    "title":{"EN":"Region"},
-        //                //    "name":"RegionC2",
-        //                //    config:{
-        //                //        "multipleselection":true,
-        //                //        "defaultsource":[
-        //                //            {"value":"51325","label":"Central","selected":true},
-        //                //            {"value":"51326","label":"Coast","selected":true},
-        //                //            {"value":"51327","label":"Eastern","selected":false},
-        //                //            {"value":"51328","label":"Nairobi","selected":false},
-        //                //            {"value":"51329","label":"North Eastern","selected":false},
-        //                //            {"value":"51330","label":"Nyanza","selected":false},
-        //                //            {"value":"51331","label":"Rift Valley","selected":false},
-        //                //            {"value":"51332","label":"Western","selected":false}
-        //                //        ]
-        //                //        //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
-        //                //    }
-        //                //}
-        //            ]
-        //        },
-        //        {
-        //            "containerType":"container1",
-        //            "title":"Container Region2",
-        //            "activeTab":"ReferenceArea2",
-        //            "components":[
-        //                {
-        //                    "componentType":"codes-FENIX",
-        //                    "lang":"EN",
-        //                    "title":{"EN": "Reference Area2",
-        //                        "ES": "Intervalo de tiempo",
-        //                        "DE": "Zeitbereich",
-        //                        "FR": "Intervalle de temps"},
-        //                    "name":"ReferenceArea2",
-        //                    "component": {
-        //                        "source": {
-        //                            "uid": "GAUL_ReferenceArea",
-        //                            "version": "1.0"
-        //                        }
-        //                    }
-        //                },
-        //                {
-        //                    "componentType":"component1",
-        //                    "lang":"EN",
-        //                    "title":{"EN":"Region"},
-        //                    "name":"RegionC2",
-        //                    config:{
-        //                        "multipleselection":true,
-        //                        "defaultsource":[
-        //                            {"value":"51325","label":"Central","selected":true},
-        //                            {"value":"51326","label":"Coast","selected":true},
-        //                            {"value":"51327","label":"Eastern","selected":false},
-        //                            {"value":"51328","label":"Nairobi","selected":false},
-        //                            {"value":"51329","label":"North Eastern","selected":false},
-        //                            {"value":"51330","label":"Nyanza","selected":false},
-        //                            {"value":"51331","label":"Rift Valley","selected":false},
-        //                            {"value":"51332","label":"Western","selected":false}
-        //                        ]
-        //                        //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
-        //                    }
-        //                }
-        //            ]
-        //        }
-        //]};
-
         var adapterMap = {};
         var regionC1_func = function(model, success, error)
         {
             var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S5','selected':true}];
             //$.proxy(success(source), this);
-            //alert("Before source")
             success(source)
             return true;
         }
@@ -322,7 +318,6 @@ require([
         //adapterMap["RegionC2"] =  regionC1_func;
 
         $("#jqxGetValuesButton").on('click', function () {
-            alert("Before ask for selected values!!! ")
             var values = filter.getValues();
             console.log("Values ");
             console.log(values)
@@ -330,9 +325,6 @@ require([
 
         filter.add(configuration, adapterMap);
 
-
-        //alert("Filter Start2")
-        //
         //var FILTER_CONTAINER2= 'filterContainer2';
         //
         //var filterUtils2 = new FilterUtils();

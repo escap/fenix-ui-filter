@@ -92,7 +92,6 @@ define([
             $tabpanel.append($components);
 
             for(var iCompon=0; iCompon< components.length; iCompon++){
-                console.log(components[iCompon])
                 var $i_component = "";
                 var id_component = module.options.id+"_comp_"+iCompon;
                 var title = "";
@@ -101,7 +100,6 @@ define([
                 }
 
                 var comp_name = components[iCompon].name;
-                console.log(comp_name)
                 if(iCompon==0){
                     $i_component =  $("<li class='active' componentname="+comp_name+"><a href='#"+id_component+"' data-toggle='tab'>"+title+"</a></li>");
                     $i_component.click( function(e) {

@@ -30,11 +30,9 @@ define([
     };
 
     function Fx_ui_w_enumeration(optionsDefault) {
-        alert("In enumeration ")
         if (this.options === undefined) {this.options = {}; }
 
         $.extend(true, this.options, o, optionsDefault);
-        console.log(this)
     }
 
     Fx_ui_w_enumeration.prototype.render = function (e, container) {
@@ -97,7 +95,6 @@ define([
                 });
             }
 
-            alert("In enumeration "+self.options.module.name )
             amplify.publish(E.MODULE_READY,
                 {
                     value: r,
@@ -201,11 +198,9 @@ define([
 
     Fx_ui_w_enumeration.prototype.getValues = function (e) {
 
-        console.log("ENUMERATION .... getValues")
         var codes = $("#" + this.options.componentid).find('.jstree-holder').jstree(true).get_selected();
 
         return {enumeration : codes};
-
 
     };
 

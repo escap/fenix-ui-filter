@@ -1,8 +1,8 @@
 define([
     'jquery',
-    'fx-filter/container1',
+    'fx-filter/fluidGridBaseContainer',
     'bootstrap'
-], function ($, Container1) {
+], function ($, FluidGridBaseContainer) {
 
 // Define a skeleton container factory
 function ContainerFactory() {}
@@ -16,11 +16,11 @@ ContainerFactory.prototype.containerClass = '';
 ContainerFactory.prototype.createContainer = function ( options ) {
 
     switch(options.containerType){
-        case "Container1":
-            this.containerClass = Container1;
+        case "fluidGridBaseContainer":
+            this.containerClass = FluidGridBaseContainer;
             break;
         default :
-            this.containerClass = Container1;
+            this.containerClass = FluidGridBaseContainer;
     }
 
     return new this.containerClass( options );

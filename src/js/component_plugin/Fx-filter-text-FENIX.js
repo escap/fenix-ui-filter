@@ -118,7 +118,6 @@ define([
     };
 
     Fx_ui_w_text.prototype.getValues = function (e) {
-        console.log("TEXT getValues")
         var c = { enumeration :  [$("#" + this.options.componentid + "  input").val()]};
         return c;
     };

@@ -18,7 +18,8 @@ define([
         this.controller = new FC({
             //mainContent: document.querySelector(o.container),
             mainContent: o.container,
-            prefix_plugin_dir: o.plugin_prefix
+            prefix_plugin_dir: o.plugin_prefix,
+            current_layout: o.layout
         });
 
         this.controller.render();

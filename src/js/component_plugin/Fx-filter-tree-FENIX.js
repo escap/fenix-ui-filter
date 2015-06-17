@@ -30,11 +30,9 @@ define([
     } ;
 
     function Fx_ui_w_geographicExtent(optionsDefault) {
-        alert("In tree ")
         if (this.options === undefined) {this.options = {}; }
 
         $.extend(true, this.options, o, optionsDefault);
-        console.log(this)
     }
 
     Fx_ui_w_geographicExtent.prototype.validate = function (e) {
@@ -178,7 +176,6 @@ define([
                 r.push({label: data.instance.get_node(data.selected[i]).text, value: data.instance.get_node(data.selected[i])});
             }
 
-            alert("Tree before Ready "+self.options.module.name)
             amplify.publish(E.MODULE_READY,
                 {
                     value: r,
@@ -205,7 +202,6 @@ define([
 
         self.options.name = e.name;
         self.options.componentid = $(container).attr("id");
-        alert("COMPONENT ID = "+ self.options.componentid)
         //Raise an event to show that the component has been rendered
         $(container).trigger(self.options.events.READY, {name: e.name});
 
@@ -239,7 +235,6 @@ define([
 
     Fx_ui_w_geographicExtent.prototype.getValues = function (e) {
 
-        console.log("TREE .... getValues")
         var codes = $("#" + this.options.componentid).find('.jstree-holder').jstree(true).get_selected(),
             uid = this.options.module.component.source.uid,
             version = this.options.module.component.source.version;

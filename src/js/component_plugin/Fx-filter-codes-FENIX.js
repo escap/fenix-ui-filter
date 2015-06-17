@@ -44,8 +44,6 @@ define([
         self.options.container = container;
 
         self.options.module = e;
-        console.log("In render")
-        console.log(self.options)
 
         this.$treeContainer = $('<div class="jstree-holder"></div>');
 
@@ -102,7 +100,6 @@ define([
                 });
             }
 
-            alert("Codes Ready "+ self.options.module.name)
             amplify.publish(E.MODULE_READY,
                 {
                     value: r,
@@ -222,8 +219,6 @@ define([
 
         var that = this;
 
-        console.log("Before deselect entry! ")
-        console.log(that.options.module.name)
         amplify.subscribe(E.MODULE_DESELECT + '.' + that.options.module.name, function (e) {
 
             that.deselectValue(e);
@@ -250,7 +245,6 @@ define([
     //For filter logic .... end
 
     Fx_ui_w_codes.prototype.getValues = function (e) {
-        console.log("CODES getValues")
         var codes = $("#" + this.options.componentid).find('.jstree-holder').jstree(true).get_selected(),
             uid = this.options.module.component.source.uid,
             version = this.options.module.component.source.version;

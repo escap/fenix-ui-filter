@@ -34,13 +34,11 @@ define([
         }
     };
 
-// A constructor for defining new component
-function Component1( o ) {
+    // A constructor for defining new component
+    function Component1( o ) {
     if (this.options === undefined) {this.options = {}; }
 
-    $.extend(true, this.options, optionsDefault, o);
-    console.log(this)
-}
+    $.extend(true, this.options, optionsDefault, o);}
 
     Component1.prototype.validate = function (e) {
         //if (!e.hasOwnProperty("source")) {

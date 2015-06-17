@@ -1,12 +1,12 @@
 define([
     'jquery',
-    'fx-filter/fluidgrid',
     'fx-filter/containerfactory',
     'fx-filter/filtermodule',
     'fx-filter/componentcreator',
+    'fx-filter/layoutfactory',
     'bootstrap'
 //], function ($, FluidForm, ContainerFactory, ComponentFactory, FilterModule, Container1, Component1, ComponentCreator) {
-], function ($, FluidForm, ContainerFactory, FilterModule, ComponentCreator) {
+], function ($, ContainerFactory, FilterModule, ComponentCreator, LayoutFactory) {
 
     'use strict';
 
@@ -16,9 +16,12 @@ define([
         grid : '',
         components_map : {},
 
+        current_layout :'',
+        //Object of the current layout
+        layout_render : '',
+
         html_ids : {
-            MAIN_CONTAINER: "fx-filter_container",
-            GRID_CONTAINER: "fx-filter-grid"
+            MAIN_CONTAINER: "fx-filter_container"
         },
 
         class_ids : {
@@ -97,10 +100,8 @@ define([
         var self = this;
         //This happen when the component has been rendered
         $('body').on(self.options.component_event.READY, function(event, properties){
-            alert("In controller READY")
 
             if((properties!=null)&&(typeof properties!="undefined")&&(properties.name !=null)&&(typeof properties.name !="undefined")){
-                console.log("Before setDomainByAdapter "+properties.name)
                 self.setDomainByAdapter(properties.name);
             }
             //The host can set now the domain
@@ -111,17 +112,18 @@ define([
     FC.prototype.renderComponents = function () {
     };
 
-    FC.prototype.add = function (modules_array, adapter_map) {
+    //FC.prototype.add = function (modules_array, adapter_map) {
+    //    if((modules_array!=null)&&(typeof modules_array!="undefined")&&(modules_array.length>0)){
+    //
+    //    }
+    //}
 
+    FC.prototype.add = function (modules_array, adapter_map) {
         if((modules_array!=null)&&(typeof modules_array!="undefined")&&(modules_array.length>0)){
-            console.log("MODULE ARRAY!!!!! ")
-            console.log("modules_array.length = "+modules_array.length)
             for(var i=0; i<modules_array.length; i++){
 
                 //Add in the DOM
                 var element = modules_array[i];
-                console.log("IN ADD .... i="+i)
-                console.log(element)
                 element.grid = this.options.grid;
                 if((element!=null)&&(element!= "undefined"))
                 {
@@ -159,7 +161,6 @@ define([
                     componentCreator.render(moduleObj, element);
                     this.options.filter_module_array.push(moduleObj);
                 }
-                console.log("ADD end in moduleArray i= "+i)
             }
         }
     }
@@ -196,7 +197,6 @@ define([
                         if((adapter!=null)&&(typeof adapter!="undefined")){
                             //Update the domain passing the filter module
                             var filterModule = this.getValues();
-                            alert("refreshDomainByAdapter")
                             components[iComp].refreshDomainByAdapter(filterModule);
                         }
                     }
@@ -292,37 +292,45 @@ define([
         return results;
     }
 
-    FC.prototype.gridRender = function (components_array) {
+//    FC.prototype.gridRender = function (components_array) {
+//
+//        var c = document.createElement('DIV');
+//        c.className = 'fx-filter-container';
+//        this.options.html_ids.GRID_CONTAINER = this.options.html_ids.GRID_CONTAINER + "_" +this.options.mainContent;
+//        c.id = this.options.html_ids.GRID_CONTAINER;
+////        c.text = 'PROVA';
+//
+//        var main_container = document.getElementById(this.options.html_ids.MAIN_CONTAINER);
+//        if((main_container!=null)&&(typeof main_container != "undefined")){
+//            while (main_container.firstChild) {
+//                main_container.removeChild(main_container.firstChild);
+//            }
+//            main_container.appendChild(c);
+//        }
+//
+//        this.options.grid = new FluidForm();
+//
+//        this.options.grid.init({
+//            container: document.querySelector("#"+this.options.html_ids.GRID_CONTAINER),
+//            drag: {
+//                handle: '.fx-catalog-modular-form-handler',
+//                containment: "#"+this.options.html_ids.GRID_CONTAINER
+//            },
+//            config: {
+//                itemSelector: "."+this.options.class_ids.ITEM_COMPONENT,
+//                columnWidth: "."+this.options.class_ids.ITEM_COMPONENT
+//            }
+//        });
+//
+//        this.options.grid.render();
+//    }
 
-        var c = document.createElement('DIV');
-        c.className = 'fx-filter-container';
-        this.options.html_ids.GRID_CONTAINER = this.options.html_ids.GRID_CONTAINER + "_" +this.options.mainContent;
-        c.id = this.options.html_ids.GRID_CONTAINER;
-//        c.text = 'PROVA';
+    FC.prototype.layoutRender = function () {
 
-        var main_container = document.getElementById(this.options.html_ids.MAIN_CONTAINER);
-        if((main_container!=null)&&(typeof main_container != "undefined")){
-            while (main_container.firstChild) {
-                main_container.removeChild(main_container.firstChild);
-            }
-            main_container.appendChild(c);
-        }
+        this.options.layout_render = new LayoutFactory().createLayoutRender({"layoutType" :this.options.current_layout});
 
-        this.options.grid = new FluidForm();
-
-        this.options.grid.init({
-            container: document.querySelector("#"+this.options.html_ids.GRID_CONTAINER),
-            drag: {
-                handle: '.fx-catalog-modular-form-handler',
-                containment: "#"+this.options.html_ids.GRID_CONTAINER
-            },
-            config: {
-                itemSelector: "."+this.options.class_ids.ITEM_COMPONENT,
-                columnWidth: "."+this.options.class_ids.ITEM_COMPONENT
-            }
-        });
-
-        this.options.grid.render();
+        this.options.layout_render.render({"mainContent":this.options.mainContent, "MAIN_CONTAINER": this.options.html_ids.MAIN_CONTAINER, "ITEM_COMPONENT_CLASS_ID": this.options.class_ids.ITEM_COMPONENT});
+        this.options.grid = this.options.layout_render.getGrid();
     }
 
     FC.prototype.render = function () {
@@ -331,7 +339,11 @@ define([
         this.initEventListeners();
         //Event Listener of each components
         this.initComponentsEventListener();
-        this.gridRender();
+        this.layoutRender();
+        //if(this.options.current_layout==this.options.layout_type.FLUID_GRID){
+        //    this.gridRender();
+        //}
+
         this.renderComponents();
     }
 
