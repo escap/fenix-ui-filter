@@ -97,6 +97,7 @@ define([
         //This happen when the component has been rendered
         $('body').on(self.options.component_event.READY, function(event, properties){
 
+            console.log(properties);
             if((properties!=null)&&(typeof properties!="undefined")&&(properties.name !=null)&&(typeof properties.name !="undefined")){
                 self.setDomainByAdapter(properties.name);
             }

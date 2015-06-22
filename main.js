@@ -299,11 +299,54 @@ require([
                                     {"value":"51331","label":"Rift Valley","selected":false},
                                     {"value":"51332","label":"Western","selected":false}
                                 ]
-                                //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
                             }
                         }
                     ]
-                }
+                },
+            {
+                "containerType":"fluidGridBaseContainer",
+                "title":"List Test",
+                "components":[
+                    {
+                        "componentType":"timeList-FENIX",
+                        "lang":"EN",
+                        "title":{"EN":"Time List Test"},
+                        "name":"timeListTest",
+                        config:{
+                            "multipleselection":true,
+                            "defaultsource":[
+                                {"value":"51325","label":"Central","selected":true},
+                                {"value":"51326","label":"Coast","selected":true},
+                                {"value":"51327","label":"Eastern","selected":false},
+                                {"value":"51328","label":"Nairobi","selected":false},
+                                {"value":"51329","label":"North Eastern","selected":false},
+                                {"value":"51330","label":"Nyanza","selected":false},
+                                {"value":"51331","label":"Rift Valley","selected":false},
+                                {"value":"51332","label":"Western","selected":false}
+                            ]
+                        }
+                    }
+                    //{
+                    //    "componentType":"baseList",
+                    //    "lang":"EN",
+                    //    "title":{"EN":"Region"},
+                    //    "name":"RegionC2",
+                    //    config:{
+                    //        "multipleselection":true,
+                    //        "defaultsource":[
+                    //            {"value":"51325","label":"Central","selected":true},
+                    //            {"value":"51326","label":"Coast","selected":true},
+                    //            {"value":"51327","label":"Eastern","selected":false},
+                    //            {"value":"51328","label":"Nairobi","selected":false},
+                    //            {"value":"51329","label":"North Eastern","selected":false},
+                    //            {"value":"51330","label":"Nyanza","selected":false},
+                    //            {"value":"51331","label":"Rift Valley","selected":false},
+                    //            {"value":"51332","label":"Western","selected":false}
+                    //        ]
+                    //    }
+                    //}
+                ]
+            }
         ];
 
         var adapterMap = {};
@@ -314,13 +357,17 @@ require([
             success(source)
             return true;
         }
-        adapterMap["RegionC2"] =  regionC1_func;
         //adapterMap["RegionC2"] =  regionC1_func;
+        adapterMap["RegionC2"] =  regionC1_func;
 
         $("#jqxGetValuesButton").on('click', function () {
             var values = filter.getValues();
             console.log("Values ");
             console.log(values)
+            var s = JSON.stringify(values);
+            console.log(s)
+
+
         })
 
         filter.add(configuration, adapterMap);

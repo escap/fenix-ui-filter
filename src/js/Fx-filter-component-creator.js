@@ -93,6 +93,7 @@ define([
 
         var div, label, c;
         var id_container = module.options.id+"_comp_"+index;
+        console.log("In create element id_container= "+id_container)
 
         c = document.getElementById(id_container);
 
@@ -106,6 +107,7 @@ define([
         }
 
         var id_component_content = id_container + "_content";
+        console.log("id_component_content "+id_component_content)
         if ((e.subtitle!=null) && (e.subtitle!="undefined") && (e.subtitle[e.lang])) {
 
             label = document.createElement("DIV");

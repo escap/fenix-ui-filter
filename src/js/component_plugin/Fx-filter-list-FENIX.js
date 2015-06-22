@@ -30,14 +30,14 @@ define([
         //For filter logic .... end
     };
 
-    function Fx_ui_w_codes(optionsDefault) {
+    function Fx_ui_w_list(optionsDefault) {
 
         if (this.options === undefined) {this.options = {}; }
 
         $.extend(true, this.options, o, optionsDefault);
     }
 
-    Fx_ui_w_codes.prototype.render = function (e, container) {
+    Fx_ui_w_list.prototype.render = function (e, container) {
 
         var self = this;
 
@@ -129,7 +129,7 @@ define([
 
     };
 
-    Fx_ui_w_codes.prototype.validate = function (e) {
+    Fx_ui_w_list.prototype.validate = function (e) {
 
         if (!e.hasOwnProperty("source")) {
 
@@ -139,7 +139,7 @@ define([
         return true;
     };
 
-    Fx_ui_w_codes.prototype.processData = function (data) {
+    Fx_ui_w_list.prototype.processData = function (data) {
 
         var r = [];
 
@@ -150,8 +150,7 @@ define([
         return r;
     };
 
-    Fx_ui_w_codes.prototype.getFirstCall = function (o, cb) {
-
+    Fx_ui_w_list.prototype.getFirstCall = function (o, cb) {
         var self = this,
             body = {
                 uid: o.component.source.uid,
@@ -172,6 +171,8 @@ define([
             success: function (data) {
 
                 if (data) {
+                    console.log("DATA!!!")
+                    console.log(JSON.stringify(data))
                     cb(self.processData(data));
                 }
             },
@@ -181,8 +182,7 @@ define([
         });
     };
 
-    Fx_ui_w_codes.prototype.getChildren = function (o, node, cb) {
-
+    Fx_ui_w_list.prototype.getChildren = function (o, node, cb) {
         var self = this,
             body = {
                 uid: o.component.source.uid,
@@ -215,7 +215,7 @@ define([
         });
     };
 
-    Fx_ui_w_codes.prototype.bindEventListeners = function () {
+    Fx_ui_w_list.prototype.bindEventListeners = function () {
 
         var that = this;
 
@@ -226,7 +226,7 @@ define([
 
     };
 
-    Fx_ui_w_codes.prototype.deselectValue = function (obj) {
+    Fx_ui_w_list.prototype.deselectValue = function (obj) {
 
         this.$treeContainer.jstree('deselect_node', [obj.value]);
 
@@ -235,17 +235,16 @@ define([
     };
 
     //For filter logic .... start
-    Fx_ui_w_codes.prototype.getName = function() {
+    Fx_ui_w_list.prototype.getName = function() {
         return this.options.name;
     };
 
-    Fx_ui_w_codes.prototype.getAdapter = function() {
+    Fx_ui_w_list.prototype.getAdapter = function() {
         return this.options.adapter;
     };
     //For filter logic .... end
 
-    Fx_ui_w_codes.prototype.getValues = function (e) {
-        console.log("getValues codes")
+    Fx_ui_w_list.prototype.getValues = function (e) {
         console.log(this.options.componentid)
         var codes = $("#" + this.options.componentid).find('.jstree-holder').jstree(true).get_selected(),
             uid = this.options.module.component.source.uid,
@@ -259,5 +258,5 @@ define([
         };
     };
 
-    return Fx_ui_w_codes;
+    return Fx_ui_w_list;
 });

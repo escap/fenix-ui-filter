@@ -77,19 +77,22 @@
         }
       }
     },
-    "fxtree":{
-      "name":"region",
-      "componentType":"tree-FENIX",
-      "lang":"EN",
-      "title":{"EN": "Region",
-      "ES": "ES List",
-      "FR": "FR List"},
-      "component": {
-      "source": {
-      "uid": "GAUL",
-      "version": "2014"
-      }
+    "fxtree": {
+      "name": "region",
+      "componentType": "tree-FENIX",
+      "lang": "EN",
+      "title": {
+        "EN": "Region",
+        "ES": "ES List",
+        "FR": "FR List"
       },
+      "component": {
+        "source": {
+          "uid": "GAUL",
+          "version": "2014"
+        }
+      }
+    },
     "fxtext":{
         "componentType":"text-FENIX",
         "lang":"EN",
@@ -111,9 +114,32 @@
           }
           }
         }
+      },
+    "timeList": {
+      "componentType": "timeList-FENIX",
+      "lang": "EN",
+      "title": {
+        "EN": "Time List",
+        "ES": "Time List",
+        "FR": "Time List"
+      },
+      "multipleselection": true,
+      "name": "timeList",
+      "component": {
+        "source": {
+          "datafields": [
+            {"name": "label"},
+            {"name": "value"}
+          ]
+        },
+        "rendering": {
+          "displayMember": "label",
+          "valueMember": "value",
+          "multiple": true,
+          "width": "100%",
+          "height": "100%"
+        }
       }
-  }
-
-
+    }
   }
 }
