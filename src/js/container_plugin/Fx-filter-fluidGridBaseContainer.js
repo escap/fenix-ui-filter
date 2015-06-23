@@ -40,12 +40,12 @@ define([
     Container1.prototype.getBlankContainer = function (module, components) {
 
         var self = this;
-        var $module = $("<div class='" + self.options.css_classes.MODULE + "'></div>"),
+        var $module = $("<div class='" + self.options.css_classes.MODULE + " '></div>"),
             $header = $("<div class='" + self.options.css_classes.HEADER + "'></div>"),
             $holder = $("<div class='" + self.options.css_classes.HOLDER + "'></div>");
 
         $module.attr("data-module", module.options.container.containerType);
-        $module.attr("data-size", "half");
+        $module.attr("data-size", "full");
         $module.attr("id", module.options.id);
         $header.append("<div class='" + self.options.css_classes.HANDLER + "'></div>");
 //        $header.append("<div class='" + o.css_classes.LABEL + "'>" + cache.json[module.module]["label"][o.widget.lang] + "</div>");
