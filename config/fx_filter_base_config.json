@@ -140,6 +140,31 @@
           "height": "100%"
         }
       }
+    },
+    "list3": {
+      "componentType":"list-FENIX",
+      "lang":"EN",
+      "title":{"EN": "Time List For Fenix",
+        "ES": "Time List For Fenix",
+        "DE": "Time List For Fenix",
+        "FR": "Time List For Fenix"},
+      "name":"timeListForFenix",
+      "component": {
+        "source": {
+          "uid": "GAUL_ReferenceArea",
+          "version": "1.0"
+        },
+        "defaultsource":[
+          {"value":"51325","label":"Central","selected":true},
+          {"value":"51326","label":"Coast","selected":true},
+          {"value":"51327","label":"Eastern","selected":false},
+          {"value":"51328","label":"Nairobi","selected":false},
+          {"value":"51329","label":"North Eastern","selected":false},
+          {"value":"51330","label":"Nyanza","selected":false},
+          {"value":"51331","label":"Rift Valley","selected":false},
+          {"value":"51332","label":"Western","selected":false}
+        ]
+      }
     }
   }
 }

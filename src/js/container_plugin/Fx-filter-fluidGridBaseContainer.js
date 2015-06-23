@@ -25,7 +25,7 @@ define([
             LABEL: "fx-catalog-modular-form-label"
         },
         events: {
-            REMOVE_MODULE: "fx.catalog.module.remove"
+            REMOVE_MODULE: "fx.filter.module.remove"
         }
     }
 

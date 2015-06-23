@@ -19,7 +19,7 @@ define([
         adapter : null,
 
         events: {
-            REMOVE_MODULE: "fx.catalog.module.remove",
+            REMOVE_MODULE: "fx.filter.module.remove",
             READY : "fx.filter.component.ready",
             DESELECT: 'fx.filter.module.deselect.'
         }
@@ -118,7 +118,12 @@ define([
     };
 
     Fx_ui_w_text.prototype.getValues = function (e) {
-        var c = { enumeration :  [$("#" + this.options.componentid + "  input").val()]};
+        var text = $("#" + this.options.componentid + "  input").val();
+
+        if(text.length<=0)
+            return null;
+
+        var c = { enumeration :  [text]};
         return c;
     };
 

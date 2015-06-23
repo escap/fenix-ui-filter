@@ -23,7 +23,7 @@ define([
         adapter : null,
 
         events: {
-            REMOVE_MODULE: "fx.catalog.module.remove",
+            REMOVE_MODULE: "fx.filter.module.remove",
             READY : "fx.filter.component.ready",
             DESELECT: 'fx.filter.module.deselect.'
         }
@@ -245,11 +245,13 @@ define([
     //For filter logic .... end
 
     Fx_ui_w_codes.prototype.getValues = function (e) {
-        console.log("getValues codes")
-        console.log(this.options.componentid)
         var codes = $("#" + this.options.componentid).find('.jstree-holder').jstree(true).get_selected(),
             uid = this.options.module.component.source.uid,
             version = this.options.module.component.source.version;
+
+        if(codes.length<=0){
+            return null;
+        }
         return {
             codes: [{
                 uid: uid,

@@ -23,7 +23,7 @@ define([
         adapter : null,
 
         events: {
-            REMOVE_MODULE: "fx.catalog.module.remove",
+            REMOVE_MODULE: "fx.filter.filter.remove",
             READY : "fx.filter.component.ready",
             DESELECT: 'fx.filter.module.deselect.'
         }
@@ -200,8 +200,11 @@ define([
 
         var codes = $("#" + this.options.componentid).find('.jstree-holder').jstree(true).get_selected();
 
-        return {enumeration : codes};
+        if(codes.length<= 0){
+            return null;
+        }
 
+        return {enumeration : codes};
     };
 
     return Fx_ui_w_enumeration;

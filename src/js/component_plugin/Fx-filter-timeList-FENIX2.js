@@ -35,12 +35,12 @@ define([
     };
 
     // A constructor for defining new component
-    function Component1( o ) {
+    function Timelist( o ) {
     if (this.options === undefined) {this.options = {}; }
 
     $.extend(true, this.options, optionsDefault, o);}
 
-    Component1.prototype.validate = function (e) {
+    Timelist.prototype.validate = function (e) {
         //if (!e.hasOwnProperty("source")) {
         //    throw new Error("ELEM_NOT_SOURCE");
         //} else {
@@ -52,15 +52,15 @@ define([
         return true;
     };
 
-    Component1.prototype.getName = function() {
+    Timelist.prototype.getName = function() {
         return this.options.name;
     };
 
-    Component1.prototype.getAdapter = function() {
+    Timelist.prototype.getAdapter = function() {
         return this.options.adapter;
     };
 
-    Component1.prototype.render = function (e, component) {
+    Timelist.prototype.render = function (e, component) {
 
         if ((e.config.defaultsource != null) && (typeof e.config.defaultsource != "undefined")) {
             if(e.config.multipleselection){
@@ -95,7 +95,7 @@ define([
        $(component).trigger(this.options.events.READY, {name: e.name});
     }
 
-    Component1.prototype.setDomain = function (source) {
+    Timelist.prototype.setDomain = function (source) {
         this.options.source = source;
         $('#'+this.options.componentid).jqxListBox({source: source});
 
@@ -106,21 +106,23 @@ define([
         }
     }
 
-    Component1.prototype.getValues = function () {
+    Timelist.prototype.getValues = function () {
+        var resultObj = {};
+        resultObj["time"] = [];
         var results = [];
         var items = $('#'+this.options.componentid).jqxListBox('getSelectedItems');
         if (items.length > 0) {
             for (var i = 0; i < items.length; i++) {
-                results.push({componentName : this.options.name, code : items[i].value, label: items[i].label});
+                //results.push({componentName : this.options.name, code : items[i].value, label: items[i].label});
+                results.push({from : parseInt(items[i].value,10), to : parseInt(items[i].value,10)});
+                //results.push(Integer.items[i].value);
             }
+            resultObj["time"] = results;
         }
-        else{
-            results = null;
-        }
-        return results;
+        return resultObj;
     };
 
-    Component1.prototype.bindEventListeners = function () {
+    Timelist.prototype.bindEventListeners = function () {
 
         var that = this;
 
@@ -129,19 +131,19 @@ define([
         }, false);
     };
 
-    Component1.prototype.deselectValue = function (obj) {
+    Timelist.prototype.deselectValue = function (obj) {
         var item = $(this.options.container).jqxListBox('getItemByValue', obj.value);
         $(this.options.container).jqxListBox('unselectItem', item );
     };
 
-    Component1.prototype.refreshDomainByAdapter = function(filterModule){
+    Timelist.prototype.refreshDomainByAdapter = function(filterModule){
         if((this.options.adapter!=null)&&(typeof this.options.adapter!="undefined")){
             var field;
             this.options.adapter(filterModule, $.proxy(this.setDomain, this), 3);
         }
     }
 
-    Component1.prototype.bindEventListeners = function () {
+    Timelist.prototype.bindEventListeners = function () {
 
         var that = this;
 
@@ -150,14 +152,14 @@ define([
         }, false);
     };
 
-    Component1.prototype.deselectValue = function (obj) {
+    Timelist.prototype.deselectValue = function (obj) {
         var item = $(this.options.container).jqxListBox('getItemByValue', obj.value);
         $(this.options.container).jqxListBox('unselectItem', item );
     };
 
-    Component1.prototype.error = function (e) {
+    Timelist.prototype.error = function (e) {
         console.log("Component error: "+ error);
     };
 
-    return Component1;
+    return Timelist;
 });

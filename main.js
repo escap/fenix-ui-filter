@@ -29,6 +29,84 @@ require([
           //  plugin_subdir: 'FENIX-plugin'
         });
 
+
+        //FENIX List Example : 1 component "sourceType": "timeList", 1 component "sourceType": "period"
+        var configuration =[
+            {
+                "containerType":"fluidGridBaseContainer",
+                "title":"List Test Timelist",
+                "components":[
+                    {
+                        "componentType":"timeList-FENIX",
+                        "lang":"EN",
+                        "title":{"EN": "Time List For Fenix",
+                            "ES": "Time List For Fenix",
+                            "DE": "Time List For Fenix",
+                            "FR": "Time List For Fenix"},
+                        "name":"timeListForFenix",
+                        "component": {
+                            "source": {
+                                "uid": "GAUL_ReferenceArea",
+                                "version": "1.0"
+                            },
+                            "sourceType": "timeList",
+                            "defaultsource":[1986, 2015, 1997, 2000, 2002, 2003, 2005, 2007, 2010]
+                        }
+                    }
+                ]
+            },
+            {
+                "containerType":"fluidGridBaseContainer",
+                "title":"List Test Period",
+                "components":[
+                    {
+                        "componentType":"timeList-FENIX",
+                        "lang":"EN",
+                        "title":{"EN": "Time List For Fenix",
+                            "ES": "Time List For Fenix",
+                            "DE": "Time List For Fenix",
+                            "FR": "Time List For Fenix"},
+                        "name":"periodForFenix",
+                        "component": {
+                            "sourceType": "period",
+                            "defaultsource":[{"from": 1983, "to": 1994},{"from": 1996, "to": 1998},{"from": 2002, "to": 2005},{"from": 2007, "to": 2011}]
+                        }
+                    }
+                ]
+            }
+        ];
+
+        //Baselist Example
+        //var configuration = [
+        //    {
+        //        "containerType":"fluidGridBaseContainer",
+        //        "title":"List Test Timelist",
+        //        "components":[
+        //                {
+        //                    "componentType":"baseList",
+        //                    "lang":"EN",
+        //                    "title":{"EN":"Region"},
+        //                    "name":"RegionC2",
+        //                    config:{
+        //                        "multipleselection":true,
+        //                        "defaultsource":[
+        //                            {"value":"51325","label":"Central","selected":false},
+        //                            {"value":"51326","label":"Coast","selected":false},
+        //                            {"value":"51327","label":"Eastern","selected":false},
+        //                            {"value":"51328","label":"Nairobi","selected":false},
+        //                            {"value":"51329","label":"North Eastern","selected":false},
+        //                            {"value":"51330","label":"Nyanza","selected":false},
+        //                            {"value":"51331","label":"Rift Valley","selected":false},
+        //                            {"value":"51332","label":"Western","selected":false}
+        //                        ]
+        //                    }
+        //                }
+        //        ]
+        //    }
+        //];
+
+        //Example with one container and these components:
+        //"enumeration-FENIX", "text-FENIX", "tree-FENIX", "codes-FENIX", "baseList"
         //var configuration =
         //[{
         //            "containerType":"fluidGridBaseContainer",
@@ -83,51 +161,7 @@ require([
         //                            "version": "2014"
         //                        }
         //                    }
-        //                }
-        //                //,
-        //                //{
-        //                //    "componentType":"codes-FENIX",
-        //                //    "lang":"EN",
-        //                //    "title":{"EN": "Reference Area2",
-        //                //        "ES": "Intervalo de tiempo",
-        //                //        "DE": "Zeitbereich",
-        //                //        "FR": "Intervalle de temps"},
-        //                //    "name":"ReferenceArea2",
-        //                //    "component": {
-        //                //        "source": {
-        //                //            "uid": "GAUL_ReferenceArea",
-        //                //            "version": "1.0"
-        //                //        }
-        //                //    }
-        //                //}
-        //
-        //                //{
-        //                //    "componentType":"baseList",
-        //                //    "lang":"EN",
-        //                //    "title":{"EN":"Region"},
-        //                //    "name":"RegionC2",
-        //                //    config:{
-        //                //        "multipleselection":true,
-        //                //        "defaultsource":[
-        //                //            {"value":"51325","label":"Central","selected":true},
-        //                //            {"value":"51326","label":"Coast","selected":true},
-        //                //            {"value":"51327","label":"Eastern","selected":false},
-        //                //            {"value":"51328","label":"Nairobi","selected":false},
-        //                //            {"value":"51329","label":"North Eastern","selected":false},
-        //                //            {"value":"51330","label":"Nyanza","selected":false},
-        //                //            {"value":"51331","label":"Rift Valley","selected":false},
-        //                //            {"value":"51332","label":"Western","selected":false}
-        //                //        ]
-        //                //        //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
-        //                //    }
-        //                //}
-        //            ]
-        //        },
-        //        {
-        //            "containerType":"fluidGridBaseContainer",
-        //            "title":"Container Region2",
-        //            "activeTab":"ReferenceArea2",
-        //            "components":[
+        //                },
         //                {
         //                    "componentType":"codes-FENIX",
         //                    "lang":"EN",
@@ -160,194 +194,11 @@ require([
         //                            {"value":"51331","label":"Rift Valley","selected":false},
         //                            {"value":"51332","label":"Western","selected":false}
         //                        ]
-        //                        //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
         //                    }
         //                }
         //            ]
         //        }
         //];
-
-
-        var configuration =
-        [{
-                    "containerType":"fluidGridBaseContainer",
-                    "title":"Container Region",
-                    "activeTab":"ResurceType",
-                    "components":[
-                        {
-                            "componentType":"enumeration-FENIX",
-                            "lang":"EN",
-                            "title":{"EN": "ResurceType",
-                                "ES": "ResurceType",
-                                "FR": "ResurceType"},
-                            "name":"ResurceType",
-                            "component": {
-                                "source": {
-                                    "uid": "RepresentationType"
-                                }
-                            }
-                        },
-                        {
-                            "componentType":"text-FENIX",
-                            "lang":"EN",
-                            "title":{"EN": "Uid",
-                                "DE": "Suche",
-                                "ES": "Búsqueda",
-                                "FR": "Recherchet"},
-                            "name":"Uid",
-                            "component": {
-                                "rendering": {
-                                    "placeholder": {
-                                        "EN": "Uid",
-                                        "DE": "uid",
-                                        "ES": "uid",
-                                        "FR": "uid"
-                                    },
-                                    "htmlattributes": {
-                                        "className": "form-control"
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "componentType":"tree-FENIX",
-                            "lang":"EN",
-                            "title":{"EN": "Region",
-                                "ES": "ES List",
-                                "FR": "FR List"},
-                            "name":"Region",
-                            "component": {
-                                "source": {
-                                    "uid": "GAUL",
-                                    "version": "2014"
-                                }
-                            }
-                        }
-                        //,
-                        //{
-                        //    "componentType":"codes-FENIX",
-                        //    "lang":"EN",
-                        //    "title":{"EN": "Reference Area2",
-                        //        "ES": "Intervalo de tiempo",
-                        //        "DE": "Zeitbereich",
-                        //        "FR": "Intervalle de temps"},
-                        //    "name":"ReferenceArea2",
-                        //    "component": {
-                        //        "source": {
-                        //            "uid": "GAUL_ReferenceArea",
-                        //            "version": "1.0"
-                        //        }
-                        //    }
-                        //}
-
-                        //{
-                        //    "componentType":"baseList",
-                        //    "lang":"EN",
-                        //    "title":{"EN":"Region"},
-                        //    "name":"RegionC2",
-                        //    config:{
-                        //        "multipleselection":true,
-                        //        "defaultsource":[
-                        //            {"value":"51325","label":"Central","selected":true},
-                        //            {"value":"51326","label":"Coast","selected":true},
-                        //            {"value":"51327","label":"Eastern","selected":false},
-                        //            {"value":"51328","label":"Nairobi","selected":false},
-                        //            {"value":"51329","label":"North Eastern","selected":false},
-                        //            {"value":"51330","label":"Nyanza","selected":false},
-                        //            {"value":"51331","label":"Rift Valley","selected":false},
-                        //            {"value":"51332","label":"Western","selected":false}
-                        //        ]
-                        //        //"adapter": "function(model, success, error) {var source = [{'value':'1234','label':'S3','selected':false},{'value':'12345','label':'S4','selected':false}]; console.log('THIS!');console.log(this); $.proxy(success(source), this); return true;}"
-                        //    }
-                        //}
-                    ]
-                },
-                {
-                    "containerType":"fluidGridBaseContainer",
-                    "title":"Container Region2",
-                    "activeTab":"ReferenceArea2",
-                    "components":[
-                        {
-                            "componentType":"codes-FENIX",
-                            "lang":"EN",
-                            "title":{"EN": "Reference Area2",
-                                "ES": "Intervalo de tiempo",
-                                "DE": "Zeitbereich",
-                                "FR": "Intervalle de temps"},
-                            "name":"ReferenceArea2",
-                            "component": {
-                                "source": {
-                                    "uid": "GAUL_ReferenceArea",
-                                    "version": "1.0"
-                                }
-                            }
-                        },
-                        {
-                            "componentType":"baseList",
-                            "lang":"EN",
-                            "title":{"EN":"Region"},
-                            "name":"RegionC2",
-                            config:{
-                                "multipleselection":true,
-                                "defaultsource":[
-                                    {"value":"51325","label":"Central","selected":true},
-                                    {"value":"51326","label":"Coast","selected":true},
-                                    {"value":"51327","label":"Eastern","selected":false},
-                                    {"value":"51328","label":"Nairobi","selected":false},
-                                    {"value":"51329","label":"North Eastern","selected":false},
-                                    {"value":"51330","label":"Nyanza","selected":false},
-                                    {"value":"51331","label":"Rift Valley","selected":false},
-                                    {"value":"51332","label":"Western","selected":false}
-                                ]
-                            }
-                        }
-                    ]
-                },
-            {
-                "containerType":"fluidGridBaseContainer",
-                "title":"List Test",
-                "components":[
-                    {
-                        "componentType":"timeList-FENIX",
-                        "lang":"EN",
-                        "title":{"EN":"Time List Test"},
-                        "name":"timeListTest",
-                        config:{
-                            "multipleselection":true,
-                            "defaultsource":[
-                                {"value":"51325","label":"Central","selected":true},
-                                {"value":"51326","label":"Coast","selected":true},
-                                {"value":"51327","label":"Eastern","selected":false},
-                                {"value":"51328","label":"Nairobi","selected":false},
-                                {"value":"51329","label":"North Eastern","selected":false},
-                                {"value":"51330","label":"Nyanza","selected":false},
-                                {"value":"51331","label":"Rift Valley","selected":false},
-                                {"value":"51332","label":"Western","selected":false}
-                            ]
-                        }
-                    }
-                    //{
-                    //    "componentType":"baseList",
-                    //    "lang":"EN",
-                    //    "title":{"EN":"Region"},
-                    //    "name":"RegionC2",
-                    //    config:{
-                    //        "multipleselection":true,
-                    //        "defaultsource":[
-                    //            {"value":"51325","label":"Central","selected":true},
-                    //            {"value":"51326","label":"Coast","selected":true},
-                    //            {"value":"51327","label":"Eastern","selected":false},
-                    //            {"value":"51328","label":"Nairobi","selected":false},
-                    //            {"value":"51329","label":"North Eastern","selected":false},
-                    //            {"value":"51330","label":"Nyanza","selected":false},
-                    //            {"value":"51331","label":"Rift Valley","selected":false},
-                    //            {"value":"51332","label":"Western","selected":false}
-                    //        ]
-                    //    }
-                    //}
-                ]
-            }
-        ];
 
         var adapterMap = {};
         var regionC1_func = function(model, success, error)
@@ -358,7 +209,7 @@ require([
             return true;
         }
         //adapterMap["RegionC2"] =  regionC1_func;
-        adapterMap["RegionC2"] =  regionC1_func;
+        //adapterMap["RegionC2"] =  regionC1_func;
 
         $("#jqxGetValuesButton").on('click', function () {
             var values = filter.getValues();
@@ -366,8 +217,6 @@ require([
             console.log(values)
             var s = JSON.stringify(values);
             console.log(s)
-
-
         })
 
         filter.add(configuration, adapterMap);

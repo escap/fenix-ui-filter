@@ -27,7 +27,7 @@ define([
 
         //The list of the filter event
         events: {
-            REMOVE_MODULE: "fx.catalog.module.remove"
+            REMOVE_MODULE: "fx.filter.module.remove"
         },
 
         //The list of the components event
@@ -97,7 +97,6 @@ define([
         //This happen when the component has been rendered
         $('body').on(self.options.component_event.READY, function(event, properties){
 
-            console.log(properties);
             if((properties!=null)&&(typeof properties!="undefined")&&(properties.name !=null)&&(typeof properties.name !="undefined")){
                 self.setDomainByAdapter(properties.name);
             }
@@ -182,8 +181,11 @@ define([
                             var modulename = component.getName();
                             // activeTab=="undefined" if there is one component for the container
                             if((componenName==modulename)&&((activeTab==null)||(typeof activeTab=="undefined")||(activeTab.length==0)||(activeTab==modulename))){
-                                results[component.getName()] = component.getValues();
-                                resultsCount++;
+                                var values = component.getValues();
+                                if(values!=null){
+                                    results[component.getName()] = values;
+                                    resultsCount++;
+                                }
                             }
                         }
                     }
@@ -200,8 +202,11 @@ define([
 //                            var component = this.options.filter_module_array[i].options.component;
                             var component = components[jComp];
                             if((activeTab==null)||(typeof activeTab=="undefined")||(activeTab.length==0)||(activeTab==component.getName())) {
-                                results[component.getName()] = component.getValues();
-                                resultsCount++;
+                                var values = component.getValues();
+                                if(values!=null){
+                                    results[component.getName()] = values;
+                                    resultsCount++;
+                                }
                             }
                         }
                     }
@@ -226,8 +231,11 @@ define([
                             var component = components[jComp];
                             var modulename = component.getName();
                             if(componenName==modulename){
-                                results[component.getName()] = component.getValues();
-                                resultsCount++;
+                                var values = component.getValues();
+                                if(values!=null){
+                                    results[component.getName()] = values;
+                                    resultsCount++;
+                                }
                             }
                         }
                     }
@@ -242,8 +250,11 @@ define([
                     for(var jComp = 0; jComp<components.length; jComp++){
 //                            var component = this.options.filter_module_array[i].options.component;
                         var component = components[jComp];
-                        results[component.getName()] = component.getValues();
-                        resultsCount++;
+                        var values = component.getValues();
+                        if(values!=null){
+                            results[component.getName()] = values;
+                            resultsCount++;
+                        }
                     }
                 }
             }
