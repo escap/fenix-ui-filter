@@ -25,8 +25,12 @@ define([
         this.controller.render();
     };
 
-    Start.prototype.getValues = function () {
-        return this.controller.getValues();
+    Start.prototype.getValues = function (components) {
+        return this.controller.getValues(components);
+    };
+
+    Start.prototype.getAllValues = function (components) {
+        return this.controller.getAllValues(components);
     };
 
     Start.prototype.add = function (modules, adapterMap) {

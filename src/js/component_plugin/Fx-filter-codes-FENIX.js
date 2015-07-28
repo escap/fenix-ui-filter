@@ -22,6 +22,7 @@ define([
         source :'',
         adapter : null,
 
+
         events: {
             REMOVE_MODULE: "fx.filter.module.remove",
             READY : "fx.filter.component.ready",
