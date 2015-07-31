@@ -92,7 +92,7 @@ define([
         });
 
         var self = this;
-        $('.' + this.options.css_classes.RESIZE).on('click', function () {
+        $( this.options.css_classes.RESIZE).on('click', function () {
 
             self.$surveyTimerange.rangeSlider('resize');
         })
