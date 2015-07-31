@@ -19,6 +19,7 @@ define([
             //mainContent: document.querySelector(o.container),
             mainContent: o.container,
             prefix_plugin_dir: o.plugin_prefix,
+            component_plugin_dir: o.component_plugin_dir || undefined,
             current_layout: o.layout
         });
 
@@ -34,7 +35,7 @@ define([
     };
 
     Start.prototype.add = function (modules, adapterMap) {
-
+        console.log('start-add')
         this.controller.add(modules, adapterMap);
     };
 
