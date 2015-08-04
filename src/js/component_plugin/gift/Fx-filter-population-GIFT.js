@@ -45,7 +45,7 @@ define([
         //For filter logic .... end
     };
 
-    function Fx_ui_survey_component(optionsDefault) {
+    function FX_ui_population_component(optionsDefault) {
 
         if (this.options === undefined) {
             this.options = {};
@@ -54,7 +54,7 @@ define([
         $.extend(true, this.options, o, optionsDefault);
     }
 
-    Fx_ui_survey_component.prototype.render = function (e, container) {
+    FX_ui_population_component.prototype.render = function (e, container) {
 
         var self = this;
 
@@ -68,11 +68,26 @@ define([
 
         this.$container.append(this.$componentStructure);
 
-        this.$surveyTimerange = $(e.template.descriptions.SURVEY.YEARS)
 
-        this.$surveyaddCharsName = e.template.descriptions.SURVEY.ADD_CHARS_RADIO_NAME
+        // gender
+        this.$opulationGenderName = e.template.descriptions.POPULATION.GENDERS_RADIO_NAME
+        this.$populationGenderSelector = $('input[name="' + this.$opulationGenderName + '"]:radio')
 
-        this.$surveyAddCharsSelector = $('input[name="' + this.$surveyaddCharsName + '"]:radio')
+        // agerange
+        this.$populationAgerange = $(e.template.descriptions.POPULATION.AGERANGE)
+
+        // characteristics
+        this.$populationCharsName = e.template.descriptions.POPULATION.CHARACTERISTICS_RADIO_NAME;
+        this.$populationCharsSelector = $('input[name="' + this.$populationCharsName + '"]:radio')
+
+
+        // initialization
+
+        var yearsSourceTimerange = e.component.years.defaultsource;
+
+
+
+
 
         var defaultSourceTimerange = e.component.years.defaultsource;
         this.$surveyTimerange.rangeSlider({
@@ -113,7 +128,7 @@ define([
 
     };
 
-    Fx_ui_survey_component.prototype.validate = function (e) {
+    FX_ui_population_component.prototype.validate = function (e) {
 
         //TODO
 
@@ -127,7 +142,7 @@ define([
         return true;
     };
 
-    Fx_ui_survey_component.prototype.processData = function (dataType, data) {
+    FX_ui_population_component.prototype.processData = function (dataType, data) {
         // TODO
 
         var r = [];
@@ -162,7 +177,7 @@ define([
         return r;
     };
 
-    Fx_ui_survey_component.prototype.bindEventListeners = function () {
+    FX_ui_population_component.prototype.bindEventListeners = function () {
 
 
         var that = this;
@@ -174,7 +189,7 @@ define([
 
     };
 
-    Fx_ui_survey_component.prototype.deselectValue = function (obj) {
+    FX_ui_population_component.prototype.deselectValue = function (obj) {
 
         this.$treeContainer.jstree('deselect_node', [obj.value]);
 
@@ -183,16 +198,16 @@ define([
     };
 
     //For filter logic .... start
-    Fx_ui_survey_component.prototype.getName = function () {
+    FX_ui_population_component.prototype.getName = function () {
         return this.options.name;
     };
 
-    Fx_ui_survey_component.prototype.getAdapter = function () {
+    FX_ui_population_component.prototype.getAdapter = function () {
         return this.options.adapter;
     };
     //For filter logic .... end
 
-    Fx_ui_survey_component.prototype.getValues = function (e) {
+    FX_ui_population_component.prototype.getValues = function (e) {
 
         var timeData = this.$surveyTimerange.rangeSlider('values');
 
@@ -210,5 +225,5 @@ define([
         };
     };
 
-    return Fx_ui_survey_component;
+    return FX_ui_population_component;
 });
