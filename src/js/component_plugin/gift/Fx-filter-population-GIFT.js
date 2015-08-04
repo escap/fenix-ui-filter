@@ -52,7 +52,33 @@ define([
         }
 
         $.extend(true, this.options, o, optionsDefault);
-    }
+    };
+
+    FX_ui_population_component.prototype._initialize = function(e) {
+
+        // gender
+        this.$populationGenderName = e.template.descriptions.POPULATION.GENDERS_RADIO_NAME
+        this.$populationGenderSelector = $('input[name="' + this.$populationGenderName + '"]:radio')
+
+        // agerange Type
+        this.$populationAgeRangeTypeName = e.template.descriptions.POPULATION.AGERANGE_TYPE_RADIO_NAME
+        this.$populationAgeRangeTypeSelector = $('input[name="' + this.$populationAgeRangeTypeName + '"]:radio')
+
+
+        // agerange
+        this.$populationAgerange = $(e.template.descriptions.POPULATION.AGERANGE)
+
+        // characteristics
+        this.$populationCharsName = e.template.descriptions.POPULATION.CHARACTERISTICS_RADIO_NAME;
+        this.$populationCharsSelector = $('input[name="' + this.$populationCharsName + '"]:radio')
+
+
+        // initialization data timerange
+       this.$dataTimeRange = {
+           yearsRange : e.component.ageRange.defaultsource.YEARS,
+           monthsRange: e.component.ageRange.defaultsource.MONTHS
+           };
+    };
 
     FX_ui_population_component.prototype.render = function (e, container) {
 
@@ -72,73 +98,13 @@ define([
 
         this.$isYearTypeSelected  =true;
 
-
-        // gender
-        this.$populationGenderName = e.template.descriptions.POPULATION.GENDERS_RADIO_NAME
-        this.$populationGenderSelector = $('input[name="' + this.$populationGenderName + '"]:radio')
-
-        // agerange Type
-        this.$populationAgeRangeTypeName = e.template.descriptions.POPULATION.AGERANGE_TYPE_RADIO_NAME
-        this.$populationAgeRangeTypeSelector = $('input[name="' + this.$populationAgeRangeTypeName + '"]:radio')
-
-
-        // agerange
-        this.$populationAgerange = $(e.template.descriptions.POPULATION.AGERANGE)
-
-        // characteristics
-        this.$populationCharsName = e.template.descriptions.POPULATION.CHARACTERISTICS_RADIO_NAME;
-        this.$populationCharsSelector = $('input[name="' + this.$populationCharsName + '"]:radio')
-
-
-        // initialization
-
-        var yearsSourceTimerange = e.component.ageRange.defaultsource.YEARS;
-        var monthsSourceTimerange = e.component.ageRange.defaultsource.MONTHS;
+        this._initialize(e);
 
         // ageRange selector
         this.$populationAgerange.rangeSlider({
-            bounds: {min: yearsSourceTimerange.from, max: yearsSourceTimerange.to},
-            step: 1, defaultValues: {min: yearsSourceTimerange.from + 5, max: yearsSourceTimerange.to - 5}
+            bounds: {min:  this.$dataTimeRange.yearsRange.from, max: this.$dataTimeRange.yearsRange.to},
+            step: 1, defaultValues: {min: this.$dataTimeRange.yearsRange.from + 5, max: this.$dataTimeRange.yearsRange.to - 5}
         });
-
-        var self = this;
-        // on change gender
-        console.log(self.options)
-        this.$populationGenderSelector.on('change', function (e, data) {
-            e.preventDefault();
-
-            console.log(self.options.events.MODIFY)
-            amplify.publish(self.options.events.MODIFY)
-        });
-
-        // on change kind of age range
-
-        this.$populationAgeRangeTypeSelector.on('change', function (e, data) {
-            e.preventDefault();
-           var data =$(e.target).val();
-            // change in months
-            if(self.$isYearTypeSelected=== true && data === 'MONTHS'){
-                self.$isYearTypeSelected = false;
-                self.$populationAgerange.rangeSlider('bounds', monthsSourceTimerange.from, monthsSourceTimerange.to);
-                self.$populationAgerange.rangeSlider('values', monthsSourceTimerange.from+48, monthsSourceTimerange.to-240)
-
-            }else if(self.$isYearTypeSelected=== false && data === 'YEARS'){
-                self.$isYearTypeSelected = true;
-                self.$populationAgerange.rangeSlider('bounds', yearsSourceTimerange.from, yearsSourceTimerange.to);
-                self.$populationAgerange.rangeSlider('values', yearsSourceTimerange.from+5, yearsSourceTimerange.to-5)
-            }
-        });
-
-        // on change pop characteristics
-
-
-        var self = this;
-        $( this.options.css_classes.RESIZE).on('click', function () {
-            self.$populationAgerange.rangeSlider('resize');
-        })
-
-
-
 
         this.bindEventListeners();
 
@@ -204,14 +170,53 @@ define([
 
     FX_ui_population_component.prototype.bindEventListeners = function () {
 
+        var self = this;
 
-        var that = this;
 
-        amplify.subscribe(E.MODULE_DESELECT + '.' + that.options.module.name, function (e) {
+        // on change gender
+        this.$populationGenderSelector.on('change', function (e, data) {
+            e.preventDefault();
 
-            that.deselectValue(e);
+            console.log(self.options.events.MODIFY)
+            amplify.publish(self.options.events.MODIFY)
         });
 
+
+        // on change kind of age range
+        this.$populationAgeRangeTypeSelector.on('change', function (e, data) {
+            e.preventDefault();
+            var kindOfAgeRange =$(e.target).val();
+            // change in months
+            if(self.$isYearTypeSelected=== true && kindOfAgeRange === 'MONTHS'){
+                self.$isYearTypeSelected = false;
+                self.$populationAgerange.rangeSlider('bounds', self.$dataTimeRange.monthsRange.from, self.$dataTimeRange.monthsRange.to);
+                self.$populationAgerange.rangeSlider('values', self.$dataTimeRange.monthsRange.from+48, self.$dataTimeRange.monthsRange.to-240)
+
+            }else if(self.$isYearTypeSelected=== false && kindOfAgeRange === 'YEARS'){
+                self.$isYearTypeSelected = true;
+                self.$populationAgerange.rangeSlider('bounds', self.$dataTimeRange.yearsRange.from, self.$dataTimeRange.yearsRange.to);
+                self.$populationAgerange.rangeSlider('values', self.$dataTimeRange.yearsRange.from+5, self.$dataTimeRange.yearsRange.to-5)
+            }
+
+            amplify.publish(self.options.events.MODIFY)
+        });
+
+
+        this.$populationAgerange.bind("valuesChanged", function(e, data){
+            e.preventDefault;
+            amplify.publish(self.options.events.MODIFY)
+        });
+
+
+        // oresize jqallrange slider
+        $( this.options.css_classes.RESIZE).on('click', function () {
+            self.$populationAgerange.rangeSlider('resize');
+        })
+
+
+        amplify.subscribe(E.MODULE_DESELECT + '.' + self.options.module.name, function (e) {
+            self.deselectValue(e);
+        });
     };
 
     FX_ui_population_component.prototype.deselectValue = function (obj) {
@@ -219,7 +224,6 @@ define([
         this.$treeContainer.jstree('deselect_node', [obj.value]);
 
         this.$treeContainer.jstree(true).deselect_node([obj.value]);
-
     };
 
     //For filter logic .... start

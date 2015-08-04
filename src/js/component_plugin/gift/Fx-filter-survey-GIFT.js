@@ -52,7 +52,19 @@ define([
         }
 
         $.extend(true, this.options, o, optionsDefault);
-    }
+    };
+
+    Fx_ui_survey_component.prototype._initialize = function(e) {
+
+        this.$surveyTimerange = $(e.template.descriptions.SURVEY.YEARS)
+
+        this.$surveyaddCharsName = e.template.descriptions.SURVEY.ADD_CHARS_RADIO_NAME
+
+        this.$surveyAddCharsSelector = $('input[name="' + this.$surveyaddCharsName + '"]:radio');
+
+        this.$sourceTimerange = e.component.years.defaultsource;
+
+    };
 
     Fx_ui_survey_component.prototype.render = function (e, container) {
 
@@ -68,38 +80,12 @@ define([
 
         this.$container.append(this.$componentStructure);
 
-        this.$surveyTimerange = $(e.template.descriptions.SURVEY.YEARS)
+        this._initialize(e);
 
-        this.$surveyaddCharsName = e.template.descriptions.SURVEY.ADD_CHARS_RADIO_NAME
-
-        this.$surveyAddCharsSelector = $('input[name="' + this.$surveyaddCharsName + '"]:radio');
-        console.log(this.$surveyAddCharsSelector)
-
-        var defaultSourceTimerange = e.component.years.defaultsource;
         this.$surveyTimerange.rangeSlider({
-            bounds: {min: defaultSourceTimerange.from, max: defaultSourceTimerange.to},
-            step: 1, defaultValues: {min: defaultSourceTimerange.from + 5, max: defaultSourceTimerange.to - 5}
+            bounds: {min: this.$sourceTimerange.from, max: this.$sourceTimerange.to},
+            step: 1, defaultValues: {min: this.$sourceTimerange.from + 5, max: this.$sourceTimerange.to - 5}
         });
-
-
-        console.log(this.$surveyAddCharsSelector);
-        this.$surveyAddCharsSelector.on('change', function (e, data) {
-            e.preventDefault();
-            console.log($(e.target).val());
-
-        });
-
-        var self = this;
-        $( this.options.css_classes.RESIZE).on('click', function () {
-
-            self.$surveyTimerange.rangeSlider('resize');
-        })
-
-
-        this.$surveyTimerange.bind("valuesChanged", function (e, data) {
-            console.log('time range changed', data);
-        });
-
 
         this.bindEventListeners();
 
@@ -166,11 +152,21 @@ define([
     Fx_ui_survey_component.prototype.bindEventListeners = function () {
 
 
-        var that = this;
+        var self = this;
 
-        amplify.subscribe(E.MODULE_DESELECT + '.' + that.options.module.name, function (e) {
+        this.$surveyAddCharsSelector.on('change', function (e, data) {
+            e.preventDefault();
+            console.log($(e.target).val());
 
-            that.deselectValue(e);
+        });
+
+        $( this.options.css_classes.RESIZE).on('click', function () {
+            self.$surveyTimerange.rangeSlider('resize');
+        })
+
+        amplify.subscribe(E.MODULE_DESELECT + '.' + self.options.module.name, function (e) {
+
+            self.deselectValue(e);
         });
 
     };
@@ -188,6 +184,7 @@ define([
         return this.options.name;
     };
 
+
     Fx_ui_survey_component.prototype.getAdapter = function () {
         return this.options.adapter;
     };
@@ -197,7 +194,6 @@ define([
 
         var timeData = this.$surveyTimerange.rangeSlider('values');
 
-
         return {
             years: {
                 "period": {
@@ -206,8 +202,6 @@ define([
                 }
             },
             addChars: $('input[name="' + this.$surveyaddCharsName + '"]:radio:checked').val()
-
-
         };
     };
 
