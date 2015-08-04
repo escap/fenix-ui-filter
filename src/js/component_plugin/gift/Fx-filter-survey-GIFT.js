@@ -72,7 +72,8 @@ define([
 
         this.$surveyaddCharsName = e.template.descriptions.SURVEY.ADD_CHARS_RADIO_NAME
 
-        this.$surveyAddCharsSelector = $('input[name="' + this.$surveyaddCharsName + '"]:radio')
+        this.$surveyAddCharsSelector = $('input[name="' + this.$surveyaddCharsName + '"]:radio');
+        console.log(this.$surveyAddCharsSelector)
 
         var defaultSourceTimerange = e.component.years.defaultsource;
         this.$surveyTimerange.rangeSlider({
