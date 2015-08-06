@@ -6,8 +6,8 @@ define([
         "fx-filter/config/config-default",
         "fx-filter/config/events",
         "text!test_geo_json/world-countries.json",
-        "leaflet", "jstree", "amplify"],
-    function ($, GeoSelector, C, DC, E, GEOJSON, L) {
+        "leaflet", "list_filter","jstree", "amplify"],
+    function ($, GeoSelector, C, DC, E, GEOJSON, L, List) {
 
         'use strict';
 
@@ -87,13 +87,24 @@ define([
             this._initialize(e);
 
             // initialize map
-            this._renderMAp();
 
+           this._renderMAp();
 
+            this.bindEventListeners();
 
-             this.bindEventListeners();
-
-
+           var input = document.getElementsByClassName('search')[0];
+            var searchArea = document.getElementById('ss');
+            input.onkeyup = function () {
+                var filter = input.value.toUpperCase();
+                var lis = searchArea.getElementsByTagName('a');
+                for (var i = 0; i < lis.length; i++) {
+                    var name = lis[i].getElementsByTagName('span')[0].innerHTML
+                    if (name.toUpperCase().indexOf(filter) == 0)
+                        lis[i].style.display = 'list-item';
+                    else
+                        lis[i].style.display = 'none';
+                }
+            }
             if ((e.adapter != null) && (typeof e.adapter != "undefined")) {
                 self.options.adapter = e.adapter;
             }
@@ -107,10 +118,12 @@ define([
 
         FX_ui_geographic_component.prototype._renderMAp = function () {
 
-           this.$leafletMap = new L.Map('map-filter', {
+            this.$leafletMap = new L.Map('map-filter', {
                 zoomControl: false,
+                minZoom: 0.9,
                 layers: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
             });
+
 
             this.$leafletMap.addControl(L.control.zoom({position: 'topright'}));
 
@@ -120,17 +133,60 @@ define([
             this.$leafletMap.fitBounds(geoLayer.getBounds())
                 .setMaxBounds(geoLayer.getBounds().pad(0.5));
 
-            var geoList = new L.Control.GeoJSONSelector(geoLayer);
+
+
+            var geoList = new L.Control.GeoJSONSelector(geoLayer, {
+                listItemBuild: function(layer) {
+                    var item = L.DomUtil.create('a',''),
+                        label = _getPath(layer.feature, this.options.listLabel);
+                    item.innerHTML = '<span class="itemValue">'+(label || '&nbsp;')+'</span>';
+
+                    return item;
+                }
+                });
 
             geoList.on('item-active', function (e) {
                 $('#map-filter').prev('label').text(e.layer.feature.properties.name)
                 console.log(JSON.stringify(e.layer.feature.properties));
+
+
             });
+
+            var _getPath = function(obj, prop) {
+                var parts = prop.split('.'),
+                    last = parts.pop(),
+                    len = parts.length,
+                    cur = parts[0],
+                    i = 1;
+
+                if(len > 0)
+                    while((obj = obj[cur]) && i < len)
+                        cur = parts[i++];
+
+                if(obj)
+                    return obj[last];
+            }
 
             this.$leafletMap.addControl(geoList);
 
+            this.$leafletMap.whenReady(function(e) {
+
+                var element = document.getElementsByClassName('geojson-list-group')[0];
+                var parent = element.parentNode;
+                var wrapper = document.createElement('div');
+                var input = document.createElement('input')
+                input.setAttribute('class','search')
+
+                wrapper.appendChild(input);
+
+                // set the wrapper as child (instead of the element)
+                parent.replaceChild(wrapper, element);
+                wrapper.appendChild(element);
 
 
+
+
+            });
         }
 
         FX_ui_geographic_component.prototype.validate = function (e) {
@@ -191,6 +247,13 @@ define([
                 self.$leafletMap.invalidateSize();
             })
 
+
+
+
+
+            /*
+                        filter.add(options);
+            */
 
             amplify.subscribe(E.MODULE_DESELECT + '.' + self.options.module.name, function (e) {
                 self.deselectValue(e);
