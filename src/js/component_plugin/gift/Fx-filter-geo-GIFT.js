@@ -6,11 +6,10 @@ define([
         "fx-filter/config/config-default",
         "fx-filter/config/events",
         "text!test_geo_json/world-countries.json",
-        "leaflet", "list_filter","jstree", "amplify"],
-    function ($, GeoSelector, C, DC, E, GEOJSON, L, List) {
+        "leaflet",  "amplify"],
+    function ($, GeoSelector, C, DC, E, GEOJSON, L) {
 
         'use strict';
-
 
         var URL = {
             africa_countries: "http://fenix.fao.org/geo/fenix/spatialquery/db/spatial/query/SELECT%20ST_AsGeoJSON(geom),%20adm0_code,%20areanamee%20FROM%20spatial.gaul0_faostat_afo_4326%20WHERE%20adm0_code%20IN%20(%208,29,35,42,43,45,47,49,50,58,59,68,66,70,40765,76,77,79,89,90,94,106,105,133,142,144,145,150,152,155,159,160,169,170,172,181,182,206,205,214,217,220,221,226,227,630,235,257,243,248,253,270,271,40764,4%20)%20",
@@ -63,8 +62,12 @@ define([
 
         FX_ui_geographic_component.prototype._initialize = function (e) {
 
-            // map
-            this.$mapSelector = $('#' + e.template.descriptions.GEO.MAP_ID)
+
+            this.$geoConfiguration = e.template.descriptions.GEO
+
+            this.$componentStructure = e.template.overallStructure;
+
+            this.$container = $(this.options.container);
 
         };
 
@@ -78,33 +81,16 @@ define([
 
             $.extend(self.options.events, e.events); // extend events passed from the host
 
-            this.$componentStructure = e.template.overallStructure;
-
-            this.$container = $(container);
+            this._initialize(e);
 
             this.$container.append(this.$componentStructure);
 
-            this._initialize(e);
-
             // initialize map
 
-           this._renderMAp();
+            this._renderMap();
 
             this.bindEventListeners();
 
-           var input = document.getElementsByClassName('search')[0];
-            var searchArea = document.getElementById('ss');
-            input.onkeyup = function () {
-                var filter = input.value.toUpperCase();
-                var lis = searchArea.getElementsByTagName('a');
-                for (var i = 0; i < lis.length; i++) {
-                    var name = lis[i].getElementsByTagName('span')[0].innerHTML
-                    if (name.toUpperCase().indexOf(filter) == 0)
-                        lis[i].style.display = 'list-item';
-                    else
-                        lis[i].style.display = 'none';
-                }
-            }
             if ((e.adapter != null) && (typeof e.adapter != "undefined")) {
                 self.options.adapter = e.adapter;
             }
@@ -116,9 +102,11 @@ define([
 
         };
 
-        FX_ui_geographic_component.prototype._renderMAp = function () {
+        FX_ui_geographic_component.prototype._renderMap = function (conf) {
 
-            this.$leafletMap = new L.Map('map-filter', {
+            var self = this;
+
+            this.$leafletMap = new L.Map(self.$geoConfiguration.MAP_ID, {
                 zoomControl: false,
                 minZoom: 0.9,
                 layers: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
@@ -134,60 +122,34 @@ define([
                 .setMaxBounds(geoLayer.getBounds().pad(0.5));
 
 
-
-            var geoList = new L.Control.GeoJSONSelector(geoLayer, {
-                listItemBuild: function(layer) {
-                    var item = L.DomUtil.create('a',''),
-                        label = _getPath(layer.feature, this.options.listLabel);
-                    item.innerHTML = '<span class="itemValue">'+(label || '&nbsp;')+'</span>';
-
-                    return item;
-                }
-                });
-
-            geoList.on('item-active', function (e) {
-                $('#map-filter').prev('label').text(e.layer.feature.properties.name)
-                console.log(JSON.stringify(e.layer.feature.properties));
+            this.$geoList = new L.Control.GeoJSONSelector(geoLayer);
 
 
-            });
+            this.$leafletMap.addControl(this.$geoList);
 
-            var _getPath = function(obj, prop) {
-                var parts = prop.split('.'),
-                    last = parts.pop(),
-                    len = parts.length,
-                    cur = parts[0],
-                    i = 1;
-
-                if(len > 0)
-                    while((obj = obj[cur]) && i < len)
-                        cur = parts[i++];
-
-                if(obj)
-                    return obj[last];
-            }
-
-            this.$leafletMap.addControl(geoList);
-
-            this.$leafletMap.whenReady(function(e) {
-
-                var element = document.getElementsByClassName('geojson-list-group')[0];
-                var parent = element.parentNode;
-                var wrapper = document.createElement('div');
-                var input = document.createElement('input')
-                input.setAttribute('class','search')
-
-                wrapper.appendChild(input);
-
-                // set the wrapper as child (instead of the element)
-                parent.replaceChild(wrapper, element);
-                wrapper.appendChild(element);
-
-
-
-
-            });
         }
+
+        FX_ui_geographic_component.prototype._manipulateDOMToFilterCountries = function () {
+
+            var listCountries = document.getElementsByClassName(this.$geoConfiguration.GEOJSON_LIST_GROUP_CLASS)[0];
+            var parentListCountries = listCountries.parentNode;
+            var containerListCountries = document.createElement('div');
+            containerListCountries.setAttribute('class', this.$geoConfiguration.LIST_COUNTRIES_CLASS);
+            parentListCountries.replaceChild(containerListCountries, listCountries);
+            containerListCountries.appendChild(listCountries);
+
+            var containerListCountriesElement = document.getElementsByClassName(this.$geoConfiguration.LIST_COUNTRIES_CLASS)[0];
+            var parentListCountriesElement = containerListCountriesElement.parentNode;
+            var wrapperSelectorWithFilter = document.createElement('div');
+            wrapperSelectorWithFilter.setAttribute('class', this.$geoConfiguration.SELECTOR_LIST_FILTER_CLASS)
+
+            var inputFilter = document.createElement('input')
+            inputFilter.setAttribute('class', this.$geoConfiguration.SEARCH_INPUT_CLASS)
+            wrapperSelectorWithFilter.appendChild(inputFilter);
+            parentListCountriesElement.replaceChild(wrapperSelectorWithFilter, containerListCountriesElement);
+            wrapperSelectorWithFilter.appendChild(containerListCountriesElement);
+
+        };
 
         FX_ui_geographic_component.prototype.validate = function (e) {
 
@@ -242,18 +204,36 @@ define([
 
             var self = this;
 
-            // oresize jqallrange slider
+            // to adapt content of map to the container
             $(this.options.css_classes.RESIZE).on('click', function () {
                 self.$leafletMap.invalidateSize();
             })
 
 
+            this.$geoList.on('item-active', function (e) {
+                $('#' + self.$geoConfiguration.MAP_ID).prev('label').text(e.layer.feature.properties.name)
+            });
+
+            this.$leafletMap.whenReady(function (e) {
+                // insert filter input search
+                self._manipulateDOMToFilterCountries();
+                self._setVariablesAfterManipulation()
+            });
 
 
+            // search filter on keyup
+            this.$inputSearch.onkeyup = function () {
+                var filter = self.$inputSearch.value.toUpperCase();
+                var lis = self.$searchArea.getElementsByTagName('a');
+                for (var i = 0; i < lis.length; i++) {
+                    var name = lis[i].getElementsByTagName('span')[0].innerHTML
+                    if (name.toUpperCase().indexOf(filter) == 0)
+                        lis[i].style.display = self.$geoConfiguration.ITEM_LIST_CLASS;
+                    else
+                        lis[i].style.display = 'none';
+                }
+            }
 
-            /*
-                        filter.add(options);
-            */
 
             amplify.subscribe(E.MODULE_DESELECT + '.' + self.options.module.name, function (e) {
                 self.deselectValue(e);
@@ -264,6 +244,12 @@ define([
 
 
         };
+
+        FX_ui_geographic_component.prototype._setVariablesAfterManipulation = function () {
+
+            this.$inputSearch = document.getElementsByClassName(this.$geoConfiguration.SEARCH_INPUT_CLASS)[0];
+            this.$searchArea = document.getElementsByClassName(this.$geoConfiguration.LIST_COUNTRIES_CLASS)[0];
+        }
 
         //For filter logic .... start
         FX_ui_geographic_component.prototype.getName = function () {
@@ -277,14 +263,9 @@ define([
 
         FX_ui_geographic_component.prototype.getValues = function (e) {
 
-
             return {
 
-                country_selected:{
-
-                }
-
-
+                country_selected: {}
 
             };
         };
