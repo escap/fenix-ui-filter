@@ -219,7 +219,7 @@ define([
             // search filter on keyup
             this.$inputSearch.onkeyup = function () {
                 var filter = self.$inputSearch.value.toUpperCase();
-                var lis = self.$searchArea.getElementsByTagName('a');
+                var lis = self.$searchArea.getElementsByClassName(self.$geoConfiguration.GEOJSON_LIST_ITEM_CLASS);
                 for (var i = 0; i < lis.length; i++) {
                     var name = lis[i].getElementsByTagName('span')[0].innerHTML
                     if (name.toUpperCase().indexOf(filter) == 0)
