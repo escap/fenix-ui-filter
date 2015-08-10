@@ -87,7 +87,7 @@ define([
 
             // initialize map
 
-            this._renderMap();
+            this._renderMap(e.template.style);
 
             this.bindEventListeners();
 
@@ -102,9 +102,10 @@ define([
 
         };
 
-        FX_ui_geographic_component.prototype._renderMap = function (conf) {
+        FX_ui_geographic_component.prototype._renderMap = function (styleConf) {
 
             var self = this;
+            console.log(styleConf)
 
             this.$leafletMap = new L.Map(self.$geoConfiguration.MAP_ID, {
                 zoomControl: false,
@@ -120,7 +121,7 @@ define([
             this.$leafletMap.fitBounds(geoLayer.getBounds())
                 .setMaxBounds(geoLayer.getBounds().pad(0.5));
 
-            this.$geoList = new L.Control.GeoJSONSelector(geoLayer);
+            this.$geoList = new L.Control.GeoJSONSelector(geoLayer,styleConf);
 
             this.$leafletMap.addControl(this.$geoList);
         }
