@@ -112,7 +112,6 @@ define([
                 layers: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
             });
 
-
             this.$leafletMap.addControl(L.control.zoom({position: 'topright'}));
 
             var geoLayer = L.geoJson(JSON.parse(GEOJSON)).addTo(this.$leafletMap);
@@ -121,12 +120,9 @@ define([
             this.$leafletMap.fitBounds(geoLayer.getBounds())
                 .setMaxBounds(geoLayer.getBounds().pad(0.5));
 
-
             this.$geoList = new L.Control.GeoJSONSelector(geoLayer);
 
-
             this.$leafletMap.addControl(this.$geoList);
-
         }
 
         FX_ui_geographic_component.prototype._manipulateDOMToFilterCountries = function () {
@@ -148,7 +144,6 @@ define([
             wrapperSelectorWithFilter.appendChild(inputFilter);
             parentListCountriesElement.replaceChild(wrapperSelectorWithFilter, containerListCountriesElement);
             wrapperSelectorWithFilter.appendChild(containerListCountriesElement);
-
         };
 
         FX_ui_geographic_component.prototype.validate = function (e) {
