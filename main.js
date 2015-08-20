@@ -31,79 +31,98 @@ require([
 
 
         //FENIX List Example : 1 component "sourceType": "timeList", 1 component "sourceType": "period"
-        var configuration =[
-            {
-                "containerType":"fluidGridBaseContainer",
-                "title":"List Test Timelist",
-                "components":[
-                    {
-                        "componentType":"timeList-FENIX",
-                        "lang":"EN",
-                        "title":{"EN": "Time List For Fenix",
-                            "ES": "Time List For Fenix",
-                            "DE": "Time List For Fenix",
-                            "FR": "Time List For Fenix"},
-                        "name":"timeListForFenix",
-                        "component": {
-                            "source": {
-                                "uid": "GAUL_ReferenceArea",
-                                "version": "1.0"
-                            },
-                            "sourceType": "timeList",
-                            "defaultsource":[1986, 2015, 1997, 2000, 2002, 2003, 2005, 2007, 2010]
-                        }
-                    }
-                ]
-            },
-            {
-                "containerType":"fluidGridBaseContainer",
-                "title":"List Test Period",
-                "components":[
-                    {
-                        "componentType":"timeList-FENIX",
-                        "lang":"EN",
-                        "title":{"EN": "Time List For Fenix",
-                            "ES": "Time List For Fenix",
-                            "DE": "Time List For Fenix",
-                            "FR": "Time List For Fenix"},
-                        "name":"periodForFenix",
-                        "component": {
-                            "sourceType": "period",
-                            "defaultsource":[{"from": 1983, "to": 1994},{"from": 1996, "to": 1998},{"from": 2002, "to": 2005},{"from": 2007, "to": 2011}]
-                        }
-                    }
-                ]
-            }
-        ];
-
-        //Baselist Example
-        //var configuration = [
+        //var configuration =[
         //    {
         //        "containerType":"fluidGridBaseContainer",
         //        "title":"List Test Timelist",
         //        "components":[
-        //                {
-        //                    "componentType":"baseList",
-        //                    "lang":"EN",
-        //                    "title":{"EN":"Region"},
-        //                    "name":"RegionC2",
-        //                    config:{
-        //                        "multipleselection":true,
-        //                        "defaultsource":[
-        //                            {"value":"51325","label":"Central","selected":false},
-        //                            {"value":"51326","label":"Coast","selected":false},
-        //                            {"value":"51327","label":"Eastern","selected":false},
-        //                            {"value":"51328","label":"Nairobi","selected":false},
-        //                            {"value":"51329","label":"North Eastern","selected":false},
-        //                            {"value":"51330","label":"Nyanza","selected":false},
-        //                            {"value":"51331","label":"Rift Valley","selected":false},
-        //                            {"value":"51332","label":"Western","selected":false}
-        //                        ]
-        //                    }
+        //            {
+        //                "componentType":"timeList-FENIX",
+        //                "lang":"EN",
+        //                "title":{"EN": "Time List For Fenix",
+        //                    "ES": "Time List For Fenix",
+        //                    "DE": "Time List For Fenix",
+        //                    "FR": "Time List For Fenix"},
+        //                "name":"timeListForFenix",
+        //                "component": {
+        //                    "source": {
+        //                        "uid": "GAUL_ReferenceArea",
+        //                        "version": "1.0"
+        //                    },
+        //                    "sourceType": "timeList",
+        //                    "defaultsource":[1986, 2015, 1997, 2000, 2002, 2003, 2005, 2007, 2010]
         //                }
+        //            }
+        //        ]
+        //    },
+        //    {
+        //        "containerType":"fluidGridBaseContainer",
+        //        "title":"List Test Period",
+        //        "components":[
+        //            {
+        //                "componentType":"timeList-FENIX",
+        //                "lang":"EN",
+        //                "title":{"EN": "Time List For Fenix",
+        //                    "ES": "Time List For Fenix",
+        //                    "DE": "Time List For Fenix",
+        //                    "FR": "Time List For Fenix"},
+        //                "name":"periodForFenix",
+        //                "component": {
+        //                    "sourceType": "period",
+        //                    "defaultsource":[{"from": 1983, "to": 1994},{"from": 1996, "to": 1998},{"from": 2002, "to": 2005},{"from": 2007, "to": 2011}]
+        //                }
+        //            }
         //        ]
         //    }
         //];
+
+        //Baselist Example
+        var configuration = [
+            {
+                "containerType":"fluidGridBaseContainer",
+                "title":"List Test Timelist",
+                "components":[
+                        {
+                            "componentType":"dropDownList",
+                            "lang":"EN",
+                            "title":{"EN":"Region"},
+                            "name":"RegionC2",
+                            config:{
+                                "defaultsource":[
+                                    {"value":"51325","label":"Central","selected":false},
+                                    {"value":"51326","label":"Coast","selected":false},
+                                    {"value":"51327","label":"Eastern","selected":false},
+                                    {"value":"51328","label":"Nairobi","selected":false},
+                                    {"value":"51329","label":"North Eastern","selected":false},
+                                    {"value":"51330","label":"Nyanza","selected":false},
+                                    {"value":"51331","label":"Rift Valley","selected":false},
+                                    {"value":"51332","label":"Western","selected":false}
+                                ]
+                            }
+                        }
+                ]
+            }
+            //{
+            //    "containerType":"fluidGridBaseContainer",
+            //    "title":"List Test Radio Button",
+            //    "components":[
+            //        {
+            //            "componentType":"radioButton",
+            //            "lang":"EN",
+            //            "title":{"EN":"Region"},
+            //            "name":"RegionC4",
+            //            config:{
+            //                "elementsNum": 3,
+            //                "defaultsource":[
+            //                    {"value":"RB1","label":"RadioButton1","selected":true},
+            //                    {"value":"RB2","label":"RadioButton2","selected":false},
+            //                    {"value":"RB3","label":"RadioButton3","selected":false}
+            //                ]
+            //            }
+            //        }
+            //    ]
+            //}
+        ];
 
         //Example with one container and these components:
         //"enumeration-FENIX", "text-FENIX", "tree-FENIX", "codes-FENIX", "baseList"
@@ -220,6 +239,18 @@ require([
         })
 
         filter.add(configuration, adapterMap);
+
+        //Radio Button SetDomain test
+        //$('body').on(filter.getReadyEvent(), function(event, properties){
+        //
+        //    alert("In Event Ready!!!")
+        //    var sourceAfter= [
+        //        {"value":"RB1","label":"RadioButton10","selected":false},
+        //        {"value":"RB2","label":"RadioButton20","selected":true},
+        //        {"value":"RB3","label":"RadioButton30","selected":false}
+        //    ];
+        //    filter.setDomain("RegionC4", sourceAfter);
+        //});
 
         //var FILTER_CONTAINER2= 'filterContainer2';
         //

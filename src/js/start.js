@@ -5,7 +5,12 @@ define([
     'fx-filter/filtercontroller'
 ], function ($, FC) {
 
-    var o = {};
+    var o = {
+    //Events for host
+        host_event: {
+            COMPONENT_READY : "fx.host.component.ready"
+        }
+    };
 
     function Start(options) {
         $.extend(true, o, options);
@@ -37,6 +42,14 @@ define([
     Start.prototype.add = function (modules, adapterMap) {
         console.log('start-add')
         this.controller.add(modules, adapterMap);
+    };
+
+    Start.prototype.setDomain = function (component_name, source) {
+        this.controller.setDomain(component_name, source);
+    };
+
+    Start.prototype.getReadyEvent = function () {
+        return o.host_event.COMPONENT_READY;
     };
 
     return Start;

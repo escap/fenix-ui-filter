@@ -38,7 +38,9 @@ define(function () {
 
             'jquery': '//fenixapps.fao.org/repository/js/jquery/2.1.1/jquery.min',
             'pnotify': '//fenixapps.fao.org/repository/js/pnotify/2.0.1/pnotify.core',
-            'jqwidgets': '//fenixapps.fao.org/repository/js/jqwidgets/3.1/jqx-light',
+            //'jqwidgets': '//fenixapps.fao.org/repository/js/jqwidgets/3.1/jqx-light',
+            //'jqwidgets': '//fenixrepo.fao.org/cdn/js/jqwidgets/3.1/jqx-all',
+            'jqwidgets': 'http://fenixrepo.fao.org/cdn/js/jqwidgets/3.8.2/jqx-all',
             'jqueryui': 'src/lib/jquery-ui.min',
             'jqueryuicustom': '//fenixapps.fao.org/repository/js/jquery-ui/1.10.3/jquery-ui-1.10.3.custom.min',
             'nprogress': '//fenixapps.fao.org/repository/js/nprogress/0.1.6/nprogress',
