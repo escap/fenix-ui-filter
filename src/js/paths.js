@@ -4,7 +4,8 @@ define(function () {
        // "baseUrl": "",
 
         paths: {
-
+            'fx-filter' : 'src/js/',
+            'fx-filter/component_plugin' : 'src/js/component_plugin/',
             'fx-filter/filtercontroller': 'src/js/Fx-filter-controller',
             'fx-filter/fluidgrid': 'src/js/Fx-fluid-grid',
             'fx-filter/containerfactory': 'src/js/Fx-filter-containerFactory',

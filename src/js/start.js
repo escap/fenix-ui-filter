@@ -40,7 +40,6 @@ define([
     };
 
     Start.prototype.add = function (modules, adapterMap) {
-        console.log('start-add')
         this.controller.add(modules, adapterMap);
     };
 

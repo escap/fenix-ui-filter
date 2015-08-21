@@ -44,11 +44,11 @@ define([
         module_id : 31,
         filter_module_array :[],
 
-        prefix_plugin_dir : '',
-        plugin_subdir : '',
+        prefix_plugin_dir : 'fx-filter/component_plugin/',
+        plugin_subdir :'',
 
         container_plugin_dir : 'src/js/container_plugin/',
-        component_plugin_dir : 'src/js/component_plugin/'
+        component_plugin_dir : ''
     },  componentCreator;
 
     function FC( o ){

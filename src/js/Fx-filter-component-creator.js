@@ -238,7 +238,6 @@ define([
         var componentslen = elems.length;
 
         $(elems).each(function (index, element) {
-
             var widgetCreator = self.o.plugin_folder + "Fx-filter-" + element.componentType;
 //                widgetCreator = "http://168.202.28.26:8080/filter/src/js/component_plugin/Fx-filter-component1.js";
 //                widgetCreator = "http://168.202.28.26:10400/uae/submodules/fenix-ui-filter/src/js/component_plugin/Fx-filter-component1.js";
