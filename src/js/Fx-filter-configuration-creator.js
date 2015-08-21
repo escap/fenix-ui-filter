@@ -64,7 +64,7 @@ define([
     Fx_filter_utils.prototype._createCodelistPromise = function (c) {
 
         var self = this,
-            cd_uid = c.uid;
+            cd_uid = c.components[0].uid;
 
         return Q($.ajax({
             url: this.o.D3S_CODELIST_URL + cd_uid
@@ -133,14 +133,14 @@ define([
 
     Fx_filter_utils.prototype._processCodelistConfiguration = function (conf) {
 
-        var uid = conf.uid,
+        var uid = conf.components[0].uid,
             codelist = this.cl[uid],
             data = codelist.data,
             result = [],
             self = this;
 
         _.each(data, function (d) {
-            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": false});
+            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(conf, d.code)});
         });
 
         function compare(a, b) {
@@ -153,10 +153,18 @@ define([
 
         result.sort(compare);
 
-        conf.components[0].config.defaultsource = result;
+        conf.components[0].config.defaultsource = conf.components[0].config.defaultsource.concat(result);
+        conf.components[0].config.id = codelist.id;
 
         this.current.result.push(conf);
 
+    };
+
+    Fx_filter_utils.prototype._checkDefaultCodes = function(conf, code) {
+        if (conf.hasOwnProperty("defaultCodes") && conf.defaultCodes.length > 0) {
+            return (conf.defaultCodes.indexOf(code) > -1)
+        }
+        return false;
     };
 
     Fx_filter_utils.prototype._processDistinctConfiguration = function (conf) {
@@ -169,7 +177,8 @@ define([
             data = distinct.data,
             result = [],
             columnCodeIndex = null,
-            columnLabelIndex = null;
+            columnLabelIndex = null,
+            self = this;
 
         _.each(columns, function (d, index) {
             if (d.id === columnCodeId) {
@@ -180,10 +189,12 @@ define([
             }
         });
 
+        // this is used by the getValues to return a readable FENIX result
+        conf.components[0].config.id = columns[columnCodeIndex].id;
+        conf.components[0].config.uid = columns[columnCodeIndex].domain.codes[0].idCodeList;
 
         var code2Label = {};
         _.each(data, function (d) {
-            //codes.push(d[columnCodeIndex]);
             if (d[columnCodeIndex] && d[columnLabelIndex]) {
                 code2Label[d[columnCodeIndex]] = d[columnLabelIndex];
             } else {
@@ -192,7 +203,7 @@ define([
         });
 
         _.each(code2Label, function (label, code) {
-            result.push({"value": code, "label": label, "selected": false});
+            result.push({"value": code, "label": label, "selected": self._checkDefaultCodes(conf, code)});
         });
 
         function compare(a, b) {
@@ -205,7 +216,7 @@ define([
 
         result.sort(compare);
 
-        conf.components[0].config.defaultsource = result;
+        conf.components[0].config.defaultsource = conf.components[0].config.defaultsource.concat(result);
 
         this.current.result.push(conf);
     };
