@@ -102,7 +102,7 @@ define([
 
         //TODO: check value selection
         if (value === null || value === "" || value.length <= 0) {
-            return;
+            return { "removeFilter": true};
         }
 
 
