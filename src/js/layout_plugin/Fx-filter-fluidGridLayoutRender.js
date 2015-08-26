@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'fx-filter/fluidgrid',
+    "fx-common/structures/fx-fluid-grid",
     'fx-filter/filtermodule',
     'fx-filter/containerfactory',
 ], function ($, FluidForm, FilterModule, ContainerFactory) {
@@ -50,7 +50,9 @@ define([
                 },
                 config: {
                     itemSelector: "."+options.ITEM_COMPONENT_CLASS_ID,
-                    columnWidth: "."+options.ITEM_COMPONENT_CLASS_ID
+                    columnWidth: "."+options.ITEM_COMPONENT_CLASS_ID,
+                    percentPosition: true,
+                    transitionDuration: 0
                 }
             });
 
@@ -65,7 +67,9 @@ define([
         if((element!=null)&&(element!= "undefined"))
         {
             //Creation of the Module
-            var moduleObj = new FilterModule({id: "fenix_filter_module_"+options.mainContent+"_"+options.module_id, grid: this.options.grid, container_plugin_dir: options.container_plugin_dir, component_plugin_dir: options.component_plugin_dir});
+            var moduleObj = new FilterModule({
+                id: "fenix_filter_module_"+options.mainContent+"_"+options.module_id,
+                grid: this.options.grid, container_plugin_dir: options.container_plugin_dir, component_plugin_dir: options.component_plugin_dir});
 
             //Creation of the Container
             var containerFactory = new ContainerFactory();
