@@ -1,20 +1,21 @@
 define([
     'jquery',
     'underscore',
-    'jqwidgets'
+    'jqwidgets',
+    'select2'
 ], function ($, _) {
 
     'use strict';
 
     var optionsDefault = {
-        componentType : '',
-        componentid : '',
-        name : '',
-        title : '',
-        grid : '',
-        source :'',
+        componentType: '',
+        componentid: '',
+        name: '',
+        title: '',
+        grid: '',
+        source: '',
         //var fn = eval("var "+field+" = function(){ return "+fieldObj.validators.callback.callback+";}; "+field+"() ;") ;
-        adapter : null,
+        adapter: null,
         widget: {
             lang: 'EN'
         },
@@ -26,55 +27,106 @@ define([
             CLOSE_BTN: "fx-catalog-modular-form-close-btn",
             MODULE: 'fx-catalog-form-module',
             RESIZE: "fx-catalog-modular-form-resize-btn",
-            LABEL: "fx-catalog-modular-form-label"
+            LABEL: "fx-catalog-modular-form-label",
+            DROPDOWN_SELECT: 'fx-filter-dropdown-menu'
         },
         events: {
             REMOVE_MODULE: "fx.filter.module.remove",
-            READY : "fx.filter.component.ready",
+            READY: "fx.filter.component.ready",
             DESELECT: 'fx.filter.module.deselect.'
-        }
+        },
+        enableMultiselection: false
     };
 
     // A constructor for defining new component
-    function ComponentDropDownList( o ) {
+    function ComponentDropDownList(o) {
 
-        if (this.options === undefined) {this.options = {}; }
+        if (this.options === undefined) {
+            this.options = {};
+        }
 
-        $.extend(true, this.options, optionsDefault, o);}
+        $.extend(true, this.options, optionsDefault, o);
+    }
 
     ComponentDropDownList.prototype.validate = function (e) {
         return true;
     };
 
-    ComponentDropDownList.prototype.getName = function() {
+    ComponentDropDownList.prototype.getName = function () {
         return this.options.name;
     };
 
-    ComponentDropDownList.prototype.getAdapter = function() {
+    ComponentDropDownList.prototype.getAdapter = function () {
         return this.options.adapter;
     };
 
     ComponentDropDownList.prototype.render = function (e, component) {
-
+        var self = this;
+        this.$dropdownSelector = $(component);
         $.extend(true, this.options, e);
+        if (e.config.enableMultiselection && e.config.enableMultiselection === true) {
+            this.options.enableMultiselection = e.config.enableMultiselection;
 
+            // TODO : render multiselection
+        }
+        // render single selection
         if ((e.config.defaultsource != null) && (typeof e.config.defaultsource != "undefined")) {
-            $(component).jqxDropDownList({source: e.config.defaultsource, width:"99%"});
 
-            for(var i=0; i< e.config.defaultsource.length; i++){
-                if(e.config.defaultsource[i].selected){
-                    $(component).jqxDropDownList('selectIndex', i);
+            var select2Data = [];
+            var selectedItems = {};
+
+            for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
+                select2Data.push({
+                    id: e.config.defaultsource[i].value,
+                    text: e.config.defaultsource[i].label
+                });
+
+                if (e.config.defaultsource[i].selected) {
+                    selectedItems[i] = true;
                 }
+            }
+
+            this.$dropdownSelector.select2({
+                data: select2Data,
+                width: '99%',
+                multiple: self.options.enableMultiselection
+            });
+
+
+            for (var index in selectedItems) {
+                this.$dropdownSelector.select2('data', select2Data[index]);
             }
             this.options.source = e.config.defaultsource;
 
         } else {
-            $(component).jqxDropDownList({source: e.config.defaultsource, width:"99%"});
+            for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
+                var select2Data = [];
+                var selectedItems = {};
+
+                for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
+                    select2Data.push({
+                        id: e.config.defaultsource[i].value,
+                        text: e.config.defaultsource[i].label
+                    });
+
+                    if (e.config.defaultsource[i].selected) {
+                        selectedItems[i] = true;
+                    }
+                }
+
+                this.$dropdownSelector.select2({
+                    data: select2Data,
+                    width: '99%',
+                    multiple: self.options.enableMultiselection
+                });
+            }
+
+
+            if ((e.adapter != null) && (typeof e.adapter != "undefined")) {
+                this.options.adapter = e.adapter;
+            }
         }
 
-        if((e.adapter!=null)&&(typeof e.adapter!="undefined")){
-            this.options.adapter = e.adapter;
-        }
 
         this.options.name = e.name;
         this.options.componentid = $(component).attr("id");
@@ -82,31 +134,42 @@ define([
         $(component).trigger(this.options.events.READY, {name: e.name});
     }
 
-    ComponentDropDownList.prototype.setDomain = function (source) {
-        this.options.source = source;
-        $('#'+this.options.componentid).jqxDropDownList({source: source});
+    ComponentDropDownList.prototype._renderDropdownBySelect2 = function (data) {
 
-        for(var i=0; i< source.length; i++){
-            if(source[i].selected){
-                $('#'+this.options.componentid).jqxDropDownList('selectIndex', i);
-            }
+    },
+
+        ComponentDropDownList.prototype.setDomain = function (source) {
+            // TODO: setDOMAIN mutliseleciton
+            this.options.source = source;
+            $(component).select2({
+                data: this.options.source,
+                width: '99%'
+            });
+
+            /*  for(var i=0; i< source.length; i++){
+             if(source[i].selected){
+             $('#'+this.options.componentid).select2('selectIndex', i);
+             }
+             }*/
         }
-    }
 
     ComponentDropDownList.prototype.getValues = function () {
+        // TODO getValues mutliselection
+        debugger;
         var type = this.options.type || "codes",
             id = this.options.id || null,
             uid = this.options.uid || null,
-            value = $('#' + this.options.componentid).val(),
+            value = this.$dropdownSelector.select2('val'),
             results = [];
+        debugger;
 
         //TODO: check value selection
         if (value === null || value === "" || value.length <= 0) {
-            return { "removeFilter": true};
+            return {"removeFilter": true};
         }
 
 
-        switch(type) {
+        switch (type) {
             case "time":
                 return this.getYears(value);
                 break;
@@ -125,40 +188,50 @@ define([
         return results;
     };
 
-    ComponentDropDownList.prototype.getYears = function(value) {
-        var results = [];
-        return {
-            "time" : [{from : parseInt(value, 10), to : parseInt(value, 10)}]
-        };
+    ComponentDropDownList.prototype.getYears = function (value) {
+        var result = {"time": []}
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+            for (var i = 0; i < value.length; i++) {
+                result.time.push({from: parseInt(value[i], 10), to: parseInt(value[i], 10)})
+            }
+        } else {
+            result.time.push({from: parseInt(value, 10), to: parseInt(value, 10)})
+        }
+
+        return result
     };
 
-    ComponentDropDownList.prototype.getCodelist = function(id, uid, value) {
+    ComponentDropDownList.prototype.getCodelist = function (id, uid, value) {
         var result = {};
+        result = {"codes": [{uid: uid, codes: []}]};
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+            for (var i = 0; i < value.length; i++) {
+                result.codes[0].codes.push(value[i])
+            }
+        } else {
+            result.codes[0].codes.push(value);
+        }
 
-        return result[id] = {
-            "codes":[{
-                uid: uid,
-                codes: [value]
-            }]
-        };
+        return result
     };
 
     ComponentDropDownList.prototype.bindEventListeners = function () {
 
         var that = this;
 
-        document.body.addEventListener(this.options.events.DESELECT+this.options.module.type, function (e) {
+        document.body.addEventListener(this.options.events.DESELECT + this.options.module.type, function (e) {
             that.deselectValue(e.detail);
         }, false);
     };
 
     ComponentDropDownList.prototype.deselectValue = function (obj) {
-        var item = $(this.options.container).jqxDropDownList('getItemByValue', obj.value);
-        $(this.options.container).jqxDropDownList('unselectItem', item );
+        //TODO deselect all values for multiselection
+        var item = $(this.options.container).select2('getItemByValue', obj.value);
+        $(this.options.container).select2('unselectItem', item);
     };
 
-    ComponentDropDownList.prototype.refreshDomainByAdapter = function(filterModule){
-        if((this.options.adapter!=null)&&(typeof this.options.adapter!="undefined")){
+    ComponentDropDownList.prototype.refreshDomainByAdapter = function (filterModule) {
+        if ((this.options.adapter != null) && (typeof this.options.adapter != "undefined")) {
             var field;
             this.options.adapter(filterModule, $.proxy(this.setDomain, this), 3);
         }
@@ -168,18 +241,18 @@ define([
 
         var that = this;
 
-        document.body.addEventListener(this.options.events.DESELECT+this.options.module.type, function (e) {
+        document.body.addEventListener(this.options.events.DESELECT + this.options.module.type, function (e) {
             that.deselectValue(e.detail);
         }, false);
     };
 
-    ComponentDropDownList.prototype.deselectValue = function (obj) {
-        var item = $(this.options.container).jqxDropDownList('getItemByValue', obj.value);
-        $(this.options.container).jqxDropDownList('unselectItem', item );
-    };
+    /* ComponentDropDownList.prototype.deselectValue = function (obj) {
+     var item = $(this.options.container).jqxDropDownList('getItemByValue', obj.value);
+     $(this.options.container).jqxDropDownList('unselectItem', item );
+     };*/
 
     ComponentDropDownList.prototype.error = function (e) {
-        console.log("Component drop down error: "+ error);
+        console.log("Component drop down error: " + error);
     };
 
     return ComponentDropDownList;

@@ -51,6 +51,7 @@ define(function () {
             'packery': '//fenixapps.fao.org/repository/js/packery/dist/packery.pkgd.min',
             'jstree': '//fenixapps.fao.org/repository/js/jstree/3.0.8/dist/jstree.min',
             'jQAllRangeSliders': 'src/lib/jQAllRangeSliders-min',
+            'select2': '//fenixrepo.fao.org/cdn/js/select2/3.5.4/select2.min',
             'text': '//fenixapps.fao.org/repository/js/requirejs/plugins/text/2.0.12/text',
             'draggabilly':'//fenixapps.fao.org/repository/js/draggabilly/dist/draggabilly.pkgd.min',
             'amplify' : '//fenixapps.fao.org/repository/js/amplify/1.1.2/amplify.min'
@@ -75,6 +76,9 @@ define(function () {
             },
             pnotify: {
                 deps: ['bootstrap']
+            },
+            'select2': {
+                deps: ['jquery']
             }
         }
     };
