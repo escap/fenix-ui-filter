@@ -79,7 +79,7 @@ require([
         //Baselist Example
         var configuration = [
             {
-                "containerType":"fluidGridBaseContainer",
+                "containerType":"baseContainer",
                 "title":"List Test Timelist",
                 "components":[
                         {

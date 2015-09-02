@@ -12,6 +12,7 @@ define(function () {
             'fx-filter/layoutfactory': 'src/js/Fx-filter-layoutFactory',
             'fx-filter/filtermodule': 'src/js/Fx-filter-module',
             'fx-filter/fluidGridBaseContainer': 'src/js/container_plugin/Fx-filter-fluidGridBaseContainer',
+            'fx-filter/baseContainer': 'src/js/container_plugin/baseContainer',
             'fx-filter/fluidGridLayoutRender': 'src/js/layout_plugin/Fx-filter-fluidGridLayoutRender',
             //'fx-filter/component1': '../../submodules/fenix-ui-filter/src/js/component_plugin/Fx-filter-component1',
             //'fx-filter/component1': 'src/js/component_plugin/Fx-filter-component1',
