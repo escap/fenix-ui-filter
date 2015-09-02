@@ -155,13 +155,11 @@ define([
 
     ComponentDropDownList.prototype.getValues = function () {
         // TODO getValues mutliselection
-        debugger;
         var type = this.options.type || "codes",
             id = this.options.id || null,
             uid = this.options.uid || null,
             value = this.$dropdownSelector.select2('val'),
             results = [];
-        debugger;
 
         //TODO: check value selection
         if (value === null || value === "" || value.length <= 0) {
