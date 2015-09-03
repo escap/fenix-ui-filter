@@ -33,7 +33,7 @@ define([
                 HANDLER: "fx-catalog-modular-form-handler",
                 CONTENT: "fx-catalog-modular-form-content",
                 CLOSE_BTN: "fx-catalog-modular-form-close-btn",
-                MODULE: 'fx-catalog-form-module',
+                MODULE: 'fx-filter-form-module',
                 RESIZE: ".fx-catalog-modular-form-resize-btn",
                 LABEL: "fx-catalog-modular-form-label"
             },

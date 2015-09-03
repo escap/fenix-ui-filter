@@ -22,7 +22,7 @@ define([
         },
 
         class_ids : {
-            ITEM_COMPONENT: "fx-catalog-form-module"
+            ITEM_COMPONENT: "fx-filter-form-module"
         },
 
         //The list of the filter event

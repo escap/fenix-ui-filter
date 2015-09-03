@@ -1,3 +1,5 @@
+/* Catalog Mode */
+
 .fx-filter-container {
     position: absolute;
     height: 800px;
@@ -79,5 +81,22 @@
     left: 30px;
     font-weight: 300;
     color: #254e70; }
+
+
+/* Filter Mode */
+
+.fx-filter_container_filter-flude{
+    position: absolute;
+    height: 800px;
+}
+
+.fx-filter-form-module {
+    width: 20%;
+    border: 10px solid white;
+}
+
+.fx-filter-form-module.fit {
+    width: 100%;
+}
 
 

@@ -20,7 +20,7 @@ define([
             HANDLER: "fx-filter-handler",
             CONTENT: "fx-filter-content",
             CLOSE_BTN: "fx-filter-close-btn",
-            MODULE: 'fx-catalog-form-module',
+            MODULE: 'fx-filter-form-module',
             RESIZE: "fx-filter-resize-btn",
             LABEL: "fx-filter-label"
         },
