@@ -2,14 +2,16 @@
 define([
     "jquery",
     "underscore",
+    "fx-filter/config/config",
+    "fx-filter/config/config-default",
     "q"
-], function ($, _, Q) {
+], function ($, _, C, DC, Q) {
 
     'use strict';
 
     var defaultConfig = {
-        D3S_CODELIST_URL: "http://fenix.fao.org/d3s_dev/msd/resources/uid/",
-        D3S_METADATA_URL: "http://fenix.fao.org/d3s_dev/msd/resources/uid/",
+        D3S_CODELIST_URL:( C.SERVICE_BASE_ADDRESS || DC.SERVICE_BASE_ADDRESS) + "/resources/uid/" ,
+        D3S_METADATA_URL: ( C.SERVICE_BASE_ADDRESS || DC.SERVICE_BASE_ADDRESS) + "/resources/uid/" ,
         lang: "EN"
     };
 
@@ -27,7 +29,7 @@ define([
     Fx_filter_utils.prototype.getConfiguration = function (conf) {
 
         if (!Array.isArray(conf)) {
-            console.error("filter configuration is not an arraty");
+            console.error("filter configuration is not an array");
             return;
         }
 

@@ -3,9 +3,13 @@ define(function () {
 
     'use strict';
 
+    var SERVER = "http://fenix.fao.org";
+
     return {
 
-        SERVICE_BASE_ADDRESS: "http://fenix.fao.org/d3s_fenix/msd"
+        SERVER :SERVER,
+
+        SERVICE_BASE_ADDRESS: SERVER + "/d3s_fenix/msd"
 
     };
 });
