@@ -64,6 +64,7 @@ define([
         var self = this;
         this.$dropdownSelector = $(component);
         $.extend(true, this.options, e);
+
         if (e.config.enableMultiselection && e.config.enableMultiselection === true) {
             this.options.enableMultiselection = e.config.enableMultiselection;
 
@@ -98,7 +99,8 @@ define([
             }
             this.options.source = e.config.defaultsource;
 
-        } else {
+        }
+        else {
             for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
                 var select2Data = [];
                 var selectedItems = {};
@@ -127,31 +129,22 @@ define([
             }
         }
 
-
         this.options.name = e.name;
         this.options.componentid = $(component).attr("id");
+
         //Raise an event to show that the component has been rendered
         $(component).trigger(this.options.events.READY, {name: e.name});
-    }
+    };
 
-    ComponentDropDownList.prototype._renderDropdownBySelect2 = function (data) {
+    ComponentDropDownList.prototype.setDomain = function (source) {
+        // TODO: setDOMAIN mutliseleciton
+        this.options.source = source;
+        $(component).select2({
+            data: this.options.source,
+            width: '99%'
+        });
 
-    },
-
-        ComponentDropDownList.prototype.setDomain = function (source) {
-            // TODO: setDOMAIN mutliseleciton
-            this.options.source = source;
-            $(component).select2({
-                data: this.options.source,
-                width: '99%'
-            });
-
-            /*  for(var i=0; i< source.length; i++){
-             if(source[i].selected){
-             $('#'+this.options.componentid).select2('selectIndex', i);
-             }
-             }*/
-        }
+    };
 
     ComponentDropDownList.prototype.getValues = function () {
         // TODO getValues mutliselection
@@ -174,6 +167,9 @@ define([
             case "codelist":
                 return this.getCodelist(id, uid, value);
                 break;
+            case "codelist-codes":
+                return this.getCodelist(id, uid, value);
+                break;
             // same as codelist
             case "distinct":
                 return this.getCodelist(id, uid, value);
@@ -187,7 +183,7 @@ define([
     };
 
     ComponentDropDownList.prototype.getYears = function (value) {
-        var result = {"time": []}
+        var result = {"time": []};
         if (Object.prototype.toString.call(value) === '[object Array]') {
             for (var i = 0; i < value.length; i++) {
                 result.time.push({from: parseInt(value[i], 10), to: parseInt(value[i], 10)})
@@ -233,7 +229,7 @@ define([
             var field;
             this.options.adapter(filterModule, $.proxy(this.setDomain, this), 3);
         }
-    }
+    };
 
     ComponentDropDownList.prototype.bindEventListeners = function () {
 
@@ -243,11 +239,6 @@ define([
             that.deselectValue(e.detail);
         }, false);
     };
-
-    /* ComponentDropDownList.prototype.deselectValue = function (obj) {
-     var item = $(this.options.container).jqxDropDownList('getItemByValue', obj.value);
-     $(this.options.container).jqxDropDownList('unselectItem', item );
-     };*/
 
     ComponentDropDownList.prototype.error = function (e) {
         console.log("Component drop down error: " + error);

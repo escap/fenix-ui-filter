@@ -12,6 +12,7 @@ define([
     var defaultConfig = {
         D3S_CODELIST_URL:( C.SERVICE_BASE_ADDRESS || DC.SERVICE_BASE_ADDRESS) + "/resources/uid/" ,
         D3S_METADATA_URL: ( C.SERVICE_BASE_ADDRESS || DC.SERVICE_BASE_ADDRESS) + "/resources/uid/" ,
+        D3S_FILTER_CODES : ( C.SERVICE_BASE_ADDRESS || DC.SERVICE_BASE_ADDRESS) + "/codes/filter",
         lang: "EN"
     };
 
@@ -22,6 +23,8 @@ define([
         this.current = {};
 
         this.cl = {};
+
+        this.clCodes = {};
 
         this.distinct = {};
     }
@@ -58,6 +61,10 @@ define([
                 cd.push(this._createCodelistPromise(c));
             }
 
+            if (c.type === "codelist-codes") {
+                cd.push(this._createCodelistCodesPromise(c));
+            }
+
         }, this));
 
         return Q.all(cd);
@@ -72,6 +79,24 @@ define([
             url: this.o.D3S_CODELIST_URL + cd_uid
         })).then(function (c) {
             self.cl[cd_uid] = c;
+        }, function (r) {
+            console.error(r);
+        });
+    };
+
+    Fx_filter_utils.prototype._createCodelistCodesPromise = function (c) {
+
+        var self = this,
+            cd_uid = c.components[0].uid;
+
+        return Q($.ajax({
+            url: this.o.D3S_FILTER_CODES,
+            type: "POST",
+            contentType: "application/json",
+            data : JSON.stringify( c.components[0].config.filter),
+            dataType: 'json'
+        })).then(function (c) {
+            self.clCodes[cd_uid] = c[0].children;
         }, function (r) {
             console.error(r);
         });
@@ -119,6 +144,9 @@ define([
             case 'distinct' :
                 this._processDistinctConfiguration(c);
                 break;
+            case 'codelist-codes' :
+                this._processCodelistCodesConfiguration(c);
+                break;
             default :
                 console.warn("configuration type [" + c.type + "] not found for: (static is applied)");
                 console.warn(c);
@@ -157,6 +185,33 @@ define([
 
         conf.components[0].config.defaultsource = conf.components[0].config.defaultsource.concat(result);
         conf.components[0].config.id = codelist.id;
+
+        this.current.result.push(conf);
+
+    };
+
+    Fx_filter_utils.prototype._processCodelistCodesConfiguration = function (conf) {
+
+        var uid = conf.components[0].uid,
+            data = this.clCodes[uid],
+            result = [],
+            self = this;
+
+        _.each(data, function (d) {
+            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(conf, d.code)});
+        });
+
+        function compare(a, b) {
+            if (a.label < b.label)
+                return -1;
+            if (a.label > b.label)
+                return 1;
+            return 0;
+        }
+
+        result.sort(compare);
+
+        conf.components[0].config.defaultsource = conf.components[0].config.defaultsource.concat(result);
 
         this.current.result.push(conf);
 
