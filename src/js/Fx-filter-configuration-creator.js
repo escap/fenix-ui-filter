@@ -255,7 +255,7 @@ define([
             if (d[columnCodeIndex] && d[columnLabelIndex]) {
                 code2Label[d[columnCodeIndex]] = d[columnLabelIndex];
             } else {
-                console.warn("Maybe there are some problem with the data, please check [" + d[columnCodeIndex] + "] [" + d[columnLabelIndex] + "]")
+                //console.warn("Maybe there are some problem with the data, please check [" + d[columnCodeIndex] + "] [" + d[columnLabelIndex] + "]")
             }
         });
 
