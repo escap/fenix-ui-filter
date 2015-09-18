@@ -77,9 +77,11 @@ define([
             var selectedItems = {};
 
             for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
+                var code = e.config.defaultsource[i].label === e.config.defaultsource[i].value ? "" : " [" +   e.config.defaultsource[i].value+ "]"
                 select2Data.push({
                     id: e.config.defaultsource[i].value,
-                    text: e.config.defaultsource[i].label
+                    text: e.config.defaultsource[i].label + code
+
                 });
 
                 if (e.config.defaultsource[i].selected) {
