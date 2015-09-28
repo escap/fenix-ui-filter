@@ -77,7 +77,7 @@ define([
             var selectedItems = {};
 
             for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
-                var code = e.config.defaultsource[i].label === e.config.defaultsource[i].value ? "" : " [" +   e.config.defaultsource[i].value+ "]"
+                var code = e.config.defaultsource[i].label === e.config.defaultsource[i].value ? "" : " [" + e.config.defaultsource[i].value + "]"
                 select2Data.push({
                     id: e.config.defaultsource[i].value,
                     text: e.config.defaultsource[i].label + code
@@ -153,6 +153,7 @@ define([
         var type = this.options.type || "codes",
             id = this.options.id || null,
             uid = this.options.uid || null,
+            version = this.options.version || null,
             value = this.$dropdownSelector.select2('val'),
             results = [];
 
@@ -160,21 +161,19 @@ define([
         if (value === null || value === "" || value.length <= 0) {
             return {"removeFilter": true};
         }
-
-
         switch (type) {
             case "time":
                 return this.getYears(value);
                 break;
             case "codelist":
-                return this.getCodelist(id, uid, value);
+                return this.getCodelist(id, uid, value, version);
                 break;
             case "codelist-codes":
-                return this.getCodelist(id, uid, value);
+                return this.getCodelist(id, uid, value, version);
                 break;
             // same as codelist
             case "distinct":
-                return this.getCodelist(id, uid, value);
+                return this.getCodelist(id, uid, value, version);
                 break;
 
             default:
@@ -197,9 +196,19 @@ define([
         return result
     };
 
-    ComponentDropDownList.prototype.getCodelist = function (id, uid, value) {
+    ComponentDropDownList.prototype.getCodelist = function (id, uid, value, version) {
         var result = {};
-        result = {"codes": [{uid: uid, codes: []}]};
+        result = {
+            "codes": [
+                {
+                    uid: uid, codes: []
+                }]
+        };
+
+        if (version) {
+            result.codes[0].version = version;
+        }
+
         if (Object.prototype.toString.call(value) === '[object Array]') {
             for (var i = 0; i < value.length; i++) {
                 result.codes[0].codes.push(value[i])
