@@ -76,19 +76,8 @@ define([
             var select2Data = [];
             var selectedItems = {};
 
-            for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
-                var code = e.config.defaultsource[i].label === e.config.defaultsource[i].value ? "" : " [" + e.config.defaultsource[i].value + "]"
-                select2Data.push({
-                    id: e.config.defaultsource[i].value,
-                    text: e.config.defaultsource[i].label + code
-
-                });
-
-                if (e.config.defaultsource[i].selected) {
-                    selectedItems[i] = true;
-                }
-            }
-
+            this._fillDropdownList(e.config,select2Data,selectedItems);
+            
             this.$dropdownSelector.select2({
                 data: select2Data,
                 width: '99%',
@@ -107,16 +96,7 @@ define([
                 var select2Data = [];
                 var selectedItems = {};
 
-                for (var i = 0, length = e.config.defaultsource.length; i < length; i++) {
-                    select2Data.push({
-                        id: e.config.defaultsource[i].value,
-                        text: e.config.defaultsource[i].label
-                    });
-
-                    if (e.config.defaultsource[i].selected) {
-                        selectedItems[i] = true;
-                    }
-                }
+                this._fillDropdownList(e.config,select2Data,selectedItems);
 
                 this.$dropdownSelector.select2({
                     data: select2Data,
@@ -137,6 +117,23 @@ define([
         //Raise an event to show that the component has been rendered
         $(component).trigger(this.options.events.READY, {name: e.name});
     };
+
+
+    ComponentDropDownList.prototype._fillDropdownList = function(config, select2Data, selectedItems) {
+
+        for (var i = 0, length = config.defaultsource.length; i < length; i++) {
+            var code = config.defaultsource[i].label === config.defaultsource[i].value ? "" : " [" +   config.defaultsource[i].value+ "]"
+
+            select2Data.push({
+                id: config.defaultsource[i].value,
+                text: (config.onlyValueText && config.onlyValueText == true)? config.defaultsource[i].label: config.defaultsource[i].label + code
+            });
+
+            if (config.defaultsource[i].selected) {
+                selectedItems[i] = true;
+            }
+        }
+    }
 
     ComponentDropDownList.prototype.setDomain = function (source) {
         // TODO: setDOMAIN mutliseleciton
