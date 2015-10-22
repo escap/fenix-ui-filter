@@ -23,7 +23,6 @@ define([
             HOLDER: "fx-catalog-modular-form-holder",
             HEADER: "fx-catalog-modular-form-header",
             HANDLER: "fx-catalog-modular-form-handler",
-            CONTENT: "fx-catalog-modular-form-content",
             CLOSE_BTN: "fx-catalog-modular-form-close-btn",
             MODULE: 'fx-filter-form-module',
             RESIZE: "fx-catalog-modular-form-resize-btn",

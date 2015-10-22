@@ -18,9 +18,9 @@ define([
             HOLDER: "fx-catalog-modular-form-holder",
             HEADER: "fx-catalog-modular-form-header",
             HANDLER: "fx-catalog-modular-form-handler",
-            CONTENT: "fx-catalog-modular-form-content",
+            CONTENT: "fx-filter-modular-form-content",
             CLOSE_BTN: "fx-catalog-modular-form-close-btn",
-            MODULE: 'fx-filter-form-module',
+            MODULE: 'fx-filter-form-module fit',
             RESIZE: "fx-catalog-modular-form-resize-btn",
             LABEL: "fx-catalog-modular-form-label"
         },
@@ -47,7 +47,7 @@ define([
         $module.attr("data-module", module.options.container.containerType);
         $module.attr("data-size", "full");
         $module.attr("id", module.options.id);
-        $header.append("<div class='" + self.options.css_classes.HANDLER + "'></div>");
+        //$header.append("<div class='" + self.options.css_classes.HANDLER + "'></div>");
 //        $header.append("<div class='" + o.css_classes.LABEL + "'>" + cache.json[module.module]["label"][o.widget.lang] + "</div>");
         if((self.options.title!=null)&&(self.options.title!="undefined")&&(self.options.title.length>0)){
             $header.append("<div class='" + self.options.css_classes.LABEL + "'>" + self.options.title + "</div>");
@@ -70,7 +70,7 @@ define([
             }
             self.options.grid.resize(e.data.module);
         });
-        $header.append($resize);
+        //$header.append($resize);
 
         var $close_btn = $("<div class='" + self.options.css_classes.CLOSE_BTN + "'></div>")
             .on("click", { o: self.options }, function (e) {
@@ -79,7 +79,7 @@ define([
                 self.options.grid.removeItem($module.get(0));
             });
 
-        $header.append($close_btn);
+        //$header.append($close_btn);
         $module.append($holder);
         $holder.append($header);
         var $content = $("<div class='" + self.options.css_classes.CONTENT + "'></div>");
