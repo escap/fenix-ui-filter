@@ -7,7 +7,6 @@ requirejs.config({
         'pnotify': 'src/lib/pnotify.custom.min',
         'jqwidgets': "node_modules/jqwidgets-3.1/jqx-all",
         'jqueryui': 'src/lib/jquery-ui.min',
-        'jqueryuicustom': '//fenixapps.fao.org/repository/js/jquery-ui/1.9.2/jquery-ui.custom.min',
         'nprogress': 'node_modules/nprogress',
         'bootstrap': 'node_modules/bootstrap/dist/js/bootstrap.min',
         'isotope': "src/lib/isotope",
@@ -41,9 +40,6 @@ requirejs.config({
         jqwidget: {
             export: "$",
             deps: ['jquery']
-        },
-        jQAllRangeSliders: {
-            deps: ['jquery', 'jqueryui', 'jqueryuicustom']
         },
         pnotify: {
             deps: ['bootstrap']

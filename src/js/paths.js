@@ -50,7 +50,6 @@ define(function () {
             'isotope': "{FENIX_CDN}/js/isotope/2.1.0/dist/isotope.pkgd.min",
             'packery': '{FENIX_CDN}/js/packery/dist/packery.pkgd.min',
             'jstree': '{FENIX_CDN}/js/jstree/3.0.8/dist/jstree.min',
-            'jQAllRangeSliders': 'src/lib/jQAllRangeSliders-min',
             'select2': '{FENIX_CDN}/js/select2/3.5.4/select2.min',
             'text': '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
             'draggabilly':'{FENIX_CDN}/js/draggabilly/dist/draggabilly.pkgd.min',
@@ -70,9 +69,6 @@ define(function () {
             jqwidget: {
                 export: "$",
                 deps: ['jquery']
-            },
-            jQAllRangeSliders: {
-                deps: ['jquery', 'jqueryui', 'jqueryuicustom']
             },
             pnotify: {
                 deps: ['bootstrap']
