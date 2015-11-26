@@ -77,8 +77,8 @@ define([
 
         return Q($.ajax({
             url: this.o.D3S_CODELIST_URL + cd_uid
-        })).then(function (c) {
-            self.cl[cd_uid] = c;
+        })).then(function (result) {
+            self.cl[cd_uid] = result;
         }, function (r) {
             console.error(r);
         });
@@ -89,15 +89,24 @@ define([
         var self = this,
             cd_uid = c.components[0].uid;
 
+        console.log(this.o.D3S_FILTER_CODES)
+
         return Q($.ajax({
             url: this.o.D3S_FILTER_CODES,
             type: "POST",
             contentType: "application/json",
             data : JSON.stringify( c.components[0].config.filter),
             dataType: 'json'
-        })).then(function (c) {
-            self.clCodes[cd_uid] = c[0].children;
+        })).then(function (result) {
+
+            if (typeof result === 'undefined') {
+                console.log("No Code List loaded for: " + cd_uid);
+            }
+
+            self.clCodes[cd_uid] = result[0].children;
+
         }, function (r) {
+
             console.error(r);
         });
     };
@@ -125,8 +134,8 @@ define([
 
         return Q($.ajax({
             url: this.o.D3S_METADATA_URL + cd_uid + "?language=" + this.o.lang + "&dsd=true"
-        })).then(function (c) {
-            self.distinct[name] = c;
+        })).then(function (result) {
+            self.distinct[name] = result;
         }, function (r) {
             console.error(r);
         });
