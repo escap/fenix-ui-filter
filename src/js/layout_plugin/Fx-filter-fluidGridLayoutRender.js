@@ -2,61 +2,61 @@ define([
     'jquery',
     "fx-common/structures/fx-fluid-grid",
     'fx-filter/filtermodule',
-    'fx-filter/containerfactory',
+    'fx-filter/containerfactory'
 ], function ($, FluidForm, FilterModule, ContainerFactory) {
 
     'use strict';
 
     var optionsDefault = {
 
-        html_ids : {
+        html_ids: {
             MAIN_CONTAINER: "fx-filter_container",
             GRID_CONTAINER: "fx-filter-grid"
         },
-        grid : ''
-    }
+        grid: ''
+    };
 
     // A constructor for defining new container
-    function FluidGridLayoutRender( o ) {
+    function FluidGridLayoutRender(o) {
 
-        if (this.options === undefined) {this.options = {}; }
+        if (this.options === undefined) {
+            this.options = {};
+        }
 
         $.extend(true, this.options, optionsDefault, o);
     }
 
     FluidGridLayoutRender.prototype.render = function (options) {
 
-            var c = document.createElement('DIV');
-            c.className = 'fx-filter-container';
-            this.options.html_ids.GRID_CONTAINER = this.options.html_ids.GRID_CONTAINER + "_" +options.mainContent;
-            c.id = this.options.html_ids.GRID_CONTAINER;
-//        c.text = 'PROVA';
-
-            var main_container = document.getElementById(options.MAIN_CONTAINER);
-            if((main_container!=null)&&(typeof main_container != "undefined")){
-                while (main_container.firstChild) {
-                    main_container.removeChild(main_container.firstChild);
-                }
-                main_container.appendChild(c);
+        var c = document.createElement('DIV');
+        c.className = 'fx-filter-container';
+        this.options.html_ids.GRID_CONTAINER = this.options.html_ids.GRID_CONTAINER + "_" + options.mainContent;
+        c.id = this.options.html_ids.GRID_CONTAINER;
+        var main_container = document.getElementById(options.MAIN_CONTAINER);
+        if ((main_container != null) && (typeof main_container != "undefined")) {
+            while (main_container.firstChild) {
+                main_container.removeChild(main_container.firstChild);
             }
+            main_container.appendChild(c);
+        }
 
-            this.options.grid = new FluidForm();
+        this.options.grid = new FluidForm();
 
-            this.options.grid.init({
-                container: document.querySelector("#"+this.options.html_ids.GRID_CONTAINER),
-                drag: {
-                    handle: '.fx-catalog-modular-form-handler',
-                    containment: "#"+this.options.html_ids.GRID_CONTAINER
-                },
-                config: {
-                    itemSelector: "."+options.ITEM_COMPONENT_CLASS_ID,
-                    columnWidth: "."+options.ITEM_COMPONENT_CLASS_ID,
-                    percentPosition: true,
-                    transitionDuration: 0
-                }
-            });
+        this.options.grid.init({
+            container: document.querySelector("#" + this.options.html_ids.GRID_CONTAINER),
+            drag: {
+                handle: '.fx-catalog-modular-form-handler',
+                containment: "#" + this.options.html_ids.GRID_CONTAINER
+            },
+            config: {
+                itemSelector: "." + options.ITEM_COMPONENT_CLASS_ID,
+                columnWidth: "." + options.ITEM_COMPONENT_CLASS_ID,
+                percentPosition: true,
+                transitionDuration: 0
+            }
+        });
 
-            this.options.grid.render();
+        this.options.grid.render();
     };
 
     FluidGridLayoutRender.prototype.add = function (element, adapter_map, options, index, componentCreator) {
@@ -64,34 +64,45 @@ define([
         var module = '';
         //Add in the DOM
         element.grid = this.options.grid;
-        if((element!=null)&&(element!= "undefined"))
-        {
+        if ((element != null) && (element != "undefined")) {
             //Creation of the Module
             var moduleObj = new FilterModule({
-                id: "fenix_filter_module_"+options.mainContent+"_"+options.module_id,
-                grid: this.options.grid, container_plugin_dir: options.container_plugin_dir, component_plugin_dir: options.component_plugin_dir});
+                id: "fenix_filter_module_" + options.mainContent + "_" + options.module_id,
+                grid: this.options.grid,
+                container_plugin_dir: options.container_plugin_dir,
+                component_plugin_dir: options.component_plugin_dir,
+                element : element
+            });
 
             //Creation of the Container
             var containerFactory = new ContainerFactory();
-//        var containerFactoryInstance = containerFactory.createContainer( {
-//            vehicleType: "car",
-//            color: "yellow",
-//            doors: 6 } );
+
             var containerFactoryInstance = '';
+
+            var containerConfiguration = {
+                containerType: element.containerType,
+                grid: element.grid,
+                activeTab: element.activeTab,
+                daniele: true
+            };
+
             //Active Tab could be undefined ... if the container contains only one component
-            if((element.title!=null)&&(typeof element.title!="undefined")){
-                containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, title : element.title, grid : element.grid, activeTab : element.activeTab});
-            }
-            else{
-                containerFactoryInstance = containerFactory.createContainer({containerType : element.containerType, grid : element.grid, activeTab : element.activeTab});
+            if ((element.title != null) && (typeof element.title != "undefined")) {
+
+                containerFactoryInstance =
+                    containerFactory.createContainer($.extend(containerConfiguration, {title: element.title}));
+
+            } else {
+                containerFactoryInstance = containerFactory.createContainer(containerConfiguration);
             }
 
             moduleObj.options.container = containerFactoryInstance;
+
             //Get html code for module render
-            if((element.components!=null)&&(typeof element.components!="undefined")){
-                for(var j =0; j<element.components.length; j++){
+            if ((element.components != null) && (typeof element.components != "undefined")) {
+                for (var j = 0; j < element.components.length; j++) {
                     var component_name = element.components[j].name;
-                    if((adapter_map!=null)&&(typeof adapter_map!= "undefined")&&(adapter_map[component_name]!=-null)&&(typeof adapter_map[component_name]!="undefined")){
+                    if ((adapter_map != null) && (typeof adapter_map != "undefined") && (adapter_map[component_name] != -null) && (typeof adapter_map[component_name] != "undefined")) {
                         element.components[j].adapter = adapter_map[component_name];
                     }
                 }

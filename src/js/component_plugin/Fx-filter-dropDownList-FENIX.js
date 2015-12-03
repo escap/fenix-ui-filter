@@ -132,7 +132,7 @@ define([
                 selectedItems[i] = true;
             }
         }
-    }
+    };
 
     ComponentDropDownList.prototype.setDomain = function (source) {
         // TODO: setDOMAIN mutliseleciton

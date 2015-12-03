@@ -17,9 +17,6 @@ ContainerFactory.prototype.containerClass = '';
 ContainerFactory.prototype.createContainer = function ( options ) {
 
     switch(options.containerType){
-        case "fluidGridBaseContainer":
-            this.containerClass = FluidGridBaseContainer;
-            break;
         case "baseContainer":
             this.containerClass = baseContainer;
             break;

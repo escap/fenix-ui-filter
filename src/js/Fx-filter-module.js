@@ -1,7 +1,6 @@
 define([
     'jquery',
-    'bootstrap',
-    'fx-filter/componentcreator'
+    'bootstrap'
 ], function ($) {
 
     'use strict';
@@ -11,7 +10,7 @@ define([
         component : '',
         grid : '',
         id : ''
-    }
+    };
 
     function FilterModule( o ){
 
