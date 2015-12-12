@@ -65,7 +65,6 @@ define([
 
     ComponentTimeRangeLists.prototype.render = function (e, component) {
         var self = this;
-        console.log(component);
 
 
         this.$rangeHolder = $(component);
@@ -240,9 +239,7 @@ define([
     };
 
     ComponentTimeRangeLists.prototype.bindEventListeners = function (fromData, toData, options) {
-        console.log("====================== BIND EVENT LISTENERS ============");
         var that = this;
-        //console.log(this.options.events.CHANGE + this.options.module.type);
 
       //  document.body.addEventListener(this.options.events.DESELECT + this.options.module.type, function (e) {
        //     that.deselectValue(e.detail);
