@@ -1,8 +1,10 @@
 define([
     'jquery',
     'underscore',
+    'amplify',
     'jqwidgets',
     'select2'
+
 ], function ($, _) {
 
     'use strict';
@@ -32,9 +34,11 @@ define([
         events: {
             REMOVE_MODULE: "fx.filter.module.remove",
             READY: "fx.filter.component.ready",
-            DESELECT: 'fx.filter.module.deselect.'
+            DESELECT: 'fx.filter.module.deselect.',
+            LIST_CHANGE: 'fx.filter.list.change.'
         },
-        enableMultiselection: false
+        enableMultiselection: false,
+        removeFilter: false
     };
 
     // A constructor for defining new component
@@ -64,11 +68,17 @@ define([
         this.$dropdownSelector = $(component);
         $.extend(true, this.options, e);
 
+
         if (e.config.enableMultiselection && e.config.enableMultiselection === true) {
             this.options.enableMultiselection = e.config.enableMultiselection;
 
             // TODO : render multiselection
         }
+
+        if (e.config.removeFilter && e.config.removeFilter === true) {
+            this.options.removeFilter = e.config.removeFilter;
+        }
+
         // render single selection
         if ((e.config.defaultsource != null) && (typeof e.config.defaultsource != "undefined")) {
 
@@ -113,15 +123,19 @@ define([
         this.options.name = e.name;
         this.options.componentid = $(component).attr("id");
 
+        this.bindEventListeners();
+
         //Raise an event to show that the component has been rendered
         $(component).trigger(this.options.events.READY, {name: e.name});
     };
+
 
 
     ComponentDropDownList.prototype._fillDropdownList = function(config, select2Data, selectedItems) {
 
         for (var i = 0, length = config.defaultsource.length; i < length; i++) {
             var code = config.defaultsource[i].label === config.defaultsource[i].value ? "" : " [" +   config.defaultsource[i].value+ "]"
+
 
             select2Data.push({
                 id: config.defaultsource[i].value,
@@ -148,13 +162,18 @@ define([
         // TODO getValues mutliselection
         var type = this.options.type || "codes",
             id = this.options.id || null,
+            removeFilter = this.options.removeFilter || false,
             uid = this.options.uid || null,
             version = this.options.version || null,
             value = this.$dropdownSelector.select2('val'),
             results = [];
 
+
         //TODO: check value selection
         if (value === null || value === "" || value.length <= 0) {
+            return {"removeFilter": true};
+        }
+        if (removeFilter) {
             return {"removeFilter": true};
         }
         switch (type) {
@@ -165,6 +184,9 @@ define([
                 return this.getCodelist(id, uid, value, version);
                 break;
             case "codelist-codes":
+                return this.getCodelist(id, uid, value, version);
+                break;
+            case "codelist-hierarchy":
                 return this.getCodelist(id, uid, value, version);
                 break;
             // same as codelist
@@ -216,14 +238,6 @@ define([
         return result
     };
 
-    ComponentDropDownList.prototype.bindEventListeners = function () {
-
-        var that = this;
-
-        document.body.addEventListener(this.options.events.DESELECT + this.options.module.type, function (e) {
-            that.deselectValue(e.detail);
-        }, false);
-    };
 
     ComponentDropDownList.prototype.deselectValue = function (obj) {
         //TODO deselect all values for multiselection
@@ -242,9 +256,14 @@ define([
 
         var that = this;
 
-        document.body.addEventListener(this.options.events.DESELECT + this.options.module.type, function (e) {
-            that.deselectValue(e.detail);
-        }, false);
+      //  document.body.addEventListener(this.options.events.DESELECT + this.options.module.type, function (e) {
+      //      that.deselectValue(e.detail);
+      //  }, false);
+
+         this.$dropdownSelector.on("change", function (e) {
+             amplify.publish(that.options.events.LIST_CHANGE + that.options.name, {value: $(this).val(), name: that.options.name});
+         }).change();
+
     };
 
     ComponentDropDownList.prototype.error = function (e) {
