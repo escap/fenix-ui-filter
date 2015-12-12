@@ -20,6 +20,10 @@ define([
 
         this.o = $.extend(true, {}, defaultConfig, o);
 
+        if(C.OVERWRITE_DEFAULT_CONFIG)
+            this.o = $.extend(true, {}, C, o);
+
+
         this.current = {};
 
         this.cl = {};
@@ -64,6 +68,9 @@ define([
             if (c.type === "codelist-codes") {
                 cd.push(this._createCodelistCodesPromise(c));
             }
+            if(c.type === "codelist-hierarchy") {
+                cd.push(this. _createCodelistHierarchyPromise(c));
+            }
 
         }, this));
 
@@ -73,10 +80,13 @@ define([
     Fx_filter_utils.prototype._createCodelistPromise = function (c) {
 
         var self = this,
-            cd_uid = c.components[0].uid;
+            cd_uid = c.components[0].uid,
+            cd_version = c.components[0].version,
+            cl_url = typeof cd_version != 'undefined'? this.o.D3S_CODELIST_URL + cd_uid + '/'+cd_version : this.o.D3S_CODELIST_URL + cd_uid;
+
 
         return Q($.ajax({
-            url: this.o.D3S_CODELIST_URL + cd_uid
+            url: cl_url //this.o.D3S_CODELIST_URL + cd_uid
         })).then(function (result) {
             self.cl[cd_uid] = result;
         }, function (r) {
@@ -110,6 +120,49 @@ define([
             console.error(r);
         });
     };
+
+    Fx_filter_utils.prototype._createCodelistHierarchyPromise = function (c) {
+
+
+        var self = this,
+            cd_uid = c.components[0].uid,
+            cd_level = typeof c.components[0].config.filter.level != 'undefined' ? c.components[0].config.filter.level : "0";
+
+        return Q($.ajax({
+            url: this.o.D3S_FILTER_CODES,
+            type: "POST",
+            contentType: "application/json",
+            data : JSON.stringify( c.components[0].config.filter),
+            dataType: 'json'
+        })).then(function (c) {
+            self.clCodes[cd_uid+cd_level] = c;
+        }, function (r) {
+            console.error(r);
+        });
+    };
+
+
+    Fx_filter_utils.prototype._createCodelistHierarchyPromiseData = function (c) {
+        console.log(c.components[0]);
+
+        var self = this,
+            cd_uid = c.components[0].uid,
+            cd_level = typeof c.components[0].config.filter.level != 'undefined' ? c.components[0].config.filter.level : "0";
+        // cd_level = c.components[0].config.filter.level;
+
+        return Q($.ajax({
+            url: this.o.D3S_FILTER_CODES,
+            type: "POST",
+            contentType: "application/json",
+            data : JSON.stringify( c.components[0].config.filter),
+            dataType: 'json'
+        })).then(function (c) {
+            return c;
+        }, function (r) {
+            console.error(r);
+        });
+    };
+
 
     Fx_filter_utils.prototype._preloadMetadata = function () {
 
@@ -156,6 +209,9 @@ define([
             case 'codelist-codes' :
                 this._processCodelistCodesConfiguration(c);
                 break;
+            case 'codelist-hierarchy' :
+                this._processCodelistHierarchyConfiguration(c);
+                break;
             default :
                 console.warn("configuration type [" + c.type + "] not found for: (static is applied)");
                 console.warn(c);
@@ -174,12 +230,13 @@ define([
 
         var uid = conf.components[0].uid,
             codelist = this.cl[uid],
+            config = conf.components[0].config,
             data = codelist.data,
             result = [],
             self = this;
 
         _.each(data, function (d) {
-            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(conf, d.code)});
+            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(config, d.code)});
         });
 
         function compare(a, b) {
@@ -202,13 +259,46 @@ define([
     Fx_filter_utils.prototype._processCodelistCodesConfiguration = function (conf) {
 
         var uid = conf.components[0].uid,
+            config = conf.components[0].config,
             data = this.clCodes[uid],
             result = [],
             self = this;
 
         _.each(data, function (d) {
-            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(conf, d.code)});
+            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(config, d.code)});
         });
+
+        function compare(a, b) {
+            if (a.label < b.label)
+                return -1;
+            if (a.label > b.label)
+                return 1;
+            return 0;
+        }
+
+        result.sort(compare);
+
+
+        conf.components[0].config.defaultsource = conf.components[0].config.defaultsource.concat(result);
+
+        this.current.result.push(conf);
+
+    };
+
+    Fx_filter_utils.prototype._processCodelistHierarchyConfiguration = function (conf) {
+
+        var uid = conf.components[0].uid,
+            config = conf.components[0].config,
+            level = conf.components[0].config.filter.level,
+            data = this.clCodes[uid+level],
+            result = [],
+            self = this;
+
+        _.each(data, function (d) {
+            result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(config, d.code)});
+        });
+
+
 
         function compare(a, b) {
             if (a.label < b.label)
@@ -227,8 +317,8 @@ define([
     };
 
     Fx_filter_utils.prototype._checkDefaultCodes = function(conf, code) {
-        if (conf.hasOwnProperty("defaultCodes") && conf.defaultCodes.length > 0) {
-            return (conf.defaultCodes.indexOf(code) > -1)
+        if (conf.hasOwnProperty("defaultcodes") && conf.defaultcodes.length > 0) {
+            return (conf.defaultcodes.indexOf(code) > -1)
         }
         return false;
     };
