@@ -159,12 +159,16 @@ define([
     };
 
     ComponentDropDownList.prototype.getValues = function () {
+        console.log("========================= GET VALUES");
+
         // TODO getValues mutliselection
         var type = this.options.type || "codes",
             id = this.options.id || null,
             removeFilter = this.options.removeFilter || false,
             uid = this.options.uid || null,
             version = this.options.version || null,
+            levels = this.options.levels || null,
+            level = this.options.level || null,
             value = this.$dropdownSelector.select2('val'),
             results = [];
 
@@ -187,7 +191,7 @@ define([
                 return this.getCodelist(id, uid, value, version);
                 break;
             case "codelist-hierarchy":
-                return this.getCodelist(id, uid, value, version);
+                return this.getHierarchyCodelist(id, uid, value, version, levels, level);
                 break;
             // same as codelist
             case "distinct":
@@ -197,6 +201,8 @@ define([
             default:
                 console.error("Add default behaviour");
         }
+
+        console.log(results);
 
         return results;
     };
@@ -238,6 +244,39 @@ define([
         return result
     };
 
+
+    ComponentDropDownList.prototype.getHierarchyCodelist = function (id, uid, value, version, levels, level) {
+        var result = {};
+        result = {
+            "codes": [
+                {
+                    uid: uid, codes: []
+                }]
+        };
+
+        if (version) {
+            result.codes[0].version = version;
+        }
+
+        if (levels) {
+            result.codes[0].levels = levels;
+        }
+
+        if (level) {
+            result.codes[0].level = level;
+        }
+
+
+        if (Object.prototype.toString.call(value) === '[object Array]') {
+            for (var i = 0; i < value.length; i++) {
+                result.codes[0].codes.push(value[i])
+            }
+        } else {
+            result.codes[0].codes.push(value);
+        }
+
+        return result
+    };
 
     ComponentDropDownList.prototype.deselectValue = function (obj) {
         //TODO deselect all values for multiselection
