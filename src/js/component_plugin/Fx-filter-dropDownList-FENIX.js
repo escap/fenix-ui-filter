@@ -149,17 +149,21 @@ define([
     };
 
     ComponentDropDownList.prototype.setDomain = function (source) {
+        var that = this;
+
+       // this.$dropdownSelector.select2("destroy");
+
         // TODO: setDOMAIN mutliseleciton
         this.options.source = source;
-        $(component).select2({
-            data: this.options.source,
+        this.$dropdownSelector.select2({
+            data: that.options.source,
             width: '99%'
         });
-
     };
 
+
     ComponentDropDownList.prototype.getValues = function () {
-        console.log("========================= GET VALUES");
+        //console.log("========================= GET VALUES");
 
         // TODO getValues mutliselection
         var type = this.options.type || "codes",
@@ -202,7 +206,7 @@ define([
                 console.error("Add default behaviour");
         }
 
-        console.log(results);
+       // console.log(results);
 
         return results;
     };
