@@ -247,7 +247,6 @@ define([
 
     ComponentDropDownList.prototype.refreshDomainByAdapter = function (filterModule) {
         if ((this.options.adapter != null) && (typeof this.options.adapter != "undefined")) {
-            var field;
             this.options.adapter(filterModule, $.proxy(this.setDomain, this), 3);
         }
     };
