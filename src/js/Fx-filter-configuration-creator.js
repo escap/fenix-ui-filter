@@ -99,8 +99,6 @@ define([
         var self = this,
             cd_uid = c.components[0].uid;
 
-        console.log(this.o.D3S_FILTER_CODES)
-
         return Q($.ajax({
             url: this.o.D3S_FILTER_CODES,
             type: "POST",
