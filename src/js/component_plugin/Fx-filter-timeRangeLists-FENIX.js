@@ -166,7 +166,7 @@ define([
 
         selector.select2({
             data: select2Data,
-            width: '40%',
+            width: '100%',
             multiple: options.enableMultiselection
         });
     }
