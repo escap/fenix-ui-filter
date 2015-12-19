@@ -152,6 +152,22 @@ define([
         }
     }
 
+
+    FC.prototype.getDomain = function (component_name) {
+        if ((this.options.filter_module_array != null) && (typeof this.options.filter_module_array != "undefined")) {
+            for (var i = 0; i < this.options.filter_module_array.length; i++) {
+//                var component = this.options.filter_module_array[i].options.component;
+                var components = this.options.filter_module_array[i].options.container.options.components;
+                for (var iComp = 0; iComp < components.length; iComp++) {
+                    var modulename = components[iComp].options.name;
+                   if (modulename == component_name) {
+                       return components[iComp];
+                    }
+                }
+            }
+        }
+    }
+
     //After the component render the host can decide to set the domain
     FC.prototype.setDomainByAdapter = function (component_name) {
         if ((this.options.filter_module_array != null) && (typeof this.options.filter_module_array != "undefined")) {

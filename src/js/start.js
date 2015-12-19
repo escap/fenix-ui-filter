@@ -47,6 +47,10 @@ define([
         this.controller.setDomain(component_name, source);
     };
 
+    Start.prototype.getDomain = function (component_name) {
+       return this.controller.getDomain(component_name);
+    };
+
     Start.prototype.getReadyEvent = function () {
         return o.host_event.COMPONENT_READY;
     };
