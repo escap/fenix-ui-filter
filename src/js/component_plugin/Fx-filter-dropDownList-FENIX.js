@@ -71,8 +71,6 @@ define([
 
         if (e.config.enableMultiselection && e.config.enableMultiselection === true) {
             this.options.enableMultiselection = e.config.enableMultiselection;
-
-            // TODO : render multiselection
         }
 
         if (e.config.removeFilter && e.config.removeFilter === true) {
@@ -83,7 +81,7 @@ define([
         if ((e.config.defaultsource != null) && (typeof e.config.defaultsource != "undefined")) {
 
             var select2Data = [];
-            var selectedItems = {};
+            var selectedItems = [];
 
             this._fillDropdownList(e.config,select2Data,selectedItems);
             
@@ -93,10 +91,11 @@ define([
                 multiple: self.options.enableMultiselection
             });
 
+            //for (var index in selectedItems) {
+                //this.$dropdownSelector.select2('data', select2Data[index]);
+                this.$dropdownSelector.select2('val', selectedItems);
+            //}
 
-            for (var index in selectedItems) {
-                this.$dropdownSelector.select2('data', select2Data[index]);
-            }
             this.options.source = e.config.defaultsource;
 
         }
@@ -143,7 +142,7 @@ define([
             });
 
             if (config.defaultsource[i].selected) {
-                selectedItems[i] = true;
+                selectedItems.push(config.defaultsource[i].value);
             }
         }
     };
@@ -221,7 +220,7 @@ define([
             result.time.push({from: parseInt(value, 10), to: parseInt(value, 10)})
         }
 
-        return result
+        return result;
     };
 
     ComponentDropDownList.prototype.getCodelist = function (id, uid, value, version) {
