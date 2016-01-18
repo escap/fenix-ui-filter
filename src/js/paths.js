@@ -14,6 +14,8 @@ define(function () {
             'fx-filter/fluidGridBaseContainer': 'src/js/container_plugin/Fx-filter-fluidGridBaseContainer',
             'fx-filter/baseContainer': 'src/js/container_plugin/baseContainer',
             'fx-filter/fluidGridLayoutRender': 'src/js/layout_plugin/Fx-filter-fluidGridLayoutRender',
+            'fx-filter/fluidGridSystemLayoutRender': 'src/js/layout_plugin/Fx-filter-fluidGridSystemLayoutRender',
+
             //'fx-filter/component1': '../../submodules/fenix-ui-filter/src/js/component_plugin/Fx-filter-component1',
             //'fx-filter/component1': 'src/js/component_plugin/Fx-filter-component1',
             'fx-filter/componentcreator': 'src/js/Fx-filter-component-creator',

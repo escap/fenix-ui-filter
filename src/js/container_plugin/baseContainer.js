@@ -39,8 +39,8 @@ define([
 
     Container1.prototype.getBlankContainer = function (module, components) {
 
-        var self = this;
-        var $module = $("<div class='" + self.options.css_classes.MODULE + " " + (module.options.element.class ? module.options.element.class : '' ) +  " '></div>"),
+       var self = this;
+        var $module = $("<div class='" + (module.options.element.class ? module.options.element.class : '' ) +  " "+ (module.options.element.module_class ? module.options.element.module_class : self.options.css_classes.MODULE )  +" '></div>"),
             $header = $("<div class='" + self.options.css_classes.HEADER + "'></div>"),
             $holder = $("<div class='" + self.options.css_classes.HOLDER + "'></div>");
 
