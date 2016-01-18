@@ -141,7 +141,7 @@ define([
 
 
     Fx_filter_utils.prototype._createCodelistHierarchyPromiseData = function (c) {
-        console.log(c.components[0]);
+       // console.log(c.components[0]);
 
         var self = this,
             cd_uid = c.components[0].uid,
