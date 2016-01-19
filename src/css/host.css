@@ -103,7 +103,7 @@
     border: 10px solid white;
 }
 
-#fx-filter-grid_filter-browse.container-fluid .row > div[class^="col"]{padding-left:0}
+/*#fx-filter-grid_filter-browse.container-fluid .row > div[class^="col"]{padding-left:0}*/
 
 .fx-filter-grid-module.fit {
     width: 100%;

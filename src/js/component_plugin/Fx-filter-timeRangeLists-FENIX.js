@@ -72,11 +72,11 @@ define([
 
         //this.$rangeHolder.prop('class', this.options.css_classes.RANGE_HOLDER);
 
-        this.$toHolder = $("<div></div>");
+        this.$toHolder = $("<div class='timeRangeListTo'></div>");
         this.$toLabelHolder = $("<div class='fx-filter-header'></div>");
         this.$toContentHolder = $("<div class='fx-filter-content'></div>");
 
-        this.$fromHolder = $("<div></div>");
+        this.$fromHolder = $("<div class='timeRangeListFrom'></div>");
         this.$fromLabelHolder = $("<div class='fx-filter-header'></div>");
         this.$fromContentHolder = $("<div class='fx-filter-content'></div>");
 
@@ -85,6 +85,8 @@ define([
         this.$toDropdownSelector = $("<div></div>");
 
         $.extend(true, this.options, e);
+
+        this.$span = $("<span class='fx-arrow-time'></span>");
 
         this.$fromTitle = $("<div>"+this.options.config.from.title[this.options.lang]+"</div>");
         this.$toTitle = $("<div>"+this.options.config.to.title[this.options.lang]+"</div>");
@@ -99,7 +101,7 @@ define([
         this.$toHolder.append(this.$toLabelHolder).append(this.$toContentHolder);
         this.$fromHolder.append(this.$fromLabelHolder).append(this.$fromContentHolder);
 
-        this.$rangeHolder.append(this.$fromHolder).append(this.$toHolder);
+        this.$rangeHolder.append(this.$fromHolder).append(this.$span).append(this.$toHolder);
 
 
         if (e.config.enableMultiselection && e.config.enableMultiselection === true) {
