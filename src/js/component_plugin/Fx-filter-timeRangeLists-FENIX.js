@@ -29,8 +29,11 @@ define([
             RESIZE: "fx-catalog-modular-form-resize-btn",
             LABEL: "fx-catalog-modular-form-label",
             DROPDOWN_SELECT: 'fx-filter-dropdown-menu',
-            RANGE_HOLDER: 'fx-filter-range-holder',
-            RANGE_LABEL_HOLDER: 'fx-filter-range-label-holder'
+            FILTER_HEADER: 'fx-filter-header',
+            FILTER_CONTENT: 'fx-filter-content',
+            RANGE_FROM_HOLDER: 'fx-filter-range-from-holder',
+            RANGE_TO_HOLDER: 'fx-filter-range-to-holder',
+            ICON: 'fx-arrow-time'
         },
         events: {
             REMOVE_MODULE: "fx.filter.module.remove",
@@ -69,16 +72,13 @@ define([
 
         this.$rangeHolder = $(component);
 
+        this.$toHolder = $("<div class='" + this.options.css_classes.RANGE_TO_HOLDER + "'></div>");
+        this.$toLabelHolder = $("<div class='" + this.options.css_classes.FILTER_HEADER + "'></div>");
+        this.$toContentHolder = $("<div class='" + this.options.css_classes.FILTER_CONTENT + "'></div>");
 
-        //this.$rangeHolder.prop('class', this.options.css_classes.RANGE_HOLDER);
-
-        this.$toHolder = $("<div class='timeRangeListTo'></div>");
-        this.$toLabelHolder = $("<div class='fx-filter-header'></div>");
-        this.$toContentHolder = $("<div class='fx-filter-content'></div>");
-
-        this.$fromHolder = $("<div class='timeRangeListFrom'></div>");
-        this.$fromLabelHolder = $("<div class='fx-filter-header'></div>");
-        this.$fromContentHolder = $("<div class='fx-filter-content'></div>");
+        this.$fromHolder = $("<div class='" + this.options.css_classes.RANGE_FROM_HOLDER + "'></div>");
+        this.$fromLabelHolder = $("<div class='" + this.options.css_classes.FILTER_HEADER + "'></div>");
+        this.$fromContentHolder = $("<div class='" + this.options.css_classes.FILTER_CONTENT + "'></div>");
 
 
         this.$fromDropdownSelector = $("<div></div>");
@@ -86,7 +86,7 @@ define([
 
         $.extend(true, this.options, e);
 
-        this.$span = $("<span class='fx-arrow-time'></span>");
+        this.$span = $("<span class='" + this.options.css_classes.ICON + "'></span>");
 
         this.$fromTitle = $("<div>"+this.options.config.from.title[this.options.lang]+"</div>");
         this.$toTitle = $("<div>"+this.options.config.to.title[this.options.lang]+"</div>");
