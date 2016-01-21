@@ -86,15 +86,30 @@ define([
                 daniele: true
             };
 
-            //Active Tab could be undefined ... if the container contains only one component
+            var opts = {};
             if ((element.title != null) && (typeof element.title != "undefined")) {
+                opts.title = element.title;
+            }
+            if ((element.icon != null) && (typeof element.icon != "undefined")) {
+                opts.icon = element.icon;
+            }
+
+            if($.isEmptyObject(opts)) {
+                containerFactoryInstance = containerFactory.createContainer(containerConfiguration);
+            } else {
+                containerFactoryInstance =
+                    containerFactory.createContainer($.extend(containerConfiguration, opts));
+            }
+
+            //Active Tab could be undefined ... if the container contains only one component
+           /** if ((element.title != null) && (typeof element.title != "undefined")) {
 
                 containerFactoryInstance =
                     containerFactory.createContainer($.extend(containerConfiguration, {title: element.title}));
 
             } else {
                 containerFactoryInstance = containerFactory.createContainer(containerConfiguration);
-            }
+            } **/
 
             moduleObj.options.container = containerFactoryInstance;
 
