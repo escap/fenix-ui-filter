@@ -22,7 +22,8 @@ define([
             CLOSE_BTN: "fx-filter-close-btn",
             MODULE: 'fx-filter-form-module',
             RESIZE: "fx-filter-resize-btn",
-            LABEL: "fx-filter-label"
+            LABEL: "fx-filter-label",
+            ICON: "fx-filter-icon",
         },
         events: {
             REMOVE_MODULE: "fx.filter.module.remove"
@@ -42,7 +43,9 @@ define([
        var self = this;
         var $module = $("<div class='" + (module.options.element.class ? module.options.element.class : '' ) +  " "+ (module.options.element.module_class ? module.options.element.module_class : self.options.css_classes.MODULE )  +" '></div>"),
             $header = $("<div class='" + self.options.css_classes.HEADER + "'></div>"),
-            $holder = $("<div class='" + self.options.css_classes.HOLDER + "'></div>");
+            $holder = $("<div class='" + self.options.css_classes.HOLDER + "'></div>"),
+            $iconHolder = $("<div class='" + self.options.css_classes.ICON + "'></div>"),
+            $icon = $("<span></span>");
 
         $module.attr("data-module", module.options.container.containerType);
         $module.attr("data-size", "full");
@@ -50,7 +53,22 @@ define([
         $header.append("<div class='" + self.options.css_classes.HANDLER + "'></div>");
 //        $header.append("<div class='" + o.css_classes.LABEL + "'>" + cache.json[module.module]["label"][o.widget.lang] + "</div>");
         if((self.options.title!=null)&&(self.options.title!="undefined")&&(self.options.title.length>0)){
-            $header.append("<div class='" + self.options.css_classes.LABEL + "'>" + self.options.title + "</div>");
+            $header.append("<div class='" + self.options.css_classes.LABEL + "' >" + self.options.title + "</div>");
+        }
+     
+        if((self.options.icon!=null)&&(self.options.icon!="undefined")){
+            if((self.options.icon.class!=null)&&(self.options.icon.class!="undefined")&&(self.options.icon.class.length>0))  {
+                    $icon.attr("class", self.options.icon.class);
+
+                if((self.options.icon.tooltip!=null)&&(self.options.icon.tooltip!="undefined")&&(self.options.icon.tooltip.length>0)) {
+                    $icon.attr("title", self.options.icon.tooltip);
+                    $icon.attr("data-toggle", 'tooltip');
+                    $icon.attr("data-placement", 'right');
+                }
+
+                $iconHolder.append($icon);
+                $header.append($iconHolder);
+            }
         }
 
         var $resize = $("<div class='" + self.options.css_classes.RESIZE + "'></div>");
