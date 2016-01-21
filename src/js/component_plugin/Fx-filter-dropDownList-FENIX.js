@@ -302,7 +302,11 @@ define([
       //  }, false);
 
          this.$dropdownSelector.on("change", function (e) {
-             amplify.publish(that.options.events.LIST_CHANGE + that.options.name, {value: $(this).val(), name: that.options.name});
+            var selectedItem = $(this).select2('data');
+
+             if(selectedItem)
+                amplify.publish(that.options.events.LIST_CHANGE + that.options.name, {value: $(this).val(), text: selectedItem.text,  name: that.options.name});
+
          }).change();
 
     };
