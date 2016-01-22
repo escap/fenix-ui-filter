@@ -44,8 +44,8 @@ define([
         var $module = $("<div class='" + (module.options.element.class ? module.options.element.class : '' ) +  " "+ (module.options.element.module_class ? module.options.element.module_class : self.options.css_classes.MODULE )  +" '></div>"),
             $header = $("<div class='" + self.options.css_classes.HEADER + "'></div>"),
             $holder = $("<div class='" + self.options.css_classes.HOLDER + "'></div>"),
-            $iconHolder = $("<div class='" + self.options.css_classes.ICON + "'></div>"),
-            $icon = $("<span></span>");
+            $label = $("<div class='" + self.options.css_classes.LABEL + "' ></div>"),
+            $icon = $("<span class='" + self.options.css_classes.ICON + "'></span>");
 
         $module.attr("data-module", module.options.container.containerType);
         $module.attr("data-size", "full");
@@ -53,21 +53,23 @@ define([
         $header.append("<div class='" + self.options.css_classes.HANDLER + "'></div>");
 //        $header.append("<div class='" + o.css_classes.LABEL + "'>" + cache.json[module.module]["label"][o.widget.lang] + "</div>");
         if((self.options.title!=null)&&(self.options.title!="undefined")&&(self.options.title.length>0)){
-            $header.append("<div class='" + self.options.css_classes.LABEL + "' >" + self.options.title + "</div>");
+            $label.text(self.options.title);
+            $header.append($label);
+
+            //$header.append("<div class='" + self.options.css_classes.LABEL + "' >" + self.options.title + "</div>");
         }
      
         if((self.options.icon!=null)&&(self.options.icon!="undefined")){
             if((self.options.icon.class!=null)&&(self.options.icon.class!="undefined")&&(self.options.icon.class.length>0))  {
-                    $icon.attr("class", self.options.icon.class);
+                    $icon.addClass(self.options.icon.class);
 
                 if((self.options.icon.tooltip!=null)&&(self.options.icon.tooltip!="undefined")&&(self.options.icon.tooltip.length>0)) {
                     $icon.attr("title", self.options.icon.tooltip);
                     $icon.attr("data-toggle", 'tooltip');
-                    $icon.attr("data-placement", 'right');
+                    $icon.attr("data-placement", self.options.icon.tooltip.placement || 'right');
                 }
 
-                $iconHolder.append($icon);
-                $header.append($iconHolder);
+                $label.append($icon);
             }
         }
 
