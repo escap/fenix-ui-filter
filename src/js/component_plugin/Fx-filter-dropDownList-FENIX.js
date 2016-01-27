@@ -68,6 +68,8 @@ define([
         this.$dropdownSelector = $(component);
         $.extend(true, this.options, e);
 
+        // allow for select2 config to be set in configuration file
+        this.select2Config = $.extend(true, { width: '99%', multiple: self.options.enableMultiselection}, e.creator);
 
         if (e.config.enableMultiselection && e.config.enableMultiselection === true) {
             this.options.enableMultiselection = e.config.enableMultiselection;
@@ -84,12 +86,16 @@ define([
             var selectedItems = [];
 
             this._fillDropdownList(e.config,select2Data,selectedItems);
-            
-            this.$dropdownSelector.select2({
+
+            this.select2Config.data = select2Data;
+            this.$dropdownSelector.select2(this.select2Config);
+
+            /**this.$dropdownSelector.select2({
                 data: select2Data,
                 width: '99%',
                 multiple: self.options.enableMultiselection
-            });
+            }
+            );  **/
 
             //for (var index in selectedItems) {
                 //this.$dropdownSelector.select2('data', select2Data[index]);
@@ -106,11 +112,14 @@ define([
 
                 this._fillDropdownList(e.config,select2Data,selectedItems);
 
-                this.$dropdownSelector.select2({
+                this.select2Config.data = select2Data;
+
+                this.$dropdownSelector.select2(this.select2Config);
+               /** this.$dropdownSelector.select2({
                     data: select2Data,
                     width: '99%',
                     multiple: self.options.enableMultiselection
-                });
+                });  **/
             }
 
 
@@ -154,10 +163,13 @@ define([
 
         // TODO: setDOMAIN mutliseleciton
         this.options.source = source;
-        this.$dropdownSelector.select2({
+        this.select2Config.data =  this.options.source;
+        this.$dropdownSelector.select2(this.select2Config);
+
+       /** this.$dropdownSelector.select2({
             data: that.options.source,
             width: '99%'
-        });
+        });  **/
     };
 
 
