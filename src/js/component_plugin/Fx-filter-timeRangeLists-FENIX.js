@@ -33,7 +33,8 @@ define([
             FILTER_CONTENT: 'fx-filter-content',
             RANGE_FROM_HOLDER: 'fx-filter-range-from-holder',
             RANGE_TO_HOLDER: 'fx-filter-range-to-holder',
-            ICON: 'fx-arrow-time'
+            ICON: 'fx-arrow-time',
+            CLEAR_FIX: 'clearfix'
         },
         events: {
             REMOVE_MODULE: "fx.filter.module.remove",
@@ -71,6 +72,8 @@ define([
 
 
         this.$rangeHolder = $(component);
+        this.$rangeHolder.addClass(this.options.css_classes.CLEAR_FIX);
+
 
         this.$toHolder = $("<div class='" + this.options.css_classes.RANGE_TO_HOLDER + "'></div>");
         this.$toLabelHolder = $("<div class='" + this.options.css_classes.FILTER_HEADER + "'></div>");
