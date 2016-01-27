@@ -2,7 +2,8 @@ define([
     'jquery',
     'underscore',
     'jqwidgets',
-    'select2'
+    'select2',
+    'amplify'
 ], function ($, _) {
 
     'use strict';
@@ -40,7 +41,8 @@ define([
             REMOVE_MODULE: "fx.filter.module.remove",
             READY: "fx.filter.component.ready",
             DESELECT: 'fx.filter.module.deselect.',
-            CHANGE: 'fx.filter.module.change.'
+            CHANGE: 'fx.filter.module.change.',
+            LIST_CHANGE: 'fx.filter.list.change.'
         },
         enableMultiselection: false
     };
@@ -262,6 +264,8 @@ define([
             that.$toDropdownSelector.select2("destroy");
             that._initDropdownList(that.$toDropdownSelector, toData, options);
 
+            that.publishChangeEvent();
+
         }).change();
 
 
@@ -276,9 +280,28 @@ define([
             that.$fromDropdownSelector.select2("destroy");
             that._initDropdownList(that.$fromDropdownSelector, fromData, options);
 
+            that.publishChangeEvent();
+
         }).change();
 
-        };
+    };
+
+    ComponentTimeRangeLists.prototype.publishChangeEvent = function () {
+        var selectedFromItem = this.$fromDropdownSelector.select2('data');
+        var selectedToItem = this.$toDropdownSelector.select2('data');
+
+         if(selectedFromItem && selectedToItem)  {
+            var value = {},
+                text = selectedFromItem.text + ' - '+ selectedToItem.text;
+
+            value.from = selectedFromItem.id;
+            value.to =  selectedToItem.id;
+
+            amplify.publish(this.options.events.LIST_CHANGE + this.options.name, {value: value, text: text,  name: this.options.name});
+        }
+
+    };
+
 
     ComponentTimeRangeLists.prototype.deselectValue = function (obj) {
         //TODO deselect all values for multiselection
