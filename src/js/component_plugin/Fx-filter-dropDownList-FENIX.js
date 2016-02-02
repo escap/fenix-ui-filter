@@ -2,7 +2,6 @@ define([
     'jquery',
     'underscore',
     'amplify',
-    'jqwidgets',
     'select2'
 
 ], function ($, _) {
@@ -70,6 +69,7 @@ define([
 
         // allow for select2 config to be set in configuration file
         this.select2Config = $.extend(true, { width: '99%', multiple: self.options.enableMultiselection}, e.creator);
+        this.select2Config.matcher = this._matchStart;
 
         if (e.config.enableMultiselection && e.config.enableMultiselection === true) {
             this.options.enableMultiselection = e.config.enableMultiselection;
@@ -137,7 +137,14 @@ define([
         $(component).trigger(this.options.events.READY, {name: e.name});
     };
 
+    ComponentDropDownList.prototype._matchStart = function(term, text) {
 
+       if(text.toUpperCase().indexOf(term.toUpperCase()) == 0){
+           return true;
+       }
+
+        return false;
+    };
 
     ComponentDropDownList.prototype._fillDropdownList = function(config, select2Data, selectedItems) {
 
