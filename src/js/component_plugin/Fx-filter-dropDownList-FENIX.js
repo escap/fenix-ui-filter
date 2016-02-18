@@ -34,7 +34,8 @@ define([
             REMOVE_MODULE: "fx.filter.module.remove",
             READY: "fx.filter.component.ready",
             DESELECT: 'fx.filter.module.deselect.',
-            LIST_CHANGE: 'fx.filter.list.change.'
+            LIST_CHANGE: 'fx.filter.list.change.',
+            LIST_RESET: 'fx.filter.list.reset.'
         },
         enableMultiselection: false,
         removeFilter: false
@@ -320,7 +321,7 @@ define([
       //      that.deselectValue(e.detail);
       //  }, false);
 
-         this.$dropdownSelector.on("change", function (e) {
+        this.$dropdownSelector.on("change", function (e) {
             var selectedItem = $(this).select2('data');
 
              if(selectedItem)
@@ -328,6 +329,12 @@ define([
 
          }).change();
 
+
+
+        this.$dropdownSelector.on("select2-removed", function (e) {
+            console.log(that.options.events.LIST_RESET + that.options.name);
+            amplify.publish(that.options.events.LIST_RESET + that.options.name);
+        });
     };
 
     ComponentDropDownList.prototype.error = function (e) {
