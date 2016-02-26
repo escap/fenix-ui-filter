@@ -332,8 +332,7 @@ define([
 
 
         this.$dropdownSelector.on("select2-removed", function (e) {
-            console.log(that.options.events.LIST_RESET + that.options.name);
-            amplify.publish(that.options.events.LIST_RESET + that.options.name);
+            amplify.publish(that.options.events.LIST_RESET + that.options.name, {name: that.options.name});
         });
     };
 
