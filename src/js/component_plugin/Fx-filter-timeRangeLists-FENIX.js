@@ -264,7 +264,7 @@ define([
             that.$toDropdownSelector.select2("destroy");
             that._initDropdownList(that.$toDropdownSelector, toData, options);
 
-            that.publishChangeEvent();
+            that.publishChangeEvent("from");
 
         }).change();
 
@@ -280,13 +280,13 @@ define([
             that.$fromDropdownSelector.select2("destroy");
             that._initDropdownList(that.$fromDropdownSelector, fromData, options);
 
-            that.publishChangeEvent();
+            that.publishChangeEvent("to");
 
         }).change();
 
     };
 
-    ComponentTimeRangeLists.prototype.publishChangeEvent = function () {
+    ComponentTimeRangeLists.prototype.publishChangeEvent = function (type) {
         var selectedFromItem = this.$fromDropdownSelector.select2('data');
         var selectedToItem = this.$toDropdownSelector.select2('data');
 
@@ -297,7 +297,7 @@ define([
             value.from = selectedFromItem.id;
             value.to =  selectedToItem.id;
 
-            amplify.publish(this.options.events.LIST_CHANGE + this.options.name, {value: value, text: text,  name: this.options.name});
+            amplify.publish(this.options.events.LIST_CHANGE + this.options.name, {value: value, text: text, type: type, name: this.options.name});
         }
 
     };
