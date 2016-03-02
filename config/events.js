@@ -1,17 +1,13 @@
-/* global define */
-
-define(function () {
+/*global define*/
+define(function ( ) {
 
     'use strict';
 
     return {
-        //Filter
-        MODULE_SELECT: "fx.filter.module.select",
-        MODULE_REMOVE: "fx.filter.module.remove",
-        MODULE_READY : "fx.filter.module.ready",
-        MODULE_DESELECT : "fx.filter.module.deselect",
 
+        SELECTORS_READY: "fx.filter.selectors.ready",
+        SELECTORS_ITEM_SELECT : "fx.filter.selectors.select",
+        SELECTOR_READY : "fx.filter.selector.ready"
 
     };
-
 });

@@ -1,0 +1,86 @@
+<div>
+
+    <div data-template-selector class="fx-selector">
+
+        {{#unless hideHeader}}
+
+                <div class="selector-header clearfix">
+
+                    {{#unless hideTitle}}
+
+                        <h4>{{ title }}</h4>
+
+                    {{/unless}}
+
+                    {{#unless hideSwitch}}
+
+                        <div class="pull-right">
+                            <input type="checkbox" id="switch-{{id}}" name="disable-selector"  data-target="{{id}}"
+                                   data-type="switch" data-role="switch" checked>
+                            <label for="switch-{{id}}">{{enable_filter}}</label>
+                        </div>
+
+                    {{/unless}}
+
+                </div>
+
+        {{/unless}}
+
+
+    </div>
+
+    <div data-template-semantic class="fx-selector">
+
+        {{#unless hideHeader}}
+
+                <div class="selector-header clearfix">
+
+                    {{#unless hideTitle}}
+
+                        <h4>{{ title }}</h4>
+
+                    {{/unless}}
+
+                    {{#unless hideSwitch}}
+
+                        <div class="pull-right">
+                            <input type="checkbox" id="switch-{{id}}" name="disable-selector"  data-target="{{id}}"
+                                   data-type="switch" data-role="switch" checked>
+                            <label for="switch-{{id}}">{{enable_filter}}</label>
+                        </div>
+
+                    {{/unless}}
+
+                </div>
+
+        {{/unless}}
+
+        <!-- Nav tabs -->
+        <div class="fx-tabs">
+
+            <ul id="country-ul" class="nav nav-tabs" role="tablist">
+
+                {{#each selectors}}
+
+                    <li role="presentation" data-sel="{{this.id}}">
+                        <a href="#{{this.id}}" aria-controls="{{this.id}}" role="tab"
+                           data-toggle="tab">{{this.label}}</a>
+                    </li>
+
+                {{/each}}
+
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+            {{#each selectors}}
+                <div role="tabpanel" class="tab-pane" id="{{this.id}}" data-selector="{{this.id}}"></div>
+            {{/each}}
+
+        </div>
+
+    </div>
+
+</div>

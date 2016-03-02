@@ -1,0 +1,48 @@
+<div>
+    <div data-tree-template>
+
+        <div class="selector-content">
+
+            {{#unless hideFilter}}
+                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+            {{/unless}}
+
+            <div class="tree-holder">
+                <div data-role="tree"></div>
+            </div>
+
+        </div>
+
+        <div class="selector-footer clearfix">
+
+            {{#unless hideFooter}}
+
+                {{#unless hideButtons}}
+
+                    <div>
+                        {{#unless hideClearAllButton}}
+                            <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                        {{/unless}}
+                        {{#unless hideSelectAllButton}}
+                            <button data-role="select" class="btn pull-right">{{ select_all_btn }}</button>
+                        {{/unless}}
+                    </div>
+
+                {{/unless}}
+
+                {{#unless hideSummary}}
+                    <ul data-role="summary"></ul>
+                {{/unless}}
+
+            {{/unless}}
+
+        </div>
+    </div>
+
+    <div data-tree-summary-item>
+        {{#each values}}
+            <div data-code="{{this.code}}">{{this.label}} [{{this.code}}]</div>
+        {{/each}}
+    </div>
+
+</div>
