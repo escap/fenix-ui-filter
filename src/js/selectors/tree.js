@@ -200,7 +200,29 @@ define([
 
     };
 
-    Tree.prototype._buildTreeModel = function (fxResource, parent, cl) {
+    Tree.prototype._buildTreeModel = function (fxResource) {
+
+        var data = this._buildTreeModelFromCodelist(fxResource) || [] ;
+
+        //Merge static static data
+        if (this.selector.source) {
+
+            var staticData = this.selector.source;
+
+            if (!Array.isArray(data)) {
+                log.error(ERR.INVALID_DATA);
+
+            } else {
+
+                var convertedData = staticData.map(function (i) { return {id: i.value, text: i.label,  parent:'#'}; });
+                data = _.uniq(_.union(data, convertedData), false, function(item){ return item.id; });
+            }
+        }
+
+        return data;
+    };
+
+    Tree.prototype._buildTreeModelFromCodelist = function (fxResource, parent, cl) {
 
         var data = [],
             selector = this,
@@ -221,7 +243,7 @@ define([
                 });
 
                 if (Array.isArray(item.children) && item.children.length > 0) {
-                    data = _.union(data, this._buildTreeModel(item.children, item.code, cl));
+                    data = _.union(data, this._buildTreeModelFromCodelist(item.children, item.code, cl));
                 }
 
             } else {
@@ -237,6 +259,24 @@ define([
             if (a.text > b.text) return 1;
             return 0;
         });
+
+
+        //Merge static static data
+        if (this.selector.data) {
+
+            var staticData = this.selector.data;
+
+            if (!Array.isArray(data)) {
+                log.error(ERR.INVALID_DATA);
+            } else {
+
+                var convertedData = staticData.map(function (i) { return {id: i.value, text: i.text,  parent:'#'}; });
+
+                data = _.uniq(_.union(this.data || [], data), false, function(item, key, a){ return item.a; });
+
+            }
+
+        }
 
         return data;
     };

@@ -540,28 +540,34 @@ define([
 
             if (sel.hasOwnProperty("dependencies")) {
 
-                var deps = sel.dependencies,
-                    objs = Object.keys(deps);
+                _.each(sel.dependencies, _.bind(function (dependencies, selectorId) {
 
-                _.each(objs, _.bind(function (obj) {
+                    if (!Array.isArray(dependencies)) {
+                        dependencies = [dependencies];
+                    }
 
-                    var d = {
-                        event: EVT.SELECTORS_ITEM_SELECT + "." + obj,
-                        callback: function (payload) {
+                    _.each(dependencies, _.bind(function (dep) {
 
-                            var call = self["_dep_" + deps[obj]];
+                        var d = {
+                            event: EVT.SELECTORS_ITEM_SELECT + "." + selectorId,
+                            callback: function (payload) {
 
-                            if (call) {
-                                call.call(self, payload, {src: obj, target: id});
-                            } else {
-                                log.error("Impossible to find : " + "_dep_" + deps[obj]);
+                                var call = self["_dep_" + dep ];
+
+                                if (call) {
+                                    call.call(self, payload, {src: selectorId, target: id});
+                                } else {
+                                    log.error("Impossible to find : " + "_dep_" + dep);
+                                }
                             }
-                        }
-                    };
+                        };
 
-                    this.dependeciesToDestory.push(d);
+                        this.dependeciesToDestory.push(d);
 
-                    amplify.subscribe(this._getEventName(d.event), this, d.callback);
+                        amplify.subscribe(this._getEventName(d.event), this, d.callback);
+
+                    }, this));
+
 
                 }, this));
 

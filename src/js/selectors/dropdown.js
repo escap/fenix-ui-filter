@@ -141,7 +141,31 @@ define([
         this.$dropdownEl = this.$el.find(s.DROPDOWN_CONTAINER);
     };
 
-    Dropdown.prototype._buildDropdownModel = function (fxResource, parent, cl) {
+    Dropdown.prototype._buildDropdownModel = function (fxResource) {
+
+        var data = this._buildDropdownModelFromCodelist(fxResource) || [] ;
+
+        //Merge static static data
+        if (this.selector.source) {
+
+            var staticData = this.selector.source;
+
+            if (!Array.isArray(data)) {
+                log.error(ERR.INVALID_DATA);
+
+            } else {
+
+                var convertedData = staticData.map(function (i) { return {value: i.value, text: i.label,  parent:'#'}; });
+                data = _.uniq(_.union(data, convertedData), false, function(item){ return item.value; });
+
+            }
+        }
+
+        return data;
+    };
+
+
+    Dropdown.prototype._buildDropdownModelFromCodelist = function (fxResource, parent, cl) {
 
         var data = [],
             selector = this,
@@ -162,7 +186,7 @@ define([
                 });
 
                 if (Array.isArray(item.children) && item.children.length > 0) {
-                    data = _.union(data, this._buildTreeModel(item.children, item.code, cl));
+                    data = _.union(data, this._buildDropdownModelFromCodelist(item.children, item.code, cl));
                 }
 
             } else {
@@ -191,35 +215,19 @@ define([
             data,
             opt;
 
-        switch (config.source.toLowerCase()) {
-            case "codelist":
+        data = this._buildDropdownModel(this.data);
 
-                data = this._buildDropdownModel(this.data);
+        opt = $.extend(true, {}, selectize, {
+            options: data
+        });
 
-                opt = $.extend(true, {}, selectize, {
-                    options: data
-                });
-
-                dropdown = $container.selectize(opt);
-
-                break;
-
-            default :
-
-                data = [];
-
-                opt = $.extend(true, {}, selectize, {
-                    options: data
-                });
-
-                for (var i = config.from; i <= config.to; i++) {
-                    data.push({value: i.toString(), text: i.toString()});
-                }
-
-                opt.options = data;
-
-                dropdown = $container.selectize(opt);
+        for (var i = config.from; i <= config.to; i++) {
+            data.push({value: i.toString(), text: i.toString()});
         }
+
+        opt.options = data;
+
+        dropdown = $container.selectize(opt);
 
         //cache data
         this.dropdownData = data;

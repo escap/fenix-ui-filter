@@ -4,32 +4,40 @@ define([
     "jquery",
     "loglevel",
     'underscore',
+    'text!fx-filter/html/selectors/radio.hbs',
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
     'fx-filter/config/config-default',
+    'handlebars',
     "amplify"
-], function ($, log, _, ERR, EVT, C, CD) {
+], function ($, log, _, templates, ERR, EVT, C, CD, Handlebars) {
 
     'use strict';
 
     var defaultOptions = {},
         s = {
             RADIO: "input[type='radio']",
-            CHECKED: "input[type='radio']:checked"
+            CHECKED: "input[type='radio']:checked",
+            TEMPLATE_LIST: "[data-radio-list]",
+            TEMPLATE_ITEM: "[data-radio-item]"
         };
 
     function Radio(o) {
 
         $.extend(true, this, defaultOptions, o);
 
-        this.$radios = this.$el.find(s.RADIO);
-
         this._renderTemplate();
+
+        this._renderRadio();
 
         this._initVariables();
 
-        this._renderRadio();
+        this._bindEventListeners();
+
+        this.printDefaultSelection();
+
+        amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
 
         return this;
     }
@@ -95,7 +103,7 @@ define([
      */
     Radio.prototype.disable = function () {
 
-        this.$radios.attr('disabled',true);
+        this.$radios.attr('disabled', true);
 
         log.info("Selector disabled : " + this.id);
 
@@ -116,7 +124,7 @@ define([
      */
     Radio.prototype.printDefaultSelection = function () {
 
-       return this._printDefaultSelection();
+        return this._printDefaultSelection();
     };
 
     Radio.prototype._getStatus = function () {
@@ -126,21 +134,51 @@ define([
 
     Radio.prototype._renderTemplate = function () {
 
-
     };
 
     Radio.prototype._initVariables = function () {
 
         this.status = {};
+
+        this.$radios = this.$el.find(s.RADIO);
     };
 
     Radio.prototype._renderRadio = function () {
 
-        this._bindEventListeners();
+        this._createRadios();
 
-        this.printDefaultSelection();
+    };
 
-        amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
+    Radio.prototype._createRadios = function () {
+
+        var data = this.selector.source || [],
+            $list = this.$el.addBack().find(s.TEMPLATE_LIST),
+            item = $(templates).find(s.TEMPLATE_ITEM)[0].outerHTML,
+            list;
+
+        if ($list.length === 0) {
+            log.info("Injecting radio list");
+            list = $(templates).find(s.TEMPLATE_LIST)[0].outerHTML;
+            $list = $(list);
+            this.$el.append($list);
+        }
+
+        _.each(data, _.bind(function (model) {
+
+            window.fx_filter_radio_id >= 0 ? window.fx_filter_radio_id++ : window.fx_filter_radio_id = 0;
+
+            var tmpl = Handlebars.compile(item),
+                m = $.extend(true, model, {
+                    name: this.id,
+                    id: "fx_radio_" + window.fx_filter_radio_id
+                });
+
+
+
+            log.info("Create radio item: " + JSON.stringify(m));
+
+            $list.append(tmpl(m));
+        }, this));
 
     };
 
@@ -153,7 +191,7 @@ define([
 
     };
 
-    Radio.prototype._getEventName = function(evt){
+    Radio.prototype._getEventName = function (evt) {
         return this.controller.id + evt;
     };
 

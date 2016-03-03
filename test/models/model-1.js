@@ -8,14 +8,16 @@ define(function () {
 
         "selectors": {
 
-            "compare": {
+    /*        "compare": {
 
                 "selector": {
                     "type": "radio",
+                    //"source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
                     "default": ["recipient"]
                 },
+
                 "template": {
-                    //"hideHeader": false,
+                    "hideHeader": false,
                     "hideSwitch": true
                 }
             },
@@ -40,8 +42,7 @@ define(function () {
                         //html selector configuration
                         "selector": {
                             "type": "tree", //tree | list
-                            //"source" : "codelist | static" // if type:list
-                            "default": [625 /*, 261, 269 */], //selected codes by default,
+                            "default": [625 /!*, 261, 269 *!/], //selected codes by default,
                             //, "max" : 2 //max number of selectable item
                             //"disabled" : true, //if present and true the selector is initially disabled
                             //"config" : { core: { multiple: true } } //specific jstree or selectize config
@@ -93,7 +94,7 @@ define(function () {
 
                 //dependencies with other selectors
                 "dependencies": {
-                    "compare": "focus"
+                    "compare": "focus" //string or array of string
                 },
 
                 "template": {
@@ -120,7 +121,8 @@ define(function () {
                 "selector": {
                     "type": "tree",
                     //"disabled" : true,
-                    "hideSelectAllButton": true
+                    "hideSelectAllButton": true,
+                    "source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
                     //"default": [1012]
                 },
 
@@ -233,7 +235,7 @@ define(function () {
                     //"mandatory" : true
                 }
             },
-
+     */
             "oda": {
 
                 "cl": {
@@ -243,7 +245,7 @@ define(function () {
 
                 "selector": {
                     "type": "dropdown",
-                    "source": "codelist",
+                    "source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
                     "default": ["adam_usd_commitment"],
                     "config" : { //Selectize configuration
                         "maxItems": 1
@@ -255,12 +257,12 @@ define(function () {
                 }
 
             },
-
+/*
             "year-from": {
 
                 "selector": {
                     "type": "dropdown",
-                    "source": "static",
+                    //"source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
                     "from": 2000,
                     "to": 2014,
                     "config" : { //Selectize configuration
@@ -277,7 +279,7 @@ define(function () {
                     "hideSwitch" : true
                 }
             },
-
+/*
             "year-to": {
 
                 "selector": {
@@ -300,34 +302,8 @@ define(function () {
                     "year-from": "min"
                 }
 
-            }
-        },
-
-        "filter": {
-            "name": "filter",
-            "parameters": {
-                "rows": {},
-                //"columns" : [] // dynamically filled by controller
-            }
-        },
-
-        "filterId" : "compare",
-
-        "processesOrder": ['flowcode', 'year', 'sectorcode', 'recipientcode', 'donorcode', 'purposecode', 'delivery'],
-
-        "maxCombinations": 20, //Max number of requests to d3p
-
-        "compareBy": "recipient", //recipient || donor || delivery || sector || sub-sector
-
-        "selectorFocusedClass": "selector-focused", //class to highlight a selector
-
-        "mandatorySelectorClass": "selector-mandatory", // class for mandatory selectors
-
-        "resultDefaultTab": "chart", //Default tab to show for result,
-
-        "advancedOptionsSelector": ".advanced-option",
-
-        "showAdvancedOptions": true
+            }*/
+        }
 
     }
 

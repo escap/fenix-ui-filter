@@ -8,6 +8,7 @@ define(function ( ) {
     return {
 
         MISSING_CONTAINER : prefix + "missing_container",
-        MISSING_SELECTORS : prefix + "missing_selectors"
+        MISSING_SELECTORS : prefix + "missing_selectors",
+        INVALID_DATA : prefix + "invalid_data"
     };
 });
