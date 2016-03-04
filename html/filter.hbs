@@ -83,4 +83,17 @@
 
     </div>
 
+    <div data-summary>
+        {{#summary}}
+            <ul class="list-unstyled">
+                {{label}}
+
+                {{#values}}
+                    <li data-code="{{this.code}}" data-selector="{{this.selector}}">{{this.label}} [{{this.code}}]</li>
+                {{/values}}
+
+            </ul>
+        {{/summary}}
+    </div>
+
 </div>

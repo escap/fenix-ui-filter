@@ -34,10 +34,14 @@ define([
         SWITCH: "input[data-role='switch'][name='disable-selector']",
         TEMPLATE_SELECTOR: "[data-template-selector]",
         TEMPLATE_SELECTOR_CONTAINER: "[data-container]",
-        TEMPLATE_SEMANTIC: "[data-template-semantic]"
+        TEMPLATE_SEMANTIC: "[data-template-semantic]",
+        TEMPLATE_SUMMARY: "[data-summary]",
+        SUMMARY_ITEM: "[data-code]"
     };
 
     function Filter(o) {
+        log.info("FENIX filter");
+        log.info(o);
 
         $.extend(true, this, o, CD, C);
 
@@ -68,14 +72,15 @@ define([
      * Return the current selection
      * @return {Object} Selection
      */
-    Filter.prototype.getValues = function () {
+    Filter.prototype.getValues = function (output) {
 
-        var call = this["_output_" + this.outputFormat];
+        var candidate = output || this.OUTPUT_FORMAT,
+            call = this["_output_" + candidate];
 
         if (call) {
             return call.call(this, this._getValues());
         } else {
-            log.error("Impossible to find the output format: " + this.outputFormat);
+            log.error("Impossible to find the output format: " + candidate);
         }
     };
 
@@ -129,6 +134,90 @@ define([
 
     // end API
 
+    Filter.prototype._updateSummary = function () {
+
+        if (!this.hasSummary) {
+            return;
+        }
+
+        log.info("Update filter summary");
+
+        var self = this,
+            templ = Handlebars.compile($(templates).find(s.TEMPLATE_SUMMARY)[0].outerHTML),
+            model = {summary: createSummaryModel(this._getValues())};
+
+        //unbind click listener
+        this.summary$el.find(s.SUMMARY_ITEM).each(function () {
+            $(this).off();
+        });
+
+        this.summary$el.html(templ(model));
+
+        //bind click listener
+        this.summary$el.find(s.SUMMARY_ITEM).each(function () {
+            var $this = $(this);
+            $this.on("click", function () {
+
+                self._unsetSelectorValue({
+                    code: $this.data("code"),
+                    selector: $this.data("selector")
+                });
+            });
+        });
+
+        function createSummaryModel(data) {
+
+            var values = data.values,
+                labels = data.labels,
+                result = [];
+
+            try {
+
+                _.each(values, _.bind(function (obj, name) {
+
+                    if (Array.isArray(obj) && obj.length > 0) {
+
+                        var id = this.semantic2selectors[name][0],
+                            model = this.selectors[id] || this.semantics[id];
+
+                        var s = {
+                            label: model.template ? model.template.title : "",
+                            id: id,
+                            values: []
+                        };
+
+                        _.each(obj, _.bind(function (v) {
+
+                            s.values.push({
+                                code: v,
+                                label : labels[name][v],
+                                selector : name
+                            })
+
+                        }, this));
+
+                        result.push(s);
+                    }
+
+                }, self));
+
+            } catch (e) {
+                log.error(ERR.SUMMARY_MODEL_CREATION);
+                log.error(e);
+            }
+
+            return result;
+
+        }
+    };
+
+    Filter.prototype._unsetSelectorValue = function (obj) {
+
+        var name = this._resolveSelectorName(obj.selector);
+        this._callSelectorInstanceMethod(name, "unsetValue", obj.code);
+
+    };
+
     Filter.prototype._validateInput = function () {
 
         var valid = true,
@@ -148,11 +237,10 @@ define([
         if (!this.$el) {
             errors.push({code: ERR.MISSING_CONTAINER});
 
-            log.warn("Impossible to find box container");
+            log.warn("Impossible to find filter container");
         }
 
         this.$el = $(this.$el);
-
 
         //Check if $el exist
         if (this.$el.length === 0) {
@@ -171,6 +259,27 @@ define([
             log.warn("Impossible to find selectors for filter: " + this.id);
 
         }
+
+        //check if summary container exist
+        if (this.summary$el) {
+
+            this.summary$el = $(this.summary$el);
+
+            if (this.summary$el.length === 0) {
+
+                errors.push({code: ERR.MISSING_SUMMARY_CONTAINER});
+
+                log.warn("Impossible to find summary container");
+
+            }
+        }
+
+        this.validTimeout = window.setTimeout(function () {
+
+            alert(ERR.READY_TIMEOUT);
+            log.error(ERR.READY_TIMEOUT);
+
+        }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
 
         return errors.length > 0 ? errors : valid;
     };
@@ -239,11 +348,10 @@ define([
 
         this.$tabs = this.$el.find(s.SEMANTIC_TABS);
 
-        //TODO refactor remove reference
-
         this.$switches = this.$el.find(s.SWITCH);
 
-        //this.$advancedOptions = this.$el.find(this.config.advancedOptionsSelector);
+        //Summary
+        this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
 
     };
 
@@ -256,6 +364,8 @@ define([
             amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT));
 
         }, this));
+
+        amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this, this._onSelectorItemSelect);
 
     };
 
@@ -418,8 +528,8 @@ define([
         log.info("Add class to mandatory selectors");
         _.each(this.mandatorySelectorIds, _.bind(function (id) {
 
-            this._getSelectorContainer(id).closest(s.SEMANTICS).addClass(this.config.mandatorySelectorClass);
-            this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.config.mandatorySelectorClass);
+            this._getSelectorContainer(id).closest(s.SEMANTICS).addClass(this.config.MANDATORY_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.config.MANDATORY_SELECTOR_CLASS_NAME);
         }, this));
 
     };
@@ -555,7 +665,7 @@ define([
                             event: EVT.SELECTORS_ITEM_SELECT + "." + selectorId,
                             callback: function (payload) {
 
-                                var call = self["_dep_" + dep ];
+                                var call = self["_dep_" + dep];
 
                                 if (call) {
                                     call.call(self, payload, {src: selectorId, target: id});
@@ -634,10 +744,10 @@ define([
             var d = payload.code,
                 selectors = this.semantic2selectors[d];
 
-            this.$el.find("." + this.config.selectorFocusedClass).removeClass(this.config.selectorFocusedClass);
+            this.$el.find("." + this.config.FOCUSED_SELECTOR_CLASS_NAME).removeClass(this.config.FOCUSED_SELECTOR_CLASS_NAME);
 
-            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS).addClass(this.config.selectorFocusedClass);
-            this._getSelectorContainer(selectors[0]).closest(s.SEMANTICS).addClass(this.config.selectorFocusedClass);
+            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS).addClass(this.config.FOCUSED_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(selectors[0]).closest(s.SEMANTICS).addClass(this.config.FOCUSED_SELECTOR_CLASS_NAME);
 
             _.each(selectors, _.bind(function (sel) {
 
@@ -737,6 +847,8 @@ define([
 
         this.printDefaultSelection();
 
+        window.clearTimeout(this.validTimeout);
+
         amplify.publish(this._getEventName(EVT.SELECTORS_READY));
 
     };
@@ -756,6 +868,12 @@ define([
     Filter.prototype._getEventName = function (evt) {
 
         return this.id + evt;
+    };
+
+    Filter.prototype._onSelectorItemSelect = function () {
+
+        this._updateSummary();
+
     };
 
     // utils for selectors
@@ -914,7 +1032,7 @@ define([
         log.info("Create container for semantic: " + id);
 
         var semantic = this.semantics[id],
-            template = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
+            templ = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
             $html,
             model;
 
@@ -926,7 +1044,7 @@ define([
 
         model = $.extend(true, {id: id}, semantic, semantic.template, i18nLables);
 
-        $html = $(template(model));
+        $html = $(templ(model));
 
         //TODO active tab by conf
         $html.find("ul").children().first().addClass("active");
@@ -967,6 +1085,8 @@ define([
     Filter.prototype._unbindEventListeners = function () {
 
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
+
+        amplify.unsubscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this._onSelectorItemSelect);
 
         //destroy selectors dependencies
         this._destroyDependencies();

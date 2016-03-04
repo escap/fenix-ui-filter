@@ -13,6 +13,7 @@ define([
 
     var s = {
             MODEL_1_BASE: "#model-1-base",
+            MODEL_1_BASE_SUMMARY: "#model-1-base-summary",
             MODEL_1_NO_BASE: "#model-1-no-base"
         },
         empty_model = {data: []},
@@ -47,7 +48,8 @@ define([
             id: s.MODEL_1_BASE,
             config: this._createFilterConfiguration(Model1),
             $el: s.MODEL_1_BASE,
-            template: templ(i18nLabels)
+            template: templ(i18nLabels),
+            summary$el : s.MODEL_1_BASE_SUMMARY
         });
 
         log.trace("Rendering Model 1 base: end");

@@ -21,9 +21,6 @@ define(function () {
                     "hideSwitch": true
                 }
             },
-
-            /*
-
             "recipient": {
 
                 //"className" : "myclass mysecondclass", //Add custom class[s] to selector container
@@ -44,7 +41,7 @@ define(function () {
                         //html selector configuration
                         "selector": {
                             "type": "tree", //tree | list
-                            "default": [625 /!*, 261, 269 *!/], //selected codes by default,
+                            "default": [625 /*, 261, 269 */], //selected codes by default,
                             //, "max" : 2 //max number of selectable item
                             //"disabled" : true, //if present and true the selector is initially disabled
                             //"config" : { core: { multiple: true } } //specific jstree or selectize config
@@ -237,7 +234,7 @@ define(function () {
                     //"mandatory" : true
                 }
             },
-     */
+
             "oda": {
 
                 "cl": {

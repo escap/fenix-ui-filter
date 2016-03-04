@@ -131,6 +131,38 @@ define([
         return this._getStatus();
     };
 
+    /**
+     * Unset the given value
+     * return {null}
+     */
+    Dropdown.prototype.unsetValue = function (v) {
+        log.info("Unset dropdown value: " + v);
+
+        //selectize doesn't have the unsetValue method
+        //get current selection and remove v
+        var instance = this.dropdown[0].selectize,
+            values = instance.getValue();
+
+        if (!Array.isArray(values)) {
+            values = [values];
+        }
+
+        values = _.without(values, v);
+
+        instance.setValue(values);
+
+    };
+
+    /**
+     * Resets the selected items to the given value.
+     * return {null}
+     */
+    Dropdown.prototype.setValue = function (v) {
+        log.info("Set dropdown value: " + v);
+        var instance = this.dropdown[0].selectize;
+        instance.setValue(v);
+    };
+
     Dropdown.prototype._getStatus = function () {
 
         return this.status;

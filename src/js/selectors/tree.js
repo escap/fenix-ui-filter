@@ -26,7 +26,7 @@ define([
         SUMMARY_CONTAINER: "[data-role='summary']",
         AMOUNT_CONTAINER: "[data-role='amount']",
         TEMPLATE_TREE: "[data-tree-template]",
-        TEMPLATE_SUMMARY_ITEM: "[data-tree-summary-item]"
+        TEMPLATE_SUMMARY_ITEM: "[data-summary-item]"
     };
 
     function Tree(o) {
@@ -50,7 +50,7 @@ define([
      */
     Tree.prototype.getValues = function () {
 
-        var result = { values: [], labels: {}};
+        var result = {values: [], labels: {}};
 
         var instance = this.tree.jstree(true),
             selection = instance.get_selected();
@@ -156,7 +156,6 @@ define([
     Tree.prototype.getStatus = function () {
 
         return this._getStatus();
-
     };
 
     /**
@@ -167,6 +166,24 @@ define([
 
         return this._setDomain(data);
 
+    };
+
+    /**
+     * Unset the given value.
+     * return {null}
+     */
+    Tree.prototype.unsetValue = function (v) {
+        log.info("Unset tree value: " + v);
+        this.tree.jstree(true).deselect_node({id: v});
+    };
+
+    /**
+     * Resets the selected items to the given value.
+     * return {null}
+     */
+    Tree.prototype.setValue = function (v) {
+        log.info("Set tree value: " + v);
+        this.tree.jstree(true).select_node({id: v});
     };
 
     Tree.prototype._renderTemplate = function () {
@@ -196,13 +213,13 @@ define([
 
     Tree.prototype._getStatus = function () {
 
-       return this.status;
+        return this.status;
 
     };
 
     Tree.prototype._buildTreeModel = function (fxResource) {
 
-        var data = this._buildTreeModelFromCodelist(fxResource) || [] ;
+        var data = this._buildTreeModelFromCodelist(fxResource) || [];
 
         //Merge static static data
         if (this.selector.source) {
@@ -214,8 +231,12 @@ define([
 
             } else {
 
-                var convertedData = staticData.map(function (i) { return {id: i.value, text: i.label,  parent:'#'}; });
-                data = _.uniq(_.union(data, convertedData), false, function(item){ return item.id; });
+                var convertedData = staticData.map(function (i) {
+                    return {id: i.value, text: i.label, parent: '#'};
+                });
+                data = _.uniq(_.union(data, convertedData), false, function (item) {
+                    return item.id;
+                });
             }
         }
 
@@ -270,9 +291,13 @@ define([
                 log.error(ERR.INVALID_DATA);
             } else {
 
-                var convertedData = staticData.map(function (i) { return {id: i.value, text: i.text,  parent:'#'}; });
+                var convertedData = staticData.map(function (i) {
+                    return {id: i.value, text: i.text, parent: '#'};
+                });
 
-                data = _.uniq(_.union(this.data || [], data), false, function(item, key, a){ return item.a; });
+                data = _.uniq(_.union(this.data || [], data), false, function (item, key, a) {
+                    return item.a;
+                });
 
             }
 
@@ -303,7 +328,6 @@ define([
             }, this))
 
             .on("select_node.jstree ", _.bind(function (e, data) {
-
                 if (!isNaN(this.selector.max) && data.selected.length > this.selector.max) {
                     data.instance.deselect_node(data.node);
                     log.warn("Max number of selectable item reached. Change 'selector.selector.max' config.");

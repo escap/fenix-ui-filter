@@ -132,6 +132,24 @@ define([
         return this._printDefaultSelection();
     };
 
+    /**
+     * Unset the given value.
+     * return {null}
+     */
+    Radio.prototype.unsetValue = function (v) {
+        log.info("Unset radio value: " + v);
+        log.warn("Value will not be unset because of the selector configuration");
+    };
+
+    /**
+     * Resets the selected items to the given value.
+     * return {null}
+     */
+    Radio.prototype.setValue = function (v) {
+        log.info("Set radio value: " + v);
+        console.log(v)
+    };
+
     Radio.prototype._getStatus = function () {
 
         return this.status;

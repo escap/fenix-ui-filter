@@ -11,7 +11,8 @@ define(function () {
 
         SERVER: SERVER,
         CODELIST_SERVICE: "d3s_dev/msd",
-        CODES_POSTFIX : '/codes/filter',
+        CODES_POSTFIX: '/codes/filter',
+        VALID_TIMEOUT: 10000, //10 secs
 
         selector_registry: {
             'dropdown': {
@@ -25,17 +26,12 @@ define(function () {
             }
         },
 
-        "maxCombinations": 20, //Max number of requests to d3p
+        "FOCUSED_SELECTOR_CLASS_NAME": "selector-focused", //class to highlight a selector
 
-        "selectorFocusedClass": "selector-focused", //class to highlight a selector
+        "MANDATORY_SELECTOR_CLASS_NAME": "selector-mandatory", // class for mandatory selectors
 
-        "mandatorySelectorClass": "selector-mandatory", // class for mandatory selectors
+        "OUTPUT_FORMAT": "plain",
 
-        "advancedOptionsSelector": ".advanced-option",
-
-        "showAdvancedOptions": true,
-
-        "outputFormat" : "plain"
 
     }
 
