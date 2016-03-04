@@ -110,6 +110,7 @@ define([
 
         this._initDependencies();
 
+        alert()
         this._initPage();
 
         this._configureSelectorsStatus();
@@ -190,8 +191,8 @@ define([
 
                             s.values.push({
                                 code: v,
-                                label : labels[name][v],
-                                selector : name
+                                label: labels[name][v],
+                                selector: name
                             })
 
                         }, this));
@@ -566,7 +567,6 @@ define([
                 controller: this
             }));
 
-
             this.selectors[name].instance = is
 
         }, this));
@@ -621,6 +621,23 @@ define([
 
     };
 
+    Filter.prototype._getEnabledSelectors = function () {
+
+        var result = [];
+        _.each(this.semanticIds, _.bind(function (n) {
+
+            var name = this._resolveSelectorName(n),
+                status = this._callSelectorInstanceMethod(name, "getStatus");
+
+            if (!status.disabled === true) {
+                result.push(name)
+            }
+
+        }, this));
+
+        return result;
+    };
+
     Filter.prototype._validateSelection = function (s) {
 
         var valid = true,
@@ -647,47 +664,103 @@ define([
 
     Filter.prototype._initDependencies = function () {
 
-        var self = this;
-
         _.each(this.selectors, _.bind(function (sel, id) {
 
-            if (sel.hasOwnProperty("dependencies")) {
-
-                _.each(sel.dependencies, _.bind(function (dependencies, selectorId) {
-
-                    if (!Array.isArray(dependencies)) {
-                        dependencies = [dependencies];
-                    }
-
-                    _.each(dependencies, _.bind(function (dep) {
-
-                        var d = {
-                            event: EVT.SELECTORS_ITEM_SELECT + "." + selectorId,
-                            callback: function (payload) {
-
-                                var call = self["_dep_" + dep];
-
-                                if (call) {
-                                    call.call(self, payload, {src: selectorId, target: id});
-                                } else {
-                                    log.error("Impossible to find : " + "_dep_" + dep);
-                                }
-                            }
-                        };
-
-                        this.dependeciesToDestory.push(d);
-
-                        amplify.subscribe(this._getEventName(d.event), this, d.callback);
-
-                    }, this));
-
-
-                }, this));
-
+            if (!sel.hasOwnProperty("dependencies")) {
+                return;
             }
+
+            this._processSelectDependencies(sel.dependencies, id);
 
         }, this));
     };
+
+    Filter.prototype._resolveDependencySelectors = function (id) {
+
+        if (!id.startsWith("@")) {
+            return [id]
+        } else {
+
+            id = id.substring(1);
+
+            switch (id.toLowerCase()) {
+                case "all":
+                    return this.selectorsId;
+                    break;
+                default:
+                    log.error(ERR.UNKNOWN_DEPENDENCY_ID);
+                    break;
+            }
+        }
+
+    };
+
+    Filter.prototype._resolveDependencyEvent = function (id) {
+
+        var event;
+
+        switch (id.toLowerCase()) {
+            case 'disable':
+                event = this._getEventName(EVT.SELECTOR_DISABLED);
+                break;
+            case 'select':
+                event = this._getEventName(EVT.SELECTORS_ITEM_SELECT);
+                break;
+            default:
+                log.error(ERR.UNKNOWN_DEPENDENCY_EVENT);
+                break;
+        }
+
+        return event;
+    };
+
+    Filter.prototype._processSelectDependencies = function (d, id) {
+
+        var self = this;
+
+        _.each(d, _.bind(function (dependencies, selectorId) {
+
+            //Ensure dependencies is an array
+            if (!Array.isArray(dependencies)) {
+                dependencies = [dependencies];
+            }
+
+            var selectors = this._resolveDependencySelectors(selectorId);
+
+            _.each(selectors, _.bind(function (s) {
+
+                _.each(dependencies, _.bind(function (d) {
+
+                    if (typeof d !== "object") {
+                        log.warn(JSON.stringify(d) + " is not a valid dependency configuration");
+                        return;
+                    }
+
+                    var toAdd = {
+                        event: this._resolveDependencyEvent(d.event) + s,
+                        callback: function (payload) {
+
+                            var call = self["_dep_" + d.id];
+
+                            if (call) {
+                                call.call(self, payload, {src: s, target: id});
+                            } else {
+                                log.error("Impossible to find : " + "_dep_" + d.id);
+                            }
+                        }
+                    };
+
+                    this.dependeciesToDestory.push(toAdd);
+
+                    amplify.subscribe(toAdd.event, this, toAdd.callback);
+
+                }, this));
+
+            }, this));
+
+        }, this));
+    };
+
 
     Filter.prototype._destroyDependencies = function () {
         var self = this;
@@ -703,7 +776,6 @@ define([
         log.info(o);
 
         this._callSelectorInstanceMethod(o.target, "_dep_min", {data: payload});
-
     };
 
     Filter.prototype._dep_parent = function (payload, o) {
@@ -757,6 +829,17 @@ define([
         }
     };
 
+    Filter.prototype._dep_ensure_unset = function (payload, o) {
+        log.info("_dep_ensure_unset invokation");
+        log.info(o);
+
+        this._callSelectorInstanceMethod(o.target, "_dep_ensure_unset", {
+            value: this.selector2semantic[o.src],
+            enabled: this._getEnabledSelectors()
+        });
+
+    };
+
     //Output formats
 
     Filter.prototype._output_plain = function (values) {
@@ -808,11 +891,11 @@ define([
 
         if (this.selectorsReady === this.selectorsId.length) {
 
-            log.info("All selectors are ready");
-
             this.ready = true;
 
             this._onReady();
+
+            log.info("All selectors are ready");
         }
     };
 
@@ -832,9 +915,13 @@ define([
                 if ($this.is(':checked')) {
                     // the checkbox was checked
 
+                    amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED + sel));
+
                     this._callSelectorInstanceMethod(sel, "enable");
 
                 } else {
+
+                    amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED + sel));
 
                     this._callSelectorInstanceMethod(sel, "disable");
                 }
@@ -1106,22 +1193,6 @@ define([
 
         //unbind event listeners
         this._unbindEventListeners();
-
-    };
-
-
-    // TODO to convert in dependency
-
-    Filter.prototype._checkCompareValue = function (d) {
-
-        var compareBy = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
-            subject = this._getSubjectBySelectorId(d),
-            enabled = this._getEnablesSelectors();
-
-        if (subject === compareBy) {
-            var sel = enabled.length > 0 ? enabled[0] : this.selectorsId[0];
-            this.$el.find(s.COMPARE_RADIO_BTNS).filter("[value='" + this._getSubjectBySelectorId(sel) + "']").prop('checked', true).trigger("change");
-        }
 
     };
 

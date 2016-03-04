@@ -25,7 +25,7 @@ define([
 
     function Radio(o) {
 
-        var self= this;
+        var self = this;
 
         $.extend(true, this, defaultOptions, o);
 
@@ -42,7 +42,7 @@ define([
         //force async execution
         window.setTimeout(function () {
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
-        },0);
+        }, 0);
 
         return this;
     }
@@ -147,7 +147,9 @@ define([
      */
     Radio.prototype.setValue = function (v) {
         log.info("Set radio value: " + v);
-        console.log(v)
+
+        this.$radios.filter("[value='" + v + "']").prop('checked', true).trigger("change")
+
     };
 
     Radio.prototype._getStatus = function () {
@@ -161,11 +163,20 @@ define([
 
     Radio.prototype._initVariables = function () {
 
+        var self =this;
+
         this.status = {};
 
         this.$radios = this.$el.find(s.RADIO);
 
         this.$radios.attr("name", this.id);
+
+        this.values = [];
+
+        this.$radios.each(function (){
+            self.values.push($(this).attr("value"));
+        });
+
     };
 
     Radio.prototype._renderRadio = function () {
@@ -199,7 +210,6 @@ define([
                 });
 
 
-
             log.info("Create radio item: " + JSON.stringify(m));
 
             $list.append(tmpl(m));
@@ -212,8 +222,8 @@ define([
         var config = this.selector,
             defaultValue = config.default || [];
 
-        this.$radios.filter("[value='" + defaultValue[0] + "']").prop("checked", true).trigger("change");
-
+        this.setValue(defaultValue);
+        
     };
 
     Radio.prototype._getEventName = function (evt) {
@@ -235,7 +245,7 @@ define([
                 code = r.values[0] || "",
                 label = r.labels[code];
 
-            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + '.' + self.id), {
+            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
                 code: code,
                 label: label,
                 parent: null
@@ -256,6 +266,33 @@ define([
 
         this._destroyRadio();
 
+    };
+
+    // dependency handler
+
+    Radio.prototype._dep_ensure_unset = function (opts) {
+
+        var disabled = opts.value,
+            enabled = opts.enabled,
+            currentValue = this.getValues().values[0],
+            candidate;
+
+        if (disabled == currentValue) {
+
+            for (var i = 0; i < enabled.length; i++) {
+                if (_.contains(this.values, enabled[i])) {
+                    candidate = enabled[i];
+                    break;
+                }
+            }
+
+            if (!candidate) {
+                this.printDefaultSelection();
+            } else {
+                this.setValue(candidate);
+            }
+
+        }
     };
 
     return Radio;

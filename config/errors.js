@@ -12,6 +12,8 @@ define(function ( ) {
         MISSING_SELECTORS : prefix + "missing_selectors",
         INVALID_DATA : prefix + "invalid_data",
         READY_TIMEOUT: prefix + "ready_timeout",
-        SUMMARY_MODEL_CREATION: prefix + "summary_model_creation"
+        SUMMARY_MODEL_CREATION: prefix + "summary_model_creation",
+        UNKNOWN_DEPENDENCY_EVENT: prefix + "unknown_dependency_event",
+        UNKNOWN_DEPENDENCY_ID: prefix + "unknown_dependency_id",
     };
 });

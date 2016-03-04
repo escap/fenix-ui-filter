@@ -1,13 +1,17 @@
 /*global define*/
-define(function ( ) {
+define(function () {
 
     'use strict';
 
+    var prefix = "fx.filter.";
+
     return {
 
-        SELECTORS_READY: "fx.filter.selectors.ready",
-        SELECTORS_ITEM_SELECT : "fx.filter.selectors.select",
-        SELECTOR_READY : "fx.filter.selector.ready"
+        SELECTORS_READY: prefix + "selectors.ready",
+        SELECTORS_ITEM_SELECT: prefix + "selectors.select.",
+        SELECTOR_READY: prefix + "selector.ready",
+        SELECTOR_DISABLED: prefix + "selector.disabled.",
+        SELECTOR_ENABLED: prefix + "selector.enabled."
 
     };
 });

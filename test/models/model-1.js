@@ -8,7 +8,7 @@ define(function () {
 
         "selectors": {
 
-           "compare": {
+            "compare": {
 
                 "selector": {
                     "type": "radio",
@@ -19,8 +19,15 @@ define(function () {
                 "template": {
                     "hideHeader": false,
                     "hideSwitch": true
+                },
+
+                //dependencies with other selectors
+                "dependencies": {
+                    //@ for special selection
+                    "@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
                 }
             },
+
             "recipient": {
 
                 //"className" : "myclass mysecondclass", //Add custom class[s] to selector container
@@ -93,7 +100,7 @@ define(function () {
 
                 //dependencies with other selectors
                 "dependencies": {
-                    "compare": "focus" //string or array of string
+                    "compare": {id: "focus", event: "select"} //obj or array of obj
                 },
 
                 "template": {
@@ -121,12 +128,12 @@ define(function () {
                     "type": "tree",
                     //"disabled" : true,
                     "hideSelectAllButton": true,
-                    "source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
+                    "source": [{"value": "myvalue", "label": "my custom label"}], // Static data
                     //"default": [1012]
                 },
 
                 "dependencies": {
-                    "compare": "focus"
+                    "compare": {id: "focus", event: "select"} //obj or array of obj
                 },
 
                 "filter": {
@@ -156,7 +163,7 @@ define(function () {
                 },
 
                 "dependencies": {
-                    "compare": "focus"
+                    "compare": {id: "focus", event: "select"} //obj or array of obj
                 },
 
                 "template": {
@@ -190,7 +197,7 @@ define(function () {
                 },
 
                 "dependencies": {
-                    "compare": "focus"
+                    "compare": {id: "focus", event: "select"} //obj or array of obj
                 },
 
                 "filter": {
@@ -226,8 +233,8 @@ define(function () {
                 },
 
                 "dependencies": {
-                    "sector": "parent",
-                    "compare": "focus"
+                    "sector": {id: "parent", event: "select"}, //obj or array of obj
+                    "compare": {id: "focus", event: "select"}
                 },
 
                 "validation": {
@@ -244,9 +251,9 @@ define(function () {
 
                 "selector": {
                     "type": "dropdown",
-                    "source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
+                    "source": [{"value": "myvalue", "label": "my custom label"}], // Static data
                     "default": ["adam_usd_commitment"],
-                    "config" : { //Selectize configuration
+                    "config": { //Selectize configuration
                         "maxItems": 1
                     }
                 },
@@ -256,7 +263,7 @@ define(function () {
                 }
 
             },
-/*
+
             "year-from": {
 
                 "selector": {
@@ -264,7 +271,7 @@ define(function () {
                     //"source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
                     "from": 2000,
                     "to": 2014,
-                    "config" : { //Selectize configuration
+                    "config": { //Selectize configuration
                         "maxItems": 1
                     }
                 },
@@ -274,20 +281,19 @@ define(function () {
                     "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}'
                 },
 
-                "template" : {
-                    "hideSwitch" : true
+                "template": {
+                    "hideSwitch": true
                 }
             },
-/*
+
             "year-to": {
 
                 "selector": {
                     "type": "dropdown",
-                    "source": "static",
                     "from": 2000,
                     "to": 2014,
                     "default": [2014],
-                    "config" : { //Selectize configuration
+                    "config": { //Selectize configuration
                         "maxItems": 1
                     }
                 },
@@ -298,10 +304,14 @@ define(function () {
                 },
 
                 "dependencies": {
-                    "year-from": "min"
+                    "year-from": {id: "min", event: "select"}
+                },
+
+                "template": {
+                    "hideSwitch": true
                 }
 
-            }*/
+            }
         }
 
     }

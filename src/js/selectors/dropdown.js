@@ -136,10 +136,13 @@ define([
      * return {null}
      */
     Dropdown.prototype.unsetValue = function (v) {
-        log.info("Unset dropdown value: " + v);
+
+        var value = v.toString();
+
+        log.info("Unset dropdown value: " + value);
 
         //selectize doesn't have the unsetValue method
-        //get current selection and remove v
+        //get current selection and remove 'value'
         var instance = this.dropdown[0].selectize,
             values = instance.getValue();
 
@@ -147,7 +150,7 @@ define([
             values = [values];
         }
 
-        values = _.without(values, v);
+        values = _.without(values, value);
 
         instance.setValue(values);
 
@@ -189,7 +192,7 @@ define([
 
             var staticData = this.selector.source;
 
-            if (!Array.isArray(data)) {
+            if (!Array.isArray(staticData)) {
                 log.error(ERR.INVALID_DATA);
 
             } else {
@@ -322,7 +325,7 @@ define([
                 });
             });
 
-            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + '.' + self.id), result);
+            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), result);
             amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
         });
 
@@ -349,7 +352,7 @@ define([
 
     Dropdown.prototype._dep_min = function (opts) {
 
-        var codes = opts.data,
+        var codes = opts.data.length > 0 ? opts.data : [{code: this.selector.from || 0}],
             from = codes[0].code,
             originalValue = this.getValues().values[0],
             data = [],
@@ -374,7 +377,9 @@ define([
         //Set selected value
         var v = from > originalValue ? from : originalValue;
 
-        instance.setValue(v.toString());
+        if (v){
+            instance.setValue(v.toString());
+        }
 
     };
 
