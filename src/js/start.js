@@ -450,11 +450,14 @@ define([
                 rawCl = this._getStoredCodelist(obj.cl),
                 Selector = this._getSelectorRender(type);
 
-            this.selectors[name].instance = new Selector($.extend(true, {}, obj, {
+            var is = new Selector($.extend(true, {}, obj, {
                 id: name,
                 data: rawCl ? rawCl : null,
                 controller: this
             }));
+
+
+            this.selectors[name].instance = is
 
         }, this));
 
@@ -857,7 +860,8 @@ define([
         var instance = this.selectors[name].instance;
 
         if (!instance) {
-            log.warn("Impossible to find selector instance for " + selector);
+
+            log.warn("Impossible to find selector instance for " + name);
         }
 
         return instance;

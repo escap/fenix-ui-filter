@@ -8,7 +8,7 @@ define(function () {
 
         "selectors": {
 
-    /*        "compare": {
+           "compare": {
 
                 "selector": {
                     "type": "radio",
@@ -21,6 +21,8 @@ define(function () {
                     "hideSwitch": true
                 }
             },
+
+            /*
 
             "recipient": {
 

@@ -33,8 +33,6 @@ define([
 
     Test.prototype._render = function () {
 
-        console.log(this._createFilterConfiguration(Model1))
-
         this._renderModel1BaseTemplate();
 
     };

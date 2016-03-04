@@ -25,6 +25,8 @@ define([
 
     function Radio(o) {
 
+        var self= this;
+
         $.extend(true, this, defaultOptions, o);
 
         this._renderTemplate();
@@ -37,7 +39,10 @@ define([
 
         this.printDefaultSelection();
 
-        amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
+        //force async execution
+        window.setTimeout(function () {
+            amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+        },0);
 
         return this;
     }
@@ -141,6 +146,8 @@ define([
         this.status = {};
 
         this.$radios = this.$el.find(s.RADIO);
+
+        this.$radios.attr("name", this.id);
     };
 
     Radio.prototype._renderRadio = function () {

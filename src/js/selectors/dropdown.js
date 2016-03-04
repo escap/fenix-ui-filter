@@ -21,9 +21,9 @@ define([
 
     function Dropdown(o) {
 
-        $.extend(true, this, defaultOptions, o);
+        var self = this;
 
-        this.status = {};
+        $.extend(true, this, defaultOptions, o);
 
         this._renderTemplate();
 
@@ -32,6 +32,11 @@ define([
         this._renderDropdown();
 
         this._bindEventListeners();
+
+        //force async execution
+        window.setTimeout(function () {
+            amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+        },0);
 
         return this;
     }
@@ -138,6 +143,8 @@ define([
 
     Dropdown.prototype._initVariables = function () {
 
+        this.status = {};
+
         this.$dropdownEl = this.$el.find(s.DROPDOWN_CONTAINER);
     };
 
@@ -236,8 +243,6 @@ define([
 
         this.printDefaultSelection();
 
-        amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
-
     };
 
     Dropdown.prototype.printDefaultSelection = function () {
@@ -304,6 +309,7 @@ define([
     };
 
     Dropdown.prototype._getEventName = function (evt) {
+
         return this.controller.id + evt;
     };
 

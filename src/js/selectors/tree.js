@@ -297,6 +297,7 @@ define([
 
                 this.printDefaultSelection();
 
+                //Always async
                 amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
 
             }, this))
