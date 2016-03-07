@@ -223,7 +223,7 @@ define([
             defaultValue = config.default || [];
 
         this.setValue(defaultValue);
-        
+
     };
 
     Radio.prototype._getEventName = function (evt) {

@@ -110,7 +110,6 @@ define([
 
         this._initDependencies();
 
-        alert()
         this._initPage();
 
         this._configureSelectorsStatus();
@@ -529,8 +528,8 @@ define([
         log.info("Add class to mandatory selectors");
         _.each(this.mandatorySelectorIds, _.bind(function (id) {
 
-            this._getSelectorContainer(id).closest(s.SEMANTICS).addClass(this.config.MANDATORY_SELECTOR_CLASS_NAME);
-            this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.config.MANDATORY_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(id).closest(s.SEMANTICS).addClass(this.MANDATORY_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.MANDATORY_SELECTOR_CLASS_NAME);
         }, this));
 
     };
@@ -737,7 +736,7 @@ define([
                     }
 
                     var toAdd = {
-                        event: this._resolveDependencyEvent(d.event) + s,
+                        event: this._resolveDependencyEvent(d.event).concat(s),
                         callback: function (payload) {
 
                             var call = self["_dep_" + d.id];
@@ -780,12 +779,12 @@ define([
 
     Filter.prototype._dep_parent = function (payload, o) {
 
-        log.info("_dep_parent invokation");
-        log.info(o);
-
         var c = this.selectors[o.target].cl;
 
         if (c) {
+
+            log.info("_dep_parent invokation");
+            log.info(o);
 
             //delete c.levels;
             c.levels = 2;
@@ -813,13 +812,16 @@ define([
 
         if (payload.code === this.selector2semantic[o.target]) {
 
+            log.info("_dep_focus invokation");
+            log.info(o);
+
             var d = payload.code,
                 selectors = this.semantic2selectors[d];
 
-            this.$el.find("." + this.config.FOCUSED_SELECTOR_CLASS_NAME).removeClass(this.config.FOCUSED_SELECTOR_CLASS_NAME);
+            this.$el.find("." + this.FOCUSED_SELECTOR_CLASS_NAME).removeClass(this.FOCUSED_SELECTOR_CLASS_NAME);
 
-            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS).addClass(this.config.FOCUSED_SELECTOR_CLASS_NAME);
-            this._getSelectorContainer(selectors[0]).closest(s.SEMANTICS).addClass(this.config.FOCUSED_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS).addClass(this.FOCUSED_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(selectors[0]).closest(s.SEMANTICS).addClass(this.FOCUSED_SELECTOR_CLASS_NAME);
 
             _.each(selectors, _.bind(function (sel) {
 
@@ -901,13 +903,13 @@ define([
 
     Filter.prototype._onReady = function () {
 
-        this.$switches.on("click", _.bind(function (e) {
-
-            log.info("Switch clicked");
+        this.$switches.on("change", _.bind(function (e) {
 
             var $this = $(e.currentTarget),
                 semantic = $(e.currentTarget).attr("data-target"),
                 selectors = this.semantic2selectors[semantic];
+
+            log.info("Switch change status: " + $this.is(':checked') );
 
             _.each(selectors, _.bind(function (sel) {
 
@@ -915,15 +917,11 @@ define([
                 if ($this.is(':checked')) {
                     // the checkbox was checked
 
-                    amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED + sel));
-
-                    this._callSelectorInstanceMethod(sel, "enable");
+                    this._enableSelectorAndSwitch(sel);
 
                 } else {
 
-                    amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED + sel));
-
-                    this._callSelectorInstanceMethod(sel, "disable");
+                    this._disableSelectorAndSwitch(sel);
                 }
 
             }, this));
@@ -954,7 +952,7 @@ define([
 
     Filter.prototype._getEventName = function (evt) {
 
-        return this.id + evt;
+        return this.id.concat(evt);
     };
 
     Filter.prototype._onSelectorItemSelect = function () {
@@ -1157,6 +1155,8 @@ define([
 
         this._callSelectorInstanceMethod(d, 'disable');
 
+        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)));
+
     };
 
     Filter.prototype._enableSelectorAndSwitch = function (d) {
@@ -1165,6 +1165,8 @@ define([
         this._getSelectorContainer(d).closest(s.SEMANTICS).find(s.SWITCH).prop('checked', true);
 
         this._callSelectorInstanceMethod(d, 'enable');
+
+        amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED.concat(d)));
     };
 
     //disposition
