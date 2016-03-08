@@ -72,10 +72,10 @@ define([
      * Return the current selection
      * @return {Object} Selection
      */
-    Filter.prototype.getValues = function (output) {
+    Filter.prototype.getValues = function (format) {
 
-        var candidate = output || this.OUTPUT_FORMAT,
-            call = this["_output_" + candidate];
+        var candidate = format || this.OUTPUT_FORMAT,
+            call = this["_format_" + candidate];
 
         if (call) {
             return call.call(this, this._getValues());
@@ -844,17 +844,18 @@ define([
 
     //Output formats
 
-    Filter.prototype._output_plain = function (values) {
+    Filter.prototype._format_plain = function (values) {
         return values;
     };
 
-    Filter.prototype._output_fenix = function (values) {
+    Filter.prototype._format_fenix = function (values) {
 
-        var filter = {};
+        var filter = {},
+            self = this;
 
         _.each(values.values, function (val, id) {
 
-            filter[id] = compileFilter(id, val);
+            filter = $.extend(true, filter, compileFilter(id, val));
 
         });
 
@@ -862,27 +863,103 @@ define([
 
         function compileFilter(id, values) {
 
-            var m = $.extend(true, this.selectors[id].cl,
-                {codes: '"' + values.join('","') + '"'});
+            var config = self.selectors[id] || {},
+                formatConfig = config.format || {},
+                template = formatConfig.template,
+                output = formatConfig.output || "codes";
 
-            return JSON.parse(this._createFilterProcess(id, m));
+            if (template) {
+                return compileTemplate(id, values, config, template);
+            }
+
+            var key = formatConfig.dimension || id,
+                tmplBegin = '{ "' + key + '" :',
+                tmplEnd = "}",
+                tmpl;
+
+            switch (output.toLocaleLowerCase()){
+                case "codes" :
+
+                    tmpl = tmplBegin + '{ "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}' + tmplEnd;
+                    return compileTemplate(id, values, config, key, tmpl);
+
+                    break;
+                case "time" :
+
+                    return createTimeFilter(id, values, config, key);
+
+                    break;
+                default :
+                    log.warn(id + " not included in the result set. Missing format configuration.");
+                    return {};
+            }
+
         }
 
-        function createFilterProcess(id, model) {
+        function compileTemplate(id, values, config, key, template) {
 
-            var config = this.selectors[id].filter || {},
-                process = config.process || {};
+            /*
+            Priority
+            - values
+            - format configuration
+            - code list configuration
+            */
 
-            if (!process) {
+            var model = $.extend(true, config.cl, config.format, {codes: '"' + values.join('","') + '"'});
+
+            if (!template) {
                 log.error("Impossible to find '" + id + "' process template. Check your '" + id + "'.filter.process configuration.")
             }
 
-            var template = Handlebars.compile(process);
+            if (!model.uid) {
+                log.error("Impossible to find '" + id + "' code list configuration for FENIX output format export.");
+            }
 
-            return template(model);
+            var tmpl = Handlebars.compile(template),
+                process = JSON.parse(tmpl(model)),
+                codes = process[key].codes;
+
+            //Remove empty version attributes
+            _.each(codes, function (obj) {
+                if (!obj.version) {
+                    delete obj.version;
+                }
+            });
+
+            return process;
 
         }
 
+        function createTimeFilter(id, values, config, key) {
+
+            var result = {}, time = [],
+                v = values.sort(function(a,b) { return a - b; }),
+                couple = {from : null, to : null};
+
+            _.each(v, function ( i ) {
+
+                if (couple.from === null) {
+                    couple.from = i;
+                }
+
+                if (couple.to - couple.from > 1) {
+                    couple.to = i ;
+                    time.push($.extend({}, couple));
+                    couple.from =null;
+                    couple.to =null;
+                }
+
+            });
+
+            if (couple.from && !couple.to) {
+                couple.to = couple.from;
+                time.push($.extend({}, couple));
+            }
+
+            result[key] = time;
+
+            return result;
+        }
     };
 
     // Handlers

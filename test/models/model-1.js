@@ -25,6 +25,13 @@ define(function () {
                 "dependencies": {
                     //@ for special selection
                     "@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
+                },
+
+                "format" : {
+                    //"output" : "codes", // codelist || time. if format is FENIX
+                    //"uid" : "myCodelist", //override codelist uid config
+                    //"version" : "myVersion", //override codelist version config
+                    //"dimension" : "myDimension", //override dimension uid, default is the selector id
                 }
             },
 
@@ -49,7 +56,7 @@ define(function () {
                         "selector": {
                             "type": "tree", //tree | list
                             "default": [625 /*, 261, 269 */], //selected codes by default,
-                            //, "max" : 2 //max number of selectable item
+                            //, "max" : 2 //max number of selectable items
                             //"disabled" : true, //if present and true the selector is initially disabled
                             //"config" : { core: { multiple: true } } //specific jstree or selectize config
                             //"blacklist": [] //codes to exclude from the codelist
@@ -92,7 +99,7 @@ define(function () {
 
                 },
 
-                "filter": {
+                "format": {
                     "dimension": "recipientcode",
                     "type": "dynamic", //dynamic | static: for dynamic or static section of D3P filter
                     "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2016", "codes": [{{{codes}}}] } ]}}'
@@ -136,7 +143,7 @@ define(function () {
                     "compare": {id: "focus", event: "select"} //obj or array of obj
                 },
 
-                "filter": {
+                "format": {
                     "dimension": "donorcode",
                     "type": "dynamic",
                     "process": '{"donorcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
@@ -170,7 +177,7 @@ define(function () {
                     //"hideSwitch" : true //hide selector enable/disable switcher
                 },
 
-                "filter": {
+                "format": {
                     "dimension": "channelcode",
                     "type": "dynamic",
                     "process": '{"channelcode": { "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
@@ -200,7 +207,7 @@ define(function () {
                     "compare": {id: "focus", event: "select"} //obj or array of obj
                 },
 
-                "filter": {
+                "format": {
                     "dimension": "sectorcode",
                     "type": "dynamic",
                     "process": '{"parentsector_code": { "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
@@ -226,7 +233,7 @@ define(function () {
                     //"default": [31165]
                 },
 
-                "filter": {
+                "format": {
                     "dimension": "purposecode",
                     "type": "dynamic",
                     "process": '{"purposecode": { "codes":[{"uid": "crs_purposes", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
@@ -258,7 +265,7 @@ define(function () {
                     }
                 },
 
-                "filter": {
+                "format": {
                     "type": "static"
                 }
 
@@ -276,9 +283,10 @@ define(function () {
                     }
                 },
 
-                "filter": {
+                "format": {
                     "type": "static",
-                    "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}'
+                    "output" : "time",
+                    //"process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}'
                 },
 
                 "template": {
@@ -298,8 +306,9 @@ define(function () {
                     }
                 },
 
-                "filter": {
-                    "type": "static"
+                "format": {
+                    "type": "static",
+                    "output" : "time"
                     //, "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}' //Not used
                 },
 
@@ -310,6 +319,7 @@ define(function () {
                 "template": {
                     "hideSwitch": true
                 }
+
 
             }
         }

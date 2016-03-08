@@ -14,7 +14,8 @@ define([
     var s = {
             MODEL_1_BASE: "#model-1-base",
             MODEL_1_BASE_SUMMARY: "#model-1-base-summary",
-            MODEL_1_NO_BASE: "#model-1-no-base"
+            MODEL_1_NO_BASE: "#model-1-no-base",
+            MODEL_1_BTN :"#model-1-btn"
         },
         empty_model = {data: []},
         error_model = {},
@@ -52,6 +53,10 @@ define([
             summary$el : s.MODEL_1_BASE_SUMMARY
         });
 
+        $(s.MODEL_1_BTN).on('click', function () {
+            log.warn(filter.getValues())
+        });
+
         log.trace("Rendering Model 1 base: end");
 
     };
@@ -79,6 +84,9 @@ define([
             if (!obj.template.title) {
                 obj.template.title = i18nLabels["sel_heading_" + name.replace("-", "_")];
             }
+
+            //Add custom class to each selector
+            //obj.className = "col-xs-6";
 
             _.each(obj.selectors, function (tab, n) {
 

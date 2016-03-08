@@ -30,8 +30,7 @@ define(function () {
 
         "MANDATORY_SELECTOR_CLASS_NAME": "selector-mandatory", // class for mandatory selectors
 
-        "OUTPUT_FORMAT": "plain",
-
+        "OUTPUT_FORMAT": "plain", // "plain | "fenix"
 
     }
 
