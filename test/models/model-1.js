@@ -8,12 +8,13 @@ define(function () {
 
         "selectors": {
 
-            "compare": {
+    /*        "compare": {
 
                 "selector": {
                     "type": "radio",
                     //"source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
-                    "default": ["recipient"]
+                    "default": ["recipient"],
+                    //"disabled" : true
                 },
 
                 "template": {
@@ -33,7 +34,7 @@ define(function () {
                     //"version" : "myVersion", //override codelist version config
                     //"dimension" : "myDimension", //override dimension uid, default is the selector id
                 }
-            },
+            },*/
 
             "recipient": {
 
@@ -79,7 +80,8 @@ define(function () {
                         "selector": {
                             "type": "tree",
                             "blacklist": [298, 189, 289, 498, 389, 380, 489, 798, 789, 689, 619, 679, 89, 589, 889], //code to exclude from the codelist
-                            "hideSelectAllButton": true
+                            "hideSelectAllButton": true,
+                            //"disabled" : true
                         }
 
                     },
@@ -136,7 +138,7 @@ define(function () {
                     //"disabled" : true,
                     "hideSelectAllButton": true,
                     "source": [{"value": "myvalue", "label": "my custom label"}], // Static data
-                    //"default": [1012]
+                    //"default": [1012],
                 },
 
                 "dependencies": {
@@ -165,7 +167,8 @@ define(function () {
 
                 "selector": {
                     "type": "tree",
-                    "hideSelectAllButton": true
+                    "hideSelectAllButton": true,
+                    //"disabled" : true
                     // "default": [44006]
                 },
 
@@ -262,7 +265,8 @@ define(function () {
                     "default": ["adam_usd_commitment"],
                     "config": { //Selectize configuration
                         "maxItems": 1
-                    }
+                    },
+                    //"disabled" : true
                 },
 
                 "format": {

@@ -104,6 +104,8 @@ define([
         //print default values
         instance.enable();
 
+        this.status.disabled = false;
+
         log.info("Selector enabled : " + this.id);
     };
 
@@ -117,6 +119,8 @@ define([
 
         //print default values
         instance.disable();
+
+        this.status.disabled = true;
 
         log.info("Selector disabled : " + this.id);
 
@@ -139,20 +143,24 @@ define([
 
         var value = v.toString();
 
-        log.info("Unset dropdown value: " + value);
+        if (this.status.disabled !== true ) {
+            log.info("Unset tree value: " + v);
 
-        //selectize doesn't have the unsetValue method
-        //get current selection and remove 'value'
-        var instance = this.dropdown[0].selectize,
-            values = instance.getValue();
+            //selectize doesn't have the unsetValue method
+            //get current selection and remove 'value'
+            var instance = this.dropdown[0].selectize,
+                values = instance.getValue();
 
-        if (!Array.isArray(values)) {
-            values = [values];
+            if (!Array.isArray(values)) {
+                values = [values];
+            }
+
+            values = _.without(values, value);
+
+            instance.setValue(values);
+        } else {
+            log.warn("Selector is disabled. Impossible to unset tree value: " + v);
         }
-
-        values = _.without(values, value);
-
-        instance.setValue(values);
 
     };
 
@@ -178,7 +186,9 @@ define([
 
     Dropdown.prototype._initVariables = function () {
 
+        //Init status
         this.status = {};
+        this.status.disabled = this.selector.disabled;
 
         this.$dropdownEl = this.$el.find(s.DROPDOWN_CONTAINER);
     };

@@ -301,7 +301,6 @@ define([
         this.semantic2selectors = {};
         this.selector2semantic = {};
         this.selectorTypes = [];
-        this.disabledSelectors = [];
 
         this.dependeciesToDestory = [];
 
@@ -339,6 +338,7 @@ define([
                     this._processSelector(model, k, key)
                 }, this));
             }
+
         }, this));
 
         this.selectorsId = Object.keys(this.selectors);
@@ -366,6 +366,8 @@ define([
         }, this));
 
         amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this, this._onSelectorItemSelect);
+        amplify.subscribe(this._getEventName(EVT.SELECTOR_DISABLED), this, this._updateSummary);
+        amplify.subscribe(this._getEventName(EVT.SELECTOR_ENABLED), this, this._updateSummary);
 
     };
 
@@ -438,8 +440,6 @@ define([
         this._initPage();
 
         this._renderSelectors();
-
-        this._configureSelectorsStatus();
 
     };
 
@@ -538,18 +538,22 @@ define([
 
         //default disabled selectors
         log.info("Disabling disabled selectors by default");
-        _.each(this.disabledSelectors, _.bind(function (d) {
 
-            var semantic = this.selector2semantic[d],
-                selectors = this.semantic2selectors[semantic];
+        _.each(this.selectorsId, _.bind(function (s) {
 
-            _.each(selectors, _.bind(function (s) {
+            var status = this._callSelectorInstanceMethod(s, "getStatus");
 
-                this._disableSelectorAndSwitch(s);
+            if (status.disabled === true) {
 
-            }, this));
+                var semantic = this.selector2semantic[s];
+
+                _.each(this.semantic2selectors[semantic], _.bind(function (n) {
+                    this._disableSelectorAndSwitch(n);
+                }, this));
+            }
 
         }, this));
+
     };
 
     Filter.prototype._renderSelectors = function () {
@@ -591,7 +595,7 @@ define([
             var name = this._resolveSelectorName(n),
                 status = this._callSelectorInstanceMethod(name, "getStatus");
 
-            if (!status.disabled === true) {
+            if (status.disabled !== true) {
 
                 var v = this._callSelectorInstanceMethod(name, "getValues");
 
@@ -760,7 +764,6 @@ define([
         }, this));
     };
 
-
     Filter.prototype._destroyDependencies = function () {
         var self = this;
 
@@ -877,7 +880,7 @@ define([
                 tmplEnd = "}",
                 tmpl;
 
-            switch (output.toLocaleLowerCase()){
+            switch (output.toLocaleLowerCase()) {
                 case "codes" :
 
                     tmpl = tmplBegin + '{ "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}' + tmplEnd;
@@ -899,11 +902,11 @@ define([
         function compileTemplate(id, values, config, key, template) {
 
             /*
-            Priority
-            - values
-            - format configuration
-            - code list configuration
-            */
+             Priority
+             - values
+             - format configuration
+             - code list configuration
+             */
 
             var model = $.extend(true, config.cl, config.format, {codes: '"' + values.join('","') + '"'});
 
@@ -933,20 +936,22 @@ define([
         function createTimeFilter(id, values, config, key) {
 
             var result = {}, time = [],
-                v = values.sort(function(a,b) { return a - b; }),
-                couple = {from : null, to : null};
+                v = values.sort(function (a, b) {
+                    return a - b;
+                }),
+                couple = {from: null, to: null};
 
-            _.each(v, function ( i ) {
+            _.each(v, function (i) {
 
                 if (couple.from === null) {
                     couple.from = i;
                 }
 
                 if (couple.to - couple.from > 1) {
-                    couple.to = i ;
+                    couple.to = i;
                     time.push($.extend({}, couple));
-                    couple.from =null;
-                    couple.to =null;
+                    couple.from = null;
+                    couple.to = null;
                 }
 
             });
@@ -986,7 +991,7 @@ define([
                 semantic = $(e.currentTarget).attr("data-target"),
                 selectors = this.semantic2selectors[semantic];
 
-            log.info("Switch change status: " + $this.is(':checked') );
+            log.info("Switch change status: " + $this.is(':checked'));
 
             _.each(selectors, _.bind(function (sel) {
 
@@ -1008,6 +1013,8 @@ define([
         this._initDependencies();
 
         this.printDefaultSelection();
+
+        this._configureSelectorsStatus();
 
         window.clearTimeout(this.validTimeout);
 
@@ -1078,11 +1085,6 @@ define([
         //get set of codelists
         if (obj.hasOwnProperty("cl")) {
             this.codelists.push(obj.cl);
-        }
-
-        //get initially disabled selectors
-        if (obj.selector.hasOwnProperty("disabled") && obj.selector.disabled === true) {
-            this.disabledSelectors.push(selectorId);
         }
 
         //get mandatory selectors id
@@ -1232,6 +1234,7 @@ define([
 
         this._callSelectorInstanceMethod(d, 'disable');
 
+        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED));
         amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)));
 
     };
@@ -1243,6 +1246,7 @@ define([
 
         this._callSelectorInstanceMethod(d, 'enable');
 
+        amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED));
         amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED.concat(d)));
     };
 
@@ -1253,6 +1257,8 @@ define([
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
 
         amplify.unsubscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this._onSelectorItemSelect);
+        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_DISABLED), this._updateSummary);
+        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_ENABLED), this._updateSummary);
 
         //destroy selectors dependencies
         this._destroyDependencies();

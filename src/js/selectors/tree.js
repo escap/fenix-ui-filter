@@ -33,8 +33,6 @@ define([
 
         $.extend(true, this, defaultOptions, o);
 
-        this.status = {};
-
         this._renderTemplate();
 
         this._initVariables();
@@ -173,8 +171,14 @@ define([
      * return {null}
      */
     Tree.prototype.unsetValue = function (v) {
-        log.info("Unset tree value: " + v);
-        this.tree.jstree(true).deselect_node({id: v});
+
+        if (this.status.disabled !== true ) {
+            log.info("Unset tree value: " + v);
+            this.tree.jstree(true).deselect_node({id: v});
+        } else {
+            log.warn("Selector is disabled. Impossible to unset tree value: " + v);
+        }
+
     };
 
     /**
@@ -202,6 +206,11 @@ define([
     Tree.prototype._initVariables = function () {
 
         this.$summaryItems = $();
+
+        //Update status
+        this.status = {};
+
+        this.status.disabled = this.selector.disabled;
 
     };
 

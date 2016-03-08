@@ -98,6 +98,8 @@ define([
 
         this.$radios.attr('disabled', false);
 
+        this.status.disabled = false;
+
         log.info("Selector enabled : " + this.id);
 
     };
@@ -109,6 +111,8 @@ define([
     Radio.prototype.disable = function () {
 
         this.$radios.attr('disabled', true);
+
+        this.status.disabled = true;
 
         log.info("Selector disabled : " + this.id);
 
@@ -137,8 +141,14 @@ define([
      * return {null}
      */
     Radio.prototype.unsetValue = function (v) {
-        log.info("Unset radio value: " + v);
-        log.warn("Value will not be unset because of the selector configuration");
+        log.info("Unset tree value: " + v);
+
+        if (this.status.disabled !== true ) {
+            log.warn("Value will not be unset because of the selector configuration");
+        } else {
+            log.warn("Selector is disabled. Impossible to unset tree value: " + v);
+        }
+
     };
 
     /**
@@ -165,7 +175,9 @@ define([
 
         var self =this;
 
+        //Init status
         this.status = {};
+        this.status.disabled = this.selector.disabled;
 
         this.$radios = this.$el.find(s.RADIO);
 
