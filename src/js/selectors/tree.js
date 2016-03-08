@@ -331,6 +331,8 @@ define([
 
                 this.printDefaultSelection();
 
+                this.status.ready = true;
+
                 //Always async
                 amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
 

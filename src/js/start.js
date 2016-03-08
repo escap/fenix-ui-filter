@@ -53,14 +53,11 @@ define([
 
             this._initVariables();
 
-            this._bindEventListeners();
-
-            this._preloadSelectorScripts();
+            this._renderFilter();
 
             return this;
 
         } else {
-
             log.error("Impossible to create Filter");
             log.error(valid)
         }
@@ -77,7 +74,7 @@ define([
         var candidate = format || this.OUTPUT_FORMAT,
             call = this["_format_" + candidate];
 
-        if (call) {
+        if ($.isFunction(call)) {
             return call.call(this, this._getValues());
         } else {
             log.error("Impossible to find the output format: " + candidate);
@@ -132,7 +129,35 @@ define([
         log.info("Printed default selection");
     };
 
+    /**
+     * Add dynamically a selector
+     * @return {null}
+     */
+    Filter.prototype.addSelector = function (id, conf) {
+
+        return this._addSelector(id, conf)
+
+    };
+
+    /**
+     * Remove dynamically a selector
+     * @return {null}
+     */
+    Filter.prototype.removeSelector = function (id) {
+
+        return this._removeSelector(id)
+    };
+
     // end API
+
+    Filter.prototype._renderFilter = function () {
+
+        this._initDynamicVariables();
+
+        this._unbindEventListeners();
+
+        this._preloadSelectorScripts();
+    };
 
     Filter.prototype._updateSummary = function () {
 
@@ -274,13 +299,6 @@ define([
             }
         }
 
-        this.validTimeout = window.setTimeout(function () {
-
-            alert(ERR.READY_TIMEOUT);
-            log.error(ERR.READY_TIMEOUT);
-
-        }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
-
         return errors.length > 0 ? errors : valid;
     };
 
@@ -305,44 +323,23 @@ define([
         this.dependeciesToDestory = [];
 
         this.mandatorySelectorIds = [];
-        this.mandatorySelectors = [];
 
         this.codelists = [];
 
-        _.each(this.config.selectors, _.bind(function (value, key) {
+        //Summary
+        this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
 
-            this.semanticIds.push(key);
+        //Process selectors
+        _.each(this.config.selectors, _.bind(function (selectorConf, selectorId) {
 
-            if (!value.hasOwnProperty("selectors")) {
-
-                this._processSelector(value, key, key);
-
-            } else {
-
-                this.semantics[key] = value;
-                this.semanticToResolve.push(key);
-
-                var semantic = $.extend(true, {}, value);
-
-                this._getSemanticContainer(key);
-
-                delete semantic.selectors;
-
-                _.each(value.selectors, _.bind(function (v, k) {
-                    //Hide selector switch by default
-                    //remove className by default
-                    var model = $.extend(true, {}, semantic, v, {
-                        className: "",
-                        template: {hideSwitch: true, hideHeader: true}
-                    });
-                    this._processSelector(model, k, key)
-                }, this));
-            }
+            this._evaluateSelectorConfiguration(selectorConf, selectorId);
 
         }, this));
+    };
+
+    Filter.prototype._initDynamicVariables = function () {
 
         this.selectorsId = Object.keys(this.selectors);
-        this.selectorsReady = 0; //used for "ready" event
 
         this.codelists = _.uniq(this.codelists);
 
@@ -350,8 +347,51 @@ define([
 
         this.$switches = this.$el.find(s.SWITCH);
 
-        //Summary
-        this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
+    };
+
+    Filter.prototype._removeSelectorReferences = function (id) {
+
+        //check if it is semantic or selector
+
+
+        //this.semanticIds = _.without(this.semanticIds, id);
+        //this._getSemanticContainer(key).remove();
+
+
+    };
+
+    Filter.prototype._evaluateSelectorConfiguration = function (value, key) {
+
+        this.semanticIds.push(key);
+
+        if (!value.hasOwnProperty("selectors")) {
+
+            this._processSelector(value, key, key);
+
+        } else {
+
+            this.semantics[key] = value;
+            this.semanticToResolve.push(key);
+
+            var semantic = $.extend(true, {}, value);
+
+            this._getSemanticContainer(key);
+
+            delete semantic.selectors;
+
+            _.each(value.selectors, _.bind(function (v, k) {
+
+                //Hide selector switch by default
+                //remove className by default
+                var model = $.extend(true, {}, semantic, v, {
+                    className: "",
+                    template: {hideSwitch: true, hideHeader: true}
+                });
+
+                this._processSelector(model, k, key);
+
+            }, this));
+        }
 
     };
 
@@ -437,9 +477,18 @@ define([
 
         log.info("Resources loaded");
 
+        this._bindEventListeners();
+
         this._initPage();
 
         this._renderSelectors();
+
+        //TODO remove
+        /**/
+        var self = this;
+        window.setTimeout(function () {
+            //self._renderFilter();
+        }, 5000)
 
     };
 
@@ -558,19 +607,49 @@ define([
 
     Filter.prototype._renderSelectors = function () {
 
+        this.ready = false;
+
+        this.selectorsReady = 0; //used for "ready" event
+
+        this.validTimeout = window.setTimeout(function () {
+
+            alert(ERR.READY_TIMEOUT);
+            log.error(ERR.READY_TIMEOUT);
+
+        }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
+
         _.each(this.selectors, _.bind(function (obj, name) {
 
-            var type = obj.selector.type,
-                rawCl = this._getStoredCodelist(obj.cl),
-                Selector = this._getSelectorRender(type);
+            if (!obj.initialized) {
 
-            var is = new Selector($.extend(true, {}, obj, {
-                id: name,
-                data: rawCl ? rawCl : null,
-                controller: this
-            }));
+                obj.initialized = true;
 
-            this.selectors[name].instance = is
+                var type = obj.selector.type,
+                    rawCl = this._getStoredCodelist(obj.cl),
+                    Selector = this._getSelectorRender(type);
+
+                var is = new Selector($.extend(true, {}, obj, {
+                    id: name,
+                    data: rawCl ? rawCl : null,
+                    controller: this
+                }));
+
+                this.selectors[name].instance = is
+
+            } else {
+                log.info(name + " selector is already initialized.");
+
+                var status = this._callSelectorInstanceMethod(name, "getStatus");
+
+                if (status.ready === true) {
+
+                    this._onSelectorReady();
+
+                } else {
+                    log.warn(name + " selector was previously initialized but its inner status was not set to ready.");
+                }
+
+            }
 
         }, this));
 
@@ -773,7 +852,6 @@ define([
     };
 
     Filter.prototype._dep_min = function (payload, o) {
-
         log.info("_dep_min invokation");
         log.info(o);
 
@@ -977,13 +1055,16 @@ define([
 
             this.ready = true;
 
+            log.info("All selectors are ready");
+
             this._onReady();
 
-            log.info("All selectors are ready");
         }
     };
 
     Filter.prototype._onReady = function () {
+
+        log.info("Filter [" + this.id + "] is ready");
 
         this.$switches.on("change", _.bind(function (e) {
 
@@ -1012,9 +1093,16 @@ define([
 
         this._initDependencies();
 
-        this.printDefaultSelection();
+        if (!this.isNotFirstRendering) {
+            this.isNotFirstRendering = true;
 
-        this._configureSelectorsStatus();
+            this.printDefaultSelection();
+
+            this._configureSelectorsStatus();
+
+        } else {
+            log.warn("skip printDefaultSelection() and configureSelectorStatus() because it not the first rendering.")
+        }
 
         window.clearTimeout(this.validTimeout);
 
@@ -1042,7 +1130,18 @@ define([
     Filter.prototype._onSelectorItemSelect = function () {
 
         this._updateSummary();
+    };
 
+    Filter.prototype._addSelector = function (id, conf) {
+        //evaluate configuration this._evaluateSelectorConfiguration()
+
+        //this._renderFilter();
+    };
+
+    Filter.prototype._removeSelector = function (id) {
+        //remove selector reference from variables
+
+        //this._renderFilter();
     };
 
     // utils for selectors
@@ -1071,13 +1170,9 @@ define([
 
         //Selector type
         var selectorType = obj.selector.type.toLowerCase();
-
-        if (!this["_selector_type_" + selectorType]) {
-            this["_selector_type_" + selectorType] = {};
+        if (!_.contains(this.selectorTypes, selectorType)) {
             this.selectorTypes.push(selectorType);
         }
-
-        this["_selector_type_" + selectorType][selectorId] = obj;
 
         //selector container
         obj.$el = this._getSelectorContainer(selectorId);
@@ -1090,9 +1185,7 @@ define([
         //get mandatory selectors id
         if (obj.hasOwnProperty("validation") && obj.validation.mandatory === true) {
             this.mandatorySelectorIds.push(selectorId);
-            this.mandatorySelectors.push(obj);
         }
-        this.mandatorySelectors = _.uniq(this.mandatorySelectors);
 
         //
         if (!Array.isArray(this.semantic2selectors[semanticId])) {

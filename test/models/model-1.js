@@ -8,7 +8,7 @@ define(function () {
 
         "selectors": {
 
-    /*        "compare": {
+            "compare": {
 
                 "selector": {
                     "type": "radio",
@@ -34,7 +34,7 @@ define(function () {
                     //"version" : "myVersion", //override codelist version config
                     //"dimension" : "myDimension", //override dimension uid, default is the selector id
                 }
-            },*/
+            },
 
             "recipient": {
 
@@ -57,7 +57,7 @@ define(function () {
                         "selector": {
                             "type": "tree", //tree | list
                             "default": [625 /*, 261, 269 */], //selected codes by default,
-                            //, "max" : 2 //max number of selectable items
+                             //"max" : 2, //max number of selectable items
                             //"disabled" : true, //if present and true the selector is initially disabled
                             //"config" : { core: { multiple: true } } //specific jstree or selectize config
                             //"blacklist": [] //codes to exclude from the codelist

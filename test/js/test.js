@@ -86,7 +86,7 @@ define([
             }
 
             //Add custom class to each selector
-            //obj.className = "col-xs-6";
+            //obj.className = "col-xs-3";
 
             _.each(obj.selectors, function (tab, n) {
 

@@ -41,6 +41,9 @@ define([
 
         //force async execution
         window.setTimeout(function () {
+
+            self.status.ready = true;
+
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
         }, 0);
 
