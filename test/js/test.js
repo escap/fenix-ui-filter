@@ -4,18 +4,21 @@ define([
     'underscore',
     'fx-filter/start',
     'test/models/model-1',
+    'test/models/semantic',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Model1, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Model1, SemanticModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
     var s = {
             MODEL_1_BASE: "#model-1-base",
             MODEL_1_BASE_SUMMARY: "#model-1-base-summary",
-            MODEL_1_NO_BASE: "#model-1-no-base",
-            MODEL_1_BTN :"#model-1-btn"
+            MODEL_1_BTN: "#model-1-btn",
+            DYNAMIC_MODEL_1_BASE: "#model-1-dynamic",
+            DYNAMIC_MODEL_1_ADD_BTN: "#model-1-dynamic-add-btn",
+            DYNAMIC_MODEL_1_VALUES_BTN: "#model-1-dynamic-values-btn",
         },
         empty_model = {data: []},
         error_model = {},
@@ -35,7 +38,9 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderModel1BaseTemplate();
+        //this._renderModel1BaseTemplate();
+
+        this._renderDynamicModel1();
 
     };
 
@@ -47,10 +52,10 @@ define([
 
         var filter = this.createFilter({
             id: s.MODEL_1_BASE,
-            config: this._createFilterConfiguration(Model1),
+            config: { selectors: this._createFilterConfiguration(Model1) },
             $el: s.MODEL_1_BASE,
             template: templ(i18nLabels),
-            summary$el : s.MODEL_1_BASE_SUMMARY
+            summary$el: s.MODEL_1_BASE_SUMMARY
         });
 
         $(s.MODEL_1_BTN).on('click', function () {
@@ -61,6 +66,37 @@ define([
 
     };
 
+    Test.prototype._renderDynamicModel1 = function () {
+
+        log.trace("Rendering Dynamic Model 1 base: start");
+
+        var self = this,
+            filter = this.createFilter({
+                id: s.DYNAMIC_MODEL_1_BASE,
+                $el: s.DYNAMIC_MODEL_1_BASE
+            });
+
+        $(s.DYNAMIC_MODEL_1_ADD_BTN).on("click", function () {
+
+            var name = self._pickRandomProperty(Model1),
+                conf = {};
+
+            conf[name] = Model1[name];
+
+            filter.add(self._createFilterConfiguration(conf));
+
+        });
+
+        $(s.DYNAMIC_MODEL_1_VALUES_BTN).on("click", function () {
+            log.warn(filter.getValues());
+        });
+
+        log.trace("Rendering Dynamic Model 1 base: end");
+
+    };
+
+    //Utils
+
     Test.prototype.createFilter = function (params) {
 
         var instance = new Filter(params);
@@ -70,33 +106,47 @@ define([
         return instance;
     };
 
-    //Utils
     Test.prototype._createFilterConfiguration = function (Base) {
 
-        var c = $.extend(true, {}, Base);
+        var self = this,
+            c = $.extend(true, {}, Base);
 
-        _.each(c.selectors, function (obj, name) {
+        _.each(c, function (obj, name) {
 
-            if (!obj.template) {
-                obj.template = {};
-            }
-
-            if (!obj.template.title) {
-                obj.template.title = i18nLabels["sel_heading_" + name.replace("-", "_")];
-            }
-
-            //Add custom class to each selector
-            //obj.className = "col-xs-3";
-
-            _.each(obj.selectors, function (tab, n) {
-
-                tab.label = i18nLabels["sel_tab_" + n.replace("-", "_")];
-
-            });
-
+            self._createSelectorConfiguration(name, obj);
         });
 
         return c;
+    };
+
+    Test.prototype._createSelectorConfiguration = function (name, obj) {
+
+        if (!obj.template) {
+            obj.template = {};
+        }
+
+        if (!obj.template.title) {
+            obj.template.title = i18nLabels["sel_heading_" + name.replace("-", "_")];
+        }
+
+        //Add custom class to each selector
+        //obj.className = "col-xs-3";
+
+        _.each(obj.selectors, function (tab, n) {
+
+            tab.label = i18nLabels["sel_tab_" + n.replace("-", "_")];
+
+        });
+
+    };
+
+    Test.prototype._pickRandomProperty = function (obj) {
+        var result;
+        var count = 0;
+        for (var prop in obj)
+            if (Math.random() < 1 / ++count)
+                result = prop;
+        return result;
     };
 
     return new Test();

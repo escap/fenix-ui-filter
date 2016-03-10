@@ -133,9 +133,13 @@ define([
      * Add dynamically a selector
      * @return {null}
      */
-    Filter.prototype.addSelector = function (id, conf) {
+    Filter.prototype.add = function (conf) {
 
-        return this._addSelector(id, conf)
+        _.each(conf, _.bind(function (obj, name) {
+
+            this._addSelector(name, obj);
+
+        }, this));
 
     };
 
@@ -143,7 +147,7 @@ define([
      * Remove dynamically a selector
      * @return {null}
      */
-    Filter.prototype.removeSelector = function (id) {
+    Filter.prototype.remove = function (id) {
 
         return this._removeSelector(id)
     };
@@ -277,12 +281,11 @@ define([
         }
 
         //check for selectors
-        if (!this.config.selectors) {
-
-            errors.push({code: ERR.MISSING_SELECTORS});
-
+        if (!this.config || !this.config.selectors) {
             log.warn("Impossible to find selectors for filter: " + this.id);
-
+            log.warn("Filer will wait for selectors dynamically");
+            this.config = this.config ? this.config : {};
+            this.config.selectors = [];
         }
 
         //check if summary container exist
@@ -364,7 +367,7 @@ define([
 
         this.semanticIds.push(key);
 
-        if (!value.hasOwnProperty("selectors")) {
+        if (!this._isSemantic(value)) {
 
             this._processSelector(value, key, key);
 
@@ -409,6 +412,10 @@ define([
         amplify.subscribe(this._getEventName(EVT.SELECTOR_DISABLED), this, this._updateSummary);
         amplify.subscribe(this._getEventName(EVT.SELECTOR_ENABLED), this, this._updateSummary);
 
+    };
+
+    Filter.prototype._isSemantic = function (value) {
+        return value.hasOwnProperty("selectors");
     };
 
     // Preload scripts and codelists
@@ -611,12 +618,16 @@ define([
 
         this.selectorsReady = 0; //used for "ready" event
 
-        this.validTimeout = window.setTimeout(function () {
+        //In case there are selectors set timeout
+        if (this.selectorsId.length > 0) {
 
-            alert(ERR.READY_TIMEOUT);
-            log.error(ERR.READY_TIMEOUT);
+            this.validTimeout = window.setTimeout(function () {
 
-        }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
+                alert(ERR.READY_TIMEOUT);
+                log.error(ERR.READY_TIMEOUT);
+
+            }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
+        }
 
         _.each(this.selectors, _.bind(function (obj, name) {
 
@@ -1093,16 +1104,19 @@ define([
 
         this._initDependencies();
 
+        //this.printDefaultSelection();
+
+        this._configureSelectorsStatus();
+
+/*
         if (!this.isNotFirstRendering) {
             this.isNotFirstRendering = true;
 
-            this.printDefaultSelection();
 
-            this._configureSelectorsStatus();
 
         } else {
             log.warn("skip printDefaultSelection() and configureSelectorStatus() because it not the first rendering.")
-        }
+        }*/
 
         window.clearTimeout(this.validTimeout);
 
@@ -1132,10 +1146,32 @@ define([
         this._updateSummary();
     };
 
-    Filter.prototype._addSelector = function (id, conf) {
-        //evaluate configuration this._evaluateSelectorConfiguration()
+    Filter.prototype._addSelector = function ( name, obj ) {
 
-        //this._renderFilter();
+        var willBeAdded = true;
+
+        if (_.contains(this.selectorsId, name)) {
+            willBeAdded = false;
+        }
+
+        if (this._isSemantic(obj)) {
+
+            _.each(obj.selectors, _.bind(function (obj, key) {
+
+                if (_.contains(this.selectorsId, key)) {
+                    willBeAdded = false;
+                }
+
+            }, this));
+        }
+
+        if (!willBeAdded) {
+            log.warn(id + " selector will not be added because it already exist or, if semantic, contains id that already exist.");
+        } else {
+            this._evaluateSelectorConfiguration(obj, name);
+            this._renderFilter();
+        }
+
     };
 
     Filter.prototype._removeSelector = function (id) {
