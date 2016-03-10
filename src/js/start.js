@@ -149,7 +149,7 @@ define([
      */
     Filter.prototype.remove = function (id) {
 
-        //force to be Array
+        //force to be array
         if (!Array.isArray(id)) {
             id = [id];
         }
@@ -157,6 +157,20 @@ define([
         _.each(id, _.bind(function (i) {
             this._removeSelector(i);
         }, this));
+
+    };
+
+    /**
+     * Clear the filter from all selectors
+     * @return {null}
+     */
+    Filter.prototype.clear = function () {
+
+        _.each(this.semanticIds, _.bind(function (id) {
+            this.remove(id);
+        }, this));
+
+        log.info("Filter " + this.id + " cleared successfully");
 
     };
 
@@ -1211,12 +1225,13 @@ define([
 
         this._removeSelector(obj.id);
 
-        this._updateSummary();
     };
 
     Filter.prototype._removeSelector = function (id) {
 
         this._removeItemReferences(id);
+
+        this._updateSummary();
 
     };
 
@@ -1366,6 +1381,7 @@ define([
 
         var semantic = this.semantics[id],
             templ = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
+            conf = C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS,
             $html,
             model;
 
@@ -1373,7 +1389,7 @@ define([
             obj.id = name;
         });
 
-        model = $.extend(true, {id: id}, semantic, semantic.template, i18nLables);
+        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLables);
 
         $html = $(templ(model));
 
@@ -1393,7 +1409,8 @@ define([
 
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
-            $html = $(template($.extend(true, {id: id}, obj, i18nLables)));
+            conf = C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS,
+            $html = $(template($.extend(true, {id: id}, conf, obj, i18nLables)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});

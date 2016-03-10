@@ -18,7 +18,9 @@ define([
             MODEL_1_BTN: "#model-1-btn",
             DYNAMIC_MODEL_1_BASE: "#model-1-dynamic",
             DYNAMIC_MODEL_1_ADD_BTN: "#model-1-dynamic-add-btn",
-            DYNAMIC_MODEL_1_VALUES_BTN: "#model-1-dynamic-values-btn"
+            DYNAMIC_MODEL_1_VALUES_BTN: "#model-1-dynamic-values-btn",
+            DYNAMIC_MODEL_1_CLEAR_BTN: "#model-1-dynamic-clear-btn",
+            DYNAMIC_MODEL_1_SUMMARY : "#model-1-dynamic-summary",
         },
         empty_model = {data: []},
         error_model = {},
@@ -38,7 +40,7 @@ define([
 
     Test.prototype._render = function () {
 
-        //this._renderModel1BaseTemplate();
+        this._renderModel1BaseTemplate();
 
         this._renderDynamicModel1();
 
@@ -73,7 +75,8 @@ define([
         var self = this,
             filter = this.createFilter({
                 id: s.DYNAMIC_MODEL_1_BASE,
-                $el: s.DYNAMIC_MODEL_1_BASE
+                $el: s.DYNAMIC_MODEL_1_BASE,
+                summary$el: s.DYNAMIC_MODEL_1_SUMMARY
             });
 
         $(s.DYNAMIC_MODEL_1_ADD_BTN).on("click", function () {
@@ -89,6 +92,10 @@ define([
 
         $(s.DYNAMIC_MODEL_1_VALUES_BTN).on("click", function () {
             log.warn(filter.getValues());
+        });
+
+        $(s.DYNAMIC_MODEL_1_CLEAR_BTN).on("click", function () {
+            filter.clear();
         });
 
         log.trace("Rendering Dynamic Model 1 base: end");

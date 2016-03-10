@@ -32,7 +32,9 @@ define(function () {
 
         "OUTPUT_FORMAT": "plain", // "plain | "fenix"
 
-        "hideRemoveButton" : true
+        DEFAULT_TEMPLATE_OPTIONS : {
+            "hideRemoveButton" : false
+        }
 
     }
 
