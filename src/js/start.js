@@ -928,31 +928,35 @@ define([
 
     Filter.prototype._dep_parent = function (payload, o) {
 
-        var c = this.selectors[o.target].cl;
+        if (this.selectors[o.target]) {
 
-        if (c) {
+            var c = this.selectors[o.target].cl;
 
-            log.info("_dep_parent invokation");
-            log.info(o);
+            if (c) {
 
-            //delete c.levels;
-            c.levels = 2;
-            delete c.level;
+                log.info("_dep_parent invokation");
+                log.info(o);
 
-            c.codes = [];
+                //delete c.levels;
+                c.levels = 2;
+                delete c.level;
 
-            _.each(payload, function (item) {
-                c.codes.push(item.code);
-            });
+                c.codes = [];
 
-            this._getPromise(c).then(
-                _.bind(function (data) {
-                    this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: data});
-                }, this),
-                function (r) {
-                    log.error(r);
-                }
-            )
+                _.each(payload, function (item) {
+                    c.codes.push(item.code);
+                });
+
+                this._getPromise(c).then(
+                    _.bind(function (data) {
+                        this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: data});
+                    }, this),
+                    function (r) {
+                        log.error(r);
+                    }
+                )
+            }
+
         }
 
     };
@@ -984,10 +988,13 @@ define([
         log.info("_dep_ensure_unset invokation");
         log.info(o);
 
-        this._callSelectorInstanceMethod(o.target, "_dep_ensure_unset", {
-            value: this.selector2semantic[o.src],
-            enabled: this._getEnabledSelectors()
-        });
+        if (this.selectors[o.target]) {
+
+            this._callSelectorInstanceMethod(o.target, "_dep_ensure_unset", {
+                value: this.selector2semantic[o.src],
+                enabled: this._getEnabledSelectors()
+            });
+        }
 
     };
 
