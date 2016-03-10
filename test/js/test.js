@@ -18,7 +18,7 @@ define([
             MODEL_1_BTN: "#model-1-btn",
             DYNAMIC_MODEL_1_BASE: "#model-1-dynamic",
             DYNAMIC_MODEL_1_ADD_BTN: "#model-1-dynamic-add-btn",
-            DYNAMIC_MODEL_1_VALUES_BTN: "#model-1-dynamic-values-btn",
+            DYNAMIC_MODEL_1_VALUES_BTN: "#model-1-dynamic-values-btn"
         },
         empty_model = {data: []},
         error_model = {},
@@ -52,7 +52,7 @@ define([
 
         var filter = this.createFilter({
             id: s.MODEL_1_BASE,
-            config: { selectors: this._createFilterConfiguration(Model1) },
+            items: this._createFilterConfiguration(Model1),
             $el: s.MODEL_1_BASE,
             template: templ(i18nLabels),
             summary$el: s.MODEL_1_BASE_SUMMARY
@@ -130,14 +130,13 @@ define([
         }
 
         //Add custom class to each selector
-        //obj.className = "col-xs-3";
+        obj.className = "col-xs-6";
 
         _.each(obj.selectors, function (tab, n) {
 
             tab.label = i18nLabels["sel_tab_" + n.replace("-", "_")];
 
         });
-
     };
 
     Test.prototype._pickRandomProperty = function (obj) {

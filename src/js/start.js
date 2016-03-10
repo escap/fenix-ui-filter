@@ -36,7 +36,8 @@ define([
         TEMPLATE_SELECTOR_CONTAINER: "[data-container]",
         TEMPLATE_SEMANTIC: "[data-template-semantic]",
         TEMPLATE_SUMMARY: "[data-summary]",
-        SUMMARY_ITEM: "[data-code]"
+        SUMMARY_ITEM: "[data-code]",
+        REMOVE_BTN: "[data-role='remove']"
     };
 
     function Filter(o) {
@@ -140,7 +141,6 @@ define([
             this._addSelector(name, obj);
 
         }, this));
-
     };
 
     /**
@@ -149,7 +149,15 @@ define([
      */
     Filter.prototype.remove = function (id) {
 
-        return this._removeSelector(id)
+        //force to be Array
+        if (!Array.isArray(id)) {
+            id = [id];
+        }
+
+        _.each(id, _.bind(function (i) {
+            this._removeSelector(i);
+        }, this));
+
     };
 
     // end API
@@ -281,11 +289,9 @@ define([
         }
 
         //check for selectors
-        if (!this.config || !this.config.selectors) {
+        if (!this.items) {
             log.warn("Impossible to find selectors for filter: " + this.id);
             log.warn("Filer will wait for selectors dynamically");
-            this.config = this.config ? this.config : {};
-            this.config.selectors = [];
         }
 
         //check if summary container exist
@@ -333,7 +339,7 @@ define([
         this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
 
         //Process selectors
-        _.each(this.config.selectors, _.bind(function (selectorConf, selectorId) {
+        _.each(this.items, _.bind(function (selectorConf, selectorId) {
 
             this._evaluateSelectorConfiguration(selectorConf, selectorId);
 
@@ -352,14 +358,50 @@ define([
 
     };
 
+    Filter.prototype._removeItemReferences = function (id) {
+
+        //remove id from result
+        this.semanticIds = _.without(this.semanticIds, id);
+
+        if (this.semantics.hasOwnProperty(id)) {
+
+            var semantic = $.extend(true, {}, this.semantics[id]);
+
+            _.each(semantic.selectors, _.bind(function (v, k) {
+                this._removeSelectorReferences(k);
+            }, this));
+
+            semantic.$el.remove();
+
+            this.semanticToResolve = _.without(this.semanticToResolve, id);
+
+            delete this.semantics[id];
+
+        }
+
+        if (this.selectors.hasOwnProperty(id)) {
+
+            this._removeSelectorReferences(id);
+        }
+
+    };
+
     Filter.prototype._removeSelectorReferences = function (id) {
 
-        //check if it is semantic or selector
+        var selector = this.selectors[id];
+        selector.instance.dispose();
+        selector.$el.remove();
 
+        delete this.selectors[id];
 
-        //this.semanticIds = _.without(this.semanticIds, id);
-        //this._getSemanticContainer(key).remove();
+        this.mandatorySelectorIds = _.without(this.mandatorySelectorIds, id);
 
+        var semantic = this.selector2semantic[id];
+        this.semantic2selectors[semantic] = _.without(this.semantic2selectors[semantic], id);
+
+        delete this.selector2semantic[id];
+
+        this.selectorsId = _.without(this.selectorsId, id);
 
     };
 
@@ -378,7 +420,7 @@ define([
 
             var semantic = $.extend(true, {}, value);
 
-            this._getSemanticContainer(key);
+            this.semantics[key].$el = this._getSemanticContainer(key);
 
             delete semantic.selectors;
 
@@ -388,7 +430,7 @@ define([
                 //remove className by default
                 var model = $.extend(true, {}, semantic, v, {
                     className: "",
-                    template: {hideSwitch: true, hideHeader: true}
+                    template: {hideHeader: true}
                 });
 
                 this._processSelector(model, k, key);
@@ -411,6 +453,7 @@ define([
         amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this, this._onSelectorItemSelect);
         amplify.subscribe(this._getEventName(EVT.SELECTOR_DISABLED), this, this._updateSummary);
         amplify.subscribe(this._getEventName(EVT.SELECTOR_ENABLED), this, this._updateSummary);
+        amplify.subscribe(this._getEventName(EVT.ITEM_REMOVED), this, this._onRemoveItem);
 
     };
 
@@ -1104,19 +1147,9 @@ define([
 
         this._initDependencies();
 
-        //this.printDefaultSelection();
-
         this._configureSelectorsStatus();
 
-/*
-        if (!this.isNotFirstRendering) {
-            this.isNotFirstRendering = true;
-
-
-
-        } else {
-            log.warn("skip printDefaultSelection() and configureSelectorStatus() because it not the first rendering.")
-        }*/
+        this._updateSummary();
 
         window.clearTimeout(this.validTimeout);
 
@@ -1146,7 +1179,7 @@ define([
         this._updateSummary();
     };
 
-    Filter.prototype._addSelector = function ( name, obj ) {
+    Filter.prototype._addSelector = function (name, obj) {
 
         var willBeAdded = true;
 
@@ -1166,7 +1199,7 @@ define([
         }
 
         if (!willBeAdded) {
-            log.warn(id + " selector will not be added because it already exist or, if semantic, contains id that already exist.");
+            log.warn(name + " selector will not be added because it already exist or, if semantic, contains id that already exist.");
         } else {
             this._evaluateSelectorConfiguration(obj, name);
             this._renderFilter();
@@ -1174,10 +1207,17 @@ define([
 
     };
 
-    Filter.prototype._removeSelector = function (id) {
-        //remove selector reference from variables
+    Filter.prototype._onRemoveItem = function (obj) {
 
-        //this._renderFilter();
+        this._removeSelector(obj.id);
+
+        this._updateSummary();
+    };
+
+    Filter.prototype._removeSelector = function (id) {
+
+        this._removeItemReferences(id);
+
     };
 
     // utils for selectors
@@ -1310,12 +1350,12 @@ define([
 
             $cont = $("<div data-semantic='" + id + "' class='" + conf.className + "'></div>");
 
-            this.$el.append($cont);
+            this.$el.prepend($cont);
         }
 
         if (conf.templateIsInitialized !== true) {
             conf.templateIsInitialized = true;
-            $cont.append(this._createSemanticContainer(id));
+            $cont.prepend(this._createSemanticContainer(id));
         }
 
         return $cont;
@@ -1330,14 +1370,16 @@ define([
             model;
 
         _.each(semantic.selectors, function (obj, name) {
-
             obj.id = name;
-
         });
 
         model = $.extend(true, {id: id}, semantic, semantic.template, i18nLables);
 
         $html = $(templ(model));
+
+        $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
+            amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
+        }, this));
 
         //TODO active tab by conf
         $html.find("ul").children().first().addClass("active");
@@ -1352,6 +1394,10 @@ define([
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
             $html = $(template($.extend(true, {id: id}, obj, i18nLables)));
+
+        $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
+            amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
+        }, this));
 
         return $html;
     };
@@ -1380,14 +1426,13 @@ define([
     };
 
     //disposition
-
     Filter.prototype._unbindEventListeners = function () {
 
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
-
         amplify.unsubscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this._onSelectorItemSelect);
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_DISABLED), this._updateSummary);
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_ENABLED), this._updateSummary);
+        amplify.unsubscribe(this._getEventName(EVT.ITEM_REMOVED), this._onRemoveItem);
 
         //destroy selectors dependencies
         this._destroyDependencies();

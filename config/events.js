@@ -11,7 +11,8 @@ define(function () {
         SELECTORS_ITEM_SELECT: prefix + "selectors.select.",
         SELECTOR_READY: prefix + "selector.ready",
         SELECTOR_DISABLED: prefix + "selector.disabled.",
-        SELECTOR_ENABLED: prefix + "selector.enabled."
+        SELECTOR_ENABLED: prefix + "selector.enabled.",
+        ITEM_REMOVED: prefix + "selector.removed.",
 
     };
 });

@@ -12,6 +12,17 @@
 
                     {{/unless}}
 
+                    {{#unless hideRemoveButton}}
+
+                        <div class="pull-right">
+                            <button data-role="remove" class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                    {{/unless}}
+
                     {{#unless hideSwitch}}
 
                         <div class="pull-right">
@@ -21,6 +32,7 @@
                         </div>
 
                     {{/unless}}
+
 
                 </div>
 
@@ -38,6 +50,17 @@
                     {{#unless hideTitle}}
 
                         <h4>{{ title }}</h4>
+
+                    {{/unless}}
+
+                    {{#unless hideRemoveButton}}
+
+                        <div class="pull-right">
+                            <button data-role="remove" class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
 
                     {{/unless}}
 

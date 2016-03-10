@@ -32,6 +32,8 @@ define(function () {
 
         "OUTPUT_FORMAT": "plain", // "plain | "fenix"
 
+        "hideRemoveButton" : true
+
     }
 
 });
