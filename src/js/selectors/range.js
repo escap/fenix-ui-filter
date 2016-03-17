@@ -93,7 +93,6 @@ define([
         this._dispose();
 
         log.info("Selector disposed successfully");
-
     };
 
     /**
@@ -220,19 +219,15 @@ define([
             from: 50,
             keyboard: false,
             onStart: function (data) {
-                log.info("onStart");
+                //log.info("onStart");
             },
             onChange: function (data) {
-                console.log("onChange");
-
                 //amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), data); //format payload
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
             },
-            onFinish: function (data) {
-                console.log("onFinish");
-            },
+            onFinish: function (data) { },
             onUpdate: function (data) {
-                console.log("onUpdate");
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
             }
         },  this.selector.config));
 
@@ -264,7 +259,6 @@ define([
         this._unbindEventListeners();
 
         this.$rangeContainer.data("ionRangeSlider").destroy();
-
     };
 
     // dependency handler
