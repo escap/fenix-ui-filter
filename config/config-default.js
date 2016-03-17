@@ -26,6 +26,9 @@ define(function () {
             },
             'range': {
                 path: selectorPath + 'range'
+            },
+            'time': {
+                path: selectorPath + 'time'
             }
         },
 

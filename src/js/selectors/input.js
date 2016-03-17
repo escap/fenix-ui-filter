@@ -157,12 +157,12 @@ define([
      * return {null}
      */
     Input.prototype.unsetValue = function (v) {
-        log.info("Unset tree value: " + v);
+        log.info("Unset input value: " + v);
 
         if (this.status.disabled !== true) {
             log.warn("Value will not be unset because of the selector configuration");
         } else {
-            log.warn("Selector is disabled. Impossible to unset tree value: " + v);
+            log.warn("Selector is disabled. Impossible to unset input value: " + v);
         }
 
     };

@@ -6,7 +6,7 @@ define(function () {
 
     return {
 
-        "range": {
+/*        "range": {
 
             "selector": {
                 "id": "range",
@@ -36,7 +36,36 @@ define(function () {
                 //"version" : "myVersion", //override codelist version config
                 //"dimension" : "myDimension", //override dimension uid, default is the selector id
             }
+        },*/
+
+        "time": {
+
+            "selector": {
+                "id": "time",
+                "default": ["Thu Mar 8 2016 17:04:58 GMT+0100 (CET)"],
+                "config" : {  },//specific bootstrap datetimepicker
+                //"disabled" : true
+            },
+
+            "template": {
+                "hideHeader": false,
+                //"hideSwitch": true
+            },
+
+            //dependencies with other selectors
+            "dependencies": {
+                //@ for special selection
+                //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
+            },
+
+            "format" : {
+                //"output" : "codes", // codelist || time. if format is FENIX
+                //"uid" : "myCodelist", //override codelist uid config
+                //"version" : "myVersion", //override codelist version config
+                //"dimension" : "myDimension", //override dimension uid, default is the selector id
+            }
         },
+
         /*
         "compare": {
 

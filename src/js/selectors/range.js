@@ -157,7 +157,7 @@ define([
         if (this.status.disabled !== true) {
             log.warn("Value will not be unset because of the selector configuration");
         } else {
-            log.warn("Selector is disabled. Impossible to unset tree value: " + v);
+            log.warn("Selector is disabled. Impossible to unset range value: " + v);
         }
 
     };

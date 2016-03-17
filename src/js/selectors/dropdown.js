@@ -146,7 +146,7 @@ define([
         var value = v.toString();
 
         if (this.status.disabled !== true ) {
-            log.info("Unset tree value: " + v);
+            log.info("Unset dropdown value: " + v);
 
             //selectize doesn't have the unsetValue method
             //get current selection and remove 'value'
@@ -161,7 +161,7 @@ define([
 
             instance.setValue(values);
         } else {
-            log.warn("Selector is disabled. Impossible to unset tree value: " + v);
+            log.warn("Selector is disabled. Impossible to unset dropdown value: " + v);
         }
 
     };
