@@ -6,11 +6,44 @@ define(function () {
 
     return {
 
+        "range": {
+
+            "selector": {
+                "id": "range",
+                "default": [126],
+                "config" : { //specific ion.rangeSlider
+                    type : "double",
+                    min: 100,
+                    max: 200
+                },
+                //"disabled" : true
+            },
+
+            "template": {
+                "hideHeader": false,
+                //"hideSwitch": true
+            },
+
+            //dependencies with other selectors
+            "dependencies": {
+                //@ for special selection
+                //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
+            },
+
+            "format" : {
+                //"output" : "codes", // codelist || time. if format is FENIX
+                //"uid" : "myCodelist", //override codelist uid config
+                //"version" : "myVersion", //override codelist version config
+                //"dimension" : "myDimension", //override dimension uid, default is the selector id
+            }
+        },
+        /*
         "compare": {
 
             "selector": {
-                "type": "radio",
-                //"source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
+                "id": "input",
+                "type" : "radio", //text || radio || checkbox || number
+                //"source" : [ {"value" : "myvalue", "label" : "my custom label"}, {"value" : "myvalue 2", "label" : "my custom label 2 "} ], // Static data
                 "default": ["recipient"],
                 //"disabled" : true
             },
@@ -53,14 +86,14 @@ define(function () {
 
                     //html selector configuration
                     "selector": {
-                        "type": "tree", //tree | list
-                        "default": [625 /*, 261, 269 */], //selected codes by default,
+                        "id": "tree", //tree | list
+                        "default": [625 /!*, 261, 269 *!/], //selected codes by default,
                         //"max" : 2, //max number of selectable items
                         //"disabled" : true, //if present and true the selector is initially disabled
                         //"config" : { core: { multiple: true } } //specific jstree or selectize config
                         //"blacklist": [] //codes to exclude from the codelist
-                        //"hideFilter" : true, //hide all buttons,
-                        //"hideButtons" : true, //hide all buttons,
+                        //"hideFilter" : true, //hide filter buttons,
+                        "hideButtons" : true, //hide all buttons,
                         "hideSelectAllButton": true, //Hide select all button
                         //"hideClearAllButton" : true, //Hide clear all button
                         //"hideFooter" : true, //hide footer
@@ -76,7 +109,7 @@ define(function () {
                     },
 
                     "selector": {
-                        "type": "tree",
+                        "id": "tree",
                         "blacklist": [298, 189, 289, 498, 389, 380, 489, 798, 789, 689, 619, 679, 89, 589, 889], //code to exclude from the codelist
                         "hideSelectAllButton": true,
                         //"disabled" : true
@@ -92,7 +125,7 @@ define(function () {
                     },
 
                     "selector": {
-                        "type": "tree",
+                        "id": "tree",
                         "hideSelectAllButton": true
                     }
                 }
@@ -132,10 +165,10 @@ define(function () {
             },
 
             "selector": {
-                "type": "tree",
+                "id": "tree",
                 //"disabled" : true,
                 "hideSelectAllButton": true,
-                "source": [{"value": "myvalue", "label": "my custom label"}], // Static data
+                //"source": [{"value": "myvalue", "label": "my custom label"}], // Static data
                 //"default": [1012],
             },
 
@@ -164,7 +197,7 @@ define(function () {
             },
 
             "selector": {
-                "type": "tree",
+                "id": "tree",
                 "hideSelectAllButton": true,
                 //"disabled" : true
                 // "default": [44006]
@@ -199,7 +232,7 @@ define(function () {
             },
 
             "selector": {
-                "type": "tree",
+                "id": "tree",
                 "default": [600],
                 "hideSelectAllButton": true
             },
@@ -229,7 +262,7 @@ define(function () {
             },
 
             "selector": {
-                "type": "tree",
+                "id": "tree",
                 "hideSelectAllButton": true
                 //"default": [31165]
             },
@@ -258,8 +291,8 @@ define(function () {
             },
 
             "selector": {
-                "type": "dropdown",
-                "source": [{"value": "myvalue", "label": "my custom label"}], // Static data
+                "id": "dropdown",
+                //"source": [{"value": "myvalue", "label": "my custom label"}], // Static data
                 "default": ["adam_usd_commitment"],
                 "config": { //Selectize configuration
                     "maxItems": 1
@@ -268,7 +301,7 @@ define(function () {
             },
 
             "format": {
-                "type": "static"
+                "id": "static"
             }
 
         },
@@ -276,7 +309,7 @@ define(function () {
         "year-from": {
 
             "selector": {
-                "type": "dropdown",
+                "id": "dropdown",
                 //"source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
                 "from": 2000,
                 "to": 2014,
@@ -299,7 +332,7 @@ define(function () {
         "year-to": {
 
             "selector": {
-                "type": "dropdown",
+                "id": "dropdown",
                 "from": 2000,
                 "to": 2014,
                 "default": [2014],
@@ -323,7 +356,7 @@ define(function () {
             }
 
 
-        }
+        }*/
     }
 
 });

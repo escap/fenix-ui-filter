@@ -21,8 +21,11 @@ define(function () {
             'tree': {
                 path: selectorPath + 'tree'
             },
-            'radio': {
-                path: selectorPath + 'radio'
+            'input': {
+                path: selectorPath + 'input'
+            },
+            'range': {
+                path: selectorPath + 'range'
             }
         },
 

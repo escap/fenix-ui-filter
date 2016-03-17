@@ -692,9 +692,9 @@ define([
 
                 obj.initialized = true;
 
-                var type = obj.selector.type,
+                var selectorId = obj.selector.id,
                     rawCl = this._getStoredCodelist(obj.cl),
-                    Selector = this._getSelectorRender(type);
+                    Selector = this._getSelectorRender(selectorId);
 
                 var is = new Selector($.extend(true, {}, obj, {
                     id: name,
@@ -1266,8 +1266,8 @@ define([
 
         this.selectors[selectorId] = obj;
 
-        //Selector type
-        var selectorType = obj.selector.type.toLowerCase();
+        //Selector id
+        var selectorType = obj.selector.id.toLowerCase();
         if (!_.contains(this.selectorTypes, selectorType)) {
             this.selectorTypes.push(selectorType);
         }
