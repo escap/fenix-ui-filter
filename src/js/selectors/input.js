@@ -239,6 +239,10 @@ define([
             this.$el.append($list);
         }
 
+        if (this.type !=="radio" && this.type!== 'checkbox' && data.length == 0){
+            data.push( {"value" : "", "label" : ""});
+            log.info("Add dummy model for input");
+        }
         _.each(data, _.bind(function (model) {
 
             window.fx_filter_input_id >= 0 ? window.fx_filter_input_id++ : window.fx_filter_input_id = 0;
@@ -250,9 +254,9 @@ define([
                     type: this.type
                 });
 
-            log.info("Create input item: " + JSON.stringify(m));
-
             $list.append(tmpl(m));
+
+            log.info("Create input item: " + JSON.stringify(m));
         }, this));
 
     };

@@ -3,12 +3,14 @@ define([
     'jquery',
     'underscore',
     'fx-filter/start',
+    'fx-filter/js/utils',
     'test/models/model-1',
     'test/models/semantic',
+    'test/models/fx-resource',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Model1, SemanticModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -21,6 +23,7 @@ define([
             DYNAMIC_MODEL_1_VALUES_BTN: "#model-1-dynamic-values-btn",
             DYNAMIC_MODEL_1_CLEAR_BTN: "#model-1-dynamic-clear-btn",
             DYNAMIC_MODEL_1_SUMMARY : "#model-1-dynamic-summary",
+            FENIX_RESOURCE : "#fenix-resource",
         },
         empty_model = {data: []},
         error_model = {},
@@ -34,8 +37,27 @@ define([
 
         log.trace("Test started");
 
-        this._render();
+        //this._render();
 
+        this._createConfiguration();
+
+    };
+
+    Test.prototype._createConfiguration = function(){
+
+        var configuration = Utils.createConfiguration({
+            model : FxResource
+        });
+
+        log.warn(configuration);
+
+        //return;
+
+        var filter = this.createFilter({
+            id: s.FENIX_RESOURCE,
+            items: this._createFilterConfiguration(configuration),
+            $el: s.FENIX_RESOURCE
+        });
     };
 
     Test.prototype._render = function () {

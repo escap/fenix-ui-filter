@@ -14,8 +14,7 @@ define([
 
     'use strict';
 
-    var defaultOptions = {
-        };
+    var defaultOptions = {};
 
     function Range(o) {
 
@@ -121,7 +120,7 @@ define([
         this.status.disabled = true;
 
         var slider = this.$rangeContainer.data("ionRangeSlider");
-        slider.update( {
+        slider.update({
             disable: true
         });
 
@@ -217,6 +216,7 @@ define([
             min: 0,
             max: 100,
             from: 50,
+            min_interval: 1,
             keyboard: false,
             onStart: function (data) {
                 //log.info("onStart");
@@ -225,11 +225,12 @@ define([
                 //amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), data); //format payload
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
             },
-            onFinish: function (data) { },
+            onFinish: function (data) {
+            },
             onUpdate: function (data) {
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
             }
-        },  this.selector.config));
+        }, this.selector.config));
 
     };
 

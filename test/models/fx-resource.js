@@ -172,7 +172,7 @@ define(function () {
                         }
                     },
                     {
-                        "id": "DIMENSION7",
+                        "id": "DIMENSION71",
                         "key": true,
                         "subject": "time",
                         "dataType": "month",
@@ -186,105 +186,6 @@ define(function () {
                             "period": {
                                 "from": 201003,
                                 "to": 201603
-                            }
-                        }
-                    },
-                    {
-                        "id": "DIMENSION7",
-                        "key": true,
-                        "subject": "time",
-                        "dataType": "month",
-                        "title": {
-                            "EN": "timeMonth2"
-                        },
-                        "supplemental": {
-                            "EN": "Time dimension expressed in months, the domain is expressed as a timeList"
-                        },
-                        "domain": {
-                            "domain": {
-                                "timeList": [
-                                    201003,
-                                    201004,
-                                    201005,
-                                    201012
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "id": "DIMENSION8",
-                        "key": true,
-                        "subject": "time",
-                        "dataType": "date",
-                        "title": {
-                            "EN": "timeDate1"
-                        },
-                        "supplemental": {
-                            "EN": "Time dimension expressed in dates, the domain is expressed as a period"
-                        },
-                        "domain": {
-                            "period": {
-                                "from": 201003,
-                                "to": 201603
-                            }
-                        }
-                    },
-                    {
-                        "id": "DIMENSION9",
-                        "key": true,
-                        "subject": "time",
-                        "dataType": "date",
-                        "title": {
-                            "EN": "timeDate2"
-                        },
-                        "supplemental": {
-                            "EN": "Time dimension expressed in dates, the domain is expressed as a timeList"
-                        },
-                        "domain": {
-                            "domain": {
-                                "timeList": [
-                                    20100301,
-                                    20100402,
-                                    20100510,
-                                    20101231
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "id": "DIMENSION10",
-                        "key": true,
-                        "subject": "time",
-                        "dataType": "time",
-                        "title": {
-                            "EN": "timeDate1"
-                        },
-                        "supplemental": {
-                            "EN": "Time dimension expressed in time, the domain is expressed as a period"
-                        },
-                        "domain": {
-                            "period": {
-                                "from": 20160310135722,
-                                "to": 20160310135722
-                            }
-                        }
-                    },
-                    {
-                        "id": "DIMENSION11",
-                        "key": true,
-                        "subject": "time",
-                        "dataType": "time",
-                        "title": {
-                            "EN": "timeDate2"
-                        },
-                        "supplemental": {
-                            "EN": "Time dimension expressed in time, the domain is expressed as a timeList"
-                        },
-                        "domain": {
-                            "domain": {
-                                "timeList": [
-                                    20160310135722
-                                ]
                             }
                         }
                     },
@@ -334,7 +235,106 @@ define(function () {
                         "supplemental": {
                             "EN": "The flag has been specified as a label"
                         }
-                    }
+                    },
+                    {
+                        "id": "DIMENSION7",
+                        "key": true,
+                        "subject": "time",
+                        "dataType": "month",
+                        "title": {
+                            "EN": "timeMonth2"
+                        },
+                        "supplemental": {
+                            "EN": "Time dimension expressed in months, the domain is expressed as a timeList"
+                        },
+                        "domain": {
+                            "timeList": [
+                                201003,
+                                201004,
+                                201005,
+                                201012
+                            ]
+                        }
+
+                    },
+                    {
+                        "id": "DIMENSION8",
+                        "key": true,
+                        "subject": "time",
+                        "dataType": "date",
+                        "title": {
+                            "EN": "timeDate1"
+                        },
+                        "supplemental": {
+                            "EN": "Time dimension expressed in dates, the domain is expressed as a period"
+                        },
+                        "domain": {
+                            "period": {
+                                "from": 201003,
+                                "to": 201603
+                            }
+                        }
+                    },
+                    {
+                        "id": "DIMENSION9",
+                        "key": true,
+                        "subject": "time",
+                        "dataType": "date",
+                        "title": {
+                            "EN": "timeDate2"
+                        },
+                        "supplemental": {
+                            "EN": "Time dimension expressed in dates, the domain is expressed as a timeList"
+                        },
+                        "domain": {
+                            "timeList": [
+                                20100301,
+                                20100402,
+                                20100510,
+                                20101231
+                            ]
+                        }
+                    },
+                    /*
+                     {
+                     "id": "DIMENSION10",
+                     "key": true,
+                     "subject": "time",
+                     "dataType": "time",
+                     "title": {
+                     "EN": "timeDate1"
+                     },
+                     "supplemental": {
+                     "EN": "Time dimension expressed in time, the domain is expressed as a period"
+                     },
+                     "domain": {
+                     "period": {
+                     "from": 20160310135722,
+                     "to": 20160310135722
+                     }
+                     }
+                     },
+                     {
+                     "id": "DIMENSION11",
+                     "key": true,
+                     "subject": "time",
+                     "dataType": "time",
+                     "title": {
+                     "EN": "timeDate2"
+                     },
+                     "supplemental": {
+                     "EN": "Time dimension expressed in time, the domain is expressed as a timeList"
+                     },
+                     "domain": {
+                     "domain": {
+                     "timeList": [
+                     20160310135722
+                     ]
+                     }
+                     }
+                     },
+                     */
+
                 ]
             }
         }

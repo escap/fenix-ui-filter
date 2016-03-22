@@ -6,7 +6,7 @@ define(function () {
 
     return {
 
-/*        "range": {
+        "range": {
 
             "selector": {
                 "id": "range",
@@ -36,7 +36,7 @@ define(function () {
                 //"version" : "myVersion", //override codelist version config
                 //"dimension" : "myDimension", //override dimension uid, default is the selector id
             }
-        },*/
+        },
 
         "time": {
 
