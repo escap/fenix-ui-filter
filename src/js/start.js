@@ -292,7 +292,7 @@ define([
 
             window.fx_filter_id >= 0 ? window.fx_filter_id++ : window.fx_filter_id = 0;
 
-            this.id = window.fx_filter_id;
+            this.id = String(window.fx_filter_id);
 
             log.warn("Impossible to find filter id. Set auto id to: " + this.id);
         }
@@ -342,7 +342,8 @@ define([
 
         var template = this.template || $("<div></div>");
 
-        this.$el.html(template);
+        this.$el.append(template);
+
     };
 
     Filter.prototype._initVariables = function () {
@@ -786,7 +787,7 @@ define([
 
     Filter.prototype._setValues = function (o) {
 
-        _.each(o, _.bind(function(obj, key){
+        _.each(o, _.bind(function (obj, key) {
 
             var name = this._resolveSelectorName(key);
 
@@ -1424,7 +1425,7 @@ define([
 
         _.each(semantic.selectors, _.bind(function (obj, name) {
             obj.id = name;
-            obj.ref = name.concat(this.id).replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'_');
+            obj.ref = name.concat(this.id).replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '_');
         }, this));
 
         model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLables);
