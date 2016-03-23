@@ -13,12 +13,19 @@ define([
 
     'use strict';
 
-    var forbiddenSubjects = ["value"];
+    var opts = {
+        forbiddenSubjects: ["value"],
+        exclude: [],
+        common: {},
+        lang: 'EN',
+        //timeLabelFormat : "L" //MomentJS format
+
+    };
 
     function Utils() {
         log.info("FENIX filter utils");
 
-        $.extend(true, this, CD, C);
+        $.extend(true, this, opts, CD, C);
 
         return this;
     }
@@ -34,10 +41,10 @@ define([
 
             _.each(o.model.metadata.dsd.columns, _.bind(function (c) {
 
-                if (!_.contains(forbiddenSubjects, c.subject)) {
-                    configuration[c.id] = this._processFxColumn(c);
+                if (!_.contains(this.forbiddenSubjects, c.subject) && !_.contains(this.exclude, c.id)) {
+                    configuration[c.id] = $.extend(true, {}, this._processFxColumn(c), this.common);
                 } else {
-                    log.warn(c.id + " was excluded because subject: " + c.subject);
+                    log.warn(c.id + " was excluded. [" + c.subject + "]");
                 }
 
             }, this));
@@ -68,9 +75,6 @@ define([
                     break;
                 case "date" :
                     conf = this._processDateColumn(c);
-                    break;
-                case "day" :
-                    conf = this._processDayColumn(c);
                     break;
                 case "month" :
                     conf = this._processMonthColumn(c);
@@ -110,7 +114,8 @@ define([
     /* processes for CODE FX column */
 
     Utils.prototype._processCustomCodeColumn = function (c) {
-        return this._configTreeFromSource(c);
+        //return this._configTreeFromSource(c);
+        return this._configDropdownFromSource(c);
     };
 
     Utils.prototype._processEnumerationColumn = function (c) {
@@ -122,7 +127,7 @@ define([
         //configure selector
         //html selector configuration
         config.selector = {};
-        config.selector.id = "tree";
+        config.selector.id = "dropdown";
         config.selector.source = _.map(enumeration, function (obj) {
             return {
                 value: obj,
@@ -135,7 +140,8 @@ define([
 
     Utils.prototype._processCodeColumn = function (c) {
 
-        return this._configTreeFromCodelist(c);
+        //return this._configTreeFromCodelist(c);
+        return this._configDropdownFromCodelist(c);
 
     };
 
@@ -161,10 +167,6 @@ define([
 
         return {};
 
-    };
-
-    Utils.prototype._processDayColumn = function (c) {
-        log.warn("TODO process");
     };
 
     Utils.prototype._processMonthColumn = function (c) {
@@ -209,7 +211,7 @@ define([
         log.warn("TODO process");
     };
 
-    /* Common process */
+    /* Common processes */
 
     Utils.prototype._commonProcessColumn = function (c) {
 
@@ -217,8 +219,8 @@ define([
             template: {}
         };
 
-        if (c.title && c.title['EN']) {
-            config.template.title = c.title.EN;
+        if (c.title && c.title[this.lang.toUpperCase()]) {
+            config.template.title = c.title[this.lang.toUpperCase()];
         }
 
         return config;
@@ -276,12 +278,12 @@ define([
         //html selector configuration
         config.selector = {};
         config.selector.id = "tree";
-        config.selector.source = _.map(cl.codes, function (obj) {
+        config.selector.source = _.map(cl.codes, _.bind(function (obj) {
             return {
                 value: obj.code,
-                label: obj.label
+                label: obj.label[this.lang.toUpperCase()]
             }
-        });
+        }, this));
 
         return config;
 
@@ -315,25 +317,90 @@ define([
 
         config.selector = {};
         config.selector.id = "dropdown";
-        config.selector.source = _.map(timelist, function (obj) {
+        config.selector.source = _.map(timelist, _.bind(function (obj) {
             return {
                 value: obj,
-                label: new Moment(obj, format).format(format)
+                label: new Moment(obj, format).format(this._getTimeLabelFormat(obj))
             }
-        });
+        }, this));
 
         return config;
 
     };
 
-    Utils.prototype._configTimeFromPeriod = function (c, opts) {
+    Utils.prototype._configDropdownFromSource = function (c) {
+
+        var config = {},
+            domain = c.domain || {},
+            codes = domain.codes,
+            cl;
+
+        if (!Array.isArray(codes) || codes.length > 1) {
+            log.warn("Invalid domain.codes attributes");
+        }
+
+        cl = codes[0];
+
+        if (!cl.codes) {
+            log.error("Impossible to find codes");
+        }
+
+        //configure selector
+        //html selector configuration
+        config.selector = {};
+        config.selector.id = "dropdown";
+        config.selector.source = _.map(cl.codes, _.bind(function (obj) {
+            return {
+                value: obj.code,
+                label: obj.label[this.lang.toUpperCase()]
+            }
+        }, this));
+
+        return config;
+
+    };
+
+    Utils.prototype._configDropdownFromCodelist = function (c) {
+
+        var config = {},
+            domain = c.domain || {},
+            codes = domain.codes,
+            cl;
+
+        if (!Array.isArray(codes) || codes.length > 1) {
+            log.warn("Invalid domain.codes attributes");
+        }
+
+        cl = codes[0];
+
+        if (!cl.idCodeList) {
+            log.error("Impossible to find idCodeList");
+        }
+
+        //configure code list
+        config.cl = {};
+        config.cl.uid = cl.idCodeList;
+        config.cl.version = cl.version;
+
+        //configure selector
+        //html selector configuration
+        config.selector = {};
+        config.selector.id = "dropdown";
+
+        return config;
+
+    };
+
+    Utils.prototype._configTimeFromPeriod = function (c) {
 
         var config = {},
             domain = c.domain || {},
             period = domain.period,
             from = String(period.from),
+            //from = String(period.from).substring(0, String(period.from).length - 2),
             to = String(period.to),
-            format =  this._getTimeFormat(from);
+            //to = String(period.to).substring(0, String(period.to).length - 2),
+            format = this._getTimeFormat(from);
 
         //configure selector
         config.selector = {
@@ -342,10 +409,9 @@ define([
         config.selector.id = "time";
         config.selector.config.minDate = new Moment(from, format);
         config.selector.config.maxDate = new Moment(to, format);
-        config.selector.config.format = format;
+        config.selector.config.format = this._getTimeLabelFormat(from);
 
         return config;
-
     };
 
     Utils.prototype._configRangeFromPeriod = function (c) {
@@ -417,8 +483,43 @@ define([
             case 8:
                 format = "YYYY MM DD";
                 break;
+            case 12:
+                format = "YYYY MM DD hh mm";
+                break;
+            case 14:
+                format = "YYYY MM DD hh mm ss";
+                break;
             default:
                 log.warn("Impossible to find time format for: " + format);
+        }
+
+        return format;
+
+    };
+
+    Utils.prototype._getTimeLabelFormat = function (s) {
+
+        if (this.timeLabelFormat) {
+            return this.timeLabelFormat;
+        }
+
+        var format;
+
+        switch (String(s).length) {
+            case 4 :
+                format = "L";
+                break;
+            case 6:
+                format = "L";
+                break;
+            case 8:
+                format = "L";
+                break;
+            case 14:
+                format = "lll";
+                break;
+            default:
+                log.warn("Impossible to find time label format for: " + format);
         }
 
         return format;

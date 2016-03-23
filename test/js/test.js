@@ -24,6 +24,7 @@ define([
             DYNAMIC_MODEL_1_CLEAR_BTN: "#model-1-dynamic-clear-btn",
             DYNAMIC_MODEL_1_SUMMARY : "#model-1-dynamic-summary",
             FENIX_RESOURCE : "#fenix-resource",
+            FENIX_RESOURCE_SUMMARY : "#fenix-resource-summary",
         },
         empty_model = {data: []},
         error_model = {},
@@ -37,7 +38,7 @@ define([
 
         log.trace("Test started");
 
-        //this._render();
+        this._render();
 
         this._createConfiguration();
 
@@ -56,7 +57,8 @@ define([
         var filter = this.createFilter({
             id: s.FENIX_RESOURCE,
             items: this._createFilterConfiguration(configuration),
-            $el: s.FENIX_RESOURCE
+            $el: s.FENIX_RESOURCE,
+            summary$el : s.FENIX_RESOURCE_SUMMARY
         });
     };
 

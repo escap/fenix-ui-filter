@@ -54,16 +54,14 @@ define([
             sel = instance.getValue() || [];
 
         if (!Array.isArray(sel)) {
-            sel = [sel];
+            sel = sel.split(",");
         }
 
         _.each(sel, function (s) {
 
             result.values.push(s);
 
-            result.labels = {};
-
-            result.labels[s] = instance.getItem(instance.getValue())[0].innerHTML.toString();
+            result.labels[s] = instance.getItem(s)[0].innerHTML.toString();
 
         });
 
@@ -154,7 +152,7 @@ define([
                 values = instance.getValue();
 
             if (!Array.isArray(values)) {
-                values = [values];
+                values = values.split(",");
             }
 
             values = _.without(values, value);

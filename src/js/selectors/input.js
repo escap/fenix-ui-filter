@@ -127,6 +127,7 @@ define([
     Input.prototype.disable = function () {
 
         this.$inputs.attr('disabled', true);
+        console.log(this.$inputs)
 
         this.status.disabled = true;
 
@@ -301,7 +302,7 @@ define([
     };
 
     Input.prototype._unbindEventListeners = function () {
-        this.$input.off();
+        this.$inputs.off();
     };
 
     Input.prototype._dispose = function () {

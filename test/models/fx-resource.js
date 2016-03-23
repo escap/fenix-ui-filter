@@ -43,7 +43,7 @@ define(function () {
                     {
                         "id": "DIMENSION2",
                         "title": {
-                            "EN": "Item"
+                            "EN": "Item crs_purposes"
                         },
                         "supplemental": {
                             "EN": "Item column"
@@ -53,8 +53,8 @@ define(function () {
                         "domain": {
                             "codes": [
                                 {
-                                    "idCodeList": "CountrySTAT_Indicators",
-                                    "version": null
+                                    "idCodeList": "crs_purposes",
+                                    "version": 2016
                                 }
                             ]
                         },
@@ -80,23 +80,23 @@ define(function () {
                                     "codes": [
                                         {
                                             "code": "01",
-                                            "label": "Wheat"
+                                            "label": {"EN": "Wheat"}
                                         },
                                         {
                                             "code": "02",
-                                            "label": "Cassava"
+                                            "label": {"EN": "Cassava"}
                                         },
                                         {
                                             "code": "03",
-                                            "label": "Sugar cane"
+                                            "label": {"EN": "Sugar cane"}
                                         },
                                         {
                                             "code": "04",
-                                            "label": "Rice"
+                                            "label": {"EN": "Rice"}
                                         },
                                         {
                                             "code": "05",
-                                            "label": "Maize"
+                                            "label": {"EN": "Maize"}
                                         }
                                     ]
                                 }
@@ -295,46 +295,41 @@ define(function () {
                             ]
                         }
                     },
-                    /*
-                     {
-                     "id": "DIMENSION10",
-                     "key": true,
-                     "subject": "time",
-                     "dataType": "time",
-                     "title": {
-                     "EN": "timeDate1"
-                     },
-                     "supplemental": {
-                     "EN": "Time dimension expressed in time, the domain is expressed as a period"
-                     },
-                     "domain": {
-                     "period": {
-                     "from": 20160310135722,
-                     "to": 20160310135722
-                     }
-                     }
-                     },
-                     {
-                     "id": "DIMENSION11",
-                     "key": true,
-                     "subject": "time",
-                     "dataType": "time",
-                     "title": {
-                     "EN": "timeDate2"
-                     },
-                     "supplemental": {
-                     "EN": "Time dimension expressed in time, the domain is expressed as a timeList"
-                     },
-                     "domain": {
-                     "domain": {
-                     "timeList": [
-                     20160310135722
-                     ]
-                     }
-                     }
-                     },
-                     */
-
+                    {
+                        "id": "DIMENSION10",
+                        "key": true,
+                        "subject": "time",
+                        "dataType": "time",
+                        "title": {
+                            "EN": "timeDate1"
+                        },
+                        "supplemental": {
+                            "EN": "Time dimension expressed in time, the domain is expressed as a period"
+                        },
+                        "domain": {
+                            "period": {
+                                "from": 20160310135722,
+                                "to": 20160315135722
+                            }
+                        }
+                    },
+                    {
+                        "id": "DIMENSION11",
+                        "key": true,
+                        "subject": "time",
+                        "dataType": "time",
+                        "title": {
+                            "EN": "timeDate2"
+                        },
+                        "supplemental": {
+                            "EN": "Time dimension expressed in time, the domain is expressed as a timeList"
+                        },
+                        "domain": {
+                            "timeList": [
+                                20160310135722
+                            ]
+                        }
+                    }
                 ]
             }
         }
