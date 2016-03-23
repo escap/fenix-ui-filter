@@ -86,7 +86,7 @@
                 {{#each selectors}}
 
                     <li role="presentation" data-sel="{{this.id}}">
-                        <a href="#{{this.id}}" aria-controls="{{this.id}}" role="tab"
+                        <a href="#{{this.ref}}" aria-controls="{{this.id}}" role="tab"
                            data-toggle="tab">{{this.label}}</a>
                     </li>
 
@@ -99,7 +99,7 @@
         <div class="tab-content">
 
             {{#each selectors}}
-                <div role="tabpanel" class="tab-pane" id="{{this.id}}" data-selector="{{this.id}}"></div>
+                <div role="tabpanel" class="tab-pane" id="{{this.ref}}" data-selector="{{this.id}}"></div>
             {{/each}}
 
         </div>

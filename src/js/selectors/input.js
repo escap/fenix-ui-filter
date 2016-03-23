@@ -250,7 +250,7 @@ define([
 
             var tmpl = Handlebars.compile(item),
                 m = $.extend(true, model, {
-                    name: this.id,
+                    name: this.id + window.fx_filter_input_id,
                     id: "fx_input_" + window.fx_filter_input_id,
                     type: this.type
                 });

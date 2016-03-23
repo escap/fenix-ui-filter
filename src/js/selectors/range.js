@@ -168,13 +168,19 @@ define([
     Range.prototype.setValue = function (v) {
         log.info("Set input value: " + v);
 
+        var c = {};
+
+        c.from = Math.min.apply(Math, v);
+
+        if (v.length > 1) {
+            c.to = Math.max.apply(Math, v);
+        }
+
         // Saving it's instance to var
         var slider = this.$rangeContainer.data("ionRangeSlider");
 
         // UPDATE - updates slider to any new values
-        slider.update({
-            from: v[0]
-        });
+        slider.update(c);
 
     };
 

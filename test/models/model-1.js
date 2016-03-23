@@ -38,6 +38,7 @@ define(function () {
             }
         },
 
+
         "time": {
 
             "selector": {
@@ -66,7 +67,6 @@ define(function () {
             }
         },
 
-        /*
         "compare": {
 
             "selector": {
@@ -116,7 +116,7 @@ define(function () {
                     //html selector configuration
                     "selector": {
                         "id": "tree", //tree | list
-                        "default": [625 /!*, 261, 269 *!/], //selected codes by default,
+                        "default": [625 /*, 261, 269 */], //selected codes by default,
                         //"max" : 2, //max number of selectable items
                         //"disabled" : true, //if present and true the selector is initially disabled
                         //"config" : { core: { multiple: true } } //specific jstree or selectize config
@@ -312,7 +312,7 @@ define(function () {
             }
         },
 
-        "oda": {
+      /*  "oda": {
 
             "cl": {
                 "uid": "crs_flow_amounts",
@@ -383,7 +383,6 @@ define(function () {
             "template": {
                 "hideSwitch": true
             }
-
 
         }*/
     }

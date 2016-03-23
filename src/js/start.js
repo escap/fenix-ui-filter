@@ -83,6 +83,19 @@ define([
     };
 
     /**
+     * Set filter selection
+     * @return {null}
+     */
+    Filter.prototype.setValues = function (o) {
+
+        log.info("Set filter values");
+
+        var values = o.values; //TODO make stronger
+
+        return this._setValues(values);
+    };
+
+    /**
      * Enable advance mode
      * @param {Boolean} show
      * @return {null}
@@ -771,6 +784,23 @@ define([
 
     };
 
+    Filter.prototype._setValues = function (o) {
+
+        _.each(o, _.bind(function(obj, key){
+
+            var name = this._resolveSelectorName(key);
+
+            if (this._getSelectorInstance(name)) {
+                this._callSelectorInstanceMethod(name, "setValue", obj);
+            } else {
+                log.info(name + " skipped");
+            }
+
+        }, this));
+
+        log.info("Filter values set");
+    };
+
     Filter.prototype._getEnabledSelectors = function () {
 
         var result = [];
@@ -892,7 +922,7 @@ define([
 
                             var call = self["_dep_" + d.id];
 
-                            if (call) {
+                            if ($.isFunction(call)) {
                                 call.call(self, payload, {src: s, target: id});
                             } else {
                                 log.error("Impossible to find : " + "_dep_" + d.id);
@@ -1392,9 +1422,10 @@ define([
             $html,
             model;
 
-        _.each(semantic.selectors, function (obj, name) {
+        _.each(semantic.selectors, _.bind(function (obj, name) {
             obj.id = name;
-        });
+            obj.ref = name.concat(this.id).replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'_');
+        }, this));
 
         model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLables);
 

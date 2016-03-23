@@ -187,7 +187,18 @@ define([
      */
     Tree.prototype.setValue = function (v) {
         log.info("Set tree value: " + v);
-        this.tree.jstree(true).select_node({id: v});
+
+        if(!Array.isArray(v)){
+            v = [v];
+        }
+
+        //clear current selection
+        this.tree.jstree(true).deselect_all(true);
+
+        _.each(v, _.bind(function (value) {
+            this.tree.jstree(true).select_node({id: value});
+        }, this));
+
     };
 
     Tree.prototype._renderTemplate = function () {

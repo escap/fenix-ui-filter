@@ -22,9 +22,12 @@ define([
             DYNAMIC_MODEL_1_ADD_BTN: "#model-1-dynamic-add-btn",
             DYNAMIC_MODEL_1_VALUES_BTN: "#model-1-dynamic-values-btn",
             DYNAMIC_MODEL_1_CLEAR_BTN: "#model-1-dynamic-clear-btn",
-            DYNAMIC_MODEL_1_SUMMARY : "#model-1-dynamic-summary",
-            FENIX_RESOURCE : "#fenix-resource",
-            FENIX_RESOURCE_SUMMARY : "#fenix-resource-summary",
+            DYNAMIC_MODEL_1_SUMMARY: "#model-1-dynamic-summary",
+            FENIX_RESOURCE: "#fenix-resource",
+            FENIX_RESOURCE_SUMMARY: "#fenix-resource-summary",
+            SYNC_SRC: "#sync-src",
+            SYNC_TARGET: "#sync-target",
+            SYNC_BTN: "#sync-btn"
         },
         empty_model = {data: []},
         error_model = {},
@@ -44,10 +47,10 @@ define([
 
     };
 
-    Test.prototype._createConfiguration = function(){
+    Test.prototype._createConfiguration = function () {
 
         var configuration = Utils.createConfiguration({
-            model : FxResource
+            model: FxResource
         });
 
         log.warn(configuration);
@@ -58,7 +61,7 @@ define([
             id: s.FENIX_RESOURCE,
             items: this._createFilterConfiguration(configuration),
             $el: s.FENIX_RESOURCE,
-            summary$el : s.FENIX_RESOURCE_SUMMARY
+            summary$el: s.FENIX_RESOURCE_SUMMARY
         });
     };
 
@@ -67,6 +70,8 @@ define([
         this._renderModel1BaseTemplate();
 
         this._renderDynamicModel1();
+
+        this._renderSynch();
 
     };
 
@@ -126,6 +131,35 @@ define([
 
     };
 
+    Test.prototype._renderSynch = function () {
+
+        log.trace("Rendering sync: start");
+
+        var templ = Handlebars.compile(model1baseTemplate);
+
+        var source = this.createFilter({
+                id: s.SYNC_SRC,
+                items: this._createFilterConfiguration(Model1),
+                $el: s.SYNC_SRC,
+                //template: templ(i18nLabels)
+            }),
+            target = this.createFilter({
+                id: s.SYNC_TARGET,
+                items: this._createFilterConfiguration(Model1),
+                $el: s.SYNC_TARGET,
+                //template: templ(i18nLabels)
+            });
+
+        $(s.SYNC_BTN).on('click', function () {
+            var v = source.getValues();
+            log.info(v);
+            target.setValues(v);
+        });
+
+        log.trace("Rendering sync: end");
+
+    };
+
     //Utils
 
     Test.prototype.createFilter = function (params) {
@@ -161,7 +195,7 @@ define([
         }
 
         //Add custom class to each selector
-        obj.className = "col-xs-3";
+        //obj.className = "col-xs-3";
 
         _.each(obj.selectors, function (tab, n) {
 
