@@ -56,7 +56,8 @@ define([
      */
     Time.prototype.getValues = function () {
 
-        var date = new Date(this.$pickerEl.data('date')).getTime(),
+        var date = this.$pickerEl.data('date'),
+        //date = new Date(this.$pickerEl.data('date')).getTime(),
             result = {
                 values: [],
                 labels: {}

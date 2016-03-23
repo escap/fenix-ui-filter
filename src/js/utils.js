@@ -314,7 +314,6 @@ define([
             format = this._getTimeFormat(timelist[0]);
 
         //configure selector
-
         config.selector = {};
         config.selector.id = "dropdown";
         config.selector.source = _.map(timelist, _.bind(function (obj) {
@@ -397,8 +396,8 @@ define([
             domain = c.domain || {},
             period = domain.period,
             from = String(period.from),
-            //from = String(period.from).substring(0, String(period.from).length - 2),
             to = String(period.to),
+            //from = String(period.from).substring(0, String(period.from).length - 2),
             //to = String(period.to).substring(0, String(period.to).length - 2),
             format = this._getTimeFormat(from);
 
@@ -410,6 +409,10 @@ define([
         config.selector.config.minDate = new Moment(from, format);
         config.selector.config.maxDate = new Moment(to, format);
         config.selector.config.format = this._getTimeLabelFormat(from);
+
+        if (from.length < 5) {
+            config.selector.config.viewMode = "years";
+        }
 
         return config;
     };
@@ -507,7 +510,7 @@ define([
 
         switch (String(s).length) {
             case 4 :
-                format = "L";
+                format = "YYYY";
                 break;
             case 6:
                 format = "L";
