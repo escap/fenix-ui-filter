@@ -7,10 +7,11 @@ define([
     'test/models/model-1',
     'test/models/semantic',
     'test/models/fx-resource',
+    'test/models/tab-table-toolbar-config',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, TableTabModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -27,7 +28,8 @@ define([
             FENIX_RESOURCE_SUMMARY: "#fenix-resource-summary",
             SYNC_SRC: "#sync-src",
             SYNC_TARGET: "#sync-target",
-            SYNC_BTN: "#sync-btn"
+            SYNC_BTN: "#sync-btn",
+            TABLE_TAB: "#table-tab",
         },
         empty_model = {data: []},
         error_model = {},
@@ -67,11 +69,24 @@ define([
 
     Test.prototype._render = function () {
 
+        this._renderTableTabToolbar();
+
+        //return;
+
         this._renderModel1BaseTemplate();
 
         this._renderDynamicModel1();
 
         this._renderSynch();
+
+    };
+
+    Test.prototype._renderTableTabToolbar = function () {
+
+        var filter = this.createFilter({
+                items: this._createFilterConfiguration(TableTabModel),
+                $el: s.TABLE_TAB
+            });
 
     };
 

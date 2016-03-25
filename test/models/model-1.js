@@ -38,7 +38,6 @@ define(function () {
             }
         },
 
-
         "time": {
 
             "selector": {
@@ -292,7 +291,7 @@ define(function () {
 
             "selector": {
                 "id": "tree",
-                "hideSelectAllButton": true
+                "hideFooter": true
                 //"default": [31165]
             },
 
