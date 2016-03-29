@@ -127,7 +127,6 @@ define([
     Input.prototype.disable = function () {
 
         this.$inputs.attr('disabled', true);
-        console.log(this.$inputs)
 
         this.status.disabled = true;
 
@@ -252,7 +251,8 @@ define([
                 m = $.extend(true, model, {
                     name: this.id + window.fx_filter_input_id,
                     id: "fx_input_" + window.fx_filter_input_id,
-                    type: this.type
+                    type: this.type,
+                    isCheckboxOrRadio : (this.type === 'radio' || this.type === 'checkbox')
                 });
 
             $list.append(tmpl(m));
@@ -272,6 +272,7 @@ define([
     };
 
     Input.prototype._getEventName = function (evt) {
+
         return this.controller.id + evt;
     };
 

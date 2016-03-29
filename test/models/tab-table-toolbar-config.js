@@ -22,6 +22,10 @@ define(function () {
                 }
             },
 
+            "template" : {
+                "hideHeader" : true
+            },
+
             "className" : "col-xs-6"
 
         },
@@ -31,12 +35,19 @@ define(function () {
             "selector": {
                 "id": "input",
                 "type": "radio",
+                "default" : ["dot"],
                 "source": [
                     {"value": "dot", "label": "Dot"},
                     {"value": "comma", "label": "Comma"}
 
                 ]
             },
+
+
+            "template" : {
+                "hideHeader" : true
+            },
+
 
             "className" : "col-xs-6"
 
@@ -47,11 +58,16 @@ define(function () {
             "selector": {
                 "id": "input",
                 "type": "radio",
+                "default" : ["enable"],
                 "source": [
                     {"value": "enable", "label": "Enable"},
                     {"value": "disable", "label": "Disable"}
-
                 ]
+            },
+
+
+            "template" : {
+                "hideHeader" : true
             },
 
             "className" : "col-xs-6"
@@ -62,8 +78,16 @@ define(function () {
 
             "selector": {
                 "id": "input",
-                "type": "number"
+                "type": "number",
+                "source": [
+                    {"value": "2"}
+                ]
             },
+
+            "template" : {
+                "hideHeader" : true
+            },
+
 
             "className" : "col-xs-6"
 

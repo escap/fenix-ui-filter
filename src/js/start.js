@@ -200,6 +200,7 @@ define([
     };
 
     Filter.prototype._trigger = function (channel) {
+
         if (!this.channels[channel]) {
             return false;
         }
@@ -208,6 +209,7 @@ define([
             var subscription = this.channels[channel][i];
             subscription.callback.apply(subscription.context, args);
         }
+        
         return this;
     };
 

@@ -3,7 +3,11 @@
     <ul data-input-list class="filter-radio-list list-unstyled list-inline"></ul>
 
     <li data-input-item class="form-group">
-        <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}" class="form-control">
+        {{#if isCheckboxOrRadio}}
+            <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}">
+        {{else}}
+            <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}" class="form-control">
+        {{/if}}
         <label for="{{id}}">{{label}}</label>
     </li>
 
