@@ -30,6 +30,7 @@ define([
             SYNC_TARGET: "#sync-target",
             SYNC_BTN: "#sync-btn",
             TABLE_TAB: "#table-tab",
+            EVENT_COUNTERS: "#event-counters"
         },
         empty_model = {data: []},
         error_model = {},
@@ -86,8 +87,22 @@ define([
         var filter = this.createFilter({
                 items: this._createFilterConfiguration(TableTabModel),
                 $el: s.TABLE_TAB
+            })
+            .on("ready", function () {
+                incrementCount("ready");
+            })
+            .on("change", function () {
+                incrementCount("change");
             });
 
+        function incrementCount(event) {
+
+            var $badge = $(s.EVENT_COUNTERS)
+                .find("[data-event='" + event + "']").find(".badge"),
+                current = parseInt($badge.html()) || 0;
+
+            $badge.html(current + 1 );
+        }
     };
 
     Test.prototype._renderModel1BaseTemplate = function () {
