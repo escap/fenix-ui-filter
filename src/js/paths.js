@@ -22,7 +22,8 @@ define(function () {
             jstree: '{FENIX_CDN}/js/jstree/3.0.8/dist/jstree.min',
             "ion.rangeSlider" : '{FENIX_CDN}/js/ion.rangeSlider/2.1.2/js/ion-rangeSlider/ion.rangeSlider.min',
             "bootstrap.datetimepicker" : '{FENIX_CDN}/js/bootstrap-datetimepicker/4.17.37/build/js/bootstrap-datetimepicker.min',
-            moment : '{FENIX_CDN}/js/moment/2.12.0/min/moment.min'
+            moment : '{FENIX_CDN}/js/moment/2.12.0/min/moment.min',
+            sortable : '//cdnjs.cloudflare.com/ajax/libs/Sortable/1.4.2/Sortable.min'
         },
 
         shim: {

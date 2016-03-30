@@ -27,9 +27,11 @@ define([
             FENIX_RESOURCE: "#fenix-resource",
             FENIX_RESOURCE_SUMMARY: "#fenix-resource-summary",
             SYNC_SRC: "#sync-src",
+        SYNC_SRC_SUMMARY : "#sync-src-summary",
             SYNC_TARGET: "#sync-target",
             SYNC_BTN: "#sync-btn",
             TABLE_TAB: "#table-tab",
+        TABLE_BTN: "#table-btn",
             EVENT_COUNTERS: "#event-counters"
         },
         empty_model = {data: []},
@@ -46,7 +48,7 @@ define([
 
         this._render();
 
-        this._createConfiguration();
+        //this._createConfiguration();
 
     };
 
@@ -70,9 +72,11 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderTableTabToolbar();
+        //this._renderTableTabToolbar();
 
-        //return;
+        this._renderSynch();
+
+        return;
 
         this._renderModel1BaseTemplate();
 
@@ -94,6 +98,10 @@ define([
             .on("change", function () {
                 incrementCount("change");
             });
+
+        $(s.TABLE_BTN).on('click', function () {
+            log.warn(filter.getValues());
+        });
 
         function incrementCount(event) {
 
@@ -169,13 +177,14 @@ define([
 
         var source = this.createFilter({
                 id: s.SYNC_SRC,
-                items: this._createFilterConfiguration(Model1),
+                items: this._createFilterConfiguration(TableTabModel),
                 $el: s.SYNC_SRC,
-                //template: templ(i18nLabels)
+                //template: templ(i18nLabels),
+                summary$el: s.SYNC_SRC_SUMMARY
             }),
             target = this.createFilter({
                 id: s.SYNC_TARGET,
-                items: this._createFilterConfiguration(Model1),
+                items: this._createFilterConfiguration(TableTabModel),
                 $el: s.SYNC_TARGET,
                 //template: templ(i18nLabels)
             });

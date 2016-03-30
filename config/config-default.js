@@ -29,6 +29,9 @@ define(function () {
             },
             'time': {
                 path: selectorPath + 'time'
+            },
+            'sortable': {
+                path: selectorPath + 'sortable'
             }
         },
 

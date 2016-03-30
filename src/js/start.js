@@ -90,9 +90,7 @@ define([
 
         log.info("Set filter values");
 
-        var values = o.values; //TODO make stronger
-
-        return this._setValues(values);
+        return this._setValues(o);
     };
 
     /**
@@ -278,9 +276,11 @@ define([
 
                         _.each(obj, _.bind(function (v) {
 
+                            var code = typeof v === 'string' ? v : v.value;
+
                             s.values.push({
-                                code: v,
-                                label: labels[name][v],
+                                code: code,
+                                label: labels[name][code],
                                 selector: name
                             })
 
@@ -816,7 +816,21 @@ define([
 
     Filter.prototype._setValues = function (o) {
 
-        _.each(o, _.bind(function (obj, key) {
+        var source = {};
+
+        _.each(o.values, _.bind(function (array, key) {
+
+            source[key] = [];
+
+            _.each(array, function (item) {
+                source[key].push($.extend({
+                    label : o.labels[key][item.value]
+                }, item));
+            });
+
+        }, this));
+
+        _.each(source, _.bind(function (obj, key) {
 
             var name = this._resolveSelectorName(key);
 
