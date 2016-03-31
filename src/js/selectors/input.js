@@ -209,7 +209,7 @@ define([
 
         this.$inputs = this.$el.find("input[type='" + this.type + "']");
 
-        this.$inputs.attr("name", this.id);
+        this.$inputs.attr("name", this.id + '-'+  this.controller.id);
 
         this.values = [];
 
