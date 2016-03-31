@@ -168,10 +168,10 @@ define([
      * Resets the selected items to the given value.
      * return {null}
      */
-    Dropdown.prototype.setValue = function (v) {
-        log.info("Set dropdown value: " + v);
+    Dropdown.prototype.setValue = function (v, silent) {
+        log.info("Set dropdown value: " + JSON.stringify(v) + ". Silent? " + silent);
         var instance = this.dropdown[0].selectize;
-        instance.setValue(v);
+        instance.setValue(v, silent);
     };
 
     Dropdown.prototype._getStatus = function () {

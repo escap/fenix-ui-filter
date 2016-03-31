@@ -165,7 +165,7 @@ define([
      * Resets the selected items to the given value.
      * return {null}
      */
-    Range.prototype.setValue = function (v) {
+    Range.prototype.setValue = function (v, silent) {
         log.info("Set input value: " + v);
 
         var c = {};
@@ -175,6 +175,9 @@ define([
         if (v.length > 1) {
             c.to = Math.max.apply(Math, v);
         }
+
+        //set silent mode
+        this.silentMode = silent;
 
         // Saving it's instance to var
         var slider = this.$rangeContainer.data("ionRangeSlider");
@@ -224,18 +227,26 @@ define([
             from: 50,
             min_interval: 1,
             keyboard: false,
-            onStart: function (data) {
-                //log.info("onStart");
-            },
-            onChange: function (data) {
+            //onStart: function (data) { },
+            onChange: _.bind(function (data) {
+
                 //amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), data); //format payload
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
-            },
-            onFinish: function (data) {
-            },
-            onUpdate: function (data) {
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
-            }
+
+                delete this.silentMode;
+
+            }, self),
+
+            //onFinish: function (data) { },
+            onUpdate: _.bind(function (data) {
+
+                //workaround for silent change
+                if (this.silentMode !== true) {
+                    amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                }
+                delete this.silentMode;
+
+            }, self)
         }, this.selector.config));
 
     };

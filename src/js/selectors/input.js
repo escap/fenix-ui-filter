@@ -171,10 +171,14 @@ define([
      * Resets the selected items to the given value.
      * return {null}
      */
-    Input.prototype.setValue = function (v) {
+    Input.prototype.setValue = function (v, silent) {
         log.info("Set input value: " + v);
 
-        this.$inputs.filter("[value='" + v + "']").prop('checked', true).trigger("change");
+        var $input = this.$inputs.filter("[value='" + v + "']").prop('checked', true);
+
+        if (silent !== true){
+            $input.trigger("change");
+        }
 
     };
 

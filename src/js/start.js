@@ -86,11 +86,11 @@ define([
      * Set filter selection
      * @return {null}
      */
-    Filter.prototype.setValues = function (o) {
+    Filter.prototype.setValues = function (o, silent) {
 
-        log.info("Set filter values");
+        log.info("Set filter values. Silent? " + !!silent);
 
-        return this._setValues(o);
+        return this._setValues(o, !!silent);
     };
 
     /**
@@ -207,7 +207,7 @@ define([
             var subscription = this.channels[channel][i];
             subscription.callback.apply(subscription.context, args);
         }
-        
+
         return this;
     };
 
@@ -276,7 +276,7 @@ define([
 
                         _.each(obj, _.bind(function (v) {
 
-                            var code = typeof v === 'string' ? v : v.value;
+                            var code = typeof v === 'object' ? v.value : v;
 
                             s.values.push({
                                 code: code,
@@ -814,18 +814,23 @@ define([
 
     };
 
-    Filter.prototype._setValues = function (o) {
+    Filter.prototype._setValues = function (o, silent) {
 
         var source = {};
 
+        //Extend obj with
         _.each(o.values, _.bind(function (array, key) {
 
             source[key] = [];
 
             _.each(array, function (item) {
-                source[key].push($.extend({
-                    label : o.labels[key][item.value]
-                }, item));
+
+                if (typeof item === 'object') {
+                    item.label = o.labels[key][item.value];
+                }
+
+                source[key].push(item);
+
             });
 
         }, this));
@@ -835,7 +840,7 @@ define([
             var name = this._resolveSelectorName(key);
 
             if (this._getSelectorInstance(name)) {
-                this._callSelectorInstanceMethod(name, "setValue", obj);
+                this._callSelectorInstanceMethod(name, "setValue", obj, silent);
             } else {
                 log.info(name + " skipped");
             }
@@ -1322,13 +1327,13 @@ define([
 
     // utils for selectors
 
-    Filter.prototype._callSelectorInstanceMethod = function (name, method, opts) {
+    Filter.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
 
         var Instance = this._getSelectorInstance(name);
 
         if ($.isFunction(Instance[method])) {
 
-            return Instance[method](opts);
+            return Instance[method](opts1, opts2);
 
         } else {
             log.error(name + " selector does not implement the mandatory " + method + "() fn");

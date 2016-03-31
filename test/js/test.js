@@ -7,11 +7,12 @@ define([
     'test/models/model-1',
     'test/models/semantic',
     'test/models/fx-resource',
+    'test/models/to-sync',
     'test/models/tab-table-toolbar-config',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, TableTabModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -27,11 +28,11 @@ define([
             FENIX_RESOURCE: "#fenix-resource",
             FENIX_RESOURCE_SUMMARY: "#fenix-resource-summary",
             SYNC_SRC: "#sync-src",
-        SYNC_SRC_SUMMARY : "#sync-src-summary",
+            SYNC_SRC_SUMMARY: "#sync-src-summary",
             SYNC_TARGET: "#sync-target",
             SYNC_BTN: "#sync-btn",
             TABLE_TAB: "#table-tab",
-        TABLE_BTN: "#table-btn",
+            TABLE_BTN: "#table-btn",
             EVENT_COUNTERS: "#event-counters"
         },
         empty_model = {data: []},
@@ -109,7 +110,7 @@ define([
                 .find("[data-event='" + event + "']").find(".badge"),
                 current = parseInt($badge.html()) || 0;
 
-            $badge.html(current + 1 );
+            $badge.html(current + 1);
         }
     };
 
@@ -177,22 +178,28 @@ define([
 
         var source = this.createFilter({
                 id: s.SYNC_SRC,
-                items: this._createFilterConfiguration(TableTabModel),
+                items: this._createFilterConfiguration(ModelToSync),
                 $el: s.SYNC_SRC,
                 //template: templ(i18nLabels),
                 summary$el: s.SYNC_SRC_SUMMARY
             }),
             target = this.createFilter({
                 id: s.SYNC_TARGET,
-                items: this._createFilterConfiguration(TableTabModel),
+                items: this._createFilterConfiguration(ModelToSync),
                 $el: s.SYNC_TARGET,
                 //template: templ(i18nLabels)
             });
 
+        target.on("ready", function () {
+            target.on("change", function () {
+                alert("Oh snap! You should not see me because sync is silent!")
+            });
+        });
+
         $(s.SYNC_BTN).on('click', function () {
             var v = source.getValues();
             log.info(v);
-            target.setValues(v);
+            target.setValues(v, true);
         });
 
         log.trace("Rendering sync: end");

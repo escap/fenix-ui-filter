@@ -29,6 +29,8 @@ define(function () {
             "className": "col-xs-12"
 
         },
+
+        
         /*        "aggregation": {
 
          "selector": {

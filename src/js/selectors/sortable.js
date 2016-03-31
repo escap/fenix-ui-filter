@@ -166,11 +166,11 @@ define([
      * Unset the given value.
      * return {null}
      */
-    Sortable.prototype.unsetValue = function (v) {
+    Sortable.prototype.unsetValue = function (v, silent) {
         log.info("Unset input value: " + v);
 
         if (this.status.disabled !== true) {
-            this._setValue(v);
+            this._setValue(v, silent);
         } else {
             log.warn("Selector is disabled. Impossible to unset input value: " + v);
         }
@@ -192,7 +192,9 @@ define([
 
     };
 
-    Sortable.prototype._setValue = function (v) {
+    Sortable.prototype._setValue = function (v, silent) {
+
+        this.silentMode = silent;
 
         this.dispose();
 
@@ -276,19 +278,24 @@ define([
                     //ghostClass: "fx-sort-sortable-ghost",  // Class name for the drop placeholder
                     //chosenClass: "fx-sort-sortable-chosen" // Class name for the chosen item
                     // Called by any change to the list (add / update / remove)
-                    onSort: function (evt) {
+                    onSort: _.bind(function (evt) {
 
                         var $itemEl = $(evt.item); // dragged HTMLElement
 
-                        amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
-                            code: $itemEl.data('id'),
-                            label: $itemEl.text(),
-                            parent: name
-                        });
+                        //workaround for silent change
+                        if (this.silentMode !== true) {
 
-                        amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
+                                code: $itemEl.data('id'),
+                                label: $itemEl.text(),
+                                parent: name
+                            });
 
-                    },
+                            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                        }
+                        delete this.silentMode;
+
+                    }, this),
                 }, this.selector.config));
 
         }, this));

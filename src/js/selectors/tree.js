@@ -185,8 +185,8 @@ define([
      * Resets the selected items to the given value.
      * return {null}
      */
-    Tree.prototype.setValue = function (v) {
-        log.info("Set tree value: " + v);
+    Tree.prototype.setValue = function (v, silent) {
+        log.info("Set tree value: " + v + ". Silent? " + silent);
 
         if(!Array.isArray(v)){
             v = [v];
@@ -196,7 +196,7 @@ define([
         this.tree.jstree(true).deselect_all(true);
 
         _.each(v, _.bind(function (value) {
-            this.tree.jstree(true).select_node({id: value});
+            this.tree.jstree(true).select_node({id: value}, silent);
         }, this));
 
     };
@@ -349,7 +349,8 @@ define([
 
             }, this))
 
-            .on("select_node.jstree ", _.bind(function (e, data) {
+            .on("changed.jstree ", _.bind(function (e, data) {
+
                 if (!isNaN(this.selector.max) && data.selected.length > this.selector.max) {
                     data.instance.deselect_node(data.node);
                     log.warn("Max number of selectable item reached. Change 'selector.selector.max' config.");
@@ -361,15 +362,6 @@ define([
                     data.instance.deselect_node(data.node, true);
                     return;
                 }
-
-                this._notifyTreeSelectionChange({
-                    instance: data.instance,
-                    id: this.id
-                })
-
-            }, this))
-
-            .on("deselect_node.jstree ", _.bind(function (e, data) {
 
                 this._notifyTreeSelectionChange({
                     instance: data.instance,

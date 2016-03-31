@@ -158,8 +158,10 @@ define([
      * Resets the selected items to the given value.
      * return {null}
      */
-    Time.prototype.setValue = function (v) {
+    Time.prototype.setValue = function (v, silent) {
         log.info("Set input value: " + v);
+
+        this.silentMode = silent;
 
         this.$pickerEl.data("DateTimePicker").date(new Date(v));
     };
@@ -223,9 +225,15 @@ define([
 
         var self = this;
 
-        this.$pickerEl.on("dp.change", function () {
-            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
-        });
+        this.$pickerEl.on("dp.change", _.bind(function () {
+
+            //workaround for silent change
+            if (this.silentMode !== true) {
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+            }
+            delete this.silentMode;
+
+        }, this));
 
     };
 
