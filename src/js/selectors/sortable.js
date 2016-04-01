@@ -260,7 +260,7 @@ define([
 
                 $list.append(tmpl(i));
 
-                log.info("Create input item: " + JSON.stringify(i));
+                //log.info("Create input item: " + JSON.stringify(i));
 
             }, this));
 

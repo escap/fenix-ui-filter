@@ -349,6 +349,14 @@ define([
 
             }, this))
 
+            .on("select_node.jstree", _.bind(function () {
+                this._updateSummary();
+            }, this))
+
+            .on("deselect_node.jstree", _.bind(function () {
+                this._updateSummary();
+            }, this))
+
             .on("changed.jstree ", _.bind(function (e, data) {
 
                 if (!isNaN(this.selector.max) && data.selected.length > this.selector.max) {
@@ -465,8 +473,6 @@ define([
             payload.push({code: node.id, label: label, parent: node.parent})
         });
 
-        this._updateSummary();
-
         amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), payload);
         amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT));
     };
@@ -476,6 +482,9 @@ define([
         var values = this.getValues(),
             model = [],
             instance = this.tree.jstree(true);
+
+        console.log("values 456 456 456 456 ")
+        console.log(values)
 
         _.each(values.labels, function (val, key) {
             model.push({code: key, label: val});

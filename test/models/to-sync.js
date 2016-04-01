@@ -10,17 +10,18 @@ define(function () {
 
             "selector": {
                 "id": "dropdown",
-                //"source" : [ {"value" : "myvalue", "label" : "my custom label"} ], // Static data
-                "from": 2000,
-                "to": 2014,
+                "source": [
+                    {"value": "enable", "label": "Enable"},
+                    {"value": "disable", "label": "Disable"}
+                ], // Static data
                 "config": { //Selectize configuration
-                    "maxItems": 1
+                    //"maxItems": 1
                 }
             },
 
             "format": {
                 "type": "static",
-                "output" : "time",
+                "output": "time",
                 //"process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}'
             },
 
@@ -34,7 +35,7 @@ define(function () {
             "selector": {
                 "id": "input",
                 "type": "radio",
-                "default" : ["dot"],
+                "default": ["dot"],
                 "source": [
                     {"value": "dot", "label": "Dot"},
                     {"value": "comma", "label": "Comma"}
@@ -42,11 +43,11 @@ define(function () {
                 ]
             },
 
-            "template" : {
-                "hideHeader" : true
+            "template": {
+                "hideHeader": true
             },
 
-            "className" : "col-xs-6"
+            "className": "col-xs-6"
 
         },
 
@@ -55,8 +56,8 @@ define(function () {
             "selector": {
                 "id": "range",
                 "default": [126],
-                "config" : { //specific ion.rangeSlider
-                    type : "double",
+                "config": { //specific ion.rangeSlider
+                    type: "double",
                     min: 100,
                     max: 200
                 },
@@ -74,7 +75,7 @@ define(function () {
                 //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
             },
 
-            "format" : {
+            "format": {
                 //"output" : "codes", // codelist || time. if format is FENIX
                 //"uid" : "myCodelist", //override codelist uid config
                 //"version" : "myVersion", //override codelist version config
@@ -111,7 +112,7 @@ define(function () {
             "selector": {
                 "id": "time",
                 "default": ["Thu Mar 8 2016 17:04:58 GMT+0100 (CET)"],
-                "config" : {  },//specific bootstrap datetimepicker
+                "config": {},//specific bootstrap datetimepicker
                 //"disabled" : true
             },
 
@@ -126,7 +127,7 @@ define(function () {
                 //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
             },
 
-            "format" : {
+            "format": {
                 //"output" : "codes", // codelist || time. if format is FENIX
                 //"uid" : "myCodelist", //override codelist uid config
                 //"version" : "myVersion", //override codelist version config
