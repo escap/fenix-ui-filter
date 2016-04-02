@@ -21,7 +21,6 @@ define(function () {
 
             "template": {
                 "hideHeader": false,
-                //"hideSwitch": true
             },
 
             //dependencies with other selectors

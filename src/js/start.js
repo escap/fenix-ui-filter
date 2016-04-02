@@ -608,10 +608,21 @@ define([
         return this._getPromise(body).then(function (result) {
 
             if (typeof result === 'undefined') {
-                log.info("No Code List loaded for: " + key);
+                log.error("Code List loaded returned empty! id: " + key);
+                log.warn('Add placeholder code list');
+
+                self._storeCodelist(body, [{
+                    code: "fake_code",
+                    leaf: true,
+                    level: 1,
+                    rid: "fake_rid",
+                    title: {
+                        EN : "EMPTY_CODE_LIST :'("
+                    }
+                }]);
+
             } else {
                 log.info("Code List loaded successfully for: " + key);
-
                 self._storeCodelist(body, result);
             }
 
@@ -1344,7 +1355,7 @@ define([
     Filter.prototype._processSelector = function (obj, selectorId, semanticId) {
 
         if (!obj.hasOwnProperty('selector')) {
-            alert(selectorId + "does not have a valid configuration");
+            alert(selectorId + " does not have a valid configuration. Missing 'selector' configuration.");
         }
 
         this.selectors[selectorId] = obj;
@@ -1501,7 +1512,7 @@ define([
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
             conf = C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS,
-            $html = $(template($.extend(true, {id: id}, conf, obj, i18nLables)));
+            $html = $(template($.extend(true, {id: id}, i18nLables, conf, obj )));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});

@@ -41,9 +41,14 @@ define(function () {
 
         "OUTPUT_FORMAT": "plain", // "plain | "fenix"
 
-        DEFAULT_TEMPLATE_OPTIONS : {
-            "hideRemoveButton" : false
-        }
+        DEFAULT_TEMPLATE_OPTIONS: {
+            "hideRemoveButton": true,
+            "hideSwitch": true
+        },
+
+        //Utils
+        DEFAULT_PERIOD_FROM: 1960,
+        DEFAULT_PERIOD_TO: 2016
 
     }
 

@@ -11,7 +11,7 @@
     "url": "https://github.com/FENIX-Platform/fenix-ui-filter.git"
   },
   "author": "Daniele Salvatore <daniele.salvatore@fao.org> (http://fenix.fao.org/)",
-  "license": "MIT",
+  "license": "GPL2",
   "bugs": {
     "url": "https://github.com/FENIX-Platform/fenix-ui-filter/issues"
   },

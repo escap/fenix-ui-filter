@@ -15,11 +15,10 @@ define([
 
     var opts = {
         forbiddenSubjects: ["value"],
-        exclude: [],
+        exclude: [], //exclude id
         common: {},
         lang: 'EN',
         //timeLabelFormat : "L" //MomentJS format
-
     };
 
     function Utils() {
@@ -34,6 +33,8 @@ define([
         log.info("Create filter configuration from:");
         log.info(o);
 
+        $.extend(true, this, o);
+
         var configuration = {};
 
         if (this._isFenixResource(o.model) === true) {
@@ -44,7 +45,7 @@ define([
                 if (!_.contains(this.forbiddenSubjects, c.subject) && !_.contains(this.exclude, c.id)) {
                     configuration[c.id] = $.extend(true, {}, this._processFxColumn(c), this.common);
                 } else {
-                    log.warn(c.id + " was excluded. [" + c.subject + "]");
+                    log.warn(c.id + " was excluded. [id: " + c.id + ", subject: " + c.subject + "]");
                 }
 
             }, this));
@@ -397,8 +398,8 @@ define([
             period = domain.period,
             from = String(period.from),
             to = String(period.to),
-            //from = String(period.from).substring(0, String(period.from).length - 2),
-            //to = String(period.to).substring(0, String(period.to).length - 2),
+        //from = String(period.from).substring(0, String(period.from).length - 2),
+        //to = String(period.to).substring(0, String(period.to).length - 2),
             format = this._getTimeFormat(from);
 
         //configure selector
@@ -434,7 +435,6 @@ define([
         config.selector.config.type = "double";
         config.selector.config.prettify_enabled = false;
 
-
         return config;
 
     };
@@ -467,9 +467,17 @@ define([
             return this._configDropdownFromTimelist(c);
         }
 
-        log.warn("Impossible to find process for column " + c.id);
+        //Default set year range
+        log.warn("Column " + c.id + " set with default time period range.");
 
-        return {};
+        c.domain = {
+            period: {
+                from: C.DEFAULT_PERIOD_FROM || CD.DEFAULT_PERIOD_FROM,
+                to: C.DEFAULT_PERIOD_TO || CD.DEFAULT_PERIOD_TO
+            }
+        };
+
+        return this._configTimeFromPeriod(c);
     };
 
     Utils.prototype._getTimeFormat = function (s) {
@@ -563,6 +571,24 @@ define([
         }
 
         return errors.length > 0 ? errors : valid;
+    };
+
+    Utils.prototype.mergeConfigurations = function (config, sync) {
+
+        if (sync.toolbar) {
+
+            var values = sync.toolbar.values;
+
+            _.each(values, _.bind(function (obj, key) {
+                if (config.hasOwnProperty(key)) {
+                    config[key].selector.default = values[key];
+                }
+
+            }, this));
+        }
+
+        return config;
+
     };
 
     return new Utils();
