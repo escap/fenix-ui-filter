@@ -196,7 +196,9 @@ define([
 
         this.silentMode = silent;
 
-        this.dispose();
+        this._destroyInstances();
+
+        this.$el.find('li').remove();
 
         this._parseInput(v);
 
@@ -265,8 +267,13 @@ define([
 
                 var tmpl = Handlebars.compile(item);
 
-                //$list.find('ul').length > 0 ? $list.find('ul').append(tmpl(i)) : $list.append(tmpl(i));
-                $list.append(tmpl(i));
+                $list = $list.find('ul').length > 0 ? $list.find('ul') : $list;
+
+                console.log($list)
+
+
+                    $list.append(tmpl(i));
+
 
                 //log.info("Create input item: " + JSON.stringify(i));
 

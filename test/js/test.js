@@ -199,12 +199,6 @@ define([
                 //template: templ(i18nLabels)
             });
 
-        target.on("ready", function () {
-            target.on("change", function () {
-                alert("Oh snap! You should not see me because sync is silent!")
-            });
-        });
-
         $(s.SYNC_BTN).on('click', function () {
             var v = source.getValues();
             log.info(v);
