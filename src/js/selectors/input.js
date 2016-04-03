@@ -232,6 +232,7 @@ define([
     Input.prototype._createInputs = function () {
 
         var data = this.selector.source || [],
+            config = this.selector.config || {},
             $list = this.$el.addBack().find(s.TEMPLATE_LIST),
             item = $(templates).find(s.TEMPLATE_ITEM)[0].outerHTML,
             list;
@@ -252,17 +253,46 @@ define([
             window.fx_filter_input_id >= 0 ? window.fx_filter_input_id++ : window.fx_filter_input_id = 0;
 
             var tmpl = Handlebars.compile(item),
-                m = $.extend(true, model, {
+                m = $.extend(true, model, config, {
                     name: this.id + window.fx_filter_input_id,
                     id: "fx_input_" + window.fx_filter_input_id,
                     type: this.type,
                     isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
-                });
+                }),
+                $input = $(tmpl(m));
 
-            $list.append(tmpl(m));
+            initValidation($input, config);
+
+            $list.append($input);
 
             log.info("Create input item: " + JSON.stringify(m));
         }, this));
+
+        function initValidation($input, config) {
+
+            if (!isNaN(config.min)) {
+
+                $input.on('change', function () {
+                    var val = parseInt($(this).find('input').val(), 10);
+                    if (val < parseInt(config.min)) {
+                        $(this).find('input').val(config.min)
+                    }
+                });
+
+            }
+
+            if (!isNaN(config.max)) {
+
+                $input.on('change', function () {
+                    var val = parseInt($(this).find('input').val(), 10);
+                    if (val > parseInt(config.max)) {
+                        $(this).find('input').val(config.max)
+                    }
+                });
+
+            }
+
+        }
 
     };
 

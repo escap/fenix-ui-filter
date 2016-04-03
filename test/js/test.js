@@ -92,7 +92,7 @@ define([
         var filterIsReady = false;
 
         var filter = this.createFilter({
-                items: this._createFilterConfiguration(Model1),
+                items: this._createFilterConfiguration(TableTabModel),
                 $el: s.TABLE_TAB
             })
             .on("ready", function () {

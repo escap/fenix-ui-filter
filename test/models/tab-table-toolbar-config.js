@@ -30,6 +30,29 @@ define(function () {
 
         },
 
+        "decimal_digit": {
+
+            "selector": {
+                "id": "input",
+                "type": "number",
+                "source": [
+                    {"value": "2"}
+                ],
+                "config" : {
+                    min : 0,
+                    max : 10
+                }
+            },
+
+            "template" : {
+                "hideHeader" : true
+            },
+
+
+            "className" : "col-xs-6"
+
+        }
+
         
         /*        "aggregation": {
 
@@ -97,26 +120,8 @@ define(function () {
 
          "className" : "col-xs-6"
 
-         },
-
-         "decimal_digit": {
-
-         "selector": {
-         "id": "input",
-         "type": "number",
-         "source": [
-         {"value": "2"}
-         ]
-         },
-
-         "template" : {
-         "hideHeader" : true
-         },
-
-
-         "className" : "col-xs-6"
-
-         }*/
+         }
+*/
     }
 
 });

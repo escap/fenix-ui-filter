@@ -6,7 +6,7 @@
         {{#if isCheckboxOrRadio}}
             <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}">
         {{else}}
-            <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}" class="form-control">
+            <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}" class="form-control"  min="{{min}}" max="{{max}}">
         {{/if}}
         <label for="{{id}}">{{label}}</label>
     </li>
