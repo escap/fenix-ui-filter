@@ -176,7 +176,7 @@ define([
 
         var $input = this.$inputs.filter("[value='" + v + "']").prop('checked', true);
 
-        if (silent !== true){
+        if (silent !== true) {
             $input.trigger("change");
         }
 
@@ -213,7 +213,7 @@ define([
 
         this.$inputs = this.$el.find("input[type='" + this.type + "']");
 
-        this.$inputs.attr("name", this.id + '-'+  this.controller.id);
+        this.$inputs.attr("name", this.id + '-' + this.controller.id);
 
         this.values = [];
 
@@ -243,8 +243,8 @@ define([
             this.$el.append($list);
         }
 
-        if (this.type !=="radio" && this.type!== 'checkbox' && data.length == 0){
-            data.push( {"value" : "", "label" : ""});
+        if (this.type !== "radio" && this.type !== 'checkbox' && data.length == 0) {
+            data.push({"value": "", "label": ""});
             log.info("Add dummy model for input");
         }
         _.each(data, _.bind(function (model) {
@@ -256,7 +256,7 @@ define([
                     name: this.id + window.fx_filter_input_id,
                     id: "fx_input_" + window.fx_filter_input_id,
                     type: this.type,
-                    isCheckboxOrRadio : (this.type === 'radio' || this.type === 'checkbox')
+                    isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
                 });
 
             $list.append(tmpl(m));
@@ -291,17 +291,21 @@ define([
 
         this.$inputs.on('change input', function () {
 
-            var r = self.getValues(),
-                code = r.values[0] || "",
-                label = r.labels[code];
+            if (self.status.ready === true) {
 
-            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
-                code: code,
-                label: label,
-                parent: null
-            });
+                var r = self.getValues(),
+                    code = r.values[0] || "",
+                    label = r.labels[code];
 
-            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
+                    code: code,
+                    label: label,
+                    parent: null
+                });
+
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+            }
+
         });
 
     };

@@ -52,8 +52,8 @@ define([
     Sortable.prototype.getValues = function () {
 
         var result = {
-                values: [],
-                labels: {}
+            values: [],
+            labels: {}
         };
 
         _.each(this.groups, _.bind(function (obj, name) {
@@ -267,7 +267,7 @@ define([
             //cache instance
             group.instance = SortableJS.create($list[0],
                 $.extend(true, {
-                    group: { name: name, pull: true, put: groups },
+                    group: {name: name, pull: true, put: groups},
                     sort: true,  // sorting inside list
                     delay: 0, // time in milliseconds to define when the sorting should start
                     disabled: this.status.disabled, // Disables the sortable if set to true.
@@ -282,20 +282,24 @@ define([
 
                         var $itemEl = $(evt.item); // dragged HTMLElement
 
-                        //workaround for silent change
-                        if (this.silentMode !== true) {
+                        if (this.status.ready === true) {
 
-                            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
-                                code: $itemEl.data('id'),
-                                label: $itemEl.text(),
-                                parent: name
-                            });
+                            //workaround for silent change
+                            if (this.silentMode !== true) {
 
-                            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
+                                    code: $itemEl.data('id'),
+                                    label: $itemEl.text(),
+                                    parent: name
+                                });
+
+                                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                            }
+                            delete this.silentMode;
+
                         }
-                        delete this.silentMode;
 
-                    }, this),
+                    }, this)
                 }, this.selector.config));
 
         }, this));

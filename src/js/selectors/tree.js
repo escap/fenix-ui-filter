@@ -172,7 +172,7 @@ define([
      */
     Tree.prototype.unsetValue = function (v) {
 
-        if (this.status.disabled !== true ) {
+        if (this.status.disabled !== true) {
             log.info("Unset tree value: " + v);
             this.tree.jstree(true).deselect_node({id: v});
         } else {
@@ -188,7 +188,7 @@ define([
     Tree.prototype.setValue = function (v, silent) {
         log.info("Set tree value: " + v + ". Silent? " + silent);
 
-        if(!Array.isArray(v)){
+        if (!Array.isArray(v)) {
             v = [v];
         }
 
@@ -371,10 +371,14 @@ define([
                     return;
                 }
 
-                this._notifyTreeSelectionChange({
-                    instance: data.instance,
-                    id: this.id
-                })
+                if (this.status.ready === true) {
+
+                    this._notifyTreeSelectionChange({
+                        instance: data.instance,
+                        id: this.id
+                    });
+
+                }
 
             }, this));
     };
@@ -482,9 +486,6 @@ define([
         var values = this.getValues(),
             model = [],
             instance = this.tree.jstree(true);
-
-        console.log("values 456 456 456 456 ")
-        console.log(values)
 
         _.each(values.labels, function (val, key) {
             model.push({code: key, label: val});

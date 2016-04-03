@@ -73,9 +73,9 @@ define([
 
     Test.prototype._render = function () {
 
-        //this._renderTableTabToolbar();
+        this._renderEvents();
 
-        this._renderSynch();
+        //this._renderSynch();
 
         return;
 
@@ -87,16 +87,25 @@ define([
 
     };
 
-    Test.prototype._renderTableTabToolbar = function () {
+    Test.prototype._renderEvents = function () {
+
+        var filterIsReady = false;
 
         var filter = this.createFilter({
-                items: this._createFilterConfiguration(TableTabModel),
+                items: this._createFilterConfiguration(Model1),
                 $el: s.TABLE_TAB
             })
             .on("ready", function () {
+                filterIsReady = true;
+
                 incrementCount("ready");
             })
             .on("change", function () {
+
+                if (filterIsReady !== true) {
+                    alert("'change' event should be triggered after 'ready' event!");
+                }
+
                 incrementCount("change");
             });
 

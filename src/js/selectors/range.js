@@ -230,21 +230,27 @@ define([
             //onStart: function (data) { },
             onChange: _.bind(function (data) {
 
-                //amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), data); //format payload
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                if (this.status.ready === true) {
+                    //amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), data); //format payload
+                    amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
 
-                delete this.silentMode;
+                    delete this.silentMode;
+                }
 
             }, self),
 
             //onFinish: function (data) { },
             onUpdate: _.bind(function (data) {
 
-                //workaround for silent change
-                if (this.silentMode !== true) {
-                    amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                if (this.status.ready === true) {
+
+                    //workaround for silent change
+                    if (this.silentMode !== true) {
+                        amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                    }
+
+                    delete this.silentMode;
                 }
-                delete this.silentMode;
 
             }, self)
         }, this.selector.config));

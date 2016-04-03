@@ -227,11 +227,15 @@ define([
 
         this.$pickerEl.on("dp.change", _.bind(function () {
 
-            //workaround for silent change
-            if (this.silentMode !== true) {
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+            if (this.status.ready === true) {
+
+                //workaround for silent change
+                if (this.silentMode !== true) {
+                    amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                }
+                delete this.silentMode;
+
             }
-            delete this.silentMode;
 
         }, this));
 

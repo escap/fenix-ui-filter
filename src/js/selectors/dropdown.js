@@ -38,7 +38,7 @@ define([
             self.status.ready = true;
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
 
-        },0);
+        }, 0);
 
         return this;
     }
@@ -143,7 +143,7 @@ define([
 
         var value = v.toString();
 
-        if (this.status.disabled !== true ) {
+        if (this.status.disabled !== true) {
             log.info("Unset dropdown value: " + v);
 
             //selectize doesn't have the unsetValue method
@@ -195,7 +195,7 @@ define([
 
     Dropdown.prototype._buildDropdownModel = function (fxResource) {
 
-        var data = this._buildDropdownModelFromCodelist(fxResource) || [] ;
+        var data = this._buildDropdownModelFromCodelist(fxResource) || [];
 
         //Merge static static data
         if (this.selector.source) {
@@ -207,8 +207,12 @@ define([
 
             } else {
 
-                var convertedData = staticData.map(function (i) { return {value: i.value, text: i.label,  parent:'#'}; });
-                data = _.uniq(_.union(data, convertedData), false, function(item){ return item.value; });
+                var convertedData = staticData.map(function (i) {
+                    return {value: i.value, text: i.label, parent: '#'};
+                });
+                data = _.uniq(_.union(data, convertedData), false, function (item) {
+                    return item.value;
+                });
 
             }
         }
@@ -322,21 +326,25 @@ define([
 
         this.dropdown.on('change', function () {
 
-            var data = self.getValues() || {},
-                values = data.values || [],
-                labels = data.labels || {},
-                result = [];
+            if (self.status.ready === true) {
 
-            _.each(values, function (s) {
-                result.push({
-                    code: s,
-                    label: labels[s],
-                    parent: "#"
+                var data = self.getValues() || {},
+                    values = data.values || [],
+                    labels = data.labels || {},
+                    result = [];
+
+                _.each(values, function (s) {
+                    result.push({
+                        code: s,
+                        label: labels[s],
+                        parent: "#"
+                    });
                 });
-            });
 
-            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), result);
-            amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), result);
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+            }
+
         });
 
     };
@@ -387,7 +395,7 @@ define([
         //Set selected value
         var v = from > originalValue ? from : originalValue;
 
-        if (v){
+        if (v) {
             instance.setValue(v.toString());
         }
 
