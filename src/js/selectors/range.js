@@ -60,12 +60,14 @@ define([
 
         //add always from
         result.values.push(values.from);
-        result.labels[values.from] = "From";
+        result.labels[values.from] = 'From';
 
         //add to is double slider
         if (this.selector.config.type === "double") {
-            result.values.push(values.to);
-            result.labels[values.to] = "To";
+            result.values = [];
+            result.values.push({value : values.to, parent : 'to'});
+            result.values.push({value : values.from, parent : 'from'});
+            result.labels[values.to] = 'To';
         }
 
         return result;
@@ -170,10 +172,21 @@ define([
 
         var c = {};
 
-        c.from = Math.min.apply(Math, v);
+        if (typeof v[0] === 'object') {
 
-        if (v.length > 1) {
-            c.to = Math.max.apply(Math, v);
+            var from = _.findWhere(v, {parent: 'from'}) || {},
+                to =_.findWhere(v, {parent: 'to'}) || {};
+
+            c.from = from.value;
+            c.to = to.value;
+
+        } else {
+
+            c.from = Math.min.apply(Math, v);
+
+            if (v.length > 1) {
+                c.to = Math.max.apply(Math, v);
+            }
         }
 
         //set silent mode

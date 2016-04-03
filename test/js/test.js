@@ -73,9 +73,9 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderEvents();
+        //this._renderEvents();
 
-        //this._renderSynch();
+        this._renderSynch();
 
         return;
 
@@ -92,7 +92,7 @@ define([
         var filterIsReady = false;
 
         var filter = this.createFilter({
-                items: this._createFilterConfiguration(TableTabModel),
+                items: this._createFilterConfiguration(ModelToSync),
                 $el: s.TABLE_TAB
             })
             .on("ready", function () {

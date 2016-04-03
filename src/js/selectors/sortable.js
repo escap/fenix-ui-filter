@@ -210,11 +210,15 @@ define([
 
         _.each(source || this.selector.source, _.bind(function (obj) {
 
-            var g = obj.parent || 'default-group';
+            window.fx_filter_sortable_id >= 0 ? window.fx_filter_sortable_id++ : window.fx_filter_sortable_id = 0;
+
+            var g = obj.parent || 'default-group',
+                label = obj.parentLabel || 'Group ' + window.fx_filter_sortable_id;
 
             if (!this.groups.hasOwnProperty(g)) {
                 this.groups[g] = {
-                    items: []
+                    items: [],
+                    label: label
                 };
             }
 
@@ -243,7 +247,10 @@ define([
                 log.info("Injecting sortable list");
 
                 var tmplGroup = Handlebars.compile(list),
-                    m = {group: name},
+                    m = {
+                        group: name,
+                        label: groupsObjs[name].label
+                    },
                     $group = $(tmplGroup(m));
 
                 this.$el.append($group);
@@ -258,6 +265,7 @@ define([
 
                 var tmpl = Handlebars.compile(item);
 
+                //$list.find('ul').length > 0 ? $list.find('ul').append(tmpl(i)) : $list.append(tmpl(i));
                 $list.append(tmpl(i));
 
                 //log.info("Create input item: " + JSON.stringify(i));
