@@ -269,11 +269,7 @@ define([
 
                 $list = $list.find('ul').length > 0 ? $list.find('ul') : $list;
 
-                console.log($list)
-
-
-                    $list.append(tmpl(i));
-
+                $list.append(tmpl(i));
 
                 //log.info("Create input item: " + JSON.stringify(i));
 
