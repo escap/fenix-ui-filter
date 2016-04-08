@@ -17,7 +17,10 @@ define([
     'use strict';
 
     var defaultOptions = {
-            checkableInputs: ["radio", "checkbox"]
+            checkableInputs: ["radio", "checkbox"],
+            itemRender : function ( params ) {
+                return this._itemRender(params);
+            }
         },
         s = {
             TEMPLATE_LIST: "[data-sortable-list]",
@@ -29,6 +32,8 @@ define([
         var self = this;
 
         $.extend(true, this, defaultOptions, o);
+console.log(o)
+        console.log(this)
 
         this._initVariables();
 
@@ -275,14 +280,18 @@ define([
 
             group = groupsObjs[name];
 
+            //Render items
             //loop over groups' items
             _.each(group.items, _.bind(function (i) {
 
-                var tmpl = Handlebars.compile(item);
+                var tmpl = Handlebars.compile(item),
+                    $content = this.itemRender.call(this, i),
+                    $li = $(tmpl(i));
+
+                $li.html($content);
 
                 $list = $list.find('ul').length > 0 ? $list.find('ul') : $list;
-
-                $list.append(tmpl(i));
+                $list.append($li);
 
                 //log.info("Create input item: " + JSON.stringify(i));
 
@@ -332,6 +341,12 @@ define([
 
     };
 
+    Sortable.prototype._itemRender = function ( model ) {
+
+        return model.label;
+
+    };
+
     Sortable.prototype._getStatus = function () {
 
         return this.status;
@@ -342,6 +357,10 @@ define([
         //Init status
         this.status = {};
         this.status.disabled = this.selector.disabled;
+
+        if (this.selector.hasOwnProperty("config") && $.isFunction(this.selector.config.itemRender)) {
+            this.itemRender = this.selector.config.itemRender;
+        }
 
     };
 

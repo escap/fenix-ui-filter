@@ -6,32 +6,34 @@ define(function () {
 
     return {
 
-        "sort": {
+        stefano : {
 
-            "selector": {
-                "id": "sortable",
-                "source": [
-                    {"value": "sort_1", "label": "my sort fn 1", parent: 'group-1'},
-                    {"value": "sort_2", "label": "my sort fn 2", parent: 'group-1'},
-                    {"value": "sort_3", "label": "my sort fn 3"},
-                    {"value": "sort_4", "label": "my sort fn 4"},
-                    {"value": "sort_5", "label": "my sort fn 5"}
-                ], // Static data
-                "config": { //SortableJS configuration
-                    //disabled: true,
-                    "groups" : {
-                        test: "Test"
+            selector : {
+                id : "sortable",
+                source : [
+                    {value : "primo", label : "Primo", parent : "primoG", parentLabel : "Dnie"},
+                    {value : "secondo", label : "Secondo", parent : "primo2"}
+                ],
+                config : {
+                    groups  :{
+                        stef : "Stef"
+                    },
+                    itemRender : function (model) {
+
+                        var self = this,
+                            $template = $("<h1> " + model.label+ " </h1>");
+
+                        $template.on("click", function () {
+                            console.log(self);
+                        });
+
+                        return $template;
+
                     }
                 }
-            },
-
-            "template": {
-                // "hideHeader": true
-            },
-
-            "className": "col-xs-12"
-
+            }
         }
+
     }
 
 });
