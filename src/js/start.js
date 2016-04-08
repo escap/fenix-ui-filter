@@ -892,7 +892,6 @@ define([
                 errors.details = this.selector2semantic[id];
 
                 return errors;
-
             }
 
         }, this));
@@ -1174,6 +1173,8 @@ define([
             if (!model.uid) {
                 log.error("Impossible to find '" + id + "' code list configuration for FENIX output format export.");
             }
+
+
 
             var tmpl = Handlebars.compile(template),
                 process = JSON.parse(tmpl(model)),

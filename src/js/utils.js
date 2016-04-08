@@ -250,7 +250,10 @@ define([
     Utils.prototype._commonProcessColumn = function (c) {
 
         var config = {
-            template: {}
+            template: {},
+            format : {
+                dimension : c.id
+            }
         };
 
         if (c.title && c.title[this.lang.toUpperCase()]) {

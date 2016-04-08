@@ -6,22 +6,23 @@ define(function () {
 
     return {
 
-        stefano : {
+        stefano: {
 
-            selector : {
-                id : "sortable",
-                source : [
-                    {value : "primo", label : "Primo", parent : "primoG", parentLabel : "Dnie"},
-                    {value : "secondo", label : "Secondo", parent : "primo2"}
+            selector: {
+                id: "sortable",
+                source: [
+                    {value: "value1", label: "Label 1", parent: "group1"},
+                    {value: "value2", label: "Label 2", parent: "group2"}
                 ],
-                config : {
-                    groups  :{
-                        stef : "Stef"
+                config: {
+                    groups: {
+                        group1: "Group 1",
+                        group2: "Group 2"
                     },
-                    itemRender : function (model) {
+                    itemRender: function (model) {
 
                         var self = this,
-                            $template = $("<h1> " + model.label+ " </h1>");
+                            $template = $("<h1> " + model.label + " </h1>");
 
                         $template.on("click", function () {
                             console.log(self);

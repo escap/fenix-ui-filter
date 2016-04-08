@@ -32,8 +32,6 @@ define([
         var self = this;
 
         $.extend(true, this, defaultOptions, o);
-console.log(o)
-        console.log(this)
 
         this._initVariables();
 
