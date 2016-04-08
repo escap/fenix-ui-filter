@@ -210,6 +210,19 @@ define([
 
         this.groups = {};
 
+        //Add predefined groups
+
+        if (this.selector && this.selector.hasOwnProperty('config') && this.selector.config.hasOwnProperty('groups')) {
+            _.each(this.selector.config.groups, _.bind(function (label, g) {
+
+                this.groups[g] = {
+                    items: [],
+                    label: label
+                };
+
+            }, this));
+        }
+
         _.each(source || this.selector.source, _.bind(function (obj) {
 
             window.fx_filter_sortable_id >= 0 ? window.fx_filter_sortable_id++ : window.fx_filter_sortable_id = 0;
@@ -275,6 +288,8 @@ define([
 
             }, this));
 
+            $list = $list.find('ul').length > 0 ? $list.find('ul') : $list;
+
             //cache instance
             group.instance = SortableJS.create($list[0],
                 $.extend(true, {
@@ -299,7 +314,7 @@ define([
                             if (this.silentMode !== true) {
 
                                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
-                                    code: $itemEl.data('id'),
+                                    value: $itemEl.data('id'),
                                     label: $itemEl.text(),
                                     parent: name
                                 });

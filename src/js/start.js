@@ -1034,7 +1034,7 @@ define([
                 c.codes = [];
 
                 _.each(payload, function (item) {
-                    c.codes.push(item.code);
+                    c.codes.push(item.value);
                 });
 
                 this._getPromise(c).then(
@@ -1053,12 +1053,11 @@ define([
 
     Filter.prototype._dep_focus = function (payload, o) {
 
-        if (payload.code === this.selector2semantic[o.target]) {
-
+        if (payload.value === this.selector2semantic[o.target]) {
             log.info("_dep_focus invokation");
             log.info(o);
 
-            var d = payload.code,
+            var d = payload.value,
                 selectors = this.semantic2selectors[d];
 
             this.$el.find("." + this.FOCUSED_SELECTOR_CLASS_NAME).removeClass(this.FOCUSED_SELECTOR_CLASS_NAME);
@@ -1084,6 +1083,21 @@ define([
                 value: this.selector2semantic[o.src],
                 enabled: this._getEnabledSelectors()
             });
+        }
+
+    };
+
+    Filter.prototype._dep_disable = function (payload, o) {
+        log.info("_dep_disable invokation");
+        log.info(o);
+
+        if (this.selectors[o.target]) {
+
+           if (!!payload.value ) {
+               this._callSelectorInstanceMethod(o.target, "enable");
+            } else {
+               this._callSelectorInstanceMethod(o.target, "disable");
+           }
         }
 
     };

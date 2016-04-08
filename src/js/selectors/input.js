@@ -324,11 +324,11 @@ define([
             if (self.status.ready === true) {
 
                 var r = self.getValues(),
-                    code = r.values[0] || "",
-                    label = r.labels[code];
+                    value = r.values[0] || "",
+                    label = r.labels[value];
 
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
-                    code: code,
+                    value: value,
                     label: label,
                     parent: null
                 });

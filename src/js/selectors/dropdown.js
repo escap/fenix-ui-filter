@@ -335,7 +335,7 @@ define([
 
                 _.each(values, function (s) {
                     result.push({
-                        code: s,
+                        value: s,
                         label: labels[s],
                         parent: "#"
                     });
@@ -370,8 +370,8 @@ define([
 
     Dropdown.prototype._dep_min = function (opts) {
 
-        var codes = opts.data.length > 0 ? opts.data : [{code: this.selector.from || 0}],
-            from = codes[0].code,
+        var codes = opts.data.length > 0 ? opts.data : [{value: this.selector.from || 0}],
+            from = codes[0].value,
             originalValue = this.getValues().values[0],
             data = [],
             instance = this.dropdown[0].selectize;

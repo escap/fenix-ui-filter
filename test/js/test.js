@@ -9,10 +9,12 @@ define([
     'test/models/fx-resource',
     'test/models/to-sync',
     'test/models/tab-table-toolbar-config',
+    'test/models/fx-process',
+    'test/models/aggregation',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -73,11 +75,11 @@ define([
 
     Test.prototype._render = function () {
 
-        //this._renderEvents();
-
         this._renderSynch();
 
         return;
+
+        this._renderEvents();
 
         this._renderModel1BaseTemplate();
 
@@ -183,18 +185,19 @@ define([
 
         log.trace("Rendering sync: start");
 
-        var templ = Handlebars.compile(model1baseTemplate);
+        var Model = AggregationModel, //ModelToSync
+            templ = Handlebars.compile(model1baseTemplate);
 
         var source = this.createFilter({
                 id: s.SYNC_SRC,
-                items: this._createFilterConfiguration(ModelToSync),
+                items: this._createFilterConfiguration(Model),
                 $el: s.SYNC_SRC,
                 //template: templ(i18nLabels),
                 summary$el: s.SYNC_SRC_SUMMARY
             }),
             target = this.createFilter({
                 id: s.SYNC_TARGET,
-                items: this._createFilterConfiguration(ModelToSync),
+                items: this._createFilterConfiguration(Model),
                 $el: s.SYNC_TARGET,
                 //template: templ(i18nLabels)
             });

@@ -29,6 +29,12 @@ define([
         return this;
     }
 
+    /**
+     * Creates a FENIX filter configuration from a
+     * FENIX resource
+     * @param {Object} o
+     * @return {Object} filter configuration
+     */
     Utils.prototype.createConfiguration = function (o) {
         log.info("Create filter configuration from:");
         log.info(o);
@@ -42,7 +48,7 @@ define([
 
             _.each(o.model.metadata.dsd.columns, _.bind(function (c) {
 
-                if (!_.contains(this.forbiddenSubjects, c.subject) && !_.contains(this.exclude, c.id)) {
+                if (!_.contains(this.forbiddenSubjects, c.subject) && !_.contains(this.exclude, c.id) && !c.id.endsWith("_" + this.lang.toUpperCase())) {
                     configuration[c.id] = $.extend(true, {}, this._processFxColumn(c), this.common);
                 } else {
                     log.warn(c.id + " was excluded. [id: " + c.id + ", subject: " + c.subject + "]");
@@ -56,6 +62,33 @@ define([
 
         return configuration;
     };
+
+    /**
+     * Merges a FENIX filter configuration with
+     * default values
+     * @param {Object} config
+     * @param {Object} sync
+     * @return {Object} filter configuration
+     */
+    Utils.prototype.mergeConfigurations = function (config, sync) {
+
+        if (sync.toolbar) {
+
+            var values = sync.toolbar.values;
+
+            _.each(values, _.bind(function (obj, key) {
+                if (config.hasOwnProperty(key)) {
+                    config[key].selector.default = values[key];
+                }
+
+            }, this));
+        }
+
+        return config;
+
+    };
+
+    // private fns
 
     Utils.prototype._processFxColumn = function (c) {
 
@@ -537,6 +570,84 @@ define([
 
     };
 
+ /*   /!* Revert Process *!/
+    /!**
+     * Extracts a blank selection from FENIX process
+     * default values
+     * @param {Object} filter
+     * @return {Object} filter configuration
+     *!/
+    Utils.prototype.revertProcess = function (filter) {
+
+        var configuration = {};
+
+        if (Array.isArray(filter)) {
+
+            _.each(filter, _.bind(function ( step ) {
+
+                var fn = "_revert_" + step.name;
+
+                if ( $.isFunction(this[fn]) && step.parameters) {
+                    configuration[step.name] = $.extend(true, this[fn](step));
+                } else {
+                    log.error(fn + " is not a valid reverse function");
+                }
+
+            }, this));
+        }
+
+        return configuration;
+
+    };
+
+    Utils.prototype._revert_filter = function (step) {
+        log.info("_revert_filter " + JSON.stringify(step));
+
+        var self = this,
+            result = {},
+            parameters = step.parameters,
+            rows = parameters.rows,
+            columns = parameters.columns;
+
+        _.each(rows, function ( obj , key) {
+
+            if ( obj.time ) {
+                result[key] = self._revert_time_row(obj);
+            } else {
+                result[key] = self._revert_codes_row(obj);
+            }
+
+        });
+
+        return result;
+    };
+
+    Utils.prototype._revert_time_row = function ( step ) {
+
+        console.log(step)
+
+    };
+
+    Utils.prototype._revert_codes_row = function ( step ) {
+
+        console.log(step)
+
+
+    };
+
+    Utils.prototype._revert_group = function (step) {
+        log.info("_revert_group " + JSON.stringify(step));
+
+
+        return;
+    };
+
+    Utils.prototype._revert_order = function (step) {
+        log.info("_revert_order " + JSON.stringify(step));
+
+        return;
+    };
+*/
     /* Validation */
 
     Utils.prototype._isFenixResource = function (res) {
@@ -571,24 +682,6 @@ define([
         }
 
         return errors.length > 0 ? errors : valid;
-    };
-
-    Utils.prototype.mergeConfigurations = function (config, sync) {
-
-        if (sync.toolbar) {
-
-            var values = sync.toolbar.values;
-
-            _.each(values, _.bind(function (obj, key) {
-                if (config.hasOwnProperty(key)) {
-                    config[key].selector.default = values[key];
-                }
-
-            }, this));
-        }
-
-        return config;
-
     };
 
     return new Utils();
