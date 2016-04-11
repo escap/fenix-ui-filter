@@ -22,7 +22,6 @@ define([
     };
 
     function Utils() {
-        log.info("FENIX filter utils");
 
         $.extend(true, this, opts, CD, C);
 
