@@ -11,10 +11,11 @@ define([
     'test/models/tab-table-toolbar-config',
     'test/models/fx-process',
     'test/models/aggregation',
+    'test/models/shopping',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, ShoppingModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -35,7 +36,8 @@ define([
             SYNC_BTN: "#sync-btn",
             TABLE_TAB: "#table-tab",
             TABLE_BTN: "#table-btn",
-            EVENT_COUNTERS: "#event-counters"
+            EVENT_COUNTERS: "#event-counters",
+            SHOPPING: "#shopping"
         },
         empty_model = {data: []},
         error_model = {},
@@ -75,20 +77,39 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderEvents();
+        this._renderModel1BaseTemplate();
 
         return;
 
-        this._renderSynch();
+        this._renderShopModel();
+
+        this._renderDynamicModel1();
 
         this._renderEvents();
 
-        this._renderModel1BaseTemplate();
+        this._renderShopModel();
 
         this._renderDynamicModel1();
 
         this._renderSynch();
 
+        this._renderEvents();
+
+
+
+        this._renderDynamicModel1();
+
+        this._renderSynch();
+
+    };
+    Test.prototype._renderShopModel = function () {
+
+        var items  = this._createFilterConfiguration(ShoppingModel);
+
+        var filter = this.createFilter({
+            items: ShoppingModel,
+            $el: s.SHOPPING
+        });
     };
 
     Test.prototype._renderEvents = function () {
@@ -172,6 +193,7 @@ define([
         });
 
         $(s.DYNAMIC_MODEL_1_VALUES_BTN).on("click", function () {
+
             log.warn(filter.getValues());
         });
 
@@ -187,7 +209,7 @@ define([
 
         log.trace("Rendering sync: start");
 
-        var Model = AggregationModel, //ModelToSync
+        var Model = ModelToSync, //ModelToSync
             templ = Handlebars.compile(model1baseTemplate);
 
         var source = this.createFilter({

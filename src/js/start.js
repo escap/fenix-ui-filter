@@ -590,13 +590,6 @@ define([
 
         this._renderSelectors();
 
-        //TODO remove
-        /**/
-        var self = this;
-        window.setTimeout(function () {
-            //self._renderFilter();
-        }, 5000)
-
     };
 
     Filter.prototype._createPromise = function (obj) {

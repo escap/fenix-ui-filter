@@ -6,34 +6,38 @@ define(function () {
 
     return {
 
-        stefano: {
+        "fabio" : {
 
-            selector: {
-                id: "sortable",
-                source: [
-                    {value: "value1", label: "Label 1", parent: "group1"},
-                    {value: "value2", label: "Label 2", parent: "group2"}
+            selector : {
+                id : "sortable",
+                source : [
+                    {value : "da" , label : "Dani2", parent : "group1"},
+                    {value : "d" , label : "Dani 1", parent : "group1"},
+                    {value : "dq" , label : "Dani 2", parent : "group2"},
+                    {value : "dw" , label : "Dani 3", parent : "group2"},
+                    {value : "de" , label : "Dani 4", parent : "group2"},
+                    {value : "dr" , label : "Dani 5", parent : "group2"},
+                    {value : "dt" , label : "Dani 5", parent : "group2"},
                 ],
-                config: {
-                    groups: {
-                        group1: "Group 1",
-                        group2: "Group 2"
-                    },
-                    itemRender: function (model) {
+                config : {
+                    itemRender :  function (model) {
 
-                        var self = this,
-                            $template = $("<h1> " + model.label + " </h1>");
+                        var $el = $("<h1> " +model.label + "</h1>");
 
-                        $template.on("click", function () {
-                            console.log(self);
-                        });
+                        $el.on("click", function () {
+                            alert()
+                        })
 
-                        return $template;
-
+                        return $el;
                     }
                 }
+            },
+
+            template :{
+                title : "Fabio"
             }
         }
+
 
     }
 

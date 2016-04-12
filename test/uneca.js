@@ -97,7 +97,7 @@ require([
     // Bootstrap the application
     require([
         'loglevel',
-        'test/js/test',
+        'test/js/uneca',
         'domReady!'
     ], function (log, Test) {
 
