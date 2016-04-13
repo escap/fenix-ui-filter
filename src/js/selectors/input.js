@@ -174,7 +174,13 @@ define([
     Input.prototype.setValue = function (v, silent) {
         log.info("Set input value: " + v);
 
-        var $input = this.$inputs.filter("[value='" + v + "']").prop('checked', true);
+        var $input;
+
+        if(this.type === 'checkbox' || this.type === 'radio') {
+            $input = this.$inputs.filter("[value='" + v + "']").prop('checked', true);
+        } else {
+            $input = this.$inputs.val(v);
+        }
 
         if (silent !== true) {
             $input.trigger("change");

@@ -66,14 +66,16 @@ define([
 
             _.each(values, _.bind(function (item) {
 
+                var label =  this.$el.addBack().find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]')
+                    .find(s.TEMPLATE_ITEM).filter('[data-id="' + item + '"]').text().trim();
+
                 result.values.push({
                     value: item,
-                    parent: name
+                    parent: name,
+                    label : label
                 });
 
-                result.labels[item] =
-                    this.$el.addBack().find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]')
-                        .find(s.TEMPLATE_ITEM).filter('[data-id="' + item + '"]').text().trim();
+                result.labels[item] = label;
 
             }, this));
 
@@ -341,7 +343,7 @@ define([
 
     Sortable.prototype._itemRender = function ( model ) {
 
-        return model.label;
+        return model.label || "Missing label";
 
     };
 
@@ -364,7 +366,7 @@ define([
 
     Sortable.prototype._printDefaultSelection = function () {
 
-        this._parseInput(this.selector.source);
+        this._parseInput(this.selector.default || this.selector.source);
 
         this._renderGroups();
 

@@ -264,7 +264,7 @@ define([
 
     Dropdown.prototype._renderDropdown = function () {
 
-        var config = this.selector,
+        var config = $.extend(true, {}, this.selector),
             $container = this.$dropdownEl,
             selectize = $.extend(true, {}, config.config),
             dropdown,
@@ -302,11 +302,12 @@ define([
     Dropdown.prototype._printDefaultSelection = function () {
 
         var config = this.selector,
-            instance = this.dropdown[0].selectize,
-            id = config.default ? config.default : this.dropdownData[0].value;
+            instance = this.dropdown[0].selectize;
 
-        //print default values
-        instance.setValue(id);
+        if(config.default) {
+            //print default values
+            instance.setValue(config.default);
+        }
 
     };
 

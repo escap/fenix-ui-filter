@@ -69,13 +69,16 @@ define([
      * @param {Object} sync
      * @return {Object} filter configuration
      */
-    Utils.prototype.mergeConfigurations = function (config, sync) {
+    Utils.prototype.mergeConfigurations = function (config, s) {
 
-        if (sync.toolbar) {
+        var sync = s.toolbar ? s.toolbar : s;
 
-            var values = sync.toolbar.values;
+        if (sync) {
+
+            var values = sync.values;
 
             _.each(values, _.bind(function (obj, key) {
+
                 if (config.hasOwnProperty(key)) {
                     config[key].selector.default = values[key];
                 }
@@ -428,6 +431,7 @@ define([
 
     Utils.prototype._configTimeFromPeriod = function (c) {
 
+        /* ~~~~~~ Selector time
         var config = {},
             domain = c.domain || {},
             period = domain.period,
@@ -449,6 +453,30 @@ define([
         if (from.length < 5) {
             config.selector.config.viewMode = "years";
         }
+
+        config.format = {
+            output : "time"
+        };
+        */
+
+        var config = {},
+            domain = c.domain || {},
+            period = domain.period,
+            from = String(period.from),
+            to = String(period.to);
+
+        //configure selector
+        config.selector = {
+            config: {}
+        };
+
+        config.selector.id = "dropdown";
+        config.selector.from = parseInt(from, 10);
+        config.selector.to = parseInt(to, 10);
+
+        config.format = {
+            output : "time"
+        };
 
         return config;
     };
@@ -477,7 +505,10 @@ define([
     Utils.prototype._configInput = function (c, o) {
 
         var config = {
-            selector: {}
+            selector: {},
+            format: {
+               output: "enumeration"
+            }
         };
 
         config.selector.id = "input";

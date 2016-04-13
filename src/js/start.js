@@ -610,7 +610,7 @@ define([
                     level: 1,
                     rid: "fake_rid",
                     title: {
-                        EN : "EMPTY_CODE_LIST :'("
+                        EN: "EMPTY_CODE_LIST :'("
                     }
                 }]);
 
@@ -1085,11 +1085,11 @@ define([
 
         if (this.selectors[o.target]) {
 
-           if (!!payload.value ) {
-               this._callSelectorInstanceMethod(o.target, "enable");
+            if (!!payload.value) {
+                this._callSelectorInstanceMethod(o.target, "enable");
             } else {
-               this._callSelectorInstanceMethod(o.target, "disable");
-           }
+                this._callSelectorInstanceMethod(o.target, "disable");
+            }
         }
 
     };
@@ -1107,7 +1107,13 @@ define([
 
         _.each(values.values, function (val, id) {
 
-            filter = $.extend(true, filter, compileFilter(id, val));
+            var v = cleanArray(val);
+
+            if (v.length > 0 ){
+                filter = $.extend(true, filter, compileFilter(id, v));
+            } else {
+                log.warn(id + " column excluded from FENIX filter because it has no values");
+            }
 
         });
 
@@ -1141,6 +1147,11 @@ define([
                     return createTimeFilter(id, values, config, key);
 
                     break;
+
+                case "enumeration" :
+
+                    return createEnumerationFilter(id, values, config, key);
+                    break;
                 default :
                     log.warn(id + " not included in the result set. Missing format configuration.");
                     return {};
@@ -1164,10 +1175,10 @@ define([
             }
 
             if (!model.uid) {
+                return
                 log.error("Impossible to find '" + id + "' code list configuration for FENIX output format export.");
+
             }
-
-
 
             var tmpl = Handlebars.compile(template),
                 process = JSON.parse(tmpl(model)),
@@ -1189,21 +1200,14 @@ define([
             var result = {}, time = [],
                 v = values.sort(function (a, b) {
                     return a - b;
+                }).map(function (a) {
+                    return parseInt(a, 10);
                 }),
                 couple = {from: null, to: null};
 
             _.each(v, function (i) {
 
-                if (couple.from === null) {
-                    couple.from = i;
-                }
-
-                if (couple.to - couple.from > 1) {
-                    couple.to = i;
-                    time.push($.extend({}, couple));
-                    couple.from = null;
-                    couple.to = null;
-                }
+                time.push({from: i, to: i});
 
             });
 
@@ -1212,10 +1216,30 @@ define([
                 time.push($.extend({}, couple));
             }
 
-            result[key] = time;
+            result[key] = {time: time};
 
             return result;
         }
+
+        function createEnumerationFilter(id, values, config, key) {
+
+            var result = {};
+
+            result[key] = {enumeration: values};
+
+            return result;
+        }
+
+        function cleanArray(actual) {
+            var newArray = new Array();
+            for (var i = 0; i < actual.length; i++) {
+                if (actual[i]) {
+                    newArray.push(actual[i]);
+                }
+            }
+            return newArray;
+        }
+
     };
 
     // Handlers
@@ -1452,13 +1476,13 @@ define([
 
             $cont = $("<div data-selector='" + id + "'  class='" + conf.className + "'></div>");
 
-            this.$el.prepend($cont);
+            this.$el.append($cont);
 
         }
 
         if (conf.templateIsInitialized !== true) {
             conf.templateIsInitialized = true;
-            $cont.prepend(this._createSelectorContainer(id));
+            $cont.append(this._createSelectorContainer(id));
         }
 
         return $cont;
@@ -1474,12 +1498,12 @@ define([
 
             $cont = $("<div data-semantic='" + id + "' class='" + conf.className + "'></div>");
 
-            this.$el.prepend($cont);
+            this.$el.append($cont);
         }
 
         if (conf.templateIsInitialized !== true) {
             conf.templateIsInitialized = true;
-            $cont.prepend(this._createSemanticContainer(id));
+            $cont.append(this._createSemanticContainer(id));
         }
 
         return $cont;
@@ -1520,7 +1544,7 @@ define([
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
             conf = C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS,
-            $html = $(template($.extend(true, {id: id}, i18nLables, conf, obj )));
+            $html = $(template($.extend(true, {id: id}, i18nLables, conf, obj)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
