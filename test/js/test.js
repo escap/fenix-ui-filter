@@ -95,8 +95,6 @@ define([
 
         this._renderEvents();
 
-
-
         this._renderDynamicModel1();
 
         this._renderSynch();

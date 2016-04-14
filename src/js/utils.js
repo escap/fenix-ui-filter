@@ -257,7 +257,7 @@ define([
                 dimension : c.id
             }
         };
-
+        
         if (c.title && c.title[this.lang.toUpperCase()]) {
             config.template.title = c.title[this.lang.toUpperCase()];
         }
