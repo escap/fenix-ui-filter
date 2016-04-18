@@ -14,7 +14,7 @@ define([
     'handlebars',
     'amplify',
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, CD, templates, i18nLables, Q, Handlebars) {
+], function ($, require, _, log, ERR, EVT, C, CD, templates, i18nLabels, Q, Handlebars) {
 
     'use strict';
 
@@ -168,6 +168,8 @@ define([
         _.each(id, _.bind(function (i) {
             this._removeSelector(i);
         }, this));
+
+        this._trigger("remove", {id: id});
 
     };
 
@@ -731,6 +733,9 @@ define([
                 log.error(ERR.READY_TIMEOUT);
 
             }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
+        } else {
+            //no selectors by default
+            this._trigger('ready');
         }
 
         _.each(this.selectors, _.bind(function (obj, name) {
@@ -1109,7 +1114,7 @@ define([
 
             var v = cleanArray(val);
 
-            if (v.length > 0 ){
+            if (v.length > 0) {
                 filter = $.extend(true, filter, compileFilter(id, v));
             } else {
                 log.warn(id + " column excluded from FENIX filter because it has no values");
@@ -1175,8 +1180,8 @@ define([
             }
 
             if (!model.uid) {
-                return
                 log.error("Impossible to find '" + id + "' code list configuration for FENIX output format export.");
+                return;
 
             }
 
@@ -1231,7 +1236,7 @@ define([
         }
 
         function cleanArray(actual) {
-            var newArray = new Array();
+            var newArray = [];
             for (var i = 0; i < actual.length; i++) {
                 if (actual[i]) {
                     newArray.push(actual[i]);
@@ -1356,7 +1361,7 @@ define([
 
     Filter.prototype._onRemoveItem = function (obj) {
 
-        this._removeSelector(obj.id);
+        this.remove(obj.id);
 
     };
 
@@ -1523,12 +1528,13 @@ define([
             obj.ref = name.concat(this.id).replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '_');
         }, this));
 
-        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLables);
+        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels);
 
         $html = $(templ(model));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
+
         }, this));
 
         //TODO active tab by conf
@@ -1544,7 +1550,7 @@ define([
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
             conf = C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS,
-            $html = $(template($.extend(true, {id: id}, i18nLables, conf, obj)));
+            $html = $(template($.extend(true, {id: id}, i18nLabels, conf, obj)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
