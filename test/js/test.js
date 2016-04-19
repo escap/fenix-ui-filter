@@ -77,11 +77,11 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderModel1BaseTemplate();
+        this._renderShopModel();
 
         return;
 
-        this._renderShopModel();
+        this._renderModel1BaseTemplate();
 
         this._renderDynamicModel1();
 
@@ -106,7 +106,10 @@ define([
 
         var filter = this.createFilter({
             items: ShoppingModel,
-            $el: s.SHOPPING
+            $el: s.SHOPPING,
+            common : {
+                hideHeader : false
+            }
         });
     };
 
@@ -273,7 +276,11 @@ define([
 
         _.each(obj.selectors, function (tab, n) {
 
-            tab.label = i18nLabels["sel_tab_" + n.replace("-", "_")];
+            if (!tab.selector) {
+                tab.selector = {};
+            }
+
+            tab.selector.title = i18nLabels["sel_tab_" + n.replace("-", "_")];
 
         });
     };

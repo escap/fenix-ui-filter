@@ -18,33 +18,40 @@ define([
 
     'use strict';
 
-    var s = {
-        SELECTORS_CLASS: ".fx-selector",
-        SELECTOR_DISABLED_CLASS: "fx-selector-disabled",
-        SELECTORS: "[data-selector]",
-        SEMANTICS: "[data-semantic]",
-        TREE_CONTAINER: "[data-role='tree']",
-        FILTER_CONTAINER: "[data-role='filter']",
-        CLEAR_ALL_CONTAINER: "[data-role='clear']",
-        AMOUNT_CONTAINER: "[data-role='amount']",
-        COMPARE_RADIO_BTNS: "input:radio[name='compare']",
-        COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
-        ACTIVE_TAB: "ul#country-ul li.active",
-        SEMANTIC_TABS: "[data-semantic] a[data-toggle='tab']",
-        SWITCH: "input[data-role='switch'][name='disable-selector']",
-        TEMPLATE_SELECTOR: "[data-template-selector]",
-        TEMPLATE_SELECTOR_CONTAINER: "[data-container]",
-        TEMPLATE_SEMANTIC: "[data-template-semantic]",
-        TEMPLATE_SUMMARY: "[data-summary]",
-        SUMMARY_ITEM: "[data-code]",
-        REMOVE_BTN: "[data-role='remove']"
-    };
+    var defaultOptions = {
+            summaryRender: function (params) {
+                return this._summaryRender(params);
+            }
+        },
+        s = {
+            SELECTORS_CLASS: ".fx-selector",
+            SELECTOR_DISABLED_CLASS: "fx-selector-disabled",
+            SELECTORS: "[data-selector]",
+            SEMANTICS: "[data-semantic]",
+            TREE_CONTAINER: "[data-role='tree']",
+            FILTER_CONTAINER: "[data-role='filter']",
+            CLEAR_ALL_CONTAINER: "[data-role='clear']",
+            AMOUNT_CONTAINER: "[data-role='amount']",
+            COMPARE_RADIO_BTNS: "input:radio[name='compare']",
+            COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
+            ACTIVE_TAB: "ul#country-ul li.active",
+            SEMANTIC_TABS: "[data-semantic] a[data-toggle='tab']",
+            SWITCH: "input[data-role='switch'][name='disable-selector']",
+            TEMPLATE_SELECTOR: "[data-template-selector]",
+            TEMPLATE_SELECTOR_CONTAINER: "[data-container]",
+            TEMPLATE_SEMANTIC: "[data-template-semantic]",
+            TEMPLATE_SUMMARY: "[data-summary]",
+            SUMMARY_ITEM: "[data-code]",
+            REMOVE_BTN: "[data-role='remove']"
+        };
 
     function Filter(o) {
         log.info("FENIX filter");
         log.info(o);
 
-        $.extend(true, this, o, CD, C);
+        $.extend(true, this, CD, C, {initial: o}, defaultOptions);
+
+        this._parseInput(o);
 
         var valid = this._validateInput();
 
@@ -215,6 +222,20 @@ define([
 
     // end API
 
+    Filter.prototype._parseInput = function () {
+
+        this.id = this.initial.id;
+        this.items = this.initial.items || {};
+        this.$el = this.initial.$el;
+        this.template = this.initial.template;
+        this.summary$el = this.initial.summary$el;
+
+        if ($.isFunction(this.initial.summaryRender)) {
+            this.summaryRender = this.initial.summaryRender;
+        }
+
+    };
+
     Filter.prototype._renderFilter = function () {
 
         this._initDynamicVariables();
@@ -222,6 +243,10 @@ define([
         this._unbindEventListeners();
 
         this._preloadSelectorScripts();
+    };
+
+    Filter.prototype._summaryRender = function (item) {
+        return item.label + " [" + item.code + "]";
     };
 
     Filter.prototype._updateSummary = function () {
@@ -278,13 +303,16 @@ define([
 
                         _.each(obj, _.bind(function (v) {
 
-                            var code = typeof v === 'object' ? v.value : v;
+                            var code = typeof v === 'object' ? v.value : v,
+                                item = {
+                                    code: code,
+                                    label: labels[name][code],
+                                    selector: name
+                                };
 
-                            s.values.push({
-                                code: code,
-                                label: labels[name][code],
-                                selector: name
-                            })
+                            item.value = self.summaryRender(item);
+
+                            s.values.push(item)
 
                         }, this));
 
@@ -319,16 +347,12 @@ define([
         if (!this.id) {
 
             window.fx_filter_id >= 0 ? window.fx_filter_id++ : window.fx_filter_id = 0;
-
             this.id = String(window.fx_filter_id);
-
             log.warn("Impossible to find filter id. Set auto id to: " + this.id);
         }
 
-
         if (!this.$el) {
             errors.push({code: ERR.MISSING_CONTAINER});
-
             log.warn("Impossible to find filter container");
         }
 
@@ -336,11 +360,8 @@ define([
 
         //Check if $el exist
         if (this.$el.length === 0) {
-
             errors.push({code: ERR.MISSING_CONTAINER});
-
             log.warn("Impossible to find box container");
-
         }
 
         //check for selectors
@@ -355,11 +376,8 @@ define([
             this.summary$el = $(this.summary$el);
 
             if (this.summary$el.length === 0) {
-
                 errors.push({code: ERR.MISSING_SUMMARY_CONTAINER});
-
                 log.warn("Impossible to find summary container");
-
             }
         }
 
@@ -390,6 +408,7 @@ define([
         this.mandatorySelectorIds = [];
 
         this.codelists = [];
+        this.enumerations = [];
 
         //Summary
         this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
@@ -410,6 +429,7 @@ define([
         this.selectorsId = Object.keys(this.selectors);
 
         this.codelists = _.uniq(this.codelists);
+        this.enumerations = _.uniq(this.enumerations);
 
         this.$tabs = this.$el.find(s.SEMANTIC_TABS);
 
@@ -574,6 +594,25 @@ define([
 
         }, this));
 
+        _.each(this.enumerations, _.bind(function (cd) {
+
+            //Check if codelist is cached otherwise query
+            var stored = this._getStoredCodelist(cd);
+
+            if (stored === undefined || stored.length < 2) {
+
+                log.info(this._getCodelistCacheKey(cd) + " not in session storage.");
+
+                promises.push(this._createPromise(cd, "enumeration"));
+
+            } else {
+
+                log.info(this._getCodelistCacheKey(cd) + " read from session storage.");
+            }
+
+        }, this));
+
+
         return Q.all(promises);
 
     };
@@ -594,19 +633,21 @@ define([
 
     };
 
-    Filter.prototype._createPromise = function (obj) {
+    Filter.prototype._createPromise = function (obj, type) {
 
         var self = this,
             body = obj,
             key = this._getCodelistCacheKey(obj);
 
-        return this._getPromise(body).then(function (result) {
+        return this._getPromise(body, type).then(function (result) {
 
-            if (typeof result === 'undefined') {
+            var data = [];
+
+            if (!result) {
                 log.error("Code List loaded returned empty! id: " + key);
                 log.warn('Add placeholder code list');
 
-                self._storeCodelist(body, [{
+                data.push({
                     code: "fake_code",
                     leaf: true,
                     level: 1,
@@ -614,15 +655,27 @@ define([
                     title: {
                         EN: "EMPTY_CODE_LIST :'("
                     }
-                }]);
-
-            } else {
-                log.info("Code List loaded successfully for: " + key);
-                self._storeCodelist(body, result);
+                });
             }
 
-        }, function (r) {
+            if (!Array.isArray(result)) {
 
+                _.each(result, function (obj, key) {
+                    data.push({
+                        code: key,
+                        title: $.extend(true, {}, obj)
+                    })
+                });
+
+            } else {
+                data = result;
+            }
+
+            log.info("Code List loaded successfully for: " + key);
+
+            self._storeCodelist(body, data);
+
+        }, function (r) {
             log.error(r);
         });
     };
@@ -650,15 +703,34 @@ define([
         return key;
     };
 
-    Filter.prototype._getPromise = function (body) {
+    Filter.prototype._getPromise = function (body, type) {
 
-        return Q($.ajax({
-            url: CD.SERVER + CD.CODELIST_SERVICE + CD.CODES_POSTFIX,
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(body),
-            dataType: 'json'
-        }));
+        var promise,
+            t = type || "";
+        switch (t.toLowerCase()) {
+
+            case "enumeration" :
+                promise = Q($.ajax({
+                    url: CD.SERVER + CD.CODES_SERVICE + CD.ENUMERATION_POSTFIX + body.uid,
+                    type: "GET",
+                    //contentType: "application/json",
+                    //data: JSON.stringify(body),
+                    dataType: 'json'
+                }));
+                break;
+
+            default :
+                promise = Q($.ajax({
+                    url: CD.SERVER + CD.CODES_SERVICE + CD.CODESLIST_POSTFIX,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(body),
+                    dataType: 'json'
+                }));
+                break;
+        }
+
+        return promise;
 
     };
 
@@ -735,7 +807,9 @@ define([
             }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
         } else {
             //no selectors by default
-            this._trigger('ready');
+            window.setTimeout(_.bind(function () {
+                this._trigger('ready');
+            }, this), 100);
         }
 
         _.each(this.selectors, _.bind(function (obj, name) {
@@ -745,7 +819,7 @@ define([
                 obj.initialized = true;
 
                 var selectorId = obj.selector.id,
-                    rawCl = this._getStoredCodelist(obj.cl),
+                    rawCl = this._getStoredCodelist(obj.cl || obj.enumeration),
                     Selector = this._getSelectorRender(selectorId);
 
                 var is = new Selector($.extend(true, {}, obj, {
@@ -768,7 +842,6 @@ define([
                 } else {
                     log.warn(name + " selector was previously initialized but its inner status was not set to ready.");
                 }
-
             }
 
         }, this));
@@ -1112,10 +1185,14 @@ define([
 
         _.each(values.values, function (val, id) {
 
-            var v = cleanArray(val);
+            var v = self.cleanArray(val),
+                config = self.selectors[id] || {},
+                formatConfig = config.format || {};
+
+            var key = formatConfig.dimension || id;
 
             if (v.length > 0) {
-                filter = $.extend(true, filter, compileFilter(id, v));
+                filter[key] = $.extend(true, {}, self.compileFilter(id, v));
             } else {
                 log.warn(id + " column excluded from FENIX filter because it has no values");
             }
@@ -1124,127 +1201,35 @@ define([
 
         return filter;
 
-        function compileFilter(id, values) {
+    };
 
-            var config = self.selectors[id] || {},
-                formatConfig = config.format || {},
-                template = formatConfig.template,
-                output = formatConfig.output || "codes";
+    Filter.prototype._format_catalog = function (values) {
 
-            if (template) {
-                return compileTemplate(id, values, config, template);
-            }
+        var filter = {},
+            self = this;
 
-            var key = formatConfig.dimension || id,
-                tmplBegin = '{ "' + key + '" :',
-                tmplEnd = "}",
-                tmpl;
+        _.each(values.values, function (val, id) {
 
-            switch (output.toLocaleLowerCase()) {
-                case "codes" :
+            var v = self.cleanArray(val),
+                config = self.items[id] || {},
+                formatConfig = config.format || {};
 
-                    tmpl = tmplBegin + '{ "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}' + tmplEnd;
-                    return compileTemplate(id, values, config, key, tmpl);
+            var key = formatConfig.metadataAttribute;
 
-                    break;
-                case "time" :
-
-                    return createTimeFilter(id, values, config, key);
-
-                    break;
-
-                case "enumeration" :
-
-                    return createEnumerationFilter(id, values, config, key);
-                    break;
-                default :
-                    log.warn(id + " not included in the result set. Missing format configuration.");
-                    return {};
-            }
-
-        }
-
-        function compileTemplate(id, values, config, key, template) {
-
-            /*
-             Priority
-             - values
-             - format configuration
-             - code list configuration
-             */
-
-            var model = $.extend(true, config.cl, config.format, {codes: '"' + values.join('","') + '"'});
-
-            if (!template) {
-                log.error("Impossible to find '" + id + "' process template. Check your '" + id + "'.filter.process configuration.")
-            }
-
-            if (!model.uid) {
-                log.error("Impossible to find '" + id + "' code list configuration for FENIX output format export.");
+            if (!key) {
+                log.warn(id + " impossible to find format.metadataAttribute configuration");
                 return;
-
             }
 
-            var tmpl = Handlebars.compile(template),
-                process = JSON.parse(tmpl(model)),
-                codes = process[key].codes;
-
-            //Remove empty version attributes
-            _.each(codes, function (obj) {
-                if (!obj.version) {
-                    delete obj.version;
-                }
-            });
-
-            return process;
-
-        }
-
-        function createTimeFilter(id, values, config, key) {
-
-            var result = {}, time = [],
-                v = values.sort(function (a, b) {
-                    return a - b;
-                }).map(function (a) {
-                    return parseInt(a, 10);
-                }),
-                couple = {from: null, to: null};
-
-            _.each(v, function (i) {
-
-                time.push({from: i, to: i});
-
-            });
-
-            if (couple.from && !couple.to) {
-                couple.to = couple.from;
-                time.push($.extend({}, couple));
+            if (v.length > 0) {
+                filter[key] = $.extend(true, {}, self.compileFilter(id, v));
+            } else {
+                log.warn(id + " column excluded from FENIX filter because it has no values");
             }
 
-            result[key] = {time: time};
+        });
 
-            return result;
-        }
-
-        function createEnumerationFilter(id, values, config, key) {
-
-            var result = {};
-
-            result[key] = {enumeration: values};
-
-            return result;
-        }
-
-        function cleanArray(actual) {
-            var newArray = [];
-            for (var i = 0; i < actual.length; i++) {
-                if (actual[i]) {
-                    newArray.push(actual[i]);
-                }
-            }
-            return newArray;
-        }
-
+        return filter;
     };
 
     // Handlers
@@ -1265,7 +1250,6 @@ define([
     };
 
     Filter.prototype._onReady = function () {
-
         log.info("Filter [" + this.id + "] is ready");
 
         this.$switches.on("change", _.bind(function (e) {
@@ -1353,6 +1337,7 @@ define([
         if (!willBeAdded) {
             log.warn(name + " selector will not be added because it already exist or, if semantic, contains id that already exist.");
         } else {
+            this.items[name] = obj;
             this._evaluateSelectorConfiguration(obj, name);
             this._renderFilter();
         }
@@ -1366,6 +1351,8 @@ define([
     };
 
     Filter.prototype._removeSelector = function (id) {
+
+        delete this.items[id];
 
         this._removeItemReferences(id);
 
@@ -1409,6 +1396,11 @@ define([
         //get set of codelists
         if (obj.hasOwnProperty("cl")) {
             this.codelists.push(obj.cl);
+        }
+
+        //get set of enumeration
+        if (obj.hasOwnProperty("enumeration")) {
+            this.enumerations.push(obj.enumeration);
         }
 
         //get mandatory selectors id
@@ -1534,7 +1526,6 @@ define([
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
-
         }, this));
 
         //TODO active tab by conf
@@ -1609,6 +1600,121 @@ define([
 
         //unbind event listeners
         this._unbindEventListeners();
+
+    };
+
+    Filter.prototype.cleanArray = function (actual) {
+        var newArray = [];
+        for (var i = 0; i < actual.length; i++) {
+            if (actual[i]) {
+                newArray.push(actual[i]);
+            }
+        }
+        return newArray;
+    };
+
+    //FENIX
+    Filter.prototype.compileFilter = function (id, values) {
+
+        var config = this.items[id] || {},
+            formatConfig = config.format || {},
+            template = formatConfig.template,
+            output = formatConfig.output || "codes";
+
+        if (template) {
+            return this.compileTemplate(id, values, config, template);
+        }
+
+        var key = formatConfig.dimension || id,
+            tmpl;
+
+        switch (output.toLocaleLowerCase()) {
+            case "codes" :
+
+                tmpl = '{ "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}';
+                return this.compileTemplate(id, values, config, key, tmpl);
+
+                break;
+            case "time" :
+
+                return this.createTimeFilter(id, values, config, key);
+                break;
+
+            case "enumeration" :
+
+                return this.createEnumerationFilter(id, values, config, key);
+                break;
+            default :
+                log.warn(id + " not included in the result set. Missing format configuration.");
+                return {};
+        }
+
+    };
+
+    Filter.prototype.compileTemplate = function (id, values, config, key, template) {
+
+        /*
+         Priority
+         - values
+         - format configuration
+         - code list configuration
+         */
+
+        var model = $.extend(true, config.cl, config.format, {codes: '"' + values.join('","') + '"'});
+
+        if (!template) {
+            log.error("Impossible to find '" + id + "' process template. Check your '" + id + "'.filter.process configuration.")
+        }
+
+        if (!model.uid) {
+            log.error("Impossible to find '" + id + "' code list configuration for FENIX output format export.");
+            return;
+        }
+
+        var tmpl = Handlebars.compile(template),
+            process = JSON.parse(tmpl(model)),
+            codes = process.codes;
+
+        //Remove empty version attributes
+        _.each(codes, function (obj) {
+            if (!obj.version) {
+                delete obj.version;
+            }
+        });
+
+        return process;
+
+    };
+
+    Filter.prototype.createTimeFilter = function (id, values, config, key) {
+
+        var result = {}, time = [],
+            v = values.sort(function (a, b) {
+                return a - b;
+            }).map(function (a) {
+                return parseInt(a, 10);
+            }),
+            couple = {from: null, to: null};
+
+        _.each(v, function (i) {
+
+            time.push({from: i, to: i});
+
+        });
+
+        if (couple.from && !couple.to) {
+            couple.to = couple.from;
+            time.push($.extend({}, couple));
+        }
+
+        result[key] = {time: time};
+
+        return result;
+    };
+
+    Filter.prototype.createEnumerationFilter = function (id, values, config, key) {
+
+        return {enumeration: values};
 
     };
 

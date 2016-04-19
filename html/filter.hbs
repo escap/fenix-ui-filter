@@ -87,7 +87,7 @@
 
                     <li role="presentation" data-sel="{{this.id}}">
                         <a href="#{{this.ref}}" aria-controls="{{this.id}}" role="tab"
-                           data-toggle="tab">{{this.label}}</a>
+                           data-toggle="tab">{{this.selector.title}}</a>
                     </li>
 
                 {{/each}}
@@ -112,7 +112,7 @@
                 {{label}}
 
                 {{#values}}
-                    <li data-code="{{this.code}}" data-selector="{{this.selector}}">{{this.label}} [{{this.code}}]</li>
+                    <li data-code="{{this.code}}" data-selector="{{this.selector}}">{{ this.value }}</li>
                 {{/values}}
 
             </ul>

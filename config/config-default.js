@@ -10,8 +10,9 @@ define(function () {
     return {
 
         SERVER: SERVER,
-        CODELIST_SERVICE: "d3s_dev/msd",
-        CODES_POSTFIX: '/codes/filter',
+        CODES_SERVICE: "d3s_dev/msd",
+        CODESLIST_POSTFIX: '/codes/filter',
+        ENUMERATION_POSTFIX: '/choices/',
         VALID_TIMEOUT: 10000, //10 secs
 
         selector_registry: {
