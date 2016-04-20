@@ -235,6 +235,7 @@ define([
         }
 
         this.direction = this.initial.direction || C.DIRECTION || CD.DIRECTION;
+        this.ensureAtLeast = parseInt(this.initial.ensureAtLeast || C.ENSURE_AT_LEAST || CD.ENSURE_AT_LEAST, 10);
 
     };
 
@@ -1285,6 +1286,8 @@ define([
 
         this._updateSummary();
 
+        this._checkItemsAmount();
+
         window.clearTimeout(this.validTimeout);
 
         amplify.publish(this._getEventName(EVT.SELECTORS_READY));
@@ -1342,6 +1345,7 @@ define([
             this.items[name] = obj;
             this._evaluateSelectorConfiguration(obj, name);
             this._renderFilter();
+            this._checkItemsAmount();
         }
 
     };
@@ -1350,6 +1354,29 @@ define([
 
         this.remove(obj.id);
 
+        this._checkItemsAmount();
+
+    };
+
+    Filter.prototype._lockRemoveButtons = function () {
+        this.$el.find(s.REMOVE_BTN).attr("disabled", true);
+    };
+
+    Filter.prototype._unlockRemoveButtons = function () {
+        this.$el.find(s.REMOVE_BTN).attr("disabled", false);
+    };
+
+    Filter.prototype._checkItemsAmount = function () {
+
+        if (this.ensureAtLeast < 0) {
+            return;
+        }
+
+        if (Object.keys(this.items).length <= this.ensureAtLeast  ) {
+            this._lockRemoveButtons();
+        } else {
+            this._unlockRemoveButtons();
+        }
     };
 
     Filter.prototype._removeSelector = function (id) {
