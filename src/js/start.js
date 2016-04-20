@@ -234,6 +234,8 @@ define([
             this.summaryRender = this.initial.summaryRender;
         }
 
+        this.direction = this.initial.direction || C.DIRECTION || CD.DIRECTION;
+
     };
 
     Filter.prototype._renderFilter = function () {
@@ -1473,7 +1475,11 @@ define([
 
             $cont = $("<div data-selector='" + id + "'  class='" + conf.className + "'></div>");
 
-            this.$el.append($cont);
+            if (this.direction === "append") {
+                this.$el.append($cont);
+            } else {
+                this.$el.prepend($cont);
+            }
 
         }
 
@@ -1495,7 +1501,11 @@ define([
 
             $cont = $("<div data-semantic='" + id + "' class='" + conf.className + "'></div>");
 
-            this.$el.append($cont);
+            if (this.direction === "append") {
+                this.$el.append($cont);
+            } else {
+                this.$el.prepend($cont);
+            }
         }
 
         if (conf.templateIsInitialized !== true) {

@@ -47,6 +47,8 @@ define(function () {
             "hideSwitch": true
         },
 
+        DIRECTION : "append",
+
         //Utils
         DEFAULT_PERIOD_FROM: 1960,
         DEFAULT_PERIOD_TO: 2016
