@@ -4,15 +4,10 @@ define(function () {
 
     'use strict';
 
-    var selectorPath = "fx-filter/js/selectors/",
-        SERVER = 'http://fenix.fao.org/';
+    var selectorPath = "fx-filter/js/selectors/";
 
     return {
-
-        SERVER: SERVER,
-        CODES_SERVICE: "d3s_dev/msd",
-        CODESLIST_POSTFIX: '/codes/filter',
-        ENUMERATION_POSTFIX: '/choices/',
+        
         VALID_TIMEOUT: 10000, //10 secs
 
         selector_registry: {

@@ -10,11 +10,11 @@ define([
     'fx-filter/config/config-default',
     'text!fx-filter/html/filter.hbs',
     'i18n!fx-filter/nls/filter',
-    'q',
+    "fx-common/bridge",
     'handlebars',
     'amplify',
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, CD, templates, i18nLabels, Q, Handlebars) {
+], function ($, require, _, log, ERR, EVT, C, CD, templates, i18nLabels, Bridge, Handlebars) {
 
     'use strict';
 
@@ -616,7 +616,7 @@ define([
         }, this));
 
 
-        return Q.all(promises);
+        return Bridge.all(promises);
 
     };
 
@@ -713,23 +713,17 @@ define([
         switch (t.toLowerCase()) {
 
             case "enumeration" :
-                promise = Q($.ajax({
-                    url: CD.SERVER + CD.CODES_SERVICE + CD.ENUMERATION_POSTFIX + body.uid,
-                    type: "GET",
-                    //contentType: "application/json",
-                    //data: JSON.stringify(body),
-                    dataType: 'json'
-                }));
+                promise = Bridge.getEnumerationPromise({
+                    uid : body.uid
+                });
                 break;
 
             default :
-                promise = Q($.ajax({
-                    url: CD.SERVER + CD.CODES_SERVICE + CD.CODESLIST_POSTFIX,
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(body),
-                    dataType: 'json'
-                }));
+
+                promise = Bridge.getCodeListPromise({
+                    body : body
+                });
+
                 break;
         }
 
