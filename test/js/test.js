@@ -81,9 +81,9 @@ define([
 
         return;
 
-        this._renderModel1BaseTemplate();
-
         this._renderDynamicModel1();
+
+        this._renderModel1BaseTemplate();
 
         this._renderEvents();
 

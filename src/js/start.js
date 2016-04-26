@@ -425,6 +425,8 @@ define([
 
         //pub/sub
         this.channels = {};
+
+        this.cache = {};
     };
 
     Filter.prototype._initDynamicVariables = function () {
@@ -685,18 +687,20 @@ define([
 
     Filter.prototype._storeCodelist = function (obj, cl) {
 
-        return amplify.store.sessionStorage(this._getCodelistCacheKey(obj), cl);
+        this.cache[this._getCodelistCacheKey(obj)] = cl;
+
+        return this.cache[this._getCodelistCacheKey(obj)];
     };
 
     Filter.prototype._getStoredCodelist = function (obj) {
 
-        return obj ? amplify.store.sessionStorage(this._getCodelistCacheKey(obj)) : null;
-
+        return this.cache[this._getCodelistCacheKey(obj)];
     };
 
-    Filter.prototype._getCodelistCacheKey = function (obj) {
+    Filter.prototype._getCodelistCacheKey = function (o) {
 
-        var key = "_",
+        var obj = typeof o === 'object' ? o : {},
+            key = "_",
             keys = Object.keys(obj).sort();
 
         for (var i = 0; i < keys.length; i++) {
@@ -713,15 +717,15 @@ define([
         switch (t.toLowerCase()) {
 
             case "enumeration" :
-                promise = Bridge.getEnumerationPromise({
-                    uid : body.uid
+                promise = Bridge.getEnumeration({
+                    uid: body.uid
                 });
                 break;
 
             default :
 
-                promise = Bridge.getCodeListPromise({
-                    body : body
+                promise = Bridge.getCodeList({
+                    body: body
                 });
 
                 break;
@@ -816,8 +820,11 @@ define([
                 obj.initialized = true;
 
                 var selectorId = obj.selector.id,
-                    rawCl = this._getStoredCodelist(obj.cl || obj.enumeration),
-                    Selector = this._getSelectorRender(selectorId);
+                    rawCl,
+                    Selector;
+
+                rawCl = this._getStoredCodelist(obj.cl || obj.enumeration);
+                Selector = this._getSelectorRender(selectorId);
 
                 var is = new Selector($.extend(true, {}, obj, {
                     id: name,
@@ -1366,7 +1373,7 @@ define([
             return;
         }
 
-        if (Object.keys(this.items).length <= this.ensureAtLeast  ) {
+        if (Object.keys(this.items).length <= this.ensureAtLeast) {
             this._lockRemoveButtons();
         } else {
             this._unlockRemoveButtons();
@@ -1549,6 +1556,12 @@ define([
         _.each(semantic.selectors, _.bind(function (obj, name) {
             obj.id = name;
             obj.ref = name.concat(this.id).replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '_');
+
+            if (!obj.selector) {
+                obj.selector = {};
+            }
+            obj.selector.title = obj.selector.title ? obj.selector.title : "Missing title: " + obj.id;
+
         }, this));
 
         model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels);

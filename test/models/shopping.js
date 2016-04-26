@@ -6,7 +6,7 @@ define(function () {
 
     return {
 
-        "interruttore" : {
+        "switch" : {
 
             selector : {
                 id : "input",
@@ -55,8 +55,6 @@ define(function () {
                 //selector id
                 "country-country": {
 
-                    label : "Tab 1",
-
                     //body sent to msd/codes/filter
                     "cl": {
                         "uid": "crs_recipientcountries", //for pure country list "crs_recipients"
@@ -79,12 +77,11 @@ define(function () {
                         //"hideClearAllButton" : true, //Hide clear all button
                         //"hideFooter" : true, //hide footer
                         //"hideSummary" : true, //Hide selection summary,
+                        title : "Country"
                     }
                 },
 
                 "country-region": {
-
-                    label : "Tab 2",
 
                     "cl": {
                         "uid": "crs_regions_countries",
@@ -95,7 +92,8 @@ define(function () {
                         "id": "tree",
                         "blacklist": [298, 189, 289, 498, 389, 380, 489, 798, 789, 689, 619, 679, 89, 589, 889], //code to exclude from the codelist
                         "hideSelectAllButton": true,
-                        //"disabled" : true
+                        //"disabled" : true,
+                        title : "Region"
                     }
 
                 },
@@ -112,7 +110,8 @@ define(function () {
 
                     "selector": {
                         "id": "tree",
-                        "hideSelectAllButton": true
+                        "hideSelectAllButton": true,
+                        title : "Country / Region"
                     }
                 }
 
