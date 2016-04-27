@@ -19,7 +19,6 @@ define([
             checkableInputs: ["radio", "checkbox"]
         },
         s = {
-            CHECKED: "input[type='radio']:checked",
             TEMPLATE_LIST: "[data-input-list]",
             TEMPLATE_ITEM: "[data-input-item]"
         };
@@ -217,7 +216,7 @@ define([
         this.status = {};
         this.status.disabled = this.selector.disabled;
 
-        this.$inputs = this.$el.find("input[type='" + this.type + "']");
+        this.$inputs = this.$el.find(s.TEMPLATE_LIST).find("input[type='" + this.type + "']");
 
         this.$inputs.attr("name", this.id + '-' + this.controller.id);
 
@@ -232,14 +231,13 @@ define([
     Input.prototype._renderInput = function () {
 
         this._createInputs();
-
     };
 
     Input.prototype._createInputs = function () {
 
         var data = this.selector.source || [],
             config = this.selector.config || {},
-            $list = this.$el.addBack().find(s.TEMPLATE_LIST),
+            $list = this.$el.find(s.TEMPLATE_LIST),
             item = $(templates).find(s.TEMPLATE_ITEM)[0].outerHTML,
             list;
 

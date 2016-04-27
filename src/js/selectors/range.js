@@ -63,7 +63,7 @@ define([
         result.labels[values.from] = 'From';
 
         //add to is double slider
-        if (this.selector.config.type === "double") {
+        if (this.selector.config && this.selector.config.type === "double") {
             result.values = [];
             result.values.push({value : values.to, parent : 'to'});
             result.values.push({value : values.from, parent : 'from'});

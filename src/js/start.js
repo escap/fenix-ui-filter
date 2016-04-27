@@ -389,9 +389,7 @@ define([
 
     Filter.prototype._attach = function () {
 
-        var template = this.template || $("<div></div>");
-
-        this.$el.append(template);
+        this.$el.append(this.template);
 
     };
 
@@ -1412,6 +1410,10 @@ define([
             alert(selectorId + " does not have a valid configuration. Missing 'selector' configuration.");
         }
 
+        if (!obj.selector.hasOwnProperty('id')) {
+            alert(selectorId + " does not have a valid configuration. Missing 'selector.id' configuration.");
+        }
+
         this.selectors[selectorId] = obj;
 
         //Selector id
@@ -1501,7 +1503,7 @@ define([
         if ($cont.length === 0) {
             log.warn("Impossible to find selector container: " + id);
 
-            $cont = $("<div data-selector='" + id + "'  class='" + conf.className + "'></div>");
+            $cont = $("<div data-selector='" + id + "'  class='" + (conf.className || '') + "'></div>");
 
             if (this.direction === "append") {
                 this.$el.append($cont);
@@ -1560,7 +1562,12 @@ define([
             if (!obj.selector) {
                 obj.selector = {};
             }
-            obj.selector.title = obj.selector.title ? obj.selector.title : "Missing title: " + obj.id;
+
+            if (!obj.template) {
+                obj.template = {};
+            }
+
+            obj.selector.title = obj.template.title ? obj.template.title : "Missing title: " + obj.id;
 
         }, this));
 

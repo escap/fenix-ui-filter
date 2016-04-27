@@ -14,14 +14,16 @@
 
     <link rel="stylesheet" href="http://fenixrepo.fao.org/cdn/js/bootstrap/3.3.4/css/bootstrap.min.css">
     <!-- dropdown selector -->
-    <link rel="stylesheet" href="http://fenixrepo.fao.org/cdn/js/selectize/0.12.1/css/selectize.bootstrap3.css" />
+    <link rel="stylesheet" href="http://fenixrepo.fao.org/cdn/js/selectize/0.12.1/css/selectize.bootstrap3.css"/>
     <!-- tree selector -->
     <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/jstree/3.3.0/dist/themes/default/style.min.css'>
     <!-- range selector -->
     <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/ion.rangeSlider/2.1.2/css/ion.rangeSlider.css'>
-    <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/ion.rangeSlider/2.1.2/css/ion.rangeSlider.skinHTML5.css'>
+    <link rel="stylesheet"
+          href='http://fenixrepo.fao.org/cdn/js/ion.rangeSlider/2.1.2/css/ion.rangeSlider.skinHTML5.css'>
     <!-- time selector -->
-    <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/bootstrap-datetimepicker/4.17.37/build/css/bootstrap-datetimepicker.min.css'>
+    <link rel="stylesheet"
+          href='http://fenixrepo.fao.org/cdn/js/bootstrap-datetimepicker/4.17.37/build/css/bootstrap-datetimepicker.min.css'>
     <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/bootstrap-daterangepicker/2.1.19/daterangepicker.css'>
 
     <link rel="stylesheet" href="css/test.css">
@@ -32,16 +34,117 @@
 <div class="alert alert-warning" role="alert">Open console for logs</div>
 
 <div class="container">
-    <div class="col-xs-12">
+    <div class="row">
+        <div class="col-xs-12">
 
-        <h1>FENIX Filter: test</h1>
+            <h1>FENIX Filter: test</h1>
 
+        </div>
     </div>
+
 </div>
 
 <hr>
 
-<!-- SYNC -->
+
+<!-- All -->
+<div class="container">
+    <div class="row">
+
+        <div class="col-xs-12">
+
+            <h2>All</h2>
+
+            <div id="all">
+
+
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Inputs</h2></div>
+
+                </div>
+
+                <div class="row">
+
+                    <div data-selector="checkbox" class="col-md-6"></div>
+
+                    <div data-selector="radio" class="col-md-6"></div>
+
+                    <div data-selector="text" class="col-md-6"></div>
+
+                </div>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Trees</h2></div>
+
+                </div>
+                <div class="row">
+
+
+                    <div data-selector="tree" class="col-md-6"></div>
+
+                    <div data-semantic="tripleTree" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+
+                    <div class="col-md-12"><h2>Dropdowns</h2></div>
+
+                    <div data-selector="dropdown" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Ranges</h2></div>
+
+                    <div data-selector="range" class="col-md-6"></div>
+
+                    <div data-selector="doubleRange" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Sortable</h2></div>
+
+                    <div data-selector="sortable" class="col-md-6"></div>
+
+                    <div data-selector="drag" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Time</h2></div>
+
+                    <div data-selector="time" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="well" id="all-summary"></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!--
+
+&lt;!&ndash; SYNC &ndash;&gt;
 <div class="container">
     <div class="row">
 
@@ -59,7 +162,7 @@
 
 <hr>
 
-<!-- SYNC -->
+&lt;!&ndash; SYNC &ndash;&gt;
 <div class="container">
     <div class="row">
 
@@ -91,7 +194,7 @@
 
 <hr>
 
-<!-- SYNC -->
+&lt;!&ndash; SYNC &ndash;&gt;
 <div class="container">
 
     <div class="row">
@@ -121,7 +224,7 @@
 
 <hr>
 
-<!-- FENIX -->
+&lt;!&ndash; FENIX &ndash;&gt;
 <div class="container">
     <div class="row">
 
@@ -148,7 +251,7 @@
 
 <hr>
 
-<!-- DYNAMIC -->
+&lt;!&ndash; DYNAMIC &ndash;&gt;
 <div class="container">
     <div class="row">
 
@@ -185,7 +288,7 @@
 </div>
 
 <hr>
-<!-- BASE TEMPLATE -->
+&lt;!&ndash; BASE TEMPLATE &ndash;&gt;
 <div class="container">
     <div class="row">
 
@@ -205,6 +308,7 @@
 </div>
 
 <hr>
+-->
 
 
 <script data-main="test" src="//fenixrepo.fao.org/cdn/js/requirejs/2.1.15/require.min.js"></script>

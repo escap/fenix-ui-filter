@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>FENIX Filter: test</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="description" content="FENIX Filter: test">
+    <meta name="author" content="Daniele Salvatore <daniele.salvatore [at] fao.org>">
+
+    <link rel="stylesheet" href="http://fenixrepo.fao.org/cdn/js/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- dropdown selector -->
+    <link rel="stylesheet" href="http://fenixrepo.fao.org/cdn/js/selectize/0.12.1/css/selectize.bootstrap3.css"/>
+    <!-- tree selector -->
+    <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/jstree/3.3.0/dist/themes/default/style.min.css'>
+    <!-- range selector -->
+    <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/ion.rangeSlider/2.1.2/css/ion.rangeSlider.css'>
+    <link rel="stylesheet"
+          href='http://fenixrepo.fao.org/cdn/js/ion.rangeSlider/2.1.2/css/ion.rangeSlider.skinHTML5.css'>
+    <!-- time selector -->
+    <link rel="stylesheet"
+          href='http://fenixrepo.fao.org/cdn/js/bootstrap-datetimepicker/4.17.37/build/css/bootstrap-datetimepicker.min.css'>
+    <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/bootstrap-daterangepicker/2.1.19/daterangepicker.css'>
+
+    <link rel="stylesheet" href="css/test.css">
+
+</head>
+<body>
+
+<div class="alert alert-warning" role="alert">Open console for logs</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+
+            <h1>FENIX Filter:
+                <small>showcase</small>
+            </h1>
+
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+<!-- All -->
+<div class="container">
+    <div class="row">
+
+        <div class="col-xs-12">
+
+            <div id="all">
+
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Input</h2></div>
+
+                </div>
+
+                <div class="row">
+
+                    <div data-selector="checkbox" class="col-md-6 panel panel-default"></div>
+
+                    <div data-selector="radio" class="col-md-6"></div>
+
+                    <div data-selector="text" class="col-md-6"></div>
+
+                </div>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Tree</h2></div>
+
+                </div>
+                <div class="row">
+
+
+                    <div data-selector="tree" class="col-md-6"></div>
+
+                    <!-- NB data-semantic instead of data-selector-->
+                    <div data-semantic="tripleTree" class="col-md-6"></div>
+
+                    <div data-selector="disabledTree" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+
+                    <div class="col-md-12"><h2>Dropdown</h2></div>
+
+                    <div data-selector="dropdown" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Range</h2></div>
+
+                    <div data-selector="range" class="col-md-6"></div>
+
+                    <div data-selector="doubleRange" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Sortable</h2></div>
+
+                    <div data-selector="sortable" class="col-md-6"></div>
+
+                    <div data-selector="drag" class="col-md-6"></div>
+
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-md-12"><h2>Time</h2></div>
+
+                    <div data-selector="time" class="col-md-6"></div>
+
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="well" id="all-summary"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script data-main="showcase" src="//fenixrepo.fao.org/cdn/js/requirejs/2.1.15/require.min.js"></script>
+
+</body>
+</html>

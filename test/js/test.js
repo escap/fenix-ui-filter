@@ -12,10 +12,11 @@ define([
     'test/models/fx-process',
     'test/models/aggregation',
     'test/models/shopping',
+    'test/models/all',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, ShoppingModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, ShoppingModel, AllModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -37,7 +38,9 @@ define([
             TABLE_TAB: "#table-tab",
             TABLE_BTN: "#table-btn",
             EVENT_COUNTERS: "#event-counters",
-            SHOPPING: "#shopping"
+            SHOPPING: "#shopping",
+            ALL : "#all",
+            ALL_SUMMARY : "#all-summary"
         },
         empty_model = {data: []},
         error_model = {},
@@ -77,11 +80,9 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderShopModel();
+        this._renderAll();
 
         return;
-
-        this._renderDynamicModel1();
 
         this._renderModel1BaseTemplate();
 
@@ -89,8 +90,6 @@ define([
 
         this._renderShopModel();
 
-        this._renderDynamicModel1();
-
         this._renderSynch();
 
         this._renderEvents();
@@ -99,7 +98,21 @@ define([
 
         this._renderSynch();
 
+        this._renderDynamicModel1();
+
+
+
     };
+
+    Test.prototype._renderAll = function () {
+
+        var filter = this.createFilter({
+            items: AllModel,
+            $el: s.ALL,
+            summary$el : s.ALL_SUMMARY
+        });
+    };
+
     Test.prototype._renderShopModel = function () {
 
         var items  = this._createFilterConfiguration(ShoppingModel);
