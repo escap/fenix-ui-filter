@@ -25,7 +25,30 @@ define([
 
     Test.prototype._render = function () {
 
+        this._bindEventListeners();
+        
         this._renderAll();
+    };
+
+    Test.prototype._bindEventListeners = function () {
+
+        $("#snippet-btn").on("click", function () {
+
+            _.each(AllModel, function (obj, key) {
+
+                var $snippet = $("<div class='col-xs-6'><code></code></div>");
+                $snippet.find("code").html(JSON.stringify(obj));
+
+                if ($("[data-selector='"+key+"']").length > 0 ){
+                    $("[data-selector='"+key+"']").after($snippet);
+                } else {
+                    $("[data-semantic='"+key+"']").after($snippet);
+                }
+
+            })
+
+        });
+
     };
 
     Test.prototype._renderAll = function () {
@@ -36,24 +59,8 @@ define([
             summary$el: s.ALL_SUMMARY
         });
 
-        /* TODO uncomment me
-
-        _.each(AllModel, function (obj, key) {
-
-            var $snippet = $("<div class='col-xs-6'><code></code></div>");
-            $snippet.find("code").html(JSON.stringify(obj));
-
-            if ($("[data-selector='"+key+"']").length > 0 ){
-                $("[data-selector='"+key+"']").after($snippet);
-            } else {
-                $("[data-semantic='"+key+"']").after($snippet);
-            }
-
-        })
-
-         */
     };
-
+    
     return new Test();
 
 });
