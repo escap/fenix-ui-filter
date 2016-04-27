@@ -2,14 +2,14 @@
 <html>
 <head>
 
-    <title>FENIX Filter: test</title>
+    <title>FENIX Filter: showcase</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="description" content="FENIX Filter: test">
+    <meta name="description" content="FENIX Filter: showcase">
     <meta name="author" content="Daniele Salvatore <daniele.salvatore [at] fao.org>">
 
     <link rel="stylesheet" href="http://fenixrepo.fao.org/cdn/js/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -26,7 +26,7 @@
           href='http://fenixrepo.fao.org/cdn/js/bootstrap-datetimepicker/4.17.37/build/css/bootstrap-datetimepicker.min.css'>
     <link rel="stylesheet" href='http://fenixrepo.fao.org/cdn/js/bootstrap-daterangepicker/2.1.19/daterangepicker.css'>
 
-    <link rel="stylesheet" href="css/test.css">
+    <link rel="stylesheet" href="css/showcase.css">
 
 </head>
 <body>
@@ -64,11 +64,13 @@
 
                 <div class="row">
 
-                    <div data-selector="checkbox" class="col-md-6 panel panel-default"></div>
+                    <div data-selector="checkbox" class="col-md-6"></div>
 
                     <div data-selector="radio" class="col-md-6"></div>
 
                     <div data-selector="text" class="col-md-6"></div>
+
+                    <div data-selector="textDisabled" class="col-md-6"></div>
 
                 </div>
 
@@ -81,22 +83,26 @@
                 </div>
                 <div class="row">
 
-
                     <div data-selector="tree" class="col-md-6"></div>
 
                     <!-- NB data-semantic instead of data-selector-->
-                    <div data-semantic="tripleTree" class="col-md-6"></div>
+                    <div data-semantic="treeTriple" class="col-md-6"></div>
 
-                    <div data-selector="disabledTree" class="col-md-6"></div>
+                    <div data-selector="treeDisabled" class="col-md-6"></div>
+
+                    <div data-selector="treeSingle" class="col-md-6"></div>
 
                 </div>
                 <hr>
                 <div class="row">
 
-
                     <div class="col-md-12"><h2>Dropdown</h2></div>
 
                     <div data-selector="dropdown" class="col-md-6"></div>
+
+                    <div data-selector="dropdownSingle" class="col-md-6"></div>
+
+                    <div data-selector="dropdownDisabled" class="col-md-6"></div>
 
                 </div>
                 <hr>
@@ -106,7 +112,9 @@
 
                     <div data-selector="range" class="col-md-6"></div>
 
-                    <div data-selector="doubleRange" class="col-md-6"></div>
+                    <div data-selector="rangeDouble" class="col-md-6"></div>
+
+                    <div data-selector="rangeDisabled" class="col-md-6"></div>
 
                 </div>
                 <hr>
@@ -116,7 +124,11 @@
 
                     <div data-selector="sortable" class="col-md-6"></div>
 
+                    <div data-selector="sortableDisabled" class="col-md-6"></div>
+
                     <div data-selector="drag" class="col-md-6"></div>
+
+                    <div data-selector="sortableCustomRender" class="col-md-6"></div>
 
                 </div>
                 <hr>
@@ -125,6 +137,8 @@
                     <div class="col-md-12"><h2>Time</h2></div>
 
                     <div data-selector="time" class="col-md-6"></div>
+
+                    <div data-selector="timeDisabled" class="col-md-6"></div>
 
                 </div>
 

@@ -66,7 +66,7 @@ define([
 
             _.each(values, _.bind(function (item) {
 
-                var label =  this.$el.addBack().find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]')
+                var label =  this.$el.find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]')
                     .find(s.TEMPLATE_ITEM).filter('[data-id="' + item + '"]').text().trim();
 
                 result.values.push({
@@ -261,7 +261,7 @@ define([
         //loop over groups
         _.each(groups, _.bind(function (name) {
 
-            $list = this.$el.addBack().find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]');
+            $list = this.$el.find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]');
 
             if ($list.length === 0) {
                 log.info("Injecting sortable list");
@@ -403,7 +403,7 @@ define([
 
         _.each(this.groups, _.bind(function (obj, name) {
 
-            $list = this.$el.addBack().find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]');
+            $list = this.$el.find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]');
             $list.empty();
 
         }, this));

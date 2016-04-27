@@ -17,7 +17,7 @@ define(function () {
                     {value : "dw" , label : "Dani 3", parent : "group2"},
                     {value : "de" , label : "Dani 4", parent : "group2"},
                     {value : "dr" , label : "Dani 5", parent : "group2"},
-                    {value : "dt" , label : "Dani 5", parent : "group2"},
+                    {value : "dt" , label : "Dani 5", parent : "group2"}
                 ],
                 config : {
                     itemRender :  function (model) {
