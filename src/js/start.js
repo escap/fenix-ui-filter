@@ -808,7 +808,7 @@ define([
         } else {
             //no selectors by default
             window.setTimeout(_.bind(function () {
-                this._trigger('ready');
+                this._onReady();
             }, this), 100);
         }
 
