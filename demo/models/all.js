@@ -390,7 +390,7 @@ define(function () {
             },
 
             template: {
-                title: "Disabled",
+                title: "Custom Renderer",
                 hideSwitch: false,
                 hideRemoveButton: false
             }
