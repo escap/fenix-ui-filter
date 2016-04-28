@@ -4,7 +4,7 @@ define([
     'underscore',
     'fx-filter/start',
     'fx-filter/js/utils',
-    'test/models/all'
+    'demo/models/all'
 ], function (log, $, _, Filter, Utils, AllModel) {
 
     'use strict';

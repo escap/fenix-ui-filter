@@ -45,9 +45,6 @@ define(function () {
         DIRECTION : "append",
         ENSURE_AT_LEAST : -1,
 
-        //Utils
-        DEFAULT_PERIOD_FROM: 1960,
-        DEFAULT_PERIOD_TO: 2016
 
     }
 
