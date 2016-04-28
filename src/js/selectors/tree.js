@@ -520,7 +520,7 @@ define([
 
     Tree.prototype._summaryRender = function (item) {
 
-        item.value = item.label + " [" + item.code + "]";
+        item.value = item.label  + "<span class='code-brk'>[" + item.code + "]</span>";
 
         return item;
     };

@@ -5,15 +5,21 @@ $fx-ui-common: '../../../fenix-ui-common/';
 
 
 @import '../../../fenix-ui-common/css/utils/fx-mixins';
+@import '../../../fenix-ui-common/css/components/fx-tabs';
 @import '../../../fenix-ui-common/css/components/fx-buttons';
 @import '../../../fenix-ui-common/css/components/fx-icons';
+@import '../../../fenix-ui-common/css/vendor/fx-jstree';
 @import '../../../fenix-ui-common/css/components/fx-radio-checkbox';
 
 
 /* Demo Styles */
 
+h1,h2,h3,h4{
+  font-weight: 300;
+}
+
 body{
-  background-color: #f0f0ef;
+  background-color: #f8f8f8;
   font-family: 'Roboto', sans-serif;
 }
 
