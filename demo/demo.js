@@ -71,8 +71,8 @@ require([
                     //nls: projectRoot + "i18n",
                     //config: projectRoot + "config",
                     //json: projectRoot + "json",
-
-                    test: projectRoot + submoduleRoot + "test",
+                    
+                    demo: projectRoot + submoduleRoot + "demo",
 
                     domReady: "{FENIX_CDN}/js/requirejs/plugins/domready/2.0.1/domReady",
                     i18n: "{FENIX_CDN}/js/requirejs/plugins/i18n/2.0.4/i18n",
@@ -97,7 +97,7 @@ require([
     // Bootstrap the application
     require([
         'loglevel',
-        'test/js/showcase',
+        'demo/js/demo',
         'domReady!'
     ], function (log, Test) {
 
