@@ -3,7 +3,7 @@
 .fx-tabs .nav-tabs {
   border: 0; }
   .fx-tabs .nav-tabs > li > a {
-    color: #666666;
+    color: #333333;
     border-color: transparent; }
     .fx-tabs .nav-tabs > li > a:hover, .fx-tabs .nav-tabs > li > a:focus {
       border-color: transparent;
@@ -83,7 +83,7 @@ input[type="button"]::-moz-focus-inner {
 
 /* Fenix - Js tree */
 .jstree-default .jstree-search {
-  color: #666666;
+  color: #333333;
   font-weight: 300;
   font-style: normal; }
 .jstree-default .jstree-node:not(.jstree-open) {
@@ -105,7 +105,7 @@ input[type="button"]::-moz-focus-inner {
 
 .jstree-default .jstree-wholerow-hovered {
   background: none;
-  background-color: #e6f1ff; }
+  background-color: #e5f1ff; }
 
 .jstree-default .jstree-disabled.jstree-clicked {
   background: none;
@@ -207,10 +207,11 @@ input[type="radio"]:disabled + label {
     opacity: 0.4; }
 
 /* Demo Styles */
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5 {
   font-weight: 300; }
 
 body {
+  color: #333333;
   background-color: #f8f8f8;
   font-family: 'Roboto', sans-serif; }
 
@@ -240,19 +241,24 @@ body {
     margin: 0;
     margin-top: 2px; }
 
-.tree-holder {
-  height: 150px;
-  overflow: auto; }
+.fx-enabled-switch {
+  position: relative;
+  top: 2px; }
 
 .selector-footer [data-role="summary"] {
   margin: 0; }
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
 
 [data-code] {
   display: inline-block;
   cursor: pointer;
   margin: 0 3px 3px 0;
   padding: 1px 3px;
-  background: #efefef;
+  background-color: #efefef;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
@@ -263,4 +269,32 @@ body {
   font-size: 10px;
   color: #999999; }
 
-/*# sourceMappingURL=demo.css.map */
+/* Tree */
+.tree-holder {
+  height: 150px;
+  overflow: auto; }
+
+.fx-tree-search {
+  margin-bottom: 5px; }
+
+.fx-tree-buttons {
+  margin-bottom: 5px; }
+
+/* Range Slider */
+.irs-bar, .irs-bar-edge, .irs-line {
+  height: 5px;
+  top: 37px; }
+
+.irs-bar, .irs-bar-edge {
+  background: #0076ff; }
+
+.irs-line {
+  background: #dddddd;
+  border-color: transparent; }
+
+.irs-slider {
+  background: white; }
+
+.irs-from, .irs-to, .irs-single {
+  background: transparent;
+  color: #0076ff; }

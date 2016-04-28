@@ -5,7 +5,7 @@ define(function () {
 
     return {
 
-        "enable_filter" : "Enable filter",
+        "enable_filter" : "Enabled",
         "disable_filter" : "Disable filter",
         "clear_all_btn": "Clear All",
         "select_all_btn": "Select All",

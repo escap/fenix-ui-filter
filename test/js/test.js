@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'fx-filter/start',
-    'fx-common/utils',
+    'fx-filter/js/utils',
     'test/models/model-1',
     'test/models/semantic',
     'test/models/fx-resource',
@@ -11,12 +11,10 @@ define([
     'test/models/tab-table-toolbar-config',
     'test/models/fx-process',
     'test/models/aggregation',
-    'test/models/shopping',
-    'test/models/all',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, ShoppingModel, AllModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -37,10 +35,7 @@ define([
             SYNC_BTN: "#sync-btn",
             TABLE_TAB: "#table-tab",
             TABLE_BTN: "#table-btn",
-            EVENT_COUNTERS: "#event-counters",
-            SHOPPING: "#shopping",
-            ALL : "#all",
-            ALL_SUMMARY : "#all-summary"
+            EVENT_COUNTERS: "#event-counters"
         },
         empty_model = {data: []},
         error_model = {},
@@ -80,50 +75,24 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderAll();
+        this._renderSynch();
+
+        this._renderEvents();
+
+        this._renderDynamicModel1();
 
         return;
 
+
+
+        this._renderEvents();
+
         this._renderModel1BaseTemplate();
 
-        this._renderEvents();
 
-        this._renderShopModel();
 
         this._renderSynch();
 
-        this._renderEvents();
-
-        this._renderDynamicModel1();
-
-        this._renderSynch();
-
-        this._renderDynamicModel1();
-
-
-
-    };
-
-    Test.prototype._renderAll = function () {
-
-        var filter = this.createFilter({
-            items: AllModel,
-            $el: s.ALL,
-            summary$el : s.ALL_SUMMARY
-        });
-    };
-
-    Test.prototype._renderShopModel = function () {
-
-        var items  = this._createFilterConfiguration(ShoppingModel);
-
-        var filter = this.createFilter({
-            items: ShoppingModel,
-            $el: s.SHOPPING,
-            common : {
-                hideHeader : false
-            }
-        });
     };
 
     Test.prototype._renderEvents = function () {
@@ -207,7 +176,6 @@ define([
         });
 
         $(s.DYNAMIC_MODEL_1_VALUES_BTN).on("click", function () {
-
             log.warn(filter.getValues());
         });
 
@@ -223,7 +191,7 @@ define([
 
         log.trace("Rendering sync: start");
 
-        var Model = ModelToSync, //ModelToSync
+        var Model = ModelToSync,
             templ = Handlebars.compile(model1baseTemplate);
 
         var source = this.createFilter({
@@ -289,11 +257,7 @@ define([
 
         _.each(obj.selectors, function (tab, n) {
 
-            if (!tab.selector) {
-                tab.selector = {};
-            }
-
-            tab.selector.title = i18nLabels["sel_tab_" + n.replace("-", "_")];
+            tab.label = i18nLabels["sel_tab_" + n.replace("-", "_")];
 
         });
     };

@@ -13,11 +13,12 @@ $fx-ui-common: '../../../fenix-ui-common/';
 
 /* Demo Styles */
 
-h1,h2,h3,h4{
+h1,h2,h3,h4,h5{
   font-weight: 300;
 }
 
 body{
+  color: $fenix-text;
   background-color: #f8f8f8;
   font-family: 'Roboto', sans-serif;
 }
@@ -30,5 +31,8 @@ body{
 
 
 @import '../../src/css/filter';
+
+
+
 
 

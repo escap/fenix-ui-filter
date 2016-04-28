@@ -292,7 +292,7 @@ define(function () {
             },
 
             template: {
-                title: "Double Range",
+                title: "Disabled",
                 hideSwitch: false,
                 hideRemoveButton: false
             }
