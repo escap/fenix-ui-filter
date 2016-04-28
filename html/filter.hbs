@@ -7,16 +7,16 @@
                 <div class="selector-header clearfix">
 
                     {{#unless hideTitle}}
-
+                    <div class="pull-left">
                         <h4>{{ title }}</h4>
-
+                    </div>
                     {{/unless}}
 
                     {{#unless hideRemoveButton}}
 
                         <div class="pull-right">
-                            <button data-role="remove" class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <button data-role="remove" class="btn btn-default btn-round" type="button">
+                                <span class="fx-icon fx-icon-close" aria-hidden="true"></span>
                             </button>
 
                         </div>
@@ -49,15 +49,19 @@
 
                     {{#unless hideTitle}}
 
+                    <div class="pull-left">
                         <h4>{{ title }}</h4>
+                    </div>
+
+
 
                     {{/unless}}
 
                     {{#unless hideRemoveButton}}
 
                         <div class="pull-right">
-                            <button data-role="remove" class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <button data-role="remove" class="btn btn-default  btn-round" type="button">
+                                <span class="fx-icon fx-icon-close" aria-hidden="true"></span>
                             </button>
 
                         </div>
@@ -112,7 +116,7 @@
                 {{label}}
 
                 {{#values}}
-                    <li data-code="{{this.code}}" data-selector="{{this.selector}}">{{ this.value }}</li>
+                    <li data-code="{{this.code}}" data-selector="{{this.selector}}">{{{ this.value }}}</li>
                 {{/values}}
 
             </ul>

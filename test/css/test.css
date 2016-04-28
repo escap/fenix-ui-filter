@@ -1,9 +1,15 @@
 /* Filter */
-.selector-header h4 {
-  display: inline; }
+.selector-header {
+  padding: 10px 0; }
+  .selector-header h1, .selector-header h2, .selector-header h3, .selector-header h4, .selector-header h5 {
+    margin: 0;
+    margin-top: 2px; }
 
 .tree-holder {
   height: 150px;
   overflow: auto; }
+
+.code-brk {
+  font-family: "Lucida Console", Monaco, monospace; }
 
 /*# sourceMappingURL=test.css.map */

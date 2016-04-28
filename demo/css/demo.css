@@ -1,9 +1,159 @@
+/* Fenix Common CSS */
+/* Fenix - Buttons Component */
+/** avoid dotted lines when clicking on button**/
+input[type="button"] {
+  outline: none; }
+
+button:focus {
+  outline: 0;
+  outline: none; }
+
+button:active {
+  outline: 0;
+  outline: none; }
+
+.btn:focus, .btn:active, .btn:active:focus {
+  outline: none; }
+
+input[type="button"]::-moz-focus-inner {
+  border: 0; }
+
+.btn-round {
+  padding: 3px;
+  height: 24px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%; }
+
+/* Fenix Icons */
+.fx-icon {
+  height: 15px;
+  width: 15px;
+  display: inline-block;
+  background: url("../../../fenix-ui-common//css/img/fenix-catalog-sprite-small.svg") 150px 30px no-repeat; }
+
+.fx-icon-close {
+  background-position: 0 -15px; }
+
+/* Radio Buttons */
+input[type="radio"] {
+  display: none; }
+
+input[type="radio"] + label {
+  cursor: pointer;
+  margin: 0 7px;
+  font-weight: normal; }
+  input[type="radio"] + label:before {
+    content: '';
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    background-color: #dddddd;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    border-radius: 100%;
+    border: 0 solid #0076ff;
+    position: relative;
+    top: 2px;
+    left: -4px; }
+
+input[type="radio"]:checked + label {
+  color: #0076ff; }
+  input[type="radio"]:checked + label:before {
+    border-width: 5px; }
+
+input[type="radio"] + label:before,
+input[type="radio"]:checked + label:before {
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s; }
+
+/* Checkbox Buttons */
+input[type="checkbox"] {
+  display: none; }
+
+input[type="checkbox"] + label {
+  cursor: pointer;
+  margin: 0 7px;
+  font-weight: normal; }
+  input[type="checkbox"] + label:before {
+    content: '';
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    background-color: #dddddd;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    border-radius: 100%;
+    border: 0 solid #0076ff;
+    position: relative;
+    top: 2px;
+    left: -4px; }
+
+input[type="checkbox"]:checked + label {
+  color: #0076ff; }
+  input[type="checkbox"]:checked + label:before {
+    border-width: 5px; }
+
+input[type="checkbox"] + label:before,
+input[type="checkbox"]:checked + label:before {
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -ms-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s; }
+
+/* Disabled */
+input[type="checkbox"]:disabled + label,
+input[type="radio"]:disabled + label {
+  cursor: no-drop;
+  opacity: 0.4; }
+  input[type="checkbox"]:disabled + label:before,
+  input[type="radio"]:disabled + label:before {
+    cursor: no-drop;
+    opacity: 0.4; }
+
+/* Demo Styles */
+body {
+  background-color: #f0f0ef;
+  font-family: 'Roboto', sans-serif; }
+
+.panel {
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-border-radius-topright: 0;
+  -webkit-border-top-right-radius: 0;
+  border-top-right-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  -webkit-border-bottom-right-radius: 0;
+  border-bottom-right-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  border-bottom-left-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  border-radius: 0;
+  padding: 0 10px; }
+
 /* Filter */
-.selector-header h4 {
-  display: inline; }
+.selector-header {
+  padding: 10px 0; }
+  .selector-header h1, .selector-header h2, .selector-header h3, .selector-header h4, .selector-header h5 {
+    margin: 0;
+    margin-top: 2px; }
 
 .tree-holder {
   height: 150px;
   overflow: auto; }
+
+.code-brk {
+  font-family: "Lucida Console", Monaco, monospace; }
 
 /*# sourceMappingURL=demo.css.map */

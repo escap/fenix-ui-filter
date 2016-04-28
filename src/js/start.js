@@ -250,7 +250,7 @@ define([
     };
 
     Filter.prototype._summaryRender = function (item) {
-        return item.label + " [" + item.code + "]";
+        return item.label  + "<span class='code-brk'>[" + item.code + "]</span>";
     };
 
     Filter.prototype._updateSummary = function () {
