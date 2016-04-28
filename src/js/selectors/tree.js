@@ -17,7 +17,11 @@ define([
 
     'use strict';
 
-    var defaultOptions = {}, s = {
+    var defaultOptions = {
+        summaryRender: function (params) {
+            return this._summaryRender(params);
+        }
+    }, s = {
         SELECTORS_CLASS: ".fx-selector",
         TREE_CONTAINER: "[data-role='tree']",
         FILTER_CONTAINER: "[data-role='filter']",
@@ -31,7 +35,7 @@ define([
 
     function Tree(o) {
 
-        $.extend(true, this, defaultOptions, o);
+        $.extend(true, this, o, defaultOptions );
 
         this._renderTemplate();
 
@@ -485,10 +489,11 @@ define([
 
         var values = this.getValues(),
             model = [],
+            self = this,
             instance = this.tree.jstree(true);
 
         _.each(values.labels, function (val, key) {
-            model.push({code: key, label: val});
+            model.push(self.summaryRender({code: key, label: val}));
         });
 
         //unbind click listener
@@ -511,6 +516,13 @@ define([
 
         this.$el.find(s.SUMMARY_CONTAINER).empty().append(this.$summaryItems);
 
+    };
+
+    Tree.prototype._summaryRender = function (item) {
+
+        item.value = item.label + " [" + item.code + "]";
+
+        return item;
     };
 
     Tree.prototype._setDomain = function (opts) {

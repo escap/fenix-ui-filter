@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'fx-filter/start',
-    'fx-filter/js/utils',
+    'fx-common/utils',
     'demo/models/all'
 ], function (log, $, _, Filter, Utils, AllModel) {
 
