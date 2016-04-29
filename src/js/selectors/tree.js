@@ -35,7 +35,7 @@ define([
 
     function Tree(o) {
 
-        $.extend(true, this, o, defaultOptions );
+        $.extend(true, this, o, defaultOptions);
 
         this._renderTemplate();
 
@@ -469,6 +469,7 @@ define([
 
     Tree.prototype._notifyTreeSelectionChange = function (o) {
 
+
         var payload = [],
             selected = o.instance.get_selected();
 
@@ -481,8 +482,11 @@ define([
             payload.push({code: node.id, label: label, parent: node.parent})
         });
 
-        amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), payload);
+        this._updateSummary();
+
         amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT));
+        amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), payload);
+
     };
 
     Tree.prototype._updateSummary = function () {
@@ -509,8 +513,10 @@ define([
         this.$summaryItems.each(function () {
             var $this = $(this);
             $this.on("click", function () {
-                instance.deselect_node($this.find("[data-code]").data("code"));
-                $this.remove();
+                if (self.status.disabled !== true) {
+                    instance.deselect_node($this.find("[data-code]").data("code"));
+                    $this.remove();
+                }
             });
         });
 
@@ -520,7 +526,7 @@ define([
 
     Tree.prototype._summaryRender = function (item) {
 
-        item.value = item.label  + "<span class='code-brk'>[" + item.code + "]</span>";
+        item.value = item.label + "<span class='code-brk'>[" + item.code + "]</span>";
 
         return item;
     };

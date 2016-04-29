@@ -1,12 +1,94 @@
 /* Filter */
 
+
+
+
+
+[data-selector], [data-semantic]{
+
+
+  /* Focused */
+
+  /* Mandatory */
+
+  /* Disabled */
+
+  & .disabled{
+    cursor:no-drop;
+    opacity: 0.4;
+  }
+
+  /* Hovered */
+
+  @media screen and (max-width: $screen-xs) {
+
+
+
+    .controller{
+      opacity:1;
+      pointer-events: auto;
+    }
+
+
+  }
+
+
+  @media screen and (min-width: $screen-sm) {
+
+    &{
+      .controller{
+        opacity:0;
+        pointer-events: none;
+        @include animate(0.3s);
+      }
+    }
+
+    &:hover{
+      .controller{
+        opacity:1;
+        pointer-events: auto;
+      }
+    }
+
+
+
+
+  }
+
+  @media screen and (min-width: $screen-md) {
+
+  }
+  @media screen and (min-width: $screen-lg) {
+
+  }
+
+
+
+
+}
+
+
+
+
+
+
+
+
 .selector-header{
   padding: 10px 0;
   h1,h2,h3,h4,h5{
     margin: 0;
     margin-top: 2px;
   }
+
+
 }
+
+.fx-selector-title{
+  display: inline-block;
+  max-width: 55%;
+}
+
 
 .fx-enabled-switch{
   position: relative;
@@ -44,6 +126,17 @@
   color: $fenix-secondary-text;
 }
 
+/* Buttons */
+
+.btn{
+  //@include fx-no-border-radius;
+}
+
+.btn-default{
+  color: $fenix-text;
+}
+
+
 /* Tree */
 
 .tree-holder{
@@ -57,6 +150,10 @@
 
 .fx-tree-buttons{
   margin-bottom: 5px;
+}
+
+.jstree-anchor,.jstree-anchor:link,.jstree-anchor:visited,.jstree-anchor:hover,.jstree-anchor:active{
+  color: $fenix-text;
 }
 
 
@@ -79,9 +176,147 @@
 
 .irs-slider{
   background: white;
+  @include fx-noshadow;
 }
 
 .irs-from, .irs-to, .irs-single {
   background: transparent;
   color: $fx-cool-blue;
 }
+
+/* Time */
+
+.time-selector-icon{
+  font-size: 20px;
+}
+
+[data-selector-time]{
+
+
+
+  .day{
+
+    &.active{
+      background-color: $fx-cool-blue;
+
+      &:hover{
+        background-color: $fx-secondary-color;
+      }
+
+    }
+
+    &.today{
+      &:before{
+        border-bottom-color: $fx-cool-blue;
+      }
+    }
+
+
+
+
+  }
+
+
+  .fx-time-addon, {
+    font-size: 24px;
+    padding: 2px 8px;
+    color: $fx-cool-blue;
+  }
+
+
+
+  [data-action="incrementHours"], [data-action="decrementHours"],[data-action="incrementMinutes"],[data-action="decrementMinutes"]{
+    font-size: 24px;
+    color:$fx-cool-blue;
+  }
+
+
+  .bootstrap-datetimepicker-widget table thead tr:first-child th:hover{
+    background: none !important;
+    @extend .fx-icon;
+  }
+
+  [data-action="previous"], [data-action="next"]{
+
+
+    background: url("#{$fx-ui-common}/css/img/fenix-catalog-sprite-small.svg") 150px 30px no-repeat;
+    display: block;
+    
+    height: 15px;
+    width: 15px;
+    position: relative;
+    left: 10px;
+    top: 5px;
+
+    &:hover{
+      background-color: $fenix-light-gray !important;
+      background: url("#{$fx-ui-common}/css/img/fenix-catalog-sprite-small.svg") 150px 30px no-repeat;
+
+
+    }
+
+    span{
+      &:before{
+        content: none;
+      }
+    }
+
+
+  }
+
+
+  [data-action="next"]{
+    background-position: -135px 0;
+
+
+  }
+
+  [data-action="previous"]{
+    background-position: -135px -15px;
+
+
+
+  }
+
+
+
+
+
+  [data-action="togglePicker"]{
+    padding: 0;
+
+    span{
+      font-size: 24px;
+      color:$fx-cool-blue;
+      line-height: 35px !important;
+      height: auto !important;
+
+
+    }
+  }
+
+
+
+
+  [data-action="incrementHours"]{
+
+  }
+
+  [data-action="decrementHours"]{
+
+  }
+
+  [data-action="incrementMinutes"]{
+
+  }
+
+  [data-action="decrementMinutes"]{
+
+  }
+
+
+
+}
+
+
+

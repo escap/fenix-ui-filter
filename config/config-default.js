@@ -31,9 +31,9 @@ define(function () {
             }
         },
 
-        "FOCUSED_SELECTOR_CLASS_NAME": "selector-focused", //class to highlight a selector
-
-        "MANDATORY_SELECTOR_CLASS_NAME": "selector-mandatory", // class for mandatory selectors
+        "FOCUSED_SELECTOR_CLASS_NAME": "focused", //class to highlight a selector
+        "MANDATORY_SELECTOR_CLASS_NAME": "mandatory", // class for mandatory selectors
+        "DISABLED_SELECTOR_CLASS_NAME": "disabled", // class for mandatory selectors
 
         "OUTPUT_FORMAT": "plain", // "plain | "fenix"
 

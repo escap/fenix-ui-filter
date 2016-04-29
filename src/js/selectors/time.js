@@ -203,7 +203,14 @@ define([
     Time.prototype._renderSelector = function () {
 
         this.$el.find(s.PICKER_CONTAINER).datetimepicker(
-            $.extend(true, {}, /*here*/ this.selector.config) //add calculated properties
+            $.extend(true, {
+                icons: {
+                    time: "icojam_time time-selector-icon",
+                    date: "icojam_calendar_4 time-selector-icon",
+                    up: "icojam_arrow_up time-selector-icon",
+                    down: "icojam_arrow_down time-selector-icon"
+                }
+            }, /*here*/ this.selector.config) //add calculated properties
         );
 
     };

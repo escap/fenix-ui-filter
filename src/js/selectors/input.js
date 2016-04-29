@@ -20,7 +20,8 @@ define([
         },
         s = {
             TEMPLATE_LIST: "[data-input-list]",
-            TEMPLATE_ITEM: "[data-input-item]"
+            TEMPLATE_ITEM: "[data-input-item]",
+            TEMPLATE_LIST_CONTAINER: "[data-input-list-container]"
         };
 
     function Input(o) {
@@ -243,9 +244,15 @@ define([
 
         if ($list.length === 0) {
             log.info("Injecting input list");
-            list = $(templates).find(s.TEMPLATE_LIST)[0].outerHTML;
-            $list = $(list);
+            var ulContainers =  $(templates).find(s.TEMPLATE_LIST_CONTAINER)[0].outerHTML,
+                tmpl = Handlebars.compile(ulContainers),
+                $list = $(tmpl({
+                    isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
+                }));
+
             this.$el.append($list);
+
+            $list = $list.find('ul');
         }
 
         if (this.type !== "radio" && this.type !== 'checkbox' && data.length == 0) {

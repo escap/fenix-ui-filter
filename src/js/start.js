@@ -35,7 +35,7 @@ define([
             AMOUNT_CONTAINER: "[data-role='amount']",
             COMPARE_RADIO_BTNS: "input:radio[name='compare']",
             COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
-            ACTIVE_TAB: "ul#country-ul li.active",
+            ACTIVE_TAB: "ul[data-semantic-list] li.active",
             SEMANTIC_TABS: "[data-semantic] a[data-toggle='tab']",
             SWITCH: "input[data-role='switch'][name='disable-selector']",
             TEMPLATE_SELECTOR: "[data-template-selector]",
@@ -43,7 +43,8 @@ define([
             TEMPLATE_SEMANTIC: "[data-template-semantic]",
             TEMPLATE_SUMMARY: "[data-summary]",
             SUMMARY_ITEM: "[data-code]",
-            REMOVE_BTN: "[data-role='remove']"
+            REMOVE_BTN: "[data-role='remove']",
+            TEMPLATE_HEADER : "[data-selector-header]"
         };
 
     function Filter(o) {
@@ -99,16 +100,6 @@ define([
         log.info("Set filter values. Silent? " + !!silent);
 
         return this._setValues(o, !!silent);
-    };
-
-    /**
-     * Enable advance mode
-     * @param {Boolean} show
-     * @return {null}
-     */
-    Filter.prototype.configureVisibilityAdvancedOptions = function (show) {
-
-        return this._configureVisibilityAdvancedOptions(show)
     };
 
     /**
@@ -777,13 +768,20 @@ define([
 
             var status = this._callSelectorInstanceMethod(s, "getStatus");
 
-            if (status.disabled === true) {
+            var semantic = this.selector2semantic[s];
 
-                var semantic = this.selector2semantic[s];
+            if (status.disabled === true) {
 
                 _.each(this.semantic2selectors[semantic], _.bind(function (n) {
                     this._disableSelectorAndSwitch(n);
                 }, this));
+
+            } else {
+
+                _.each(this.semantic2selectors[semantic], _.bind(function (n) {
+                    this._enableSelectorAndSwitch(n);
+                }, this));
+
             }
 
         }, this));
@@ -1254,18 +1252,6 @@ define([
 
     };
 
-    Filter.prototype._configureVisibilityAdvancedOptions = function (show) {
-
-        if (show) {
-
-            this.$advancedOptions.show();
-
-        } else {
-
-            this.$advancedOptions.hide();
-        }
-    };
-
     Filter.prototype._getEventName = function (evt) {
 
         return this.id.concat(evt);
@@ -1562,6 +1548,9 @@ define([
 
     Filter.prototype._disableSelectorAndSwitch = function (d) {
 
+        this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).addClass(this.DISABLED_SELECTOR_CLASS_NAME);
+        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).addClass(this.DISABLED_SELECTOR_CLASS_NAME);
+
         this._getSelectorContainer(d).closest(s.SELECTORS).find(s.SWITCH).prop('checked', false);
         this._getSelectorContainer(d).closest(s.SEMANTICS).find(s.SWITCH).prop('checked', false);
 
@@ -1573,6 +1562,9 @@ define([
     };
 
     Filter.prototype._enableSelectorAndSwitch = function (d) {
+
+        this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.DISABLED_SELECTOR_CLASS_NAME);
+        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.DISABLED_SELECTOR_CLASS_NAME);
 
         this._getSelectorContainer(d).closest(s.SELECTORS).find(s.SWITCH).prop('checked', true);
         this._getSelectorContainer(d).closest(s.SEMANTICS).find(s.SWITCH).prop('checked', true);
