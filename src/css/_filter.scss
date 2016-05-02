@@ -18,6 +18,8 @@
     opacity: 0.4;
   }
 
+
+
   /* Hovered */
 
   @media screen and (max-width: $screen-xs) {
@@ -251,7 +253,7 @@
 
 
 
-  .fx-time-addon, {
+  .fx-time-addon {
     font-size: 24px;
     padding: 2px 8px;
     color: $fx-cool-blue;
