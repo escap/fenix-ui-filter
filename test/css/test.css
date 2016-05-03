@@ -5,7 +5,7 @@
 .fx-tabs .nav-tabs {
   border: 0; }
   .fx-tabs .nav-tabs > li > a {
-    color: #333333;
+    color: #333;
     border-color: transparent; }
     .fx-tabs .nav-tabs > li > a:hover, .fx-tabs .nav-tabs > li > a:focus {
       border-color: transparent;
@@ -87,7 +87,7 @@ input[type="button"]::-moz-focus-inner {
 
 /* Fenix - Js tree */
 .jstree-default .jstree-search {
-  color: #333333;
+  color: #333;
   font-weight: 300;
   font-style: normal; }
 .jstree-default .jstree-node:not(.jstree-open) {
@@ -109,7 +109,7 @@ input[type="button"]::-moz-focus-inner {
 
 .jstree-default .jstree-wholerow-hovered {
   background: none;
-  background-color: #ffe5e5; }
+  background-color: #ffe6e6; }
 
 .jstree-default .jstree-disabled.jstree-clicked {
   background: none;
@@ -276,7 +276,7 @@ input[type="radio"]:disabled + label {
 
 /* Buttons */
 .btn-default {
-  color: #333333; }
+  color: #333; }
 
 /* Tree */
 .tree-holder {
@@ -290,7 +290,7 @@ input[type="radio"]:disabled + label {
   margin-bottom: 5px; }
 
 .jstree-anchor, .jstree-anchor:link, .jstree-anchor:visited, .jstree-anchor:hover, .jstree-anchor:active {
-  color: #333333; }
+  color: #333; }
 
 /* Range Slider */
 .irs-bar, .irs-bar-edge, .irs-line {
@@ -366,3 +366,5 @@ input[type="radio"]:disabled + label {
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
   border-radius: 3px; }
+
+/*# sourceMappingURL=test.css.map */

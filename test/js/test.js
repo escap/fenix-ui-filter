@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'fx-filter/start',
-    'fx-filter/js/utils',
+    'fx-common/utils',
     'test/models/model-1',
     'test/models/semantic',
     'test/models/fx-resource',
@@ -77,13 +77,11 @@ define([
 
         this._renderSynch();
 
+        return;
+
         this._renderEvents();
 
         this._renderDynamicModel1();
-
-        return;
-
-
 
         this._renderEvents();
 

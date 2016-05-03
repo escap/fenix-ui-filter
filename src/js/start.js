@@ -44,7 +44,7 @@ define([
             TEMPLATE_SUMMARY: "[data-summary]",
             SUMMARY_ITEM: "[data-code]",
             REMOVE_BTN: "[data-role='remove']",
-            TEMPLATE_HEADER : "[data-selector-header]"
+            TEMPLATE_HEADER: "[data-selector-header]"
         };
 
     function Filter(o) {
@@ -229,6 +229,7 @@ define([
         this.direction = this.initial.direction || C.DIRECTION || CD.DIRECTION;
         this.ensureAtLeast = parseInt(this.initial.ensureAtLeast || C.ENSURE_AT_LEAST || CD.ENSURE_AT_LEAST, 10);
 
+        this.common = this.initial.common || {};
     };
 
     Filter.prototype._renderFilter = function () {
@@ -241,7 +242,7 @@ define([
     };
 
     Filter.prototype._summaryRender = function (item) {
-        return item.label  + "<span class='code-brk'>[" + item.code + "]</span>";
+        return item.label + "<span class='code-brk'>[" + item.code + "]</span>";
     };
 
     Filter.prototype._updateSummary = function () {
@@ -521,7 +522,6 @@ define([
         this.$tabs.on('shown.bs.tab', _.bind(function () {
 
             amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT));
-
         }, this));
 
         amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this, this._onSelectorItemSelect);
@@ -823,13 +823,13 @@ define([
                 rawCl = this._getStoredCodelist(obj.cl || obj.enumeration);
                 Selector = this._getSelectorRender(selectorId);
 
-                var is = new Selector($.extend(true, {}, obj, {
+                var model = $.extend(true, {}, obj, this.common, {
                     id: name,
                     data: rawCl ? rawCl : null,
                     controller: this
-                }));
+                });
 
-                this.selectors[name].instance = is
+                this.selectors[name].instance = new Selector(model);
 
             } else {
                 log.info(name + " selector is already initialized.");
@@ -1163,7 +1163,6 @@ define([
         log.info(o);
 
         if (this.selectors[o.target]) {
-
             if (!!payload.value) {
                 this._callSelectorInstanceMethod(o.target, "enable");
             } else {
@@ -1496,7 +1495,7 @@ define([
 
         var semantic = this.semantics[id],
             templ = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
-            conf = C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS,
+            conf = $.extend(true, {}, C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS, this.common.template),
             $html,
             model;
 
@@ -1536,7 +1535,7 @@ define([
 
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
-            conf = C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS,
+            conf = $.extend(true, {}, C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS, this.common.template),
             $html = $(template($.extend(true, {id: id}, i18nLabels, conf, obj)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
@@ -1556,8 +1555,8 @@ define([
 
         this._callSelectorInstanceMethod(d, 'disable');
 
-        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED));
-        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)));
+        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED), {value: false});
+        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)), {value: false});
 
     };
 
@@ -1571,8 +1570,11 @@ define([
 
         this._callSelectorInstanceMethod(d, 'enable');
 
-        amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED));
-        amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED.concat(d)));
+        amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED), {value: false});
+        amplify.publish(this._getEventName(EVT.SELECTOR_ENABLED.concat(d)), {value: false});
+
+        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED), {value: true});
+        amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)), {value: true});
     };
 
     //disposition
