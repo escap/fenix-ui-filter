@@ -388,7 +388,16 @@
 }
 
 [data-group] ul {
-  position: relative;
+  //position: relative;
   min-height: 50px;
-  background-color: $superlight-gray
+  //border:1px solid $superlight-gray
+  padding: 6px 12px;
+  @include fx-box-shadow(0px, 1px, 1px, rgba(0,0,0,.075), true);
+  @include fx-border-radius(4px);
+  background-color: white;
+  background-image: none;
+  border: 1px solid $fenix-hr;
+
+
 }
+
