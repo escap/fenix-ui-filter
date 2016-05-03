@@ -88,7 +88,8 @@
 
 .fx-selector-title{
   display: inline-block;
-  max-width: 55%;
+  max-width: 40%;
+
 }
 
 
@@ -384,4 +385,10 @@
 
   }
 
+}
+
+[data-group] ul {
+  position: relative;
+  min-height: 50px;
+  background-color: $superlight-gray
 }
