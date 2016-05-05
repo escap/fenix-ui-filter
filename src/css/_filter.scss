@@ -88,14 +88,42 @@
 
 .fx-selector-title{
   display: inline-block;
-  max-width: 40%;
+  max-width: 45%;
 
 }
 
 
+.filter-enabled-label{
+
+  width: 10px;
+  font-size: 0;
+
+
+  /* Small devices (tablets, 768px and up) */
+  @media (min-width: $screen-sm-min) {
+
+
+
+  }
+
+  /* Medium devices (desktops, 992px and up) */
+  @media (min-width: $screen-md-min) {
+
+
+    width: auto;
+    font-size: inherit;
+
+  }
+
+  /* Large devices (large desktops, 1200px and up) */
+  @media (min-width: $screen-lg-min) {  }
+
+
+
+}
+
 .fx-enabled-switch{
-  position: relative;
-  top: 2px;
+
 }
 
 
@@ -137,6 +165,13 @@
 
 .btn-default{
   color: $fenix-text;
+}
+
+[data-role="remove"].btn-round{
+
+  position: relative;
+  top: -2px;
+
 }
 
 

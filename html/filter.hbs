@@ -8,7 +8,7 @@
 
                 {{#unless hideTitle}}
 
-                    <h4 class="truncate fx-selector-title">{{ title }}</h4>
+                    <h5 class="truncate fx-selector-title">{{ title }}</h5>
 
                 {{/unless}}
 
@@ -28,7 +28,7 @@
                     <div class="pull-right fx-enabled-switch controller">
                         <input type="checkbox" id="switch-{{id}}" name="disable-selector" data-target="{{id}}"
                                data-type="switch" data-role="switch" checked>
-                        <label for="switch-{{id}}">{{enable_filter}}</label>
+                        <label class="filter-enabled-label" for="switch-{{id}}">{{enable_filter}}</label>
                     </div>
 
                 {{/unless}}
@@ -50,7 +50,7 @@
                 {{#unless hideTitle}}
 
                     <div class="pull-left">
-                        <h4 class="truncate">{{ title }}</h4>
+                        <h5 class="truncate">{{ title }}</h5>
                     </div>
 
                 {{/unless}}
