@@ -5,7 +5,7 @@
 .fx-tabs .nav-tabs {
   border: 0; }
   .fx-tabs .nav-tabs > li > a {
-    color: #333;
+    color: #333333;
     border-color: transparent; }
     .fx-tabs .nav-tabs > li > a:hover, .fx-tabs .nav-tabs > li > a:focus {
       border-color: transparent;
@@ -79,7 +79,7 @@ input[type="button"]::-moz-focus-inner {
   background-color: #999999;
   font-size: 11px;
   color: white;
-  padding: 2px 8px;
+  padding: 1px 5px;
   border-color: transparent;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -103,7 +103,7 @@ input[type="button"]::-moz-focus-inner {
 
 /* Fenix - Js tree */
 .jstree-default .jstree-search {
-  color: #333;
+  color: #333333;
   font-weight: 300;
   font-style: normal; }
 .jstree-default .jstree-node:not(.jstree-open) {
@@ -125,7 +125,7 @@ input[type="button"]::-moz-focus-inner {
 
 .jstree-default .jstree-wholerow-hovered {
   background: none;
-  background-color: #e6f1ff; }
+  background-color: #e5f1ff; }
 
 .jstree-default .jstree-disabled.jstree-clicked {
   background: none;
@@ -299,7 +299,7 @@ input[type="radio"]:disabled + label {
 
 /* Buttons */
 .btn-default {
-  color: #333; }
+  color: #333333; }
 
 [data-role="remove"].btn-round {
   position: relative;
@@ -317,7 +317,7 @@ input[type="radio"]:disabled + label {
   margin-bottom: 5px; }
 
 .jstree-anchor, .jstree-anchor:link, .jstree-anchor:visited, .jstree-anchor:hover, .jstree-anchor:active {
-  color: #333; }
+  color: #333333; }
 
 /* Range Slider */
 .irs-bar, .irs-bar-edge, .irs-line {
@@ -407,5 +407,3 @@ input[type="radio"]:disabled + label {
   background-color: white;
   background-image: none;
   border: 1px solid #d8d8d8; }
-
-/*# sourceMappingURL=test.css.map */
