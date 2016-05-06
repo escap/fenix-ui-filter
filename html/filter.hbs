@@ -12,27 +12,34 @@
 
                 {{/unless}}
 
-                {{#unless hideRemoveButton}}
 
-                    <div class="pull-right controller">
-                        <button data-role="remove" class="btn btn-default btn-round" type="button">
-                            <span class="fx-icon fx-icon-close" aria-hidden="true"></span>
-                        </button>
 
-                    </div>
+                <div class="btn-group controller" role="group">
 
-                {{/unless}}
 
-                {{#unless hideSwitch}}
+                    {{#unless hideSwitch}}
 
-                    <div class="pull-right fx-enabled-switch controller">
+                    <div class="btn-group" role="group">
                         <input type="checkbox" id="switch-{{id}}" name="disable-selector" data-target="{{id}}"
                                data-type="switch" data-role="switch" checked>
                         <label class="filter-enabled-label" for="switch-{{id}}">{{enable_filter}}</label>
                     </div>
 
-                {{/unless}}
+                    {{/unless}}
 
+                    {{#unless hideRemoveButton}}
+
+
+                        <button data-role="remove" class="btn btn-default btn-round" type="button">
+                            <span class="fx-icon fx-icon-close" aria-hidden="true"></span>
+                        </button>
+
+
+
+                    {{/unless}}
+
+
+                </div>
 
             </div>
 
@@ -49,36 +56,43 @@
 
                 {{#unless hideTitle}}
 
-                    <div class="pull-left">
-                        <h5 class="truncate">{{ title }}</h5>
-                    </div>
+                    <h5 class="truncate fx-selector-title">{{ title }}</h5>
 
                 {{/unless}}
 
-                {{#unless hideRemoveButton}}
 
-                    <div class="pull-right controller">
-                        <button data-role="remove" class="btn btn-default  btn-round" type="button">
+
+                <div class="btn-group controller" role="group">
+
+
+                    {{#unless hideSwitch}}
+
+                        <div class="btn-group" role="group">
+                            <input type="checkbox" id="switch-{{id}}" name="disable-selector" data-target="{{id}}"
+                                   data-type="switch" data-role="switch" checked>
+                            <label class="filter-enabled-label" for="switch-{{id}}">{{enable_filter}}</label>
+                        </div>
+
+                    {{/unless}}
+
+                    {{#unless hideRemoveButton}}
+
+
+                        <button data-role="remove" class="btn btn-default btn-round" type="button">
                             <span class="fx-icon fx-icon-close" aria-hidden="true"></span>
                         </button>
 
-                    </div>
 
-                {{/unless}}
 
-                {{#unless hideSwitch}}
+                    {{/unless}}
 
-                    <div class="pull-right fx-enabled-switch controller">
-                        <input type="checkbox" id="switch-{{id}}" name="disable-selector" data-target="{{id}}"
-                               data-type="switch" data-role="switch" checked>
-                        <label for="switch-{{id}}">{{enable_filter}}</label>
-                    </div>
 
-                {{/unless}}
+                </div>
 
             </div>
 
         {{/unless}}
+
 
         <!-- Nav tabs -->
         <div class="fx-tabs">
@@ -121,288 +135,4 @@
         {{/summary}}
     </div>
 
-</div>
-
-
-<div class="bootstrap-datetimepicker-widget dropdown-menu top"
-     style="display: block; top: auto; bottom: 34px; left: 0px; right: auto;">
-    <ul class="list-unstyled">
-        <li class="collapse in">
-            <div class="datepicker">
-                <div class="datepicker-days" style="display: block;">
-                    <table class="table-condensed">
-                        <thead>
-                        <tr>
-                            <th class="prev" data-action="previous"><span class="glyphicon glyphicon-chevron-left"
-                                                                          title="Previous Month"></span></th>
-                            <th class="picker-switch" data-action="pickerSwitch" colspan="5" title="Select Month">April
-                                2016
-                            </th>
-                            <th class="next" data-action="next"><span class="glyphicon glyphicon-chevron-right"
-                                                                      title="Next Month"></span></th>
-                        </tr>
-                        <tr>
-                            <th class="dow">Su</th>
-                            <th class="dow">Mo</th>
-                            <th class="dow">Tu</th>
-                            <th class="dow">We</th>
-                            <th class="dow">Th</th>
-                            <th class="dow">Fr</th>
-                            <th class="dow">Sa</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td data-action="selectDay" data-day="03/27/2016" class="day old weekend">27</td>
-                            <td data-action="selectDay" data-day="03/28/2016" class="day old">28</td>
-                            <td data-action="selectDay" data-day="03/29/2016" class="day old">29</td>
-                            <td data-action="selectDay" data-day="03/30/2016" class="day old">30</td>
-                            <td data-action="selectDay" data-day="03/31/2016" class="day old">31</td>
-                            <td data-action="selectDay" data-day="04/01/2016" class="day">1</td>
-                            <td data-action="selectDay" data-day="04/02/2016" class="day weekend">2</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectDay" data-day="04/03/2016" class="day weekend">3</td>
-                            <td data-action="selectDay" data-day="04/04/2016" class="day">4</td>
-                            <td data-action="selectDay" data-day="04/05/2016" class="day">5</td>
-                            <td data-action="selectDay" data-day="04/06/2016" class="day">6</td>
-                            <td data-action="selectDay" data-day="04/07/2016" class="day">7</td>
-                            <td data-action="selectDay" data-day="04/08/2016" class="day">8</td>
-                            <td data-action="selectDay" data-day="04/09/2016" class="day weekend">9</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectDay" data-day="04/10/2016" class="day weekend">10</td>
-                            <td data-action="selectDay" data-day="04/11/2016" class="day">11</td>
-                            <td data-action="selectDay" data-day="04/12/2016" class="day">12</td>
-                            <td data-action="selectDay" data-day="04/13/2016" class="day">13</td>
-                            <td data-action="selectDay" data-day="04/14/2016" class="day">14</td>
-                            <td data-action="selectDay" data-day="04/15/2016" class="day">15</td>
-                            <td data-action="selectDay" data-day="04/16/2016" class="day weekend">16</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectDay" data-day="04/17/2016" class="day weekend">17</td>
-                            <td data-action="selectDay" data-day="04/18/2016" class="day">18</td>
-                            <td data-action="selectDay" data-day="04/19/2016" class="day active">19</td>
-                            <td data-action="selectDay" data-day="04/20/2016" class="day">20</td>
-                            <td data-action="selectDay" data-day="04/21/2016" class="day">21</td>
-                            <td data-action="selectDay" data-day="04/22/2016" class="day">22</td>
-                            <td data-action="selectDay" data-day="04/23/2016" class="day weekend">23</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectDay" data-day="04/24/2016" class="day weekend">24</td>
-                            <td data-action="selectDay" data-day="04/25/2016" class="day">25</td>
-                            <td data-action="selectDay" data-day="04/26/2016" class="day">26</td>
-                            <td data-action="selectDay" data-day="04/27/2016" class="day">27</td>
-                            <td data-action="selectDay" data-day="04/28/2016" class="day">28</td>
-                            <td data-action="selectDay" data-day="04/29/2016" class="day today">29</td>
-                            <td data-action="selectDay" data-day="04/30/2016" class="day weekend">30</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectDay" data-day="05/01/2016" class="day new weekend">1</td>
-                            <td data-action="selectDay" data-day="05/02/2016" class="day new">2</td>
-                            <td data-action="selectDay" data-day="05/03/2016" class="day new">3</td>
-                            <td data-action="selectDay" data-day="05/04/2016" class="day new">4</td>
-                            <td data-action="selectDay" data-day="05/05/2016" class="day new">5</td>
-                            <td data-action="selectDay" data-day="05/06/2016" class="day new">6</td>
-                            <td data-action="selectDay" data-day="05/07/2016" class="day new weekend">7</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="datepicker-months" style="display: none;">
-                    <table class="table-condensed">
-                        <thead>
-                        <tr>
-                            <th class="prev" data-action="previous"><span class="glyphicon glyphicon-chevron-left"
-                                                                          title="Previous Year"></span></th>
-                            <th class="picker-switch" data-action="pickerSwitch" colspan="5" title="Select Year">2016
-                            </th>
-                            <th class="next" data-action="next"><span class="glyphicon glyphicon-chevron-right"
-                                                                      title="Next Year"></span></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td colspan="7"><span data-action="selectMonth" class="month">Jan</span><span
-                                    data-action="selectMonth" class="month">Feb</span><span data-action="selectMonth"
-                                                                                            class="month">Mar</span><span
-                                    data-action="selectMonth" class="month active">Apr</span><span
-                                    data-action="selectMonth" class="month">May</span><span data-action="selectMonth"
-                                                                                            class="month">Jun</span><span
-                                    data-action="selectMonth" class="month">Jul</span><span data-action="selectMonth"
-                                                                                            class="month">Aug</span><span
-                                    data-action="selectMonth" class="month">Sep</span><span data-action="selectMonth"
-                                                                                            class="month">Oct</span><span
-                                    data-action="selectMonth" class="month">Nov</span><span data-action="selectMonth"
-                                                                                            class="month">Dec</span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="datepicker-years" style="display: none;">
-                    <table class="table-condensed">
-                        <thead>
-                        <tr>
-                            <th class="prev" data-action="previous"><span class="glyphicon glyphicon-chevron-left"
-                                                                          title="Previous Decade"></span></th>
-                            <th class="picker-switch" data-action="pickerSwitch" colspan="5" title="Select Decade">
-                                2011-2022
-                            </th>
-                            <th class="next" data-action="next"><span class="glyphicon glyphicon-chevron-right"
-                                                                      title="Next Decade"></span></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td colspan="7"><span data-action="selectYear" class="year">2011</span><span
-                                    data-action="selectYear" class="year">2012</span><span data-action="selectYear"
-                                                                                           class="year">2013</span><span
-                                    data-action="selectYear" class="year">2014</span><span data-action="selectYear"
-                                                                                           class="year">2015</span><span
-                                    data-action="selectYear" class="year active">2016</span><span
-                                    data-action="selectYear" class="year">2017</span><span data-action="selectYear"
-                                                                                           class="year">2018</span><span
-                                    data-action="selectYear" class="year">2019</span><span data-action="selectYear"
-                                                                                           class="year">2020</span><span
-                                    data-action="selectYear" class="year">2021</span><span data-action="selectYear"
-                                                                                           class="year">2022</span></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="datepicker-decades" style="display: none;">
-                    <table class="table-condensed">
-                        <thead>
-                        <tr>
-                            <th class="prev" data-action="previous"><span class="glyphicon glyphicon-chevron-left"
-                                                                          title="Previous Century"></span></th>
-                            <th class="picker-switch" data-action="pickerSwitch" colspan="5">2000-2107</th>
-                            <th class="next" data-action="next"><span class="glyphicon glyphicon-chevron-right"
-                                                                      title="Next Century"></span></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td colspan="7"><span data-action="selectDecade" class="decade" data-selection="2005">2000 - 2011</span><span
-                                    data-action="selectDecade" class="decade"
-                                    data-selection="2017">2012 - 2023</span><span data-action="selectDecade"
-                                                                                  class="decade" data-selection="2029">2024 - 2035</span><span
-                                    data-action="selectDecade" class="decade"
-                                    data-selection="2041">2036 - 2047</span><span data-action="selectDecade"
-                                                                                  class="decade" data-selection="2053">2048 - 2059</span><span
-                                    data-action="selectDecade" class="decade"
-                                    data-selection="2065">2060 - 2071</span><span data-action="selectDecade"
-                                                                                  class="decade" data-selection="2077">2072 - 2083</span><span
-                                    data-action="selectDecade" class="decade"
-                                    data-selection="2089">2084 - 2095</span><span data-action="selectDecade"
-                                                                                  class="decade" data-selection="2101">2096 - 2107</span><span></span><span></span><span></span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </li>
-        <li class="picker-switch accordion-toggle">
-            <table class="table-condensed">
-                <tbody>
-                <tr>
-                    <td><a data-action="togglePicker" title="Select Time"><span
-                            class="icojam_time time-selector-icon"></span></a></td>
-                </tr>
-                </tbody>
-            </table>
-        </li>
-        <li class="collapse">
-            <div class="timepicker">
-                <div class="timepicker-picker">
-                    <table class="table-condensed">
-                        <tbody>
-                        <tr>
-                            <td><a href="#" tabindex="-1" title="Increment Hour" class="btn"
-                                   data-action="incrementHours"><span class="icojam_arrow_up time-selector-icon"></span></a>
-                            </td>
-                            <td class="separator"></td>
-                            <td><a href="#" tabindex="-1" title="Increment Minute" class="btn"
-                                   data-action="incrementMinutes"><span
-                                    class="icojam_arrow_up time-selector-icon"></span></a></td>
-                            <td class="separator"></td>
-                        </tr>
-                        <tr>
-                            <td><span class="timepicker-hour" data-time-component="hours" title="Pick Hour"
-                                      data-action="showHours">05</span></td>
-                            <td class="separator">:</td>
-                            <td><span class="timepicker-minute" data-time-component="minutes" title="Pick Minute"
-                                      data-action="showMinutes">05</span></td>
-                            <td>
-                                <button class="btn btn-primary" data-action="togglePeriod" tabindex="-1"
-                                        title="Toggle Period">PM
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><a href="#" tabindex="-1" title="Decrement Hour" class="btn"
-                                   data-action="decrementHours"><span
-                                    class="icojam_arrow_down time-selector-icon"></span></a></td>
-                            <td class="separator"></td>
-                            <td><a href="#" tabindex="-1" title="Decrement Minute" class="btn"
-                                   data-action="decrementMinutes"><span
-                                    class="icojam_arrow_down time-selector-icon"></span></a></td>
-                            <td class="separator"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="timepicker-hours" style="display: none;">
-                    <table class="table-condensed">
-                        <tbody>
-                        <tr>
-                            <td data-action="selectHour" class="hour">12</td>
-                            <td data-action="selectHour" class="hour">01</td>
-                            <td data-action="selectHour" class="hour">02</td>
-                            <td data-action="selectHour" class="hour">03</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectHour" class="hour">04</td>
-                            <td data-action="selectHour" class="hour">05</td>
-                            <td data-action="selectHour" class="hour">06</td>
-                            <td data-action="selectHour" class="hour">07</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectHour" class="hour">08</td>
-                            <td data-action="selectHour" class="hour">09</td>
-                            <td data-action="selectHour" class="hour">10</td>
-                            <td data-action="selectHour" class="hour">11</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="timepicker-minutes" style="display: none;">
-                    <table class="table-condensed">
-                        <tbody>
-                        <tr>
-                            <td data-action="selectMinute" class="minute">00</td>
-                            <td data-action="selectMinute" class="minute">05</td>
-                            <td data-action="selectMinute" class="minute">10</td>
-                            <td data-action="selectMinute" class="minute">15</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectMinute" class="minute">20</td>
-                            <td data-action="selectMinute" class="minute">25</td>
-                            <td data-action="selectMinute" class="minute">30</td>
-                            <td data-action="selectMinute" class="minute">35</td>
-                        </tr>
-                        <tr>
-                            <td data-action="selectMinute" class="minute">40</td>
-                            <td data-action="selectMinute" class="minute">45</td>
-                            <td data-action="selectMinute" class="minute">50</td>
-                            <td data-action="selectMinute" class="minute">55</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </li>
-    </ul>
 </div>

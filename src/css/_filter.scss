@@ -1,10 +1,27 @@
 /* Filter */
 
-
+$controller-width: 105px;
+$controller-width-xs: 50px;
 
 
 
 [data-selector], [data-semantic]{
+
+
+  .controller{
+    position: absolute;
+    right: 0;
+    top: 17px;
+
+
+    .btn-round{
+      -webkit-border-radius: 50% !important;
+      -moz-border-radius: 50% !important;
+      -ms-border-radius: 50% !important;
+      border-radius: 50% !important;
+    }
+
+  }
 
 
   /* Focused */
@@ -20,6 +37,7 @@
 
 
 
+
   /* Hovered */
 
   @media screen and (max-width: $screen-xs) {
@@ -29,6 +47,7 @@
     .controller{
       opacity:1;
       pointer-events: auto;
+
     }
 
 
@@ -41,7 +60,7 @@
       .controller{
         opacity:0;
         pointer-events: none;
-        @include animate(0.3s);
+        @include animate(0.3s, 0.3s);
       }
     }
 
@@ -78,17 +97,32 @@
 
 .selector-header{
   padding: 10px 0;
-  h1,h2,h3,h4,h5{
-    margin: 0;
-    margin-top: 2px;
-  }
+  position: relative;
 
 
 }
 
 .fx-selector-title{
-  display: inline-block;
-  max-width: 45%;
+  margin-right: $controller-width-xs;
+
+  /* Small devices (tablets, 768px and up) */
+  @media (min-width: $screen-sm-min) {
+
+
+
+  }
+
+  /* Medium devices (desktops, 992px and up) */
+  @media (min-width: $screen-md-min) {
+
+    margin-right: $controller-width;
+
+  }
+
+  /* Large devices (large desktops, 1200px and up) */
+  @media (min-width: $screen-lg-min) {  }
+
+
 
 }
 
@@ -135,11 +169,6 @@
 
 }
 
-.truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 
 [data-code]{
@@ -234,6 +263,9 @@
 }
 
 /* Time */
+
+
+
 
 .time-selector-icon{
   font-size: 20px;
