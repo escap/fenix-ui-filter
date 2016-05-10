@@ -218,9 +218,9 @@ define([
 
         this.id = this.initial.id;
         this.items = this.initial.items || {};
-        this.$el = this.initial.$el;
+        this.$el = $(this.initial.el);
         this.template = this.initial.template;
-        this.summary$el = this.initial.summary$el;
+        this.summary$el = this.initial.summaryEl;
 
         if ($.isFunction(this.initial.summaryRender)) {
             this.summaryRender = this.initial.summaryRender;
@@ -347,17 +347,10 @@ define([
             log.warn("Impossible to find filter id. Set auto id to: " + this.id);
         }
 
-        if (!this.$el) {
-            errors.push({code: ERR.MISSING_CONTAINER});
-            log.warn("Impossible to find filter container");
-        }
-
-        this.$el = $(this.$el);
-
         //Check if $el exist
         if (this.$el.length === 0) {
             errors.push({code: ERR.MISSING_CONTAINER});
-            log.warn("Impossible to find box container");
+            log.warn("Impossible to find filter container");
         }
 
         //check for selectors

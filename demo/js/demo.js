@@ -55,8 +55,8 @@ define([
 
         var filter = new Filter({
             items: AllModel,
-            $el: s.ALL,
-            summary$el: s.ALL_SUMMARY
+            el: s.ALL,
+            summaryEl: s.ALL_SUMMARY
         });
 
     };

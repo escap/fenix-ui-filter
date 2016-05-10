@@ -69,7 +69,7 @@ define([
             id: s.FENIX_RESOURCE,
             items: this._createFilterConfiguration(configuration),
             $el: s.FENIX_RESOURCE,
-            summary$el: s.FENIX_RESOURCE_SUMMARY
+            summaryEl: s.FENIX_RESOURCE_SUMMARY
         });
     };
 
@@ -140,7 +140,7 @@ define([
             items: this._createFilterConfiguration(Model1),
             $el: s.MODEL_1_BASE,
             template: templ(i18nLabels),
-            summary$el: s.MODEL_1_BASE_SUMMARY
+            summaryEl: s.MODEL_1_BASE_SUMMARY
         });
 
         $(s.MODEL_1_BTN).on('click', function () {
@@ -158,8 +158,8 @@ define([
         var self = this,
             filter = this.createFilter({
                 id: s.DYNAMIC_MODEL_1_BASE,
-                $el: s.DYNAMIC_MODEL_1_BASE,
-                summary$el: s.DYNAMIC_MODEL_1_SUMMARY
+                el: s.DYNAMIC_MODEL_1_BASE,
+                summaryEl: s.DYNAMIC_MODEL_1_SUMMARY
             });
 
         $(s.DYNAMIC_MODEL_1_ADD_BTN).on("click", function () {
@@ -195,14 +195,14 @@ define([
         var source = this.createFilter({
                 id: s.SYNC_SRC,
                 items: this._createFilterConfiguration(Model),
-                $el: s.SYNC_SRC,
+                el: s.SYNC_SRC,
                 //template: templ(i18nLabels),
-                summary$el: s.SYNC_SRC_SUMMARY
+                summaryEl: s.SYNC_SRC_SUMMARY
             }),
             target = this.createFilter({
                 id: s.SYNC_TARGET,
                 items: this._createFilterConfiguration(Model),
-                $el: s.SYNC_TARGET,
+                el: s.SYNC_TARGET,
                 //template: templ(i18nLabels)
             });
 
