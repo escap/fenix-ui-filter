@@ -35,7 +35,9 @@ define([
             SYNC_BTN: "#sync-btn",
             TABLE_TAB: "#table-tab",
             TABLE_BTN: "#table-btn",
-            EVENT_COUNTERS: "#event-counters"
+            EVENT_COUNTERS: "#event-counters",
+        EVENT_VALUES_BTN : "#event-values-btn",
+        EVENT_DISPOSE : "#event-dispose",
         },
         empty_model = {data: []},
         error_model = {},
@@ -68,26 +70,24 @@ define([
         var filter = this.createFilter({
             id: s.FENIX_RESOURCE,
             items: this._createFilterConfiguration(configuration),
-            $el: s.FENIX_RESOURCE,
+            el: s.FENIX_RESOURCE,
             summaryEl: s.FENIX_RESOURCE_SUMMARY
         });
     };
 
     Test.prototype._render = function () {
 
-        this._renderSynch();
+        this._renderEvents();
 
         return;
 
-        this._renderEvents();
+        this._renderSynch();
 
         this._renderDynamicModel1();
 
         this._renderEvents();
 
         this._renderModel1BaseTemplate();
-
-
 
         this._renderSynch();
 
@@ -99,7 +99,7 @@ define([
 
         var filter = this.createFilter({
                 items: this._createFilterConfiguration(AggregationModel),
-                $el: s.TABLE_TAB
+                el: s.TABLE_TAB
             })
             .on("ready", function () {
                 filterIsReady = true;
@@ -115,8 +115,13 @@ define([
                 incrementCount("change");
             });
 
-        $(s.TABLE_BTN).on('click', function () {
+        $(s.EVENT_VALUES_BTN).on('click', function () {
             log.warn(filter.getValues());
+        });
+
+        $(s.EVENT_DISPOSE).on('click', function () {
+            filter.dispose();
+            log.warn("Filter disposed successfully")
         });
 
         function incrementCount(event) {
@@ -138,7 +143,7 @@ define([
         var filter = this.createFilter({
             id: s.MODEL_1_BASE,
             items: this._createFilterConfiguration(Model1),
-            $el: s.MODEL_1_BASE,
+            el: s.MODEL_1_BASE,
             template: templ(i18nLabels),
             summaryEl: s.MODEL_1_BASE_SUMMARY
         });

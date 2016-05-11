@@ -1598,6 +1598,9 @@ define([
         //unbind event listeners
         this._unbindEventListeners();
 
+        //empty filter container
+        this.$el.empty();
+
     };
 
     return Filter;
