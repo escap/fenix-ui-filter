@@ -3,7 +3,7 @@ define(function () {
     var config = {
 
         paths: {
-            'fx-filter/start': './start',
+            'fx-filter/start': './filter',
             'fx-filter/html': '../../html',
             'fx-filter/js': './',
             'fx-filter/config' :  '../../config',
