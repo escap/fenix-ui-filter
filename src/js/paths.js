@@ -50,7 +50,7 @@ define(function () {
             'underscore': '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             'bootstrap': '{FENIX_CDN}/js/bootstrap/3.2/js/bootstrap.min',
             'isotope': "{FENIX_CDN}/js/isotope/2.1.0/dist/isotope.pkgd.min",
-            'packery': '{FENIX_CDN}/js/packery/dist/packery.pkgd.min',
+            'packery': '{FENIX_CDN}/js/packery/1.4.3/dist/packery.pkgd.min.js',
             'jstree': '{FENIX_CDN}/js/jstree/3.0.8/dist/jstree.min',
             'select2': '{FENIX_CDN}/js/select2/3.5.4/select2.min',
             'text': '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
