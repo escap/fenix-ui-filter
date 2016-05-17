@@ -168,7 +168,7 @@ input[type="radio"] + label {
     display: inline-block;
     height: 15px;
     width: 15px;
-    background-color: #dddddd;
+    background-color: #bdbdbd;
     -webkit-border-radius: 100%;
     -moz-border-radius: 100%;
     -ms-border-radius: 100%;
@@ -204,11 +204,7 @@ input[type="checkbox"] + label {
     display: inline-block;
     height: 15px;
     width: 15px;
-    background-color: #dddddd;
-    -webkit-border-radius: 100%;
-    -moz-border-radius: 100%;
-    -ms-border-radius: 100%;
-    border-radius: 100%;
+    background-color: #bdbdbd;
     border: 0 solid #0076ff;
     position: relative;
     top: 2px;
@@ -247,6 +243,11 @@ input[type="radio"]:disabled + label {
     position: absolute;
     right: 0;
     top: 17px; }
+    [data-selector] .controller input[type="checkbox"] + label:before, [data-semantic] .controller input[type="checkbox"] + label:before {
+      -webkit-border-radius: 50% !important;
+      -moz-border-radius: 50% !important;
+      -ms-border-radius: 50% !important;
+      border-radius: 50% !important; }
     [data-selector] .controller .btn-round, [data-semantic] .controller .btn-round {
       -webkit-border-radius: 50% !important;
       -moz-border-radius: 50% !important;
@@ -353,7 +354,7 @@ input[type="radio"]:disabled + label {
   background: #0076ff; }
 
 .irs-line {
-  background: #dddddd;
+  background: #bdbdbd;
   border-color: transparent; }
 
 .irs-slider {

@@ -2,7 +2,7 @@
 
 $controller-width: 105px;
 $controller-width-xs: 50px;
-
+$controller-elements-background: #bdbdbd;
 
 
 [data-selector], [data-semantic]{
@@ -13,12 +13,18 @@ $controller-width-xs: 50px;
     right: 0;
     top: 17px;
 
+    input[type="checkbox"] + label  {
 
-    .btn-round{
-      -webkit-border-radius: 50% !important;
-      -moz-border-radius: 50% !important;
-      -ms-border-radius: 50% !important;
-      border-radius: 50% !important;
+      &:before{
+        @include fx-border-radius(50% !important); //The only checkbox with round corners
+
+      }
+
+    }
+
+
+      .btn-round{
+        @include fx-border-radius(50% !important);
     }
 
   }
@@ -248,7 +254,7 @@ $controller-width-xs: 50px;
 }
 
 .irs-line{
-  background: $fenix-light-gray;
+  background: $controller-elements-background;
   border-color: transparent;
 }
 
