@@ -36,8 +36,8 @@ define([
             TABLE_TAB: "#table-tab",
             TABLE_BTN: "#table-btn",
             EVENT_COUNTERS: "#event-counters",
-        EVENT_VALUES_BTN : "#event-values-btn",
-        EVENT_DISPOSE : "#event-dispose",
+            EVENT_VALUES_BTN: "#event-values-btn",
+            EVENT_DISPOSE: "#event-dispose",
         },
         empty_model = {data: []},
         error_model = {},
@@ -79,9 +79,9 @@ define([
 
         this._renderEvents();
 
-        return;
-
         this._renderSynch();
+
+        return;
 
         this._renderDynamicModel1();
 
@@ -98,9 +98,9 @@ define([
         var filterIsReady = false;
 
         var filter = this.createFilter({
-                items: this._createFilterConfiguration(AggregationModel),
-                el: s.TABLE_TAB
-            })
+            items: this._createFilterConfiguration(AggregationModel),
+            el: s.TABLE_TAB
+        })
             .on("ready", function () {
                 filterIsReady = true;
 
@@ -127,7 +127,7 @@ define([
         function incrementCount(event) {
 
             var $badge = $(s.EVENT_COUNTERS)
-                .find("[data-event='" + event + "']").find(".badge"),
+                    .find("[data-event='" + event + "']").find(".badge"),
                 current = parseInt($badge.html()) || 0;
 
             $badge.html(current + 1);

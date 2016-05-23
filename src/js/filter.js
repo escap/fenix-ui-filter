@@ -901,8 +901,9 @@ define([
 
             _.each(array, function (item) {
 
-                if (typeof item === 'object') {
-                    item.label = o.labels[key][item.value];
+                if (typeof item === 'object' && !item.label) {
+                    var labels = o.labels[key];
+                    item.label = labels ? o.labels[key][item.value] : "Missing label";
                 }
 
                 source[key].push(item);
@@ -1191,11 +1192,11 @@ define([
 
         if (this.selectorsReady === this.selectorsId.length) {
 
-            this.ready = true;
-
             log.info("All selectors are ready");
 
             this._onReady();
+
+            this.ready = true;
 
         }
     };
@@ -1251,7 +1252,9 @@ define([
 
     Filter.prototype._onSelectorItemSelect = function () {
 
-        this._trigger('change');
+        if (this.ready === true) {
+            this._trigger('change');
+        }
 
         this._updateSummary();
     };
@@ -1523,7 +1526,7 @@ define([
         return $html;
     };
 
-    Filter.prototype._createSelectorContainer = function (id) {
+    Filter.prototype._createSelectorContainer = function (id, $cont) {
         log.info("Create container for selector: " + id);
 
         var obj = this.selectors[id].template,
@@ -1535,7 +1538,7 @@ define([
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
         }, this));
 
-        return $html;
+        return $html.append();
     };
 
     Filter.prototype._disableSelectorAndSwitch = function (d) {
@@ -1551,6 +1554,9 @@ define([
         amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED), {value: false});
         amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)), {value: false});
 
+        if (this.ready === true) {
+            this._trigger('change');
+        }
     };
 
     Filter.prototype._enableSelectorAndSwitch = function (d) {
@@ -1568,6 +1574,11 @@ define([
 
         amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED), {value: true});
         amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)), {value: true});
+
+        if (this.ready === true) {
+            this._trigger('change');
+        }
+
     };
 
     //disposition
