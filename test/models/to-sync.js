@@ -45,9 +45,7 @@ define(function () {
 
             "template": {
                 "hideHeader": true
-            },
-
-            "className": "col-xs-6"
+            }
 
         },
 
@@ -101,9 +99,7 @@ define(function () {
 
             "template": {
                 // "hideHeader": true
-            },
-
-            "className": "col-xs-12"
+            }
 
         },
 
@@ -137,7 +133,7 @@ define(function () {
 
         "donor": {
 
-            //"className" : "col-xs-6",
+            //"className" : "",
 
             "cl": {
                 "uid": "crs_donors",
