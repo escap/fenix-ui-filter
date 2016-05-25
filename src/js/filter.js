@@ -853,6 +853,7 @@ define([
         };
 
         if (this.ready !== true) {
+            log.warn("Abort getValues() because filter is not ready")
             return result;
         }
 
@@ -1196,8 +1197,6 @@ define([
 
             this._onReady();
 
-            this.ready = true;
-
         }
     };
 
@@ -1240,6 +1239,8 @@ define([
         window.clearTimeout(this.validTimeout);
 
         amplify.publish(this._getEventName(EVT.SELECTORS_READY));
+
+        this.ready = true;
 
         this._trigger('ready');
 
