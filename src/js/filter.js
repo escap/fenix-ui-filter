@@ -221,6 +221,7 @@ define([
         this.$el = $(this.initial.el);
         this.template = this.initial.template;
         this.summary$el = this.initial.summaryEl;
+        this.values = this.initial.values;
 
         if ($.isFunction(this.initial.summaryRender)) {
             this.summaryRender = this.initial.summaryRender;
@@ -1239,6 +1240,11 @@ define([
         window.clearTimeout(this.validTimeout);
 
         amplify.publish(this._getEventName(EVT.SELECTORS_READY));
+
+        // set default values
+        if (!$.isEmptyObject(this.values)){
+            this.setValues(this.values, true);
+        }
 
         this.ready = true;
 
