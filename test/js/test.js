@@ -11,10 +11,11 @@ define([
     'test/models/tab-table-toolbar-config',
     'test/models/fx-process',
     'test/models/aggregation',
+    'test/models/model-2',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -38,6 +39,7 @@ define([
             EVENT_COUNTERS: "#event-counters",
             EVENT_VALUES_BTN: "#event-values-btn",
             EVENT_DISPOSE: "#event-dispose",
+            MODEL_2 : "#model2"
         },
         empty_model = {data: []},
         error_model = {},
@@ -55,6 +57,14 @@ define([
 
         //this._createConfiguration();
 
+    };
+
+    Test.prototype._renderModel2 = function () {
+
+        var filter = this.createFilter({
+            items: Model2,
+            el: s.MODEL_2
+        });
     };
 
     Test.prototype._createConfiguration = function () {
@@ -77,11 +87,13 @@ define([
 
     Test.prototype._render = function () {
 
+        this._renderModel2();
+
+        return;
+
         this._renderEvents();
 
         this._renderSynch();
-
-        return;
 
         this._renderDynamicModel1();
 

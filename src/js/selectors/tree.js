@@ -408,6 +408,10 @@ define([
             self = this,
             data = this._buildTreeModel(this.data);
 
+        for (var i = config.from; i <= config.to; i++) {
+            data.push({id: i.toString(), text: i.toString()});
+        }
+
         tree = $container.find(s.TREE_CONTAINER).jstree($.extend(true, {}, {
             core: {
                 multiple: true,
