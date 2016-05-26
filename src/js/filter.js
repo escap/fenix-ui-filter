@@ -231,6 +231,7 @@ define([
         this.ensureAtLeast = parseInt(this.initial.ensureAtLeast || C.ENSURE_AT_LEAST || CD.ENSURE_AT_LEAST, 10);
 
         this.common = this.initial.common || {};
+        this.environment = this.initial.environment;
     };
 
     Filter.prototype._renderFilter = function () {
@@ -412,6 +413,10 @@ define([
         this.channels = {};
 
         this.cache = {};
+
+        this.bridge = new Bridge({
+            environment : this.environment
+        })
     };
 
     Filter.prototype._initDynamicVariables = function () {
@@ -602,7 +607,7 @@ define([
         }, this));
 
 
-        return Bridge.all(promises);
+        return this.bridge.all(promises);
 
     };
 
@@ -701,14 +706,14 @@ define([
         switch (t.toLowerCase()) {
 
             case "enumeration" :
-                promise = Bridge.getEnumeration({
+                promise = this.bridge.getEnumeration({
                     uid: body.uid
                 });
                 break;
 
             default :
 
-                promise = Bridge.getCodeList({
+                promise = this.bridge.getCodeList({
                     body: body
                 });
 
