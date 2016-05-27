@@ -369,11 +369,12 @@ define([
                     return;
                 }
 
+                /* TODO uncomment after configuration
                 if (!data.instance.is_leaf(data.node)) {
                     data.instance.toggle_node(data.node);
                     data.instance.deselect_node(data.node, true);
-                    return;
-                }
+                   return;
+                }*/
 
                 if (this.status.ready === true) {
 
