@@ -1346,6 +1346,12 @@ define([
 
         var Instance = this._getSelectorInstance(name);
 
+        if (!Instance) {
+            log.warn(id + " is not a current selector.");
+
+            return
+        }
+
         if ($.isFunction(Instance[method])) {
 
             return Instance[method](opts1, opts2);
@@ -1437,7 +1443,15 @@ define([
 
     Filter.prototype._getSelectorInstance = function (name) {
 
-        var instance = this.selectors[name].instance;
+        var selector = this.selectors[name];
+
+        if (!selector) {
+            log.warn("Impossible to find selector obj " + name);
+
+            return;
+        }
+
+        var instance = selector.instance;
 
         if (!instance) {
 
