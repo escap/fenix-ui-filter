@@ -277,8 +277,8 @@ define([
             options: data
         });
 
-        for (var i = config.from; i <= config.to; i++) {
-            data.push({value: i.toString(), text: i.toString()});
+        for (var i = config.to; i >= config.from; i--) {
+            data.push({id: i.toString(), text: i.toString()});
         }
 
         opt.options = data;
