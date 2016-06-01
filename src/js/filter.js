@@ -1557,7 +1557,7 @@ define([
 
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
-            conf = $.extend(true, {}, C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS, this.common.template),
+            conf = $.extend(true, {}, C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS, this.common.template, {hideHeaderIcon: true}),
             $html = $(template($.extend(true, {id: id}, i18nLabels, conf, obj)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
