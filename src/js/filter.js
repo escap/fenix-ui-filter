@@ -798,7 +798,7 @@ define([
 
             this.validTimeout = window.setTimeout(function () {
 
-                alert(ERR.READY_TIMEOUT);
+                //alert(ERR.READY_TIMEOUT);
                 log.error(ERR.READY_TIMEOUT);
 
             }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
