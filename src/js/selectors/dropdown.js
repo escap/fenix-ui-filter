@@ -61,7 +61,8 @@ define([
 
             result.values.push(s);
 
-            result.labels[s] = instance.getItem(s)[0].innerHTML.toString();
+            //result.labels[s] = instance.getItem(s)[0].innerHTML.toString();
+            result.labels[s] = $(instance.getItem(s)[0]).contents().get(0).nodeValue;
 
         });
 
@@ -336,6 +337,7 @@ define([
 
                 _.each(values, function (s) {
                     result.push({
+                        id:self.id,
                         value: s,
                         label: labels[s],
                         parent: "#"
