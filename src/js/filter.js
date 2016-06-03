@@ -1262,10 +1262,10 @@ define([
         return this.id.concat(evt);
     };
 
-    Filter.prototype._onSelectorItemSelect = function () {
+    Filter.prototype._onSelectorItemSelect = function ( values ) {
 
         if (this.ready === true) {
-            this._trigger('change');
+            this._trigger('change', values);
         }
 
         this._updateSummary();

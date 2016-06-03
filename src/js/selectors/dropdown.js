@@ -305,7 +305,7 @@ define([
         var config = this.selector,
             instance = this.dropdown[0].selectize;
 
-        if(config.default) {
+        if (config.default) {
             //print default values
             instance.setValue(config.default);
         }
@@ -345,7 +345,7 @@ define([
                 });
 
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), result);
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT), {id: self.id, values: self.getValues()});
             }
 
         });

@@ -35,15 +35,16 @@ define(function () {
         "MANDATORY_SELECTOR_CLASS_NAME": "mandatory", // class for mandatory selectors
         "DISABLED_SELECTOR_CLASS_NAME": "disabled", // class for mandatory selectors
 
-        "OUTPUT_FORMAT": "plain", // "plain | "fenix"
+        "OUTPUT_FORMAT": "plain", // plain || fenix || catalog
 
         DEFAULT_TEMPLATE_OPTIONS: {
-            "hideRemoveButton": true,
-            "hideSwitch": true
+            hideRemoveButton: true,
+            hideSwitch: true,
+            hideHeaderIcon: true
         },
 
         DIRECTION : "append",
-        ENSURE_AT_LEAST : -1,
+        ENSURE_AT_LEAST : -1
 
 
     }

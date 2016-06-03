@@ -87,11 +87,13 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderModel2();
+
+
+        this._renderEvents();
 
         return;
 
-        this._renderEvents();
+        this._renderModel2();
 
         this._renderSynch();
 
@@ -118,11 +120,13 @@ define([
 
                 incrementCount("ready");
             })
-            .on("change", function () {
+            .on("change", function ( payload ) {
 
                 if (filterIsReady !== true) {
                     alert("'change' event should be triggered after 'ready' event!");
                 }
+
+                log.info(payload);
 
                 incrementCount("change");
             });

@@ -63,8 +63,8 @@ define(function () {
                         var template = $('<div> Ciao!: ' +model.label +'</div>');
 
                         template.on('click', function () {
-                            alert('Hello!')
-                        })
+                            console.log('Hello!')
+                        });
 
 
                         return template;

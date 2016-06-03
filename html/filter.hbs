@@ -28,11 +28,11 @@
 
                     {{#unless hideSwitch}}
 
-                    <div class="btn-group" role="group">
-                        <input type="checkbox" id="switch-{{id}}" name="disable-selector" data-target="{{id}}"
-                               data-type="switch" data-role="switch" checked>
-                        <label class="filter-enabled-label" for="switch-{{id}}">{{enable_filter}}</label>
-                    </div>
+                        <div class="btn-group" role="group">
+                            <input type="checkbox" id="switch-{{id}}" name="disable-selector" data-target="{{id}}"
+                                   data-type="switch" data-role="switch" checked>
+                            <label class="filter-enabled-label" for="switch-{{id}}">{{enable_filter}}</label>
+                        </div>
 
                     {{/unless}}
 
@@ -50,7 +50,6 @@
             </div>
 
         {{/unless}}
-
 
     </div>
 
@@ -69,7 +68,6 @@
 
                 <div class="btn-group controller" role="group">
 
-
                     {{#unless hideSwitch}}
 
                         <div class="btn-group" role="group">
@@ -82,22 +80,17 @@
 
                     {{#unless hideRemoveButton}}
 
-
                         <button data-role="remove" class="btn btn-default btn-round" type="button">
                             <span class="fx-icon fx-icon-close" aria-hidden="true"></span>
                         </button>
 
-
-
                     {{/unless}}
-
 
                 </div>
 
             </div>
 
         {{/unless}}
-
 
         <!-- Nav tabs -->
         <div class="fx-tabs">
@@ -128,6 +121,7 @@
     </div>
 
     <div data-summary>
+
         {{#summary}}
             <ul class="list-unstyled">
                 {{label}}
@@ -138,6 +132,7 @@
 
             </ul>
         {{/summary}}
+
     </div>
 
 </div>
