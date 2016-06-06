@@ -222,6 +222,7 @@ define([
         this.template = this.initial.template;
         this.summary$el = this.initial.summaryEl;
         this.values = this.initial.values;
+        this.cache = this.initial.cache;
 
         if ($.isFunction(this.initial.summaryRender)) {
             this.summaryRender = this.initial.summaryRender;
@@ -412,10 +413,11 @@ define([
         //pub/sub
         this.channels = {};
 
-        this.cache = {};
+        this.cache_db = {};
 
         this.bridge = new Bridge({
-            environment : this.environment
+            environment : this.environment,
+            cache : this.cache
         })
     };
 
@@ -676,14 +678,14 @@ define([
 
     Filter.prototype._storeCodelist = function (obj, cl) {
 
-        this.cache[this._getCodelistCacheKey(obj)] = cl;
+        this.cache_db[this._getCodelistCacheKey(obj)] = cl;
 
-        return this.cache[this._getCodelistCacheKey(obj)];
+        return this.cache_db[this._getCodelistCacheKey(obj)];
     };
 
     Filter.prototype._getStoredCodelist = function (obj) {
 
-        return this.cache[this._getCodelistCacheKey(obj)];
+        return this.cache_db[this._getCodelistCacheKey(obj)];
     };
 
     Filter.prototype._getCodelistCacheKey = function (o) {
