@@ -274,15 +274,13 @@ define([
 
         data = this._buildDropdownModel(this.data);
 
-        opt = $.extend(true, {}, selectize, {
-            options: data
-        });
-
         for (var i = config.to; i >= config.from; i--) {
             data.push({value: i.toString(), text: i.toString()});
         }
 
-        opt.options = data;
+        opt = $.extend(true, {}, selectize, {
+            options: data
+        });
 
         dropdown = $container.selectize(opt);
 
@@ -337,7 +335,7 @@ define([
 
                 _.each(values, function (s) {
                     result.push({
-                        id:self.id,
+                        id: self.id,
                         value: s,
                         label: labels[s],
                         parent: "#"
@@ -371,13 +369,12 @@ define([
 
     // dependency handler
 
+
     Dropdown.prototype._dep_min = function (opts) {
 
         var codes = opts.data.length > 0 ? opts.data : [{value: this.selector.from || 0}],
             from = codes[0].value,
-            originalValue = this.getValues().values[0],
-            data = [],
-            instance = this.dropdown[0].selectize;
+            data = [];
 
         if (!this.selector.to) {
             log.error("Currently the '_dep_min' is implemented only for dropdown with static model [from/to]");
@@ -390,6 +387,15 @@ define([
                 text: i.toString()
             })
         }
+
+        this._updateDropdown(data);
+
+    };
+
+    Dropdown.prototype._updateDropdown = function (data) {
+
+        var originalValue = this.getValues().values[0],
+            instance = this.dropdown[0].selectize;
 
         //add new values to dropdown
         instance.clearOptions();
@@ -406,7 +412,10 @@ define([
 
     Dropdown.prototype._dep_parent = function (opts) {
 
-        this.setDomain(opts);
+        var codelist = opts.data || [],
+            data = this._buildDropdownModel(codelist);
+
+        this._updateDropdown(data);
 
     };
 

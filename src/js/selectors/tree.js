@@ -474,7 +474,6 @@ define([
 
     Tree.prototype._notifyTreeSelectionChange = function (o) {
 
-
         var payload = [],
             selected = o.instance.get_selected();
 
@@ -484,7 +483,7 @@ define([
 
             label["EN"] = node.text;
 
-            payload.push({code: node.id, label: label, parent: node.parent})
+            payload.push({value: node.id, label: label, parent: node.parent})
         });
 
         this._updateSummary();
@@ -502,7 +501,7 @@ define([
             instance = this.tree.jstree(true);
 
         _.each(values.labels, function (val, key) {
-            model.push(self.summaryRender({code: key, label: val}));
+            model.push(self.summaryRender({value: key, label: val}));
         });
 
         //unbind click listener
@@ -531,7 +530,7 @@ define([
 
     Tree.prototype._summaryRender = function (item) {
 
-        item.value = item.label + "<span class='code-brk'>[" + item.code + "]</span>";
+        item.value = item.label + "<span class='code-brk'>[" + item.value + "]</span>";
 
         return item;
     };
@@ -552,7 +551,8 @@ define([
         if ($container.length > 0 && Array.isArray(model)) {
 
             tree = $container.find(s.TREE_CONTAINER).jstree(true);
-            tree.settings.core.data = this._buildTreeModel(model, null);
+            var data = this._buildTreeModel(model, null);
+            tree.settings.core.data = data;
             tree.refresh(true);
             tree.redraw(true);
 

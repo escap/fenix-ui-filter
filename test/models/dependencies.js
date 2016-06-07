@@ -6,9 +6,10 @@ define(function () {
 
     return {
 
-        parentsector_code :{
+        parentsector_code: {
+
             selector: {
-                id : "dropdown",
+                id: "dropdown",
                 default: ["600"],
                 config: { //Selectize configuration
                     maxItems: 1,
@@ -21,17 +22,22 @@ define(function () {
             cl: {
                 uid: "crs_dac",
                 version: "2016",
-                level : 1,
-                levels:1
+                level: 1,
+                levels: 1
             },
+
             template: {
                 hideSwitch: true,
                 hideRemoveButton: true
             }
         },
-        purposecode :{
+
+        purposecode: {
+
             selector: {
-                id : "dropdown",
+
+                id: "dropdown",
+
                 config: {
                     maxItems: 1,
                     placeholder: "All",
@@ -51,7 +57,7 @@ define(function () {
                 hideSwitch: true,
                 hideRemoveButton: true
             },
-            dependencies :{
+            dependencies: {
                 "parentsector_code": {id: "parent", event: "select"}, //obj or array of obj
             }
         },
@@ -70,7 +76,7 @@ define(function () {
 
             "format": {
                 "type": "static",
-                "output" : "time",
+                "output": "time",
                 //"process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}'
             },
 
@@ -93,7 +99,7 @@ define(function () {
 
             "format": {
                 "type": "static",
-                "output" : "time"
+                "output": "time"
                 //, "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}' //Not used
             },
 

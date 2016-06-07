@@ -1102,7 +1102,7 @@ define([
                 log.info(o);
 
                 //delete c.levels;
-                c.levels = 2;
+                //c.levels = 2;
                 delete c.level;
 
                 c.codes = [];
@@ -1120,9 +1120,7 @@ define([
                     }
                 )
             }
-
         }
-
     };
 
     Filter.prototype._dep_focus = function (payload, o) {
