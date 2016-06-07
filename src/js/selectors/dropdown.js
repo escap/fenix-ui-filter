@@ -279,7 +279,7 @@ define([
         });
 
         for (var i = config.to; i >= config.from; i--) {
-            data.push({id: i.toString(), text: i.toString()});
+            data.push({value: i.toString(), text: i.toString()});
         }
 
         opt.options = data;

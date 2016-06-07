@@ -12,10 +12,11 @@ define([
     'test/models/fx-process',
     'test/models/aggregation',
     'test/models/model-2',
+    'test/models/dependencies',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -39,7 +40,8 @@ define([
             EVENT_COUNTERS: "#event-counters",
             EVENT_VALUES_BTN: "#event-values-btn",
             EVENT_DISPOSE: "#event-dispose",
-            MODEL_2 : "#model2"
+            MODEL_2 : "#model2",
+            DEPENDENCIES: "#dependencies",
         },
         empty_model = {data: []},
         error_model = {},
@@ -58,6 +60,15 @@ define([
         //this._createConfiguration();
 
     };
+
+    Test.prototype._renderDependencies = function () {
+
+        var filter = this.createFilter({
+            items: ModelDependencies,
+            el: s.DEPENDENCIES
+        });
+    };
+
 
     Test.prototype._renderModel2 = function () {
 
@@ -87,11 +98,11 @@ define([
 
     Test.prototype._render = function () {
 
-
-
-        this._renderEvents();
+        this._renderDependencies();
 
         return;
+
+        this._renderEvents();
 
         this._renderModel2();
 
