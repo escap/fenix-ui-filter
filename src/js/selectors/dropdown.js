@@ -404,6 +404,12 @@ define([
 
     };
 
+    Dropdown.prototype._dep_parent = function (opts) {
+
+        this.setDomain(opts);
+
+    };
+
     return Dropdown;
 
 });

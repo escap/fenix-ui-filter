@@ -46,7 +46,8 @@ define([
         empty_model = {data: []},
         error_model = {},
         valid_model = {},
-        filters = [];
+        filters = [],
+        environment = 'develop';
 
     function Test() {
     }
@@ -252,7 +253,10 @@ define([
 
     Test.prototype.createFilter = function (params) {
 
-        var instance = new Filter(params);
+        var instance = new Filter(
+            $.extend(true, params,{
+                environment : environment
+            }));
 
         filters.push(instance);
 
