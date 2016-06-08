@@ -21,5 +21,12 @@
       <td>600</td>
       <td>duration of animation between slides (in ms)</td>
     </tr>
+    <tr>
+      <td>speed</td>
+      <td>number</td>
+      <td>300</td>
+      <td>600</td>
+      <td>duration of animation between slides (in ms)</td>
+    </tr>
   </tbody>
 </table>
