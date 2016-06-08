@@ -13,10 +13,11 @@ define([
     'test/models/aggregation',
     'test/models/model-2',
     'test/models/dependencies',
+    'test/models/countrystat',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel,  model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -42,6 +43,7 @@ define([
             EVENT_DISPOSE: "#event-dispose",
             MODEL_2 : "#model2",
             DEPENDENCIES: "#dependencies",
+            COUNTRYSTAT: "#countrystat",
         },
         empty_model = {data: []},
         error_model = {},
@@ -70,6 +72,14 @@ define([
         });
     };
 
+    Test.prototype._renderCountrystat = function () {
+
+        var filter = this.createFilter({
+            items: CountryStatModel,
+            el: s.COUNTRYSTAT
+        });
+
+    };
 
     Test.prototype._renderModel2 = function () {
 
@@ -99,9 +109,11 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderDependencies();
+        this._renderCountrystat();
 
         return;
+
+        this._renderDependencies();
 
         this._renderEvents();
 
