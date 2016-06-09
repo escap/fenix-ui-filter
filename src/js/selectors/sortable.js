@@ -8,11 +8,10 @@ define([
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
-    'fx-filter/config/config-default',
     'handlebars',
     'sortable',
     "amplify"
-], function ($, log, _, templates, ERR, EVT, C, CD, Handlebars, SortableJS) {
+], function ($, log, _, templates, ERR, EVT, C, Handlebars, SortableJS) {
 
     'use strict';
 
@@ -31,7 +30,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o);
+        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
 
         this._initVariables();
 

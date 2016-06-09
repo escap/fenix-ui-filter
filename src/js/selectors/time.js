@@ -7,13 +7,12 @@ define([
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
-    'fx-filter/config/config-default',
     'i18n!fx-filter/nls/filter',
     'handlebars',
     'text!fx-filter/html/selectors/time.hbs',
     "bootstrap.datetimepicker",
     "amplify"
-], function ($, log, _, ERR, EVT, C, CD, i18n, Handlebars, template) {
+], function ($, log, _, ERR, EVT, C, i18n, Handlebars, template) {
 
     'use strict';
 
@@ -25,7 +24,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o);
+        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
 
         this._checkConfiguration(); //empty
 

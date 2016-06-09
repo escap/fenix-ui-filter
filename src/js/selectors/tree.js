@@ -7,13 +7,12 @@ define([
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
-    'fx-filter/config/config-default',
     'handlebars',
     'i18n!fx-filter/nls/filter',
     'text!fx-filter/html/selectors/tree.hbs',
     "amplify",
     'jstree'
-], function ($, log, _, ERR, EVT, C, CD, Handlebars, i18n, template) {
+], function ($, log, _, ERR, EVT, C, Handlebars, i18n, template) {
 
     'use strict';
 
@@ -35,7 +34,7 @@ define([
 
     function Tree(o) {
 
-        $.extend(true, this, o, defaultOptions);
+        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
 
         this._renderTemplate();
 

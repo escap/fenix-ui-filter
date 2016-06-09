@@ -7,7 +7,6 @@ define([
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
-    'fx-filter/config/config-default',
     'text!fx-filter/html/filter.hbs',
     'i18n!fx-filter/nls/filter',
     "fx-common/bridge",
@@ -15,7 +14,7 @@ define([
     'handlebars',
     'amplify',
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, CD, templates, i18nLabels, Bridge, Utils, Handlebars) {
+], function ($, require, _, log, ERR, EVT, C, templates, i18nLabels, Bridge, Utils, Handlebars) {
 
     'use strict';
 
@@ -51,7 +50,7 @@ define([
         log.info("FENIX filter");
         log.info(o);
 
-        $.extend(true, this, CD, C, {initial: o}, defaultOptions);
+        $.extend(true, this, C, {initial: o}, defaultOptions);
 
         this._parseInput(o);
 
@@ -81,7 +80,7 @@ define([
      */
     Filter.prototype.getValues = function (format) {
 
-        var candidate = format || this.OUTPUT_FORMAT,
+        var candidate = format || this.outputFormat,
             call = this["_format_" + candidate];
 
         if ($.isFunction(call)) {
@@ -228,8 +227,8 @@ define([
             this.summaryRender = this.initial.summaryRender;
         }
 
-        this.direction = this.initial.direction || C.DIRECTION || CD.DIRECTION;
-        this.ensureAtLeast = parseInt(this.initial.ensureAtLeast || C.ENSURE_AT_LEAST || CD.ENSURE_AT_LEAST, 10);
+        this.direction = this.initial.direction || C.direction;
+        this.ensureAtLeast = parseInt(this.initial.ensureAtLeast || C.ensureAtLeast, 10);
 
         this.common = this.initial.common || {};
         this.environment = this.initial.environment;
@@ -728,7 +727,7 @@ define([
 
     Filter.prototype._getSelectorScriptPath = function (name) {
 
-        var registeredSelectors = $.extend(true, {}, this.selector_registry),
+        var registeredSelectors = $.extend(true, {}, this.selectorRegistry),
             path;
 
         var conf = registeredSelectors[name];
@@ -754,8 +753,8 @@ define([
         log.info("Add class to mandatory selectors");
         _.each(this.mandatorySelectorIds, _.bind(function (id) {
 
-            this._getSelectorContainer(id).closest(s.SEMANTICS).addClass(this.MANDATORY_SELECTOR_CLASS_NAME);
-            this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.MANDATORY_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(id).closest(s.SEMANTICS).addClass(this.mandatorySelectorClassName);
+            this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.mandatorySelectorClassName);
         }, this));
 
     };
@@ -803,7 +802,7 @@ define([
                 //alert(ERR.READY_TIMEOUT);
                 log.error(ERR.READY_TIMEOUT);
 
-            }, C.VALID_TIMEOUT || CD.VALID_TIMEOUT);
+            }, C.validityTimeout);
         } else {
             //no selectors by default
             window.setTimeout(_.bind(function () {
@@ -1132,10 +1131,10 @@ define([
             var d = payload.value,
                 selectors = this.semantic2selectors[d];
 
-            this.$el.find("." + this.FOCUSED_SELECTOR_CLASS_NAME).removeClass(this.FOCUSED_SELECTOR_CLASS_NAME);
+            this.$el.find("." + this.focusedSelectorClassName).removeClass(this.focusedSelectorClassName);
 
-            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS).addClass(this.FOCUSED_SELECTOR_CLASS_NAME);
-            this._getSelectorContainer(selectors[0]).closest(s.SEMANTICS).addClass(this.FOCUSED_SELECTOR_CLASS_NAME);
+            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS).addClass(this.focusedSelectorClassName);
+            this._getSelectorContainer(selectors[0]).closest(s.SEMANTICS).addClass(this.focusedSelectorClassName);
 
             _.each(selectors, _.bind(function (sel) {
 
@@ -1238,8 +1237,6 @@ define([
 
         this._configureSelectorsStatus();
 
-        this._updateSummary();
-
         this._checkItemsAmount();
 
         window.clearTimeout(this.validTimeout);
@@ -1254,6 +1251,8 @@ define([
         this.ready = true;
 
         this._trigger('ready');
+
+        this._updateSummary();
 
     };
 
@@ -1381,7 +1380,7 @@ define([
         }
 
         //selector container
-        obj.$el = this._getSelectorContainer(selectorId);
+        obj.el = this._getSelectorContainer(selectorId);
 
         //get set of codelists
         if (obj.hasOwnProperty("cl")) {
@@ -1517,7 +1516,7 @@ define([
 
         var semantic = this.semantics[id],
             templ = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
-            conf = $.extend(true, {}, C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS, this.common.template),
+            conf = $.extend(true, {}, C.templateOptions, this.common.template),
             $html,
             model;
 
@@ -1557,7 +1556,7 @@ define([
 
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
-            conf = $.extend(true, {}, C.DEFAULT_TEMPLATE_OPTIONS || CD.DEFAULT_TEMPLATE_OPTIONS, this.common.template),
+            conf = $.extend(true, {}, C.templateOptions, this.common.template),
             $html = $(template($.extend(true, {id: id}, i18nLabels, conf, obj)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
@@ -1569,8 +1568,8 @@ define([
 
     Filter.prototype._disableSelectorAndSwitch = function (d) {
 
-        this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).addClass(this.DISABLED_SELECTOR_CLASS_NAME);
-        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).addClass(this.DISABLED_SELECTOR_CLASS_NAME);
+        this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).addClass(this.disabledSelectorClassName);
+        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).addClass(this.disabledSelectorClassName);
 
         this._getSelectorContainer(d).closest(s.SELECTORS).find(s.SWITCH).prop('checked', false);
         this._getSelectorContainer(d).closest(s.SEMANTICS).find(s.SWITCH).prop('checked', false);
@@ -1587,8 +1586,8 @@ define([
 
     Filter.prototype._enableSelectorAndSwitch = function (d) {
 
-        this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.DISABLED_SELECTOR_CLASS_NAME);
-        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.DISABLED_SELECTOR_CLASS_NAME);
+        this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.disabledSelectorClassName);
+        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.disabledSelectorClassName);
 
         this._getSelectorContainer(d).closest(s.SELECTORS).find(s.SWITCH).prop('checked', true);
         this._getSelectorContainer(d).closest(s.SEMANTICS).find(s.SWITCH).prop('checked', true);

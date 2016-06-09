@@ -7,10 +7,9 @@ define([
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
-    'fx-filter/config/config-default',
     "ion.rangeSlider",
     "amplify"
-], function ($, log, _, ERR, EVT, C, CD) {
+], function ($, log, _, ERR, EVT, C) {
 
     'use strict';
 
@@ -20,7 +19,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o);
+        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
 
         this._checkConfiguration(); //empty
 

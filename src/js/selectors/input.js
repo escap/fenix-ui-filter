@@ -8,10 +8,9 @@ define([
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
-    'fx-filter/config/config-default',
     'handlebars',
     "amplify"
-], function ($, log, _, templates, ERR, EVT, C, CD, Handlebars) {
+], function ($, log, _, templates, ERR, EVT, C, Handlebars) {
 
     'use strict';
 
@@ -28,7 +27,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o);
+        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
 
         this._checkConfiguration();
 
