@@ -44,8 +44,8 @@ define(function () {
         },
 
         direction : "append",
-        ensureAtLeast : -1
-
+        ensureAtLeast : -1,
+        cache : false
 
     }
 

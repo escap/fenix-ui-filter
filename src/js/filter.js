@@ -221,7 +221,7 @@ define([
         this.template = this.initial.template;
         this.summary$el = this.initial.summaryEl;
         this.values = this.initial.values;
-        this.cache = this.initial.cache;
+        this.cache = typeof this.initial.cache === "boolean" ? this.initial.cache : C.cache;
 
         if ($.isFunction(this.initial.summaryRender)) {
             this.summaryRender = this.initial.summaryRender;
