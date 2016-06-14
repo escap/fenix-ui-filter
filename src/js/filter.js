@@ -1548,8 +1548,6 @@ define([
         $html.find("ul").children().first().addClass("active");
         $html.find(".tab-content").children().first().addClass("active");
 
-        $html.find('[data-toggle="tooltip"]').tooltip();
-
         return $html;
     };
 
@@ -1564,9 +1562,6 @@ define([
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
         }, this));
-
-        //init tooltip
-        $html.find('[data-toggle="tooltip"]').tooltip();
 
         return $html.append();
     };
