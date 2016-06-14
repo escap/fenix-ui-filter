@@ -456,7 +456,6 @@ define([
         }
 
         if (this.selectors.hasOwnProperty(id)) {
-
             this._removeSelectorReferences(id);
         }
 
@@ -466,7 +465,7 @@ define([
 
         var selector = this.selectors[id];
         selector.instance.dispose();
-        selector.$el.remove();
+        selector.el.remove();
 
         delete this.selectors[id];
 
@@ -1517,7 +1516,7 @@ define([
 
         var semantic = this.semantics[id],
             templ = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
-            conf = $.extend(true, {}, C.templateOptions, this.common.template),
+            conf = $.extend(true, {}, C.template, this.common.template),
             $html,
             model;
 
@@ -1549,20 +1548,25 @@ define([
         $html.find("ul").children().first().addClass("active");
         $html.find(".tab-content").children().first().addClass("active");
 
+        $html.find('[data-toggle="tooltip"]').tooltip();
+
         return $html;
     };
 
-    Filter.prototype._createSelectorContainer = function (id, $cont) {
+    Filter.prototype._createSelectorContainer = function (id) {
         log.info("Create container for selector: " + id);
 
         var obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
-            conf = $.extend(true, {}, C.templateOptions, this.common.template),
+            conf = $.extend(true, {}, C.template, this.common.template),
             $html = $(template($.extend(true, {id: id}, i18nLabels, conf, obj)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
         }, this));
+
+        //init tooltip
+        $html.find('[data-toggle="tooltip"]').tooltip();
 
         return $html.append();
     };

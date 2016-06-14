@@ -37,7 +37,7 @@ define(function () {
 
         outputFormat: "plain", // plain || fenix || catalog
 
-        templateOptions: {
+        template: {
             hideRemoveButton: true,
             hideSwitch: true,
             hideHeaderIcon: true
