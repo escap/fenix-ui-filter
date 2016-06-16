@@ -3,7 +3,13 @@
 ```javascript
 var Filter = require('fx-filter/start');
 
-var filter = new Filter(options);
+var filter = new Filter({
+        el : "#filter",
+        items : {
+            sel_1 : { ... }, // selector configuration goes here
+            sel_2 : { ... }
+        }
+    });
 ```
 
 # Configuration
@@ -173,7 +179,7 @@ This is the schema of a selector configuration
 
 ```javascript
 {
- selector_id : { // this will appear within the result of .getValues()
+ sel_1 : { // this will appear within the result of .getValues()
  
     className : "...", //custom CSS class for selector container
      
@@ -197,7 +203,7 @@ This is the schema of a selector configuration
 }
 ```
 
-## Selector
+## Selector 
 
 ```javascript
 {
@@ -223,7 +229,7 @@ selector : {
 }
 ```
 
-## Cl / Enumeration
+## Code-list / Enumeration as selector source
 
 This configuration proxies the information to D3S code-list / enumeration services
 
@@ -321,11 +327,11 @@ TODO
     
         output : "codes", // codes || enumeration || time. If format is 'fenix'
         
-        uid : "myUid", //override code-list uid config
+        uid : "myUid", // override code-list uid config
         
-        version : "myVersion", //override code-list version config
+        version : "myVersion", // override code-list version config
         
-        dimension : "myDimension", //override dimension uid, default is the selector id
+        dimension : "myDimension", // override dimension uid, default is the selector id
     
     } 
 ...
@@ -447,10 +453,10 @@ It is possible to define a semantic selector. A semantic selector is a group of 
  
 # Filter layout definition
 It is possible to specify where a selector has to be rendered.
-FENIX Filter looks for `data-selector=":id"` or `data-semantic=":id"` where `:id` is the selector/semantic id in order to find containers within its `el`.
-It is possible to pass an HTML template using the `template` configuration that will be attached to the `el`.
+FENIX Filter looks for `data-selector=":id"` or `data-semantic=":id"` where `:id` is the selector/semantic id within its `el`.
+In case no container will be found, FENIX filter will add (append/prepend according to configuration) the container to its `el`.
 
-In case no container will be found, FENIX filter will add (append/prepend according to configuration) the container to `el`.
+It is possible to pass an HTML template using the `template` configuration that will be attached to the `el`.
 
 # Demo
 
@@ -460,7 +466,7 @@ Browse the `demo` folder to visualize a showcase of the available selectors and 
 
 ```javascript
 //This is an example
-filter.getValues();
+filter.getValues("fenix");
 ```
 
 - `filter.getValues(format)` : get filter values according to the specific format. Available format are 'plain' (default and optional), 
@@ -479,3 +485,42 @@ catalog, fenix. For more info che the `fx-common/utils` doc.
 - `remove` : triggered when a selector is removed
 - `ready` : triggered when the filter and all its initial selectors are rendered
 - `change` : triggered when a selector state changes (selector item selected, selector disabled, ecc...)
+
+# Output formats
+
+In order to have different output format pass the desired format to `filter.getValue( format )` function.
+
+## Plain
+
+Default output format. 
+
+```javascript
+
+{
+    values : {
+        sel_1 : ["cod_1"],
+        sel_2 : ["fx"]
+    },
+    labels : {
+        sel_1 : {
+            cod_1 : "Code One"
+        },
+        sel_2 : {
+            fx : "FENIX"
+        }
+    },
+    valid : true
+}
+```
+
+Where the keyset of `values` and `labels` is the set of selector ids of the filter.
+`values` contains the selected values, `labels` the labels of selected values.
+If a selector has no selected value, it is excluded from result.
+
+## FENIX
+
+If proper `format` configuration for each selector is provided, return a D3P process body with the selected values.
+
+## Catalog
+
+If proper `format` configuration for each selector is provided, return a D3S filter body with the selected values.
