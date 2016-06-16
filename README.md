@@ -208,7 +208,7 @@ selector : {
  
     type : "...", // additional selector configuration. Ex: id:"input", type:"text"
  
-    source : [ {value: "item", label: "Item"} ], static selector source. Merged to `cl` configuration
+    source : [ {value: "item", label: "Item"} ], // static selector source. Merged to `cl` configuration
  
     default : [...], // default selector values
  
@@ -293,17 +293,24 @@ the `ensure_unset` callback is called. The second one, when 'sel_2' trigger the 
 
 ### Available dependencies
 
-Please note that not all dependencies are compatible with all the available selectors
+NB: not all dependencies are compatible with all the available selectors. Check the compatibility tables. 
 
-- min : set the payload value as min value of the selector
-- parent : refresh the selector source considering the payload value as parent code
-- focus : if the payload value is equal to the selector id, set the selector state to focused
-- ensure_unset : ensure that the payload value is not selected in the specific selector
-- disable : disable selector
+- `min` : set the payload value as min value of the selector
+- `parent` : refresh the selector source considering the payload value as parent code
+- `focus` : if the payload value is equal to the selector id, set the selector state to focused
+- `ensure_unset` : ensure that the payload value is not selected in the specific selector
+- `disable` : disable selector
 
-### Compatibility table
+### Available events
 
+NB: these are different events from filter global events 
 
+- `select` : triggered when an selector's item  is selected
+- `disable` :  triggered when an selector is disabled
+
+## Compatibility tables
+
+TODO 
 
 ## Format
 
@@ -438,7 +445,7 @@ It is possible to define a semantic selector. A semantic selector is a group of 
  can be active. This is useful, for example, when a specific information can be selected in different manners (e.g. time selection, 
  with a calendar or a range).
  
-# Custom layout
+# Filter layout definition
 It is possible to specify where a selector has to be rendered.
 FENIX Filter looks for `data-selector=":id"` or `data-semantic=":id"` where `:id` is the selector/semantic id in order to find containers within its `el`.
 It is possible to pass an HTML template using the `template` configuration that will be attached to the `el`.
