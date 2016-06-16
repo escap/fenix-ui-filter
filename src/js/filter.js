@@ -232,6 +232,7 @@ define([
 
         this.common = this.initial.common || C.common;
         this.environment = this.initial.environment;
+        this.lang = this.initial.lang || C.lang;
     };
 
     Filter.prototype._renderFilter = function () {
@@ -641,14 +642,15 @@ define([
                 log.error("Code List loaded returned empty! id: " + key);
                 log.warn('Add placeholder code list');
 
+                var title = {};
+                title[self.lang] = "EMPTY_CODE_LIST :'(";
+
                 data.push({
                     code: "fake_code",
                     leaf: true,
                     level: 1,
                     rid: "fake_rid",
-                    title: {
-                        EN: "EMPTY_CODE_LIST :'("
-                    }
+                    title: title
                 });
             }
 
@@ -726,7 +728,7 @@ define([
 
     Filter.prototype._getSelectorScriptPath = function (name) {
 
-        var registeredSelectors = $.extend(true, {}, this.selectorRegistry),
+        var registeredSelectors = $.extend(true, {}, this.pluginRegistry),
             path;
 
         var conf = registeredSelectors[name];
@@ -825,7 +827,8 @@ define([
                 var model = $.extend(true, {}, obj, this.common, {
                     id: name,
                     data: rawCl ? rawCl : null,
-                    controller: this
+                    controller: this,
+                    lang : this.lang
                 });
 
                 this.selectors[name].instance = new Selector(model);

@@ -22,7 +22,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
+        $.extend(true, this, defaultOptions, o, {$el: $(o.el)});
 
         this._renderTemplate();
 
@@ -237,7 +237,7 @@ define([
 
                 data.push({
                     value: item.code,
-                    text: item.title["EN"],
+                    text: item.title[selector.lang],
                     parent: parent || '#'
                 });
 
@@ -380,7 +380,7 @@ define([
             return;
         }
 
-        for (var i = from; i <= this.selector.to; i++) {
+        for (var i = this.selector.to; i >= from; i--) {
             data.push({
                 value: i,
                 text: i.toString()
@@ -399,6 +399,11 @@ define([
         //add new values to dropdown
         instance.clearOptions();
         instance.addOption(data);
+
+        var newValues = _.map(data, function (d) {
+                return isNaN(parseInt(d.value, 10)) ? d.value : parseInt(d.value, 10);
+            }),
+            from = _.min(newValues);
 
         //Set selected value
         var v = from > originalValue ? from : originalValue;

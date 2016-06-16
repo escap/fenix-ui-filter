@@ -282,7 +282,7 @@ define([
 
                 data.push({
                     id: item.code,
-                    text: item.title["EN"],
+                    text: item.title[selector.lang],
                     parent: parent || '#'
                 });
 
@@ -473,14 +473,15 @@ define([
 
     Tree.prototype._notifyTreeSelectionChange = function (o) {
 
-        var payload = [],
+        var self = this,
+            payload = [],
             selected = o.instance.get_selected();
 
         _.each(selected, function (sel) {
             var node = o.instance.get_node(sel),
                 label = {};
 
-            label["EN"] = node.text;
+            label[self.lang] = node.text;
 
             payload.push({value: node.id, label: label, parent: node.parent})
         });
@@ -517,7 +518,7 @@ define([
             var $this = $(this);
             $this.on("click", function () {
                 if (self.status.disabled !== true) {
-                    instance.deselect_node($this.find("[data-code]").data("code"));
+                    instance.deselect_node($this.find("[data-value]").data("value"));
                     $this.remove();
                 }
             });
@@ -529,7 +530,7 @@ define([
 
     Tree.prototype._summaryRender = function (item) {
 
-        item.value = item.label + "<span class='code-brk'>[" + item.value + "]</span>";
+        item.value = item.label + "<span data-value='"+item.value+"' class='code-brk'>[" + item.value + "]</span>";
 
         return item;
     };

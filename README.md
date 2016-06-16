@@ -6,7 +6,7 @@ var Filter = require('fx-filter/start');
 var filter = new Filter({
         el : "#filter",
         items : {
-            sel_1 : { ... }, // selector configuration goes here
+            sel_1 : { /* selector configuration goes here */ }, 
             sel_2 : { ... }
         }
     });
@@ -49,7 +49,7 @@ To have a look of the default configuration check `fx-filter/config/config.js`.
          <td>The filter template to render selector with a specific layout.</td>
       </tr>
       <tr>
-         <td>selectorRegistry</td>
+         <td>pluginRegistry</td>
          <td>object</td>
          <td>{
             'dropdown': {
@@ -100,7 +100,7 @@ To have a look of the default configuration check `fx-filter/config/config.js`.
          <td>outputFormat</td>
          <td>string</td>
          <td>"plain"</td>
-         <td>plain || fenix || catalog</td>
+         <td>plain , fenix, catalog</td>
          <td>Default output format of getValues() fn</td>
       </tr>
       <tr>
@@ -151,10 +151,16 @@ To have a look of the default configuration check `fx-filter/config/config.js`.
       <tr>
          <td>environment</td>
          <td>string</td>
-         <td>'develop'
-         </td>
+         <td>'develop'</td>
          <td>'production'</td>
          <td>Server environment</td>
+      </tr>
+      <tr>
+         <td>lang</td>
+         <td>string</td>
+         <td>'EN'</td>
+         <td>'IT'</td>
+         <td>Multilingual</td>
       </tr>
       <tr>
          <td>common</td>
@@ -354,7 +360,7 @@ TODO
 # Available selectors
 
 The following are the default available selectors. The selector registry can be extended with the `selectorsRegistry` configuration.
-
+In order to choose a specific selector
 ## Dropdown
 
 Wrapped lib: [selectize.js](http://selectize.github.io/selectize.js/)

@@ -10,7 +10,7 @@ define(function () {
 
         validityTimeout: 10000, //10 secs
 
-        selectorRegistry: {
+        pluginRegistry: {
             'dropdown': {
                 path: selectorPath + 'dropdown'
             },
@@ -52,7 +52,9 @@ define(function () {
         
         ensureAtLeast : -1,
         
-        cache : false
+        cache : false,
+
+        lang : "EN"
 
     }
 
