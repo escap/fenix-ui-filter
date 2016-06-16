@@ -75,7 +75,6 @@ define(function () {
             },
 
             "format": {
-                "type": "static",
                 "output": "time",
                 //"process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}'
             },
@@ -98,7 +97,6 @@ define(function () {
             },
 
             "format": {
-                "type": "static",
                 "output": "time"
                 //, "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}' //Not used
             },

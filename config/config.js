@@ -31,20 +31,27 @@ define(function () {
             }
         },
 
-        focusedSelectorClassName: "focused", //class to highlight a selector
-        mandatorySelectorClassName: "mandatory", // class for mandatory selectors
-        disabledSelectorClassName: "disabled", // class for mandatory selectors
+        // css class names
+        focusedSelectorClassName: "focused", // highlight a selector
+        
+        mandatorySelectorClassName: "mandatory", // mandatory selectors
+        
+        disabledSelectorClassName: "disabled", // disabled selectors
 
         outputFormat: "plain", // plain || fenix || catalog
 
-        template: {
-            hideRemoveButton: true,
-            hideSwitch: true,
-            hideHeaderIcon: true
+        common: {
+            template : {
+                hideRemoveButton: true,
+                hideSwitch: true,
+                hideHeaderIcon: true
+            }
         },
 
         direction : "append",
+        
         ensureAtLeast : -1,
+        
         cache : false
 
     }

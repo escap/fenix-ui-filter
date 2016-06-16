@@ -215,8 +215,7 @@ define([
     // end API
 
     Filter.prototype._parseInput = function () {
-
-        this.id = this.initial.id;
+        
         this.items = this.initial.items || {};
         this.$el = $(this.initial.el);
         this.template = this.initial.template;
@@ -231,7 +230,7 @@ define([
         this.direction = this.initial.direction || C.direction;
         this.ensureAtLeast = parseInt(this.initial.ensureAtLeast || C.ensureAtLeast, 10);
 
-        this.common = this.initial.common || {};
+        this.common = this.initial.common || C.common;
         this.environment = this.initial.environment;
     };
 
@@ -347,7 +346,7 @@ define([
 
             window.fx_filter_id >= 0 ? window.fx_filter_id++ : window.fx_filter_id = 0;
             this.id = String(window.fx_filter_id);
-            log.warn("Impossible to find filter id. Set auto id to: " + this.id);
+            log.info("Set filter id: " + this.id);
         }
 
         //Check if $el exist

@@ -161,8 +161,6 @@ define(function () {
 
             "format": {
                 "dimension": "recipientcode",
-                "type": "dynamic", //dynamic | static: for dynamic or static section of D3P filter
-                "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2016", "codes": [{{{codes}}}] } ]}}'
             },
 
             //dependencies with other selectors
