@@ -443,7 +443,7 @@ define([
                     clearTimeout(to);
                 }
                 to = setTimeout(function () {
-                    var v = $container.find(s.FILTER_CONTAINER).val();
+                    var v = $container.find(s.FILTER_CONTAINER).val().replace(/\s+$/, '');
                     $container.find(s.TREE_CONTAINER).jstree(true).search(v);
                 }, 250);
             });
