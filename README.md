@@ -14,7 +14,7 @@ var filter = new Filter({
 
 # Configuration
 
-To have a look of the default configuration check `fx-filter/config/config.js`.
+Check `fx-filter/config/config.js` to have a look of the default configuration.
 
 <table>
    <thead>
