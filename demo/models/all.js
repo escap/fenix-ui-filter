@@ -90,6 +90,10 @@ define(function () {
 
             },
 
+            summaryRender : function (item) {
+              return "<u><mark> " + item.label + "</mark></u>"
+            },
+
             template: {
                 title: "Tree",
                 hideSwitch: false,
