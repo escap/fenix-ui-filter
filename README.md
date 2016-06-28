@@ -447,7 +447,8 @@ selector : {
     hideFooter : true, //hide footer
     hideSummary : true, //Hide selection summary,
     ...
-    }
+    },
+summaryRender : function ( item ) {} // custom summary render function
 ...
 ```
 

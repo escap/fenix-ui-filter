@@ -501,9 +501,15 @@ define([
             instance = this.tree.jstree(true);
 
         _.each(values.labels, function (val, key) {
-            model.push(self.summaryRender({value: key, label: val}));
-        });
+            var $summaryModel = $(self.summaryRender({value: key, label: val})),
+                value ;
 
+            if ($summaryModel.length > 0){
+                value = "<span data-value='"+key+"'> " + $summaryModel[0].outerHTML + "</span>"
+            }
+
+            model.push(value);
+        });
         //unbind click listener
         this.$summaryItems.each(function () {
             $(this).off();
@@ -530,9 +536,8 @@ define([
 
     Tree.prototype._summaryRender = function (item) {
 
-        item.value = item.label + "<span data-value='"+item.value+"' class='code-brk'>[" + item.value + "]</span>";
+        return "<span>" + item.label + "<span class='code-brk'>[" + item.value + "]</span></span>";
 
-        return item;
     };
 
     Tree.prototype._setDomain = function (opts) {
