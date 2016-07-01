@@ -359,8 +359,8 @@ TODO
 
 # Available selectors
 
-The following are the default available selectors. The selector registry can be extended with the `selectorsRegistry` configuration.
-In order to choose a specific selector
+The following are the default available selectors. The plugin registry can be extended with the `pluginRegistry` configuration.
+In order to choose a specific selector specify the correspondent id in `selector.id` configuratino for each item.
 ## Dropdown
 
 Wrapped lib: [selectize.js](http://selectize.github.io/selectize.js/)
