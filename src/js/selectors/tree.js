@@ -240,9 +240,9 @@ define([
 
     };
 
-    Tree.prototype._buildTreeModel = function (fxResource) {
+    Tree.prototype._buildTreeModel = function (fxResource, parent) {
 
-        var data = this._buildTreeModelFromCodelist(fxResource) || [];
+        var data = this._buildTreeModelFromCodelist(fxResource, parent) || [];
 
         //Merge static static data
         if (this.selector.source) {
@@ -399,18 +399,22 @@ define([
         var config = this.selector,
             $container = this.$el,
             tree,
-            self = this,
-            data = this._buildTreeModel(this.data);
-
-        for (var i = config.to; i >= config.from; i--) {
-            data.push({id: i.toString(), text: i.toString()});
-        }
+            self = this;
 
         tree = $container.find(s.TREE_CONTAINER).jstree($.extend(true, {}, {
             core: {
                 multiple: true,
                 check_callback: true,
-                data: data,
+                animation: 0,
+                data: function (node, cb) {
+
+                    if (node.id === "#") {
+                        self._getRootItems(config, cb);
+                    } else {
+                        self._getChildrenItems(config, node, cb);
+                    }
+
+                },
                 themes: {
                     icons: false,
                     stripes: true
@@ -463,6 +467,50 @@ define([
                 })
             });
         }
+
+    };
+
+    Tree.prototype._getRootItems = function (config, cb) {
+
+        var data = this._getTreeModel(config);
+
+        if (config.lazy === true) {
+            _.each(data, function (item) {
+                item.children = true;
+            })
+        }
+
+        cb(data);
+
+    };
+
+    Tree.prototype._getChildrenItems = function (config, node, cb) {
+
+        var self = this,
+            body = $.extend(true, {}, this.cl, {
+                levels: 2,
+                codes: [node.id]
+            });
+
+        delete body.level;
+
+        this.controller.getCodelist(body)
+            .then(function (data) {
+                var model = self._buildTreeModel(data[0].children || [], node.id);
+                cb(model);
+            });
+
+    };
+
+    Tree.prototype._getTreeModel = function (config) {
+
+        var data = this._buildTreeModel(this.data);
+
+        for (var i = config.to; i >= config.from; i--) {
+            data.push({id: i.toString(), text: i.toString()});
+        }
+
+        return data;
 
     };
 

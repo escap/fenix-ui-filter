@@ -198,6 +198,17 @@ define([
         return this;
     };
 
+    /** pub/sub
+    * @return {Promise} codelist as promise
+    */
+    Filter.prototype.getCodelist = function (obj) {
+
+        var promise = this._createPromise(obj);
+
+        return promise;
+
+    };
+
     Filter.prototype._trigger = function (channel) {
 
         if (!this.channels[channel]) {
@@ -634,7 +645,8 @@ define([
             body = obj,
             key = this._getCodelistCacheKey(obj);
 
-        return this._getPromise(body, type).then(function (result) {
+        return this._getPromise(body, type)
+            .then(function (result) {
 
             var data = [];
 
@@ -670,6 +682,8 @@ define([
             log.info("Code List loaded successfully for: " + key);
 
             self._storeCodelist(body, data);
+
+            return data;
 
         }, function (r) {
             log.error(r);
@@ -1386,7 +1400,13 @@ define([
 
         //get set of codelists
         if (obj.hasOwnProperty("cl")) {
-            this.codelists.push(obj.cl);
+            var cl = obj.cl;
+            if (obj.selector.lazy === true) {
+                log.warn("Lazy loading for selector: " + selectorId);
+                cl.levels = 1;
+                cl.level = 1;
+            }
+            this.codelists.push(cl);
         }
 
         //get set of enumeration

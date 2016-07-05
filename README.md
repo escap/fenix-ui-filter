@@ -440,6 +440,7 @@ Wrapped lib: [jstree](https://www.jstree.com/)
 selector : {
     ...
     max : 2, //max number of selectable items
+    lazy : true, //lazy loading of children items
     hideFilter : true, //hide filter
     hideButtons : true, //hide all buttons,
     hideSelectAllButton: true, //Hide select all button

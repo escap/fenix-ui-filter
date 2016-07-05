@@ -2073,7 +2073,11 @@ define(function () {
 
         "CountryCode": {
             "cl": {"uid": "UNECA_ISO3"},
-            "selector": {"id": "tree", "hideSummary": true},
+            "selector": {
+                "id": "tree",
+                "hideSummary": true,
+                "lazy" : true
+            },
             "template": {"title": "Country", "hideSwitch": true},
             "format": {"dimension": "CountryCode"}
         },
