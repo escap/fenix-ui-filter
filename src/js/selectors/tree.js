@@ -11,7 +11,7 @@ define([
     'i18n!fx-filter/nls/filter',
     'text!fx-filter/html/selectors/tree.hbs',
     "amplify",
-    'jstree'
+    "jstree"
 ], function ($, log, _, ERR, EVT, C, Handlebars, i18n, template) {
 
     'use strict';
@@ -34,7 +34,7 @@ define([
 
     function Tree(o) {
 
-        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
+        $.extend(true, this, defaultOptions, o, {$el: $(o.el)});
 
         this._renderTemplate();
 
@@ -255,8 +255,9 @@ define([
             } else {
 
                 var convertedData = staticData.map(function (i) {
-                    return {id: i.value, text: i.label, parent: '#'};
+                    return {id: i.value, text: i.label, parent: i.parent || '#'};
                 });
+
                 data = _.uniq(_.union(data, convertedData), false, function (item) {
                     return item.id;
                 });
@@ -329,18 +330,11 @@ define([
         return data;
     };
 
-    Tree.prototype._destroyTree = function () {
-
-        this.dropdown.select2('destroy');
-
-        log.info("Destroyed dropdown: " + this.id);
-    };
-
     Tree.prototype._bindEventListeners = function () {
 
         this.tree
 
-            //Default selection
+        //Default selection
             .on('ready.jstree', _.bind(function (e, data) {
 
                 this.printDefaultSelection();
@@ -369,11 +363,11 @@ define([
                 }
 
                 /* TODO uncomment after configuration
-                if (!data.instance.is_leaf(data.node)) {
-                    data.instance.toggle_node(data.node);
-                    data.instance.deselect_node(data.node, true);
-                   return;
-                }*/
+                 if (!data.instance.is_leaf(data.node)) {
+                 data.instance.toggle_node(data.node);
+                 data.instance.deselect_node(data.node, true);
+                 return;
+                 }*/
 
                 if (this.status.ready === true) {
 
@@ -415,13 +409,14 @@ define([
         tree = $container.find(s.TREE_CONTAINER).jstree($.extend(true, {}, {
             core: {
                 multiple: true,
+                check_callback: true,
                 data: data,
                 themes: {
                     icons: false,
                     stripes: true
                 }
             },
-            plugins: ['search', 'wholerow', 'checkbox'],
+            plugins: ['search', 'wholerow', 'checkbox', "unique"],
             search: {
                 show_only_matches: true
             }
@@ -502,10 +497,10 @@ define([
 
         _.each(values.labels, function (val, key) {
             var $summaryModel = $(self.summaryRender({value: key, label: val})),
-                value ;
+                value;
 
-            if ($summaryModel.length > 0){
-                value = "<span data-value='"+key+"'> " + $summaryModel[0].outerHTML + "</span>"
+            if ($summaryModel.length > 0) {
+                value = "<span data-value='" + key + "'> " + $summaryModel[0].outerHTML + "</span>"
             }
 
             model.push(value);
@@ -556,8 +551,8 @@ define([
         if ($container.length > 0 && Array.isArray(model)) {
 
             tree = $container.find(s.TREE_CONTAINER).jstree(true);
-            var data = this._buildTreeModel(model, null);
-            tree.settings.core.data = data;
+            var treeData = this._buildTreeModel(model, null);
+            tree.settings.core.data = treeData;
             tree.refresh(true);
             tree.redraw(true);
 

@@ -84,10 +84,11 @@ define(function () {
                 id: "tree",
                 source: [
                     {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "item_11", label: "Item 11", parent: "item_1"},
+                    {value: "item_2", label: "Item 2"},
+                    {value: "item_22", label: "Item 22", parent: "item_2"},
                 ],
                 default: ["item_1"],
-
             },
 
             summaryRender : function (item) {
