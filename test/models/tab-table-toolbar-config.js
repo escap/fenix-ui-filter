@@ -30,7 +30,7 @@ define(function () {
 
         },
 
-        "decimal_digit": {
+        "decimals": {
 
             "selector": {
                 "id": "input",
