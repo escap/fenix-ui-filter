@@ -1,6 +1,6 @@
 {
   "name": "fenix-ui-filter",
-  "version": "1.0.0-alpha",
+  "version": "2.0.0-beta.0",
   "description": "FENIX Filter",
   "main": "src/js/start.js",
   "scripts": {
@@ -10,10 +10,23 @@
     "type": "git",
     "url": "https://github.com/FENIX-Platform/fenix-ui-filter.git"
   },
-  "author": "Daniele Salvatore <daniele.salvatore@fao.org> (http://fenix.fao.org/)",
-  "license": "GPL2",
+  "author": "FENIX team (http://fenix.fao.org/)",
+  "license": "GPL-2.0",
   "bugs": {
     "url": "https://github.com/FENIX-Platform/fenix-ui-filter/issues"
   },
-  "homepage": "https://github.com/FENIX-Platform/fenix-ui-filter#readme"
+  "homepage": "https://github.com/FENIX-Platform/fenix-ui-filter#readme",
+  "dependencies": {
+    "amplify": "0.0.11",
+    "bootstrap": "3.3.6",
+    "handlebars": "4.0.5",
+    "ion-rangeslider": "2.1.4",
+    "jquery": "3.1.0",
+    "jstree": "3.3.1",
+    "loglevel": "1.4.1",
+    "moment": "2.14.1",
+    "selectize": "0.12.2",
+    "sortablejs": "1.4.2",
+    "underscore": "1.8.3"
+  }
 }
