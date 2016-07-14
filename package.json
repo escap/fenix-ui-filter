@@ -1,12 +1,8 @@
 {
   "name": "fenix-ui-filter",
-  "version": "0.0.1",
-  "description": "Fenix Filter",
-  "main": "main.js",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
+  "version": "2.0.0-beta.0",
+  "description": "FENIX Filter",
+  "main": "src/js/start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,26 +10,23 @@
     "type": "git",
     "url": "https://github.com/FENIX-Platform/fenix-ui-filter.git"
   },
-  "author": "Barbara Cintoli",
-  "license": "BSD-2-Clause",
+  "author": "FENIX team (http://fenix.fao.org/)",
+  "license": "GPL-2.0",
   "bugs": {
     "url": "https://github.com/FENIX-Platform/fenix-ui-filter/issues"
   },
-	"dependencies": {
-	"jquery": "~2.1.0",
-	"backbone": "~1.1.2",
-	"backbone.layoutmanager": "~0.9.5",
-	"bootstrap": "~3.2.0",
-	"underscore": "~1.7.0",
-	"nprogress": "~0.1.6",
-	"requirejs": "~2.1.14",
-	"handlebars": "~2.0.0",
-	"domReady": "https://github.com/requirejs/domReady/tarball/master",
-	"text": "https://github.com/requirejs/text/tarball/master",
-	"i18n": "https://github.com/requirejs/i18n/tarball/master",
-	"jqwidgets": "http://fenixapps.fao.org/repository/js/jqwidgets/3.1.tgz",
-	"jstree": "~3.0.8",
-    "packery": "~1.2.4",
-    "draggabilly": "~1.1.1"
-	}
+  "homepage": "https://github.com/FENIX-Platform/fenix-ui-filter#readme",
+  "dependencies": {
+    "amplify": "0.0.11",
+    "bootstrap": "3.3.6",
+    "handlebars": "4.0.5",
+    "ion-rangeslider": "2.1.4",
+    "jquery": "3.1.0",
+    "jstree": "3.3.1",
+    "loglevel": "1.4.1",
+    "moment": "2.14.1",
+    "selectize": "0.12.2",
+    "sortablejs": "1.4.2",
+    "underscore": "1.8.3"
+  }
 }
