@@ -10,17 +10,17 @@
 
                     <h5 class="truncate fx-selector-title">{{ title }}
 
+                        {{#unless hideHeaderIcon}}
+
+                            {{#if headerIconTooltip}}
+                                <span class="{{headerIconClassName}}" title="{{headerIconTooltip}}"></span>
+                            {{else}}
+                                <span class="{{headerIconClassName}}"></span>
+                            {{/if}}
+
+                        {{/unless}}
+
                     </h5>
-
-                {{/unless}}
-
-                {{#unless hideHeaderIcon}}
-
-                    {{#if headerIconTooltip}}
-                        <span class="{{headerIconClassName}}" title="{{headerIconTooltip}}"></span>
-                     {{else}}
-                        <span class="{{headerIconClassName}}"></span>
-                    {{/if}}
 
                 {{/unless}}
 
