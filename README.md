@@ -312,7 +312,7 @@ NB: not all dependencies are compatible with all the available selectors. Check 
 - `focus` : if the payload value is equal to the selector id, set the selector state to focused
 - `ensure_unset` : ensure that the payload value is not selected in the specific selector
 - `disable` : disable selector
-- `process` : use a D3P to populate a selector. The dependency configuration will be `[{id: "process", event:"...", param : "<place_d3p_process_here>"}]` and if the string `{{codes}}` will be found within the `<place_d3p_process_here>` it will be replaced with the concatenation of the codes that triggered the dependency call.
+- `process` : use a D3P process to populate a selector. The dependency configuration will be `[{id: "process", event:"...", param : "<place_d3p_process_here>"}]` and if the string `{{codes}}` will be found within the `<place_d3p_process_here>` it will be replaced with the concatenation of the codes that triggered the dependency call.
 
 ### Available events
 
@@ -482,7 +482,7 @@ Browse the `demo` folder to visualize a showcase of the available selectors and 
 filter.getValues("fenix");
 ```
 
-- `filter.getValues(format)` : get filter values according to the specific format. Available format are 'plain' (default and optional), 
+- `filter.getValues(format, includedSelectors)` : get filter values according to the specific format. Available format are 'plain' (default and optional), includedSelectors filter the selectors to include in the result
 catalog, fenix. For more info che the `fx-common/utils` doc.
 - `filter.setValues(values)` : set filter values. The syntax is the same of `filter.getValues()` 
 - `filter.on(event, callback[, context])` : pub/sub 

@@ -78,13 +78,13 @@ define([
      * Return the current selection
      * @return {Object} Selection
      */
-    Filter.prototype.getValues = function (format) {
+    Filter.prototype.getValues = function (format, includedSelectors) {
 
         var candidate = format || this.outputFormat,
             call = this["_format_" + candidate];
 
         if ($.isFunction(call)) {
-            return call.call(this, this._getValues());
+            return call.call(this, this._getValues(includedSelectors));
         } else {
             log.error("Impossible to find the output format: " + candidate);
         }
@@ -878,7 +878,7 @@ define([
 
     // filter selection [values] and validation
 
-    Filter.prototype._getValues = function () {
+    Filter.prototype._getValues = function (includedSelectors) {
 
         var result = {
             valid: false,
@@ -896,7 +896,7 @@ define([
             var name = this._resolveSelectorName(n),
                 status = this._callSelectorInstanceMethod(name, "getStatus");
 
-            if (status.disabled !== true) {
+            if (includeSelector(name) && status.disabled !== true) {
 
                 var v = this._callSelectorInstanceMethod(name, "getValues");
 
@@ -905,7 +905,7 @@ define([
 
             } else {
 
-                log.warn(n + " selector not included in filter result because disabled.");
+                log.warn(n + " selector not included in filter result.");
             }
 
         }, this));
@@ -922,6 +922,16 @@ define([
         }
 
         return result;
+
+        function includeSelector(id){
+            var include = true;
+
+            if (Array.isArray(includedSelectors ) && !_.contains(includedSelectors, id)) {
+                include = false;
+            }
+
+            return include;
+        }
 
     };
 

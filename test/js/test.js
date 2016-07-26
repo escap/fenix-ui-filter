@@ -112,20 +112,17 @@ define([
         this._renderDependencies();
 
         this._renderCountrystat();
+        this._renderEvents();
+
+
 
         return;
-
-
-
-        this._renderEvents();
 
         this._renderModel2();
 
         this._renderSynch();
 
         this._renderDynamicModel1();
-
-        this._renderEvents();
 
         this._renderModel1BaseTemplate();
 
@@ -158,7 +155,7 @@ define([
             });
 
         $(s.EVENT_VALUES_BTN).on('click', function () {
-            log.warn(filter.getValues());
+            log.warn(filter.getValues(null, ["tree"]));
         });
 
         $(s.EVENT_DISPOSE).on('click', function () {
