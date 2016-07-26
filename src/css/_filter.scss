@@ -5,6 +5,102 @@ $controller-width-xs: 50px;
 $controller-elements-background: #bdbdbd;
 
 
+.fx-selector.hideSwitch{
+
+
+  .fx-selector-title{
+    margin-right: 30px;
+
+    /* Small devices (tablets, 768px and up) */
+    @media (min-width: $screen-sm-min) {
+
+
+
+    }
+
+    /* Medium devices (desktops, 992px and up) */
+    @media (min-width: $screen-md-min) {
+
+      margin-right: 30px;
+
+    }
+
+    /* Large devices (large desktops, 1200px and up) */
+    @media (min-width: $screen-lg-min) {  }
+
+
+
+  }
+
+
+}
+
+
+.fx-selector.hideRemoveButton{
+
+
+    .fx-selector-title{
+      margin-right: 30px;
+
+      /* Small devices (tablets, 768px and up) */
+      @media (min-width: $screen-sm-min) {
+
+
+
+      }
+
+      /* Medium devices (desktops, 992px and up) */
+      @media (min-width: $screen-md-min) {
+
+        margin-right: 80px;
+
+      }
+
+      /* Large devices (large desktops, 1200px and up) */
+      @media (min-width: $screen-lg-min) {  }
+
+
+    }
+
+
+  }
+
+
+.fx-selector.hideSwitch.hideRemoveButton{
+
+
+  .fx-selector-title{
+    margin-right: 0;
+
+    /* Small devices (tablets, 768px and up) */
+    @media (min-width: $screen-sm-min) {
+
+
+
+    }
+
+    /* Medium devices (desktops, 992px and up) */
+    @media (min-width: $screen-md-min) {
+
+      margin-right: 0;
+
+    }
+
+    /* Large devices (large desktops, 1200px and up) */
+    @media (min-width: $screen-lg-min) {  }
+
+
+
+  }
+
+
+}
+
+
+.fx-selector.hideSwitch.hideRemoveButton{
+
+}
+
 [data-selector], [data-semantic]{
 
 
@@ -26,6 +122,7 @@ $controller-elements-background: #bdbdbd;
       .btn-round{
         @include fx-border-radius(50% !important);
     }
+
 
   }
 
