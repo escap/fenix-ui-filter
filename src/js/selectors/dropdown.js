@@ -16,7 +16,12 @@ define([
 
     'use strict';
 
-    var defaultOptions = {},
+    var defaultOptions = {
+            selector: {
+                hideSelectAllButton: true,
+                hideClearAllButton : true
+            }
+        },
         s = {
             DROPDOWN_CONTAINER: "[data-role='dropdown']",
             CLEAR_ALL_CONTAINER: "[data-role='clear']",
