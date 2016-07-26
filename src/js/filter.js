@@ -199,8 +199,8 @@ define([
     };
 
     /** pub/sub
-    * @return {Promise} codelist as promise
-    */
+     * @return {Promise} codelist as promise
+     */
     Filter.prototype.getCodelist = function (obj) {
 
         var promise = this._createPromise(obj);
@@ -226,7 +226,7 @@ define([
     // end API
 
     Filter.prototype._parseInput = function () {
-        
+
         this.items = this.initial.items || {};
         this.$el = $(this.initial.el);
         this.template = this.initial.template;
@@ -427,8 +427,8 @@ define([
         this.cache_db = {};
 
         this.bridge = new Bridge({
-            environment : this.environment,
-            cache : this.cache
+            environment: this.environment,
+            cache: this.cache
         })
     };
 
@@ -648,46 +648,46 @@ define([
         return this._getPromise(body, type)
             .then(function (result) {
 
-            var data = [];
+                var data = [];
 
-            if (!result) {
-                log.error("Code List loaded returned empty! id: " + key);
-                log.warn('Add placeholder code list');
+                if (!result) {
+                    log.error("Code List loaded returned empty! id: " + key);
+                    log.warn('Add placeholder code list');
 
-                var title = {};
-                title[self.lang] = "EMPTY_CODE_LIST :'(";
+                    var title = {};
+                    title[self.lang] = "EMPTY_CODE_LIST :'(";
 
-                data.push({
-                    code: "fake_code",
-                    leaf: true,
-                    level: 1,
-                    rid: "fake_rid",
-                    title: title
-                });
-            }
-
-            if (!Array.isArray(result)) {
-
-                _.each(result, function (obj, key) {
                     data.push({
-                        code: key,
-                        title: $.extend(true, {}, obj)
-                    })
-                });
+                        code: "fake_code",
+                        leaf: true,
+                        level: 1,
+                        rid: "fake_rid",
+                        title: title
+                    });
+                }
 
-            } else {
-                data = result;
-            }
+                if (!Array.isArray(result)) {
 
-            log.info("Code List loaded successfully for: " + key);
+                    _.each(result, function (obj, key) {
+                        data.push({
+                            code: key,
+                            title: $.extend(true, {}, obj)
+                        })
+                    });
 
-            self._storeCodelist(body, data);
+                } else {
+                    data = result;
+                }
 
-            return data;
+                log.info("Code List loaded successfully for: " + key);
 
-        }, function (r) {
-            log.error(r);
-        });
+                self._storeCodelist(body, data);
+
+                return data;
+
+            }, function (r) {
+                log.error(r);
+            });
     };
 
     Filter.prototype._storeCodelist = function (obj, cl) {
@@ -842,7 +842,7 @@ define([
                     id: name,
                     data: rawCl ? rawCl : null,
                     controller: this,
-                    lang : this.lang
+                    lang: this.lang
                 });
 
                 this.selectors[name].instance = new Selector(model);
@@ -1128,7 +1128,15 @@ define([
 
                 this._getPromise(c).then(
                     _.bind(function (data) {
-                        this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: data});
+
+                        var source = [];
+
+                        _.each(data, function (s) {
+                            source = source.concat(s.children);
+                        });
+
+                        source = _.uniq(source);
+                        this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: source});
                     }, this),
                     function (r) {
                         log.error(r);
@@ -1260,7 +1268,7 @@ define([
         amplify.publish(this._getEventName(EVT.SELECTORS_READY));
 
         // set default values
-        if (!$.isEmptyObject(this.values)){
+        if (!$.isEmptyObject(this.values)) {
             this.setValues(this.values, true);
         }
 
@@ -1277,7 +1285,7 @@ define([
         return this.id.concat(evt);
     };
 
-    Filter.prototype._onSelectorItemSelect = function ( values ) {
+    Filter.prototype._onSelectorItemSelect = function (values) {
 
         if (this.ready === true) {
             this._trigger('change', values);

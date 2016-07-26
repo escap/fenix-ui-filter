@@ -109,11 +109,13 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderCountrystat();
+
+        this._renderDependencies();
 
         return;
 
-        this._renderDependencies();
+        this._renderCountrystat();
+
 
         this._renderEvents();
 
