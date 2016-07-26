@@ -75,6 +75,23 @@ define([
     };
 
     /**
+     * getValues method
+     * Mandatory method
+     */
+    Dropdown.prototype.setSource = function ( source ) {
+
+        var data = _.map(source, function (d) {
+            return {
+                value: d.value,
+                text: d.label
+            }
+        });
+
+        this._updateDropdown(data);
+
+    };
+
+    /**
      * Disposition method
      * Mandatory method
      */
@@ -460,14 +477,7 @@ define([
 
         var data = opts.data || [];
 
-        data = _.map(data, function (d) {
-            return {
-                value: d.value,
-                text: d.label
-            }
-        });
-
-        this._updateDropdown(data);
+        this.setSource(data);
 
     };
 

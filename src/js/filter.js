@@ -974,32 +974,12 @@ define([
 
     Filter.prototype._setSources = function (o) {
 
-        var source = {};
-
-        //Extend obj with
-        _.each(o.values, _.bind(function (array, key) {
-
-            source[key] = [];
-
-            _.each(array, function (item) {
-
-                if (typeof item === 'object' && !item.label) {
-                    var labels = o.labels[key];
-                    item.label = labels ? o.labels[key][item.value] : "Missing label";
-                }
-
-                source[key].push(item);
-
-            });
-
-        }, this));
-
-        _.each(source, _.bind(function (obj, key) {
+        _.each(o, _.bind(function (obj, key) {
 
             var name = this._resolveSelectorName(key);
 
             if (this._getSelectorInstance(name)) {
-                this._callSelectorInstanceMethod(name, "setValue", obj, silent);
+                this._callSelectorInstanceMethod(name, "setSource", obj);
             } else {
                 log.info(name + " skipped");
             }

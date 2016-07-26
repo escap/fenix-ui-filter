@@ -170,6 +170,28 @@ define([
     };
 
     /**
+     * setSource method
+     * Mandatory method
+     */
+    Tree.prototype.setSource = function ( source ) {
+
+       var $container = this.$el,
+           tree = $container.find(s.TREE_CONTAINER).jstree(true);
+
+        source = _.map(source, function (d) {
+            return {
+                value: d.value,
+                text: d.label
+            }
+        });
+
+        tree.settings.core.data = source;
+        tree.refresh(true);
+        tree.redraw(true);
+
+    };
+
+    /**
      * Unset the given value.
      * return {null}
      */
@@ -600,9 +622,7 @@ define([
 
             tree = $container.find(s.TREE_CONTAINER).jstree(true);
             var treeData = this._buildTreeModel(model, null);
-            tree.settings.core.data = treeData;
-            tree.refresh(true);
-            tree.redraw(true);
+            this.setSource(treeData);
 
         } else {
             log.warn("Impossible to find container for: " + this.id);

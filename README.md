@@ -492,6 +492,7 @@ catalog, fenix. For more info che the `fx-common/utils` doc.
 - `filter.add( selectors )` : add dynamically selectors to filter
 - `filter.remove( selectors )` : remove dynamically selectors from filter
 - `filter.clear()` : clear the filter from all selectors
+- `filter.setSources( sources )` : set sources to specifies selectors. `sources` is an object: keys are the selectors id, values are sources in `selector.source` format
 
 # Events
 

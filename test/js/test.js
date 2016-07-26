@@ -14,10 +14,11 @@ define([
     'test/models/model-2',
     'test/models/dependencies',
     'test/models/countrystat',
+    'test/models/setSources',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel,  model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -44,6 +45,8 @@ define([
             MODEL_2 : "#model2",
             DEPENDENCIES: "#dependencies",
             COUNTRYSTAT: "#countrystat",
+            SOURCES: "#sources",
+            SOURCES_BTN: "#sources-btn",
         },
         empty_model = {data: []},
         error_model = {},
@@ -109,14 +112,15 @@ define([
 
     Test.prototype._render = function () {
 
+        this._renderSetSources();
+
+        return;
+
         this._renderDependencies();
 
         this._renderCountrystat();
+
         this._renderEvents();
-
-
-
-        return;
 
         this._renderModel2();
 
@@ -127,6 +131,23 @@ define([
         this._renderModel1BaseTemplate();
 
         this._renderSynch();
+
+    };
+
+    Test.prototype._renderSetSources = function () {
+
+        var filter = this.createFilter({
+            items: this._createFilterConfiguration(SetSourcesModel),
+            el: s.SOURCES
+        });
+
+        $(s.SOURCES_BTN).on('click', function () {
+
+            filter.setSources({
+                tree: [{value : "item_01", label: "Item 1"}, {value : "item_02", label: "Item 2"}],
+                dropdown : [{value : "item_03", label: "Item 3"}, {value : "item_04", label: "Item 4"}]
+            })
+        });
 
     };
 
