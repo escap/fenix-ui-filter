@@ -1659,7 +1659,8 @@ define([
     Filter.prototype._createSemanticContainer = function (id) {
         log.info("Create container for semantic: " + id);
 
-        var semantic = this.semantics[id],
+        var classNames = "",
+            semantic = this.semantics[id],
             templ = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
             conf = $.extend(true, {}, C.template, this.common.template),
             $html,
@@ -1681,7 +1682,15 @@ define([
 
         }, this));
 
-        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels);
+        model = $.extend(true, {id: id }, conf, semantic, semantic.template, i18nLabels);
+
+        _.each(model, function (value, key){
+            if (value === true) {
+                classNames = classNames.concat(key + " " );
+            }
+        });
+
+        model.classNames = classNames;
 
         $html = $(templ(model));
 
@@ -1699,10 +1708,19 @@ define([
     Filter.prototype._createSelectorContainer = function (id) {
         log.info("Create container for selector: " + id);
 
-        var obj = this.selectors[id].template,
+        var classNames = "",
+            obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
             conf = $.extend(true, {}, C.template, this.common.template),
-            $html = $(template($.extend(true, {id: id}, i18nLabels, conf, obj)));
+            $html;
+
+        _.each(conf, function (value, key){
+            if (value === true) {
+                classNames = classNames.concat(key + " " );
+            }
+        });
+
+        $html = $(template($.extend(true, {id: id, classNames : classNames}, i18nLabels, conf, obj)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
