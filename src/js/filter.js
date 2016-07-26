@@ -923,10 +923,10 @@ define([
 
         return result;
 
-        function includeSelector(id){
+        function includeSelector(id) {
             var include = true;
 
-            if (Array.isArray(includedSelectors ) && !_.contains(includedSelectors, id)) {
+            if (Array.isArray(includedSelectors) && !_.contains(includedSelectors, id)) {
                 include = false;
             }
 
@@ -1110,7 +1110,7 @@ define([
                             var call = self["_dep_" + d.id];
 
                             if ($.isFunction(call)) {
-                                call.call(self, payload, {src: s, target: id, params : d.params});
+                                call.call(self, payload, {src: s, target: id, params: d.params});
                             } else {
                                 log.error("Impossible to find : " + "_dep_" + d.id);
                             }
@@ -1228,14 +1228,14 @@ define([
     Filter.prototype._dep_process = function (payload, o) {
         if (this.selectors[o.target]) {
 
-            var process = $.extend(true, {},o.params);
+            var process = $.extend(true, {}, o.params);
 
             if (process) {
 
                 log.info("_dep_process invokation");
                 log.info(o);
 
-              var body = JSON.stringify(process.body),
+                var body = JSON.stringify(process.body),
                     templ = Handlebars.compile(body),
                     codes = "";
 
@@ -1243,20 +1243,20 @@ define([
                     codes = codes.concat(p.value).concat('","');
                 });
 
-                codes= codes.substring(0, codes.length - 3);
+                codes = codes.substring(0, codes.length - 3);
 
-                process.body = JSON.parse(templ({codes : codes}));
+                process.body = JSON.parse(templ({codes: codes}));
 
                 this.bridge.getProcessedResource(process).then(
                     _.bind(function (result) {
 
-                        var data = Array.isArray(result.data) ?  result.data : [],
+                        var data = Array.isArray(result.data) ? result.data : [],
                             source = [];
 
                         _.each(data.data, function (s) {
                             source.push({
-                                value : s[0],
-                                label : s[1]
+                                value: s[0],
+                                label: s[1]
                             });
                         });
 
@@ -1672,11 +1672,11 @@ define([
 
         }, this));
 
-        model = $.extend(true, {id: id }, conf, semantic, semantic.template, i18nLabels);
+        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels);
 
-        _.each(model, function (value, key){
+        _.each(model, function (value, key) {
             if (value === true) {
-                classNames = classNames.concat(key + " " );
+                classNames = classNames.concat(key + " ");
             }
         });
 
@@ -1701,16 +1701,16 @@ define([
         var classNames = "",
             obj = this.selectors[id].template,
             template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
-            conf = $.extend(true, {}, C.template, this.common.template),
+            conf = $.extend(true, {id: id}, i18nLabels, C.template, this.common.template, obj),
             $html;
 
-        _.each(conf, function (value, key){
+        _.each(conf, function (value, key) {
             if (value === true) {
-                classNames = classNames.concat(key + " " );
+                classNames = classNames.concat(key + " ");
             }
         });
 
-        $html = $(template($.extend(true, {id: id, classNames : classNames}, i18nLabels, conf, obj)));
+        $html = $(template($.extend(true, {classNames: classNames}, conf)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});

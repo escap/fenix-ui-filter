@@ -10,7 +10,8 @@ define(function () {
                 "lazy": true
             },
             "template": {
-                "hideSwitch": true
+                hideSwitch: true,
+                hideRemoveButton: false
             },
             "format": {"dimension": "CountryCode"}
         },
