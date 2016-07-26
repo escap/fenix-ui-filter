@@ -369,6 +369,10 @@ Wrapped lib: [selectize.js](http://selectize.github.io/selectize.js/)
 //specific configuration
 ...
 selector : {
+
+    hideButtons : true, //hide all buttons,
+    hideSelectAllButton: true, //Hide select all button
+    hideClearAllButton : true, //Hide clear all button
     ...
     config : {
         maxItems: 1, // Max amount of selected items,

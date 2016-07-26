@@ -7,15 +7,20 @@ define([
     'fx-filter/config/errors',
     'fx-filter/config/events',
     'fx-filter/config/config',
+    'text!fx-filter/html/selectors/dropdown.hbs',
+    'i18n!fx-filter/nls/filter',
+    'handlebars',
     'amplify',
     'selectize'
-], function ($, log, _, ERR, EVT, C) {
+], function ($, log, _, ERR, EVT, C, template, i18n, Handlebars) {
 
     'use strict';
 
     var defaultOptions = {},
         s = {
-            DROPDOWN_CONTAINER: "[data-role='dropdown']"
+            DROPDOWN_CONTAINER: "[data-role='dropdown']",
+            CLEAR_ALL_CONTAINER: "[data-role='clear']",
+            SELECT_ALL_CONTAINER: "[data-role='select']"
         };
 
     function Dropdown(o) {
@@ -181,7 +186,14 @@ define([
 
     Dropdown.prototype._renderTemplate = function () {
 
-        this.$el.append($("<div data-role='dropdown'></div>"));
+        var $el = this.$el.find(s.DROPDOWN_CONTAINER);
+
+        if ($el.length === 0) {
+            log.info("Injecting template for: " + this.id);
+            var tmpl = Handlebars.compile($(template)[0].outerHTML);
+            this.$el.append(tmpl($.extend(true, {}, i18n, this, this.selector)));
+        }
+
     };
 
     Dropdown.prototype._initVariables = function () {
@@ -191,6 +203,7 @@ define([
         this.status.disabled = this.selector.disabled;
 
         this.$dropdownEl = this.$el.find(s.DROPDOWN_CONTAINER);
+
     };
 
     Dropdown.prototype._buildDropdownModel = function (fxResource) {
@@ -321,7 +334,8 @@ define([
 
     Dropdown.prototype._bindEventListeners = function () {
 
-        var self = this;
+        var self = this,
+            selectize = this.$dropdownEl[0].selectize;
 
         this.dropdown.on('change', function () {
 
@@ -347,10 +361,27 @@ define([
 
         });
 
+        this.$el.find(s.CLEAR_ALL_CONTAINER).on("click", function () {
+            if (selectize) {
+                selectize.clear();
+            }
+        });
+
+        this.$el.find(s.SELECT_ALL_CONTAINER).on("click", function () {
+
+            if (selectize) {
+                selectize.setValue(_.keys(selectize.options));
+            }
+        });
+
     };
 
     Dropdown.prototype._unbindEventListeners = function () {
         this.dropdown.off();
+
+        this.$el.find(s.CLEAR_ALL_CONTAINER).off();
+        this.$el.find(s.SELECT_ALL_CONTAINER).off();
+
     };
 
     Dropdown.prototype._dispose = function () {

@@ -1,0 +1,22 @@
+<div class="selector-content">
+
+    <div data-role="dropdown"></div>
+
+    {{#unless hideButtons}}
+
+        <div class="btn-group btn-group-justified fx-tree-buttons">
+            {{#unless hideClearAllButton}}
+                <div class="btn-group" role="group">
+                    <button data-role="clear" class="btn btn-default">{{ clear_all_btn }}</button>
+                </div>
+            {{/unless}}
+            {{#unless hideSelectAllButton}}
+                <div class="btn-group" role="group">
+                    <button data-role="select" class="btn btn-default">{{ select_all_btn }}</button>
+                </div>
+            {{/unless}}
+        </div>
+
+    {{/unless}}
+
+</div>
