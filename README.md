@@ -312,6 +312,7 @@ NB: not all dependencies are compatible with all the available selectors. Check 
 - `focus` : if the payload value is equal to the selector id, set the selector state to focused
 - `ensure_unset` : ensure that the payload value is not selected in the specific selector
 - `disable` : disable selector
+- `process` : pass a custom D3P process that will compiled. Use `{{codes}}` to specify where to place the codes that triggered the dependencies call.
 
 ### Available events
 

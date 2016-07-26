@@ -434,7 +434,9 @@ define([
         var newValues = _.map(data, function (d) {
                 return isNaN(parseInt(d.value, 10)) ? d.value : parseInt(d.value, 10);
             }),
-            from = _.min(newValues);
+            from;
+
+        from = _.min(newValues);
 
         //Set selected value
         var v = from > originalValue ? from : originalValue;
@@ -449,6 +451,21 @@ define([
 
         var codelist = opts.data || [],
             data = this._buildDropdownModel(codelist);
+
+        this._updateDropdown(data);
+
+    };
+
+    Dropdown.prototype._dep_process = function (opts) {
+
+        var data = opts.data || [];
+
+        data = _.map(data, function (d) {
+            return {
+                value: d.value,
+                text: d.label
+            }
+        });
 
         this._updateDropdown(data);
 

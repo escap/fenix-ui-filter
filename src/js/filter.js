@@ -1,4 +1,4 @@
-/*global define, amplify*/
+/*global define, amplify, JSON*/
 define([
     'jquery',
     'require',
@@ -99,6 +99,17 @@ define([
         log.info("Set filter values. Silent? " + !!silent);
 
         return this._setValues(o, !!silent);
+    };
+
+    /**
+     * Set selectors sources
+     * @return {null}
+     */
+    Filter.prototype.setSources = function (o) {
+
+        log.info("Set selectors sources");
+
+        return this._setSources(o);
     };
 
     /**
@@ -951,6 +962,43 @@ define([
         log.info("Filter values set");
     };
 
+    Filter.prototype._setSources = function (o) {
+
+        var source = {};
+
+        //Extend obj with
+        _.each(o.values, _.bind(function (array, key) {
+
+            source[key] = [];
+
+            _.each(array, function (item) {
+
+                if (typeof item === 'object' && !item.label) {
+                    var labels = o.labels[key];
+                    item.label = labels ? o.labels[key][item.value] : "Missing label";
+                }
+
+                source[key].push(item);
+
+            });
+
+        }, this));
+
+        _.each(source, _.bind(function (obj, key) {
+
+            var name = this._resolveSelectorName(key);
+
+            if (this._getSelectorInstance(name)) {
+                this._callSelectorInstanceMethod(name, "setValue", obj, silent);
+            } else {
+                log.info(name + " skipped");
+            }
+
+        }, this));
+
+        log.info("Selectors sources set");
+    };
+
     Filter.prototype._getEnabledSelectors = function () {
 
         var result = [];
@@ -1072,7 +1120,7 @@ define([
                             var call = self["_dep_" + d.id];
 
                             if ($.isFunction(call)) {
-                                call.call(self, payload, {src: s, target: id});
+                                call.call(self, payload, {src: s, target: id, params : d.params});
                             } else {
                                 log.error("Impossible to find : " + "_dep_" + d.id);
                             }
@@ -1146,25 +1194,92 @@ define([
         }
     };
 
-    Filter.prototype._dep_focus = function (payload, o) {
+    Filter.prototype._dep_parent = function (payload, o) {
 
-        if (payload.value === this.selector2semantic[o.target]) {
-            log.info("_dep_focus invokation");
-            log.info(o);
+        if (this.selectors[o.target]) {
 
-            var d = payload.value,
-                selectors = this.semantic2selectors[d];
+            var c = this.selectors[o.target].cl;
 
-            this.$el.find("." + this.focusedSelectorClassName).removeClass(this.focusedSelectorClassName);
+            if (c) {
 
-            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS).addClass(this.focusedSelectorClassName);
-            this._getSelectorContainer(selectors[0]).closest(s.SEMANTICS).addClass(this.focusedSelectorClassName);
+                log.info("_dep_parent invokation");
+                log.info(o);
 
-            _.each(selectors, _.bind(function (sel) {
+                //delete c.levels;
+                //c.levels = 2;
+                delete c.level;
 
-                this._enableSelectorAndSwitch(sel);
+                c.codes = [];
 
-            }, this));
+                _.each(payload, function (item) {
+                    c.codes.push(item.value);
+                });
+
+                this._getPromise(c).then(
+                    _.bind(function (data) {
+
+                        var source = [];
+
+                        _.each(data, function (s) {
+                            source = source.concat(s.children);
+                        });
+
+                        source = _.uniq(source);
+                        this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: source});
+                    }, this),
+                    function (r) {
+                        log.error(r);
+                    }
+                )
+            }
+        }
+    };
+
+    Filter.prototype._dep_process = function (payload, o) {
+        if (this.selectors[o.target]) {
+
+            var process = $.extend(true, {},o.params);
+
+            if (process) {
+
+                log.info("_dep_process invokation");
+                log.info(o);
+
+              var body = JSON.stringify(process.body),
+                    templ = Handlebars.compile(body),
+                    codes = "";
+
+                _.each(payload, function (p) {
+                    codes = codes.concat(p.value).concat('","');
+                });
+
+                codes= codes.substring(0, codes.length - 3);
+
+                process.body = JSON.parse(templ({codes : codes}));
+
+                this.bridge.getProcessedResource(process).then(
+                    _.bind(function (result) {
+
+                        var data = Array.isArray(result.data) ?  result.data : [],
+                            source = [];
+
+                        _.each(data.data, function (s) {
+                            source.push({
+                                value : s[0],
+                                label : s[1]
+                            });
+                        });
+
+                        source = _.uniq(source);
+                        this._callSelectorInstanceMethod(o.target, "_dep_process", {data: source});
+
+
+                    }, this),
+                    function (r) {
+                        log.error(r);
+                    }
+                )
+            }
         }
     };
 
