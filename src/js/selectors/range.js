@@ -19,7 +19,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
+        $.extend(true, this, defaultOptions, o, {$el: $(o.el)});
 
         this._checkConfiguration(); //empty
 
@@ -64,8 +64,8 @@ define([
         //add to is double slider
         if (this.selector.config && this.selector.config.type === "double") {
             result.values = [];
-            result.values.push({value : values.to, parent : 'to'});
-            result.values.push({value : values.from, parent : 'from'});
+            result.values.push({value: values.to, parent: 'to'});
+            result.values.push({value: values.from, parent: 'from'});
             result.labels[values.to] = 'To';
         }
 
@@ -174,7 +174,7 @@ define([
         if (typeof v[0] === 'object') {
 
             var from = _.findWhere(v, {parent: 'from'}) || {},
-                to =_.findWhere(v, {parent: 'to'}) || {};
+                to = _.findWhere(v, {parent: 'to'}) || {};
 
             c.from = from.value;
             c.to = to.value;
@@ -197,6 +197,23 @@ define([
         // UPDATE - updates slider to any new values
         slider.update(c);
 
+    };
+
+    /**
+     * Resets the selected items to the given value.
+     * return {null}
+     */
+    Range.prototype.setSource = function (s) {
+
+        var source = s || [],
+            from = _.findWhere(source, {parent: 'from'}) || {},
+            to = _.findWhere(source, {parent: 'to'}) || {};
+
+        var slider = this.$rangeContainer.data("ionRangeSlider");
+        slider.update({
+            min: from.value,
+            max: to.value
+        });
     };
 
     Range.prototype._checkConfiguration = function () {
@@ -230,12 +247,25 @@ define([
 
     Range.prototype._renderSelector = function () {
 
+        var source = this.selector.source || [],
+            from = _.findWhere(source, {parent: 'from'}) || {},
+            to = _.findWhere(source, {parent: 'to'}) || {};
+
+        this._renderRange({
+            min: from.value,
+            max: to.value
+        });
+
+    };
+
+    Range.prototype._renderRange = function (opt) {
+
         var self = this;
 
         this.$rangeContainer.ionRangeSlider($.extend(true, {}, {
             type: "single",
-            min: 0,
-            max: 100,
+            min: opt.min || 0,
+            max: opt.max || 100,
             from: 50,
             min_interval: 1,
             keyboard: false,

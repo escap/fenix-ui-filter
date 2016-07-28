@@ -243,10 +243,10 @@ define([
             } else {
 
                 var convertedData = staticData.map(function (i) {
-                    return {value: i.value, text: i.label, parent: '#'};
+                    return {value: i.value.toString(), text: i.label, parent: '#'};
                 });
                 data = _.uniq(_.union(data, convertedData), false, function (item) {
-                    return item.value;
+                    return item.value.toString();
                 });
 
             }

@@ -145,7 +145,9 @@ define([
 
             filter.setSources({
                 tree: [{value : "item_01", label: "Item 1"}, {value : "item_02", label: "Item 2"}],
-                dropdown : [{value : "item_03", label: "Item 3"}, {value : "item_04", label: "Item 4"}]
+                dropdown : [{value : "item_03", label: "Item 3"}, {value : "item_04", label: "Item 4"}],
+                range :  [{value : "10", label: "10", parent: 'from'}, {value : "99", label: "99", parent: 'to'}],
+
             })
         });
 
