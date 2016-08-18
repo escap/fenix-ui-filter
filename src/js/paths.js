@@ -4,10 +4,10 @@ define(function () {
 
         paths: {
             'fx-filter/start': './filter',
-            'fx-filter/html': '../../html',
+            'fx-filter/html': '../html',
             'fx-filter/js': './',
-            'fx-filter/config' :  '../../config',
-            'fx-filter/nls' :  '../../nls',
+            'fx-filter/config' :  '../config',
+            'fx-filter/nls' :  '../nls',
 
             //3rd party libs
             'jquery': '{FENIX_CDN}/js/jquery/2.1.1/jquery.min',

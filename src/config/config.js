@@ -4,32 +4,13 @@ define(function () {
 
     'use strict';
 
-    var selectorPath = "fx-filter/js/selectors/";
-
     return {
 
         validityTimeout: 10000, //10 secs
 
-        pluginRegistry: {
-            'dropdown': {
-                path: selectorPath + 'dropdown'
-            },
-            'tree': {
-                path: selectorPath + 'tree'
-            },
-            'input': {
-                path: selectorPath + 'input'
-            },
-            'range': {
-                path: selectorPath + 'range'
-            },
-            'time': {
-                path: selectorPath + 'time'
-            },
-            'sortable': {
-                path: selectorPath + 'sortable'
-            }
-        },
+        corePlugins : ['dropdown', 'tree', 'input', 'range', 'time', 'sortable'],
+
+        pluginRegistry: { },
 
         // css class names
         focusedSelectorClassName: "focused", // highlight a selector

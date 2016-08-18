@@ -18,7 +18,8 @@ define([
 
     'use strict';
 
-    var defaultOptions = {
+    var codePluginsFolder = "fx-filter/js/selectors/",
+        defaultOptions = {
             summaryRender: function (params) {
                 return this._summaryRender(params);
             }
@@ -263,7 +264,10 @@ define([
 
         this._unbindEventListeners();
 
-        this._preloadSelectorScripts();
+        this._preloadResources().then(
+            _.bind(this._onPreloadResourceSuccess, this),
+            _.bind(this._onPreloadResourceError, this)
+        );
     };
 
     Filter.prototype._summaryRender = function (item) {
@@ -559,34 +563,6 @@ define([
 
     // Preload scripts and codelists
 
-    Filter.prototype._preloadSelectorScripts = function () {
-
-        var paths = [];
-
-        _.each(this.selectorTypes, _.bind(function (t) {
-
-            paths.push(this._getSelectorScriptPath(t));
-
-        }, this));
-
-        log.info("Selectors path to load");
-        log.info(paths);
-
-        //Async load of plugin js source
-        require(paths, _.bind(this._preloadSelectorScriptsSuccess, this));
-
-    };
-
-    Filter.prototype._preloadSelectorScriptsSuccess = function () {
-        log.info('Selectors scripts loaded successfully');
-
-        this._preloadResources().then(
-            _.bind(this._onPreloadResourceSuccess, this),
-            _.bind(this._onPreloadResourceError, this)
-        );
-
-    };
-
     Filter.prototype._preloadResources = function () {
 
         var promises = [];
@@ -628,7 +604,6 @@ define([
             }
 
         }, this));
-
 
         return this.bridge.all(promises);
 
@@ -753,10 +728,19 @@ define([
 
     Filter.prototype._getSelectorScriptPath = function (name) {
 
-        var registeredSelectors = $.extend(true, {}, this.pluginRegistry),
-            path;
+        var corePlugins = this.corePlugins,
+            registeredSelectors = $.extend(true, {}, this.pluginRegistry),
+            path,
+            conf,
+            isCore;
 
-        var conf = registeredSelectors[name];
+        isCore = _.contains(corePlugins, name);
+
+        if (isCore) {
+            return codePluginsFolder + name;
+        }
+
+        conf = registeredSelectors[name];
 
         if (!conf) {
             log.error('Registration not found for "' + name + ' selector".');
@@ -843,20 +827,21 @@ define([
                 obj.initialized = true;
 
                 var selectorId = obj.selector.id,
-                    rawCl,
-                    Selector;
+                    rawCl;
 
                 rawCl = this._getStoredCodelist(obj.cl || obj.enumeration);
-                Selector = this._getSelectorRender(selectorId);
 
-                var model = $.extend(true, {}, obj, this.common, {
-                    id: name,
-                    data: rawCl ? rawCl : null,
-                    controller: this,
-                    lang: this.lang
-                });
+                this._getSelectorRender(selectorId, _.bind(function (Selector) {
 
-                this.selectors[name].instance = new Selector(model);
+                    var model = $.extend(true, {}, obj, this.common, {
+                        id: name,
+                        data: rawCl ? rawCl : null,
+                        controller: this,
+                        lang: this.lang
+                    });
+
+                    this.selectors[name].instance = new Selector(model);
+                }, this));
 
             } else {
                 log.info(name + " selector is already initialized.");
@@ -1546,9 +1531,9 @@ define([
 
     };
 
-    Filter.prototype._getSelectorRender = function (name) {
+    Filter.prototype._getSelectorRender = function (name, callback) {
 
-        return require(this._getSelectorScriptPath(name));
+        return require([this._getSelectorScriptPath(name)], callback);
     };
 
     Filter.prototype._getActiveSelectorBySemantic = function (name) {

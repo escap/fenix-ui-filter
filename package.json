@@ -4,11 +4,11 @@
   "description": "FENIX Filter",
   "main": "src/js/start.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test webpack & COVERAGE=true karma start ./karma.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FENIX-Platform/fenix-ui-filter.git"
+    "url": "git+https://github.com/FENIX-Platform/fenix-ui-filter.git"
   },
   "author": "FENIX team (http://fenix.fao.org/)",
   "license": "GPL-2.0",
@@ -28,5 +28,28 @@
     "selectize": "0.12.2",
     "sortablejs": "1.4.2",
     "underscore": "1.8.3"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "filter",
+    "fenix"
+  ],
+  "devDependencies": {
+    "chai": "3.5.0",
+    "clean-webpack-plugin": "0.1.10",
+    "extract-text-webpack-plugin": "1.0.1",
+    "html-webpack-plugin": "2.22.0",
+    "karma": "1.2.0",
+    "karma-chai": "0.1.0",
+    "karma-chrome-launcher": "1.0.1",
+    "karma-coverage": "1.1.1",
+    "karma-firefox-launcher": "1.0.0",
+    "karma-mocha": "1.1.1",
+    "karma-webpack": "1.8.0",
+    "mocha": "3.0.2",
+    "webpack": "1.13.2",
+    "webpack-dev-server": "1.14.1"
   }
 }
