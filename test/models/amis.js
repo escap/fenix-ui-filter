@@ -76,14 +76,14 @@ define(function () {
                                     "codes": [{
                                         "uid": "OECD_CommodityDomain",
                                         "version": "1.0",
-                                        "codes": "{{{commodityDomain}}}"
+                                        "codes": ["{{{commodityDomain}}}"]
                                     }]
                                 },
                                 "policydomain": {
                                     "codes": [{
                                         "uid": "OECD_PolicyDomain",
                                         "version": "1.0",
-                                        "codes": "{{{policydomain}}}"
+                                        "codes": ["{{{policydomain}}}"]
                                     }]
                                 }
                             }, "columns": ["policytype"]

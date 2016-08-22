@@ -1294,14 +1294,16 @@ define([
         }
 
         function processArrayForHandlebars(values) {
-            var result = [];
+            var result = '';
 
             _.each(values, function (p) {
                 var value = typeof p === "object" ? p.value : p;
-                result.push(value);
+                result = result.concat(value).concat('","');
             });
 
-            return JSON.stringify(result);
+            result = result.substring(0, result.length - 3);
+
+            return result;
         }
     };
 
