@@ -872,7 +872,7 @@ define([
         };
 
         if (this.ready !== true) {
-            log.warn("Abort getValues() because filter is not ready")
+            log.warn("Abort getValues() because filter is not ready");
             return result;
         }
 
@@ -1095,7 +1095,7 @@ define([
                             var call = self["_dep_" + d.id];
 
                             if ($.isFunction(call)) {
-                                call.call(self, payload, {src: s, target: id, params: d.params});
+                                call.call(self, payload, {src: s, target: id, args: d.args});
                             } else {
                                 log.error("Impossible to find : " + "_dep_" + d.id);
                             }
@@ -1213,24 +1213,60 @@ define([
     Filter.prototype._dep_process = function (payload, o) {
         if (this.selectors[o.target]) {
 
-            var process = $.extend(true, {}, o.params);
+            var process = $.extend(true, {}, o.args);
 
             if (process) {
 
                 log.info("_dep_process invokation");
+                log.info(payload);
                 log.info(o);
 
-                var body = JSON.stringify(process.body),
-                    templ = Handlebars.compile(body),
-                    codes = "";
+                if (!process.body) {
+                    log.error("Impossible to find args.body for " + o.target + " `process` dependency configuration.");
+                    return;
+                }
 
-                _.each(payload, function (p) {
-                    codes = codes.concat(p.value).concat('","');
+                if (!process.uid) {
+                    log.error("Impossible to find args.uid for " + o.target + " `process` dependency configuration.");
+                    return;
+                }
+
+                var body = JSON.stringify(Array.isArray(process.body) ? process.body : [process.body]),
+                    templ,
+                    model = {};
+
+                templ = Handlebars.compile(JSON.stringify(body));
+
+                if (o.args.hasOwnProperty("payloadIncludes")) {
+
+                    var selectors = _.without(this._getModelValues(o.args.payloadIncludes), o.target);
+
+                    log.info("Selectors included in process: " + JSON.stringify(selectors));
+
+                    var values = this.getValues(null, selectors) || {};
+
+                    model = values.values;
+
+                } else {
+
+                    if (!Array.isArray(payload)){
+                        payload = [payload];
+                    }
+                    model[o.src] = payload;
+                }
+
+                _.each(model, function (values, key) {
+                    model[key] = processArrayForHandlebars(values)
                 });
 
-                codes = codes.substring(0, codes.length - 3);
+                log.info("Model for the process:");
+                log.info(model);
 
-                process.body = JSON.parse(templ({codes: codes}));
+                process.body = JSON.parse(templ(model));
+
+                console.log(process.body)
+
+                return;
 
                 this.bridge.getProcessedResource(process).then(
                     _.bind(function (result) {
@@ -1255,6 +1291,17 @@ define([
                     }
                 )
             }
+        }
+
+        function processArrayForHandlebars(values) {
+            var result = [];
+
+            _.each(values, function (p) {
+                var value = typeof p === "object" ? p.value : p;
+                result.push(value);
+            });
+
+            return JSON.stringify(result);
         }
     };
 
@@ -1742,6 +1789,25 @@ define([
             this._trigger('change');
         }
 
+    };
+
+    Filter.prototype._getModelValues = function (ids) {
+
+        if (!Array.isArray(ids)) {
+            log.error("`args.payloadIncludes` configuration has to be an array");
+            return {};
+        }
+
+        var selectedIds = [];
+
+        _.each(ids, _.bind(function (id) {
+
+            selectedIds = selectedIds.concat(this._resolveDependencySelectors(id));
+        }, this));
+
+        selectedIds = _.uniq(selectedIds);
+
+        return selectedIds;
     };
 
     //disposition

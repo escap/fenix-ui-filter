@@ -15,10 +15,11 @@ define([
     'test/models/dependencies',
     'test/models/countrystat',
     'test/models/setSources',
+    'test/models/amis',
     'text!test/html/model-1-base.hbs',
     'i18n!test/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -47,6 +48,7 @@ define([
             COUNTRYSTAT: "#countrystat",
             SOURCES: "#sources",
             SOURCES_BTN: "#sources-btn",
+            AMIS : "#amis"
         },
         empty_model = {data: []},
         error_model = {},
@@ -73,6 +75,15 @@ define([
             items: ModelDependencies,
             el: s.DEPENDENCIES
         });
+    };
+
+    Test.prototype._renderAmis = function () {
+
+        var filter = this.createFilter({
+            items: AmisModel,
+            el: s.AMIS
+        });
+
     };
 
     Test.prototype._renderCountrystat = function () {
@@ -112,11 +123,13 @@ define([
 
     Test.prototype._render = function () {
 
-        this._renderSetSources();
+        this._renderAmis();
 
         return;
 
         this._renderDependencies();
+
+        this._renderSetSources();
 
         this._renderCountrystat();
 

@@ -12,7 +12,7 @@ define(function () {
                 id: "dropdown",
                 default: ["600"],
                 config: { //Selectize configuration
-                    maxItems: 1,
+                    //maxItems: 1,
                     placeholder: "Please select",
                     plugins: ['remove_button'],
                     mode: 'multi'
@@ -39,7 +39,7 @@ define(function () {
                 id: "dropdown",
 
                 config: {
-                    maxItems: 1,
+                    //maxItems: 1,
                     placeholder: "All",
                     plugins: ['remove_button'],
                     mode: 'multi'
@@ -58,10 +58,13 @@ define(function () {
                 hideRemoveButton: true
             },
             dependencies: {
-                "parentsector_code": {id: "parent", event: "select"}, //obj or array of obj
+                "parentsector_code": {
+                    id: "process",
+                    event: "select",
+                    args: {body: {uid: "dani"}}
+                }, //obj or array of obj
             }
         },
-
         "from": {
 
             "selector": {
