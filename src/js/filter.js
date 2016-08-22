@@ -1235,7 +1235,7 @@ define([
                     templ,
                     model = {};
 
-                templ = Handlebars.compile(JSON.stringify(body));
+                templ = Handlebars.compile(body);
 
                 if (o.args.hasOwnProperty("payloadIncludes")) {
 
@@ -1264,9 +1264,11 @@ define([
 
                 process.body = JSON.parse(templ(model));
 
-                console.log(process.body)
-
-                return;
+                //add lang
+                if (!process.params) {
+                    process.params = {};
+                }
+                process.params.lang = this.lang;
 
                 this.bridge.getProcessedResource(process).then(
                     _.bind(function (result) {
@@ -1276,14 +1278,14 @@ define([
 
                         _.each(data.data, function (s) {
                             source.push({
-                                value: s[0],
-                                label: s[1]
+                                value: s[o.args.indexValueColumn || 0],
+                                label: s[o.args.indexLabelColumn || 1]
                             });
                         });
 
                         source = _.uniq(source);
-                        this._callSelectorInstanceMethod(o.target, "_dep_process", {data: source});
 
+                        this._callSelectorInstanceMethod(o.target, "_dep_process", {data: source});
 
                     }, this),
                     function (r) {
@@ -1294,14 +1296,12 @@ define([
         }
 
         function processArrayForHandlebars(values) {
-            var result = '';
 
-            _.each(values, function (p) {
-                var value = typeof p === "object" ? p.value : p;
-                result = result.concat(value).concat('","');
+            var result = values.map(function (p) {
+                return typeof p === "object" ? p.value : p;
             });
 
-            result = result.substring(0, result.length - 3);
+             result = result.join('","');
 
             return result;
         }

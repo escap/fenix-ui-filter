@@ -62,32 +62,35 @@ define(function () {
             },
 
             dependencies: {
-                "commodityDomain": [{
-                    "id": "process", "event": "select",
-                    "args": {
-                        "uid": "OECD_View_QueryDownload",
-                        version: "dni",
-                        payloadIncludes : ["commodityDomain", "policydomain"],
-                        body : [{
-                            "name": "filter",
-                            "parameters": {
-                            "rows": {
-                                "commoditydomain": {
-                                    "codes": [{
-                                        "uid": "OECD_CommodityDomain",
-                                        "version": "1.0",
-                                        "codes": ["{{{commodityDomain}}}"]
-                                    }]
+                commodityDomain: [{
+                    id: "process",
+                    event: "select",
+                    args: {
+                        uid: "OECD_View_QueryDownload",
+                        payloadIncludes: ["commodityDomain", "policyDomain"],
+                        //indexValueColumn : 1,
+                        //indexLabelColumn : 0,
+                        body: [{
+                            name: "filter",
+                            parameters: {
+                                rows: {
+                                    commoditydomain: {
+                                        codes: [{
+                                            uid: "OECD_CommodityDomain",
+                                            version: "1.0",
+                                            codes: ["{{commodityDomain}}"]
+                                        }]
+                                    },
+                                    policydomain: {
+                                        codes: [{
+                                            uid: "OECD_PolicyDomain",
+                                            version: "1.0",
+                                            codes: ["{{policyDomain}}"]
+                                        }]
+                                    }
                                 },
-                                "policydomain": {
-                                    "codes": [{
-                                        "uid": "OECD_PolicyDomain",
-                                        "version": "1.0",
-                                        "codes": ["{{{policydomain}}}"]
-                                    }]
-                                }
-                            }, "columns": ["policytype"]
-                        }
+                                columns: ["policytype"]
+                            }
                         }]
                     }
                 }]
@@ -103,8 +106,8 @@ define(function () {
             },
 
             cl: {
-                "uid": "OECD_PolicyType2_1_1",
-                "version": "1.0"
+                uid: "OECD_PolicyType2_1_1",
+                version: "1.0"
             },
 
             template: {

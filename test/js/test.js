@@ -54,7 +54,7 @@ define([
         error_model = {},
         valid_model = {},
         filters = [],
-        environment = 'develop';
+        environment = 'production';
 
     function Test() {
     }
