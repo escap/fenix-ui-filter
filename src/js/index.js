@@ -3,17 +3,18 @@ define([
     'require',
     'underscore',
     'loglevel',
-    '__config/errors',
-    '__config/events',
-    '__config/config',
-    '__html/filter.hbs',
-    '__nls/filter',
+    '../config/errors',
+    '../config/events',
+    '../config/config',
+    '../html/selector.hbs',
+    '../html/semantic.hbs',
+    '../html/summary.hbs',
+    '../nls/labels',
     "fenix-ui-bridge",
     "fenix-ui-converter",
-    'handlebars',
     'amplify',
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, templates, i18nLabels, Bridge, Converter, Handlebars) {
+], function ($, require, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter) {
 
     'use strict';
 
@@ -282,7 +283,6 @@ define([
         log.info("Update filter summary");
 
         var self = this,
-            templ = Handlebars.compile($(templates).find(s.TEMPLATE_SUMMARY)[0].outerHTML),
             model = {summary: createSummaryModel(this._getValues())};
 
         //unbind click listener
@@ -290,7 +290,7 @@ define([
             $(this).off();
         });
 
-        this.summary$el.html(templ(model));
+        this.summary$el.html(templateSelector(model));
 
         //bind click listener
         this.summary$el.find(s.SUMMARY_ITEM).each(function () {
@@ -1684,7 +1684,6 @@ define([
 
         var classNames = "",
             semantic = this.semantics[id],
-            templ = Handlebars.compile($(templates).find(s.TEMPLATE_SEMANTIC)[0].outerHTML),
             conf = $.extend(true, {}, C.template, this.common.template),
             $html,
             model;
@@ -1705,7 +1704,7 @@ define([
 
         }, this));
 
-        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels);
+        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels[this.lang]);
 
         _.each(model, function (value, key) {
             if (value === true) {
@@ -1715,7 +1714,7 @@ define([
 
         model.classNames = classNames;
 
-        $html = $(templ(model));
+        $html = $(templateSemantic(model));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
@@ -1733,8 +1732,7 @@ define([
 
         var classNames = "",
             obj = this.selectors[id].template,
-            template = Handlebars.compile($(templates).find(s.TEMPLATE_SELECTOR)[0].outerHTML),
-            conf = $.extend(true, {id: id}, i18nLabels, C.template, this.common.template, obj),
+            conf = $.extend(true, {id: id}, i18nLabels[this.lang], C.template, this.common.template, obj),
             $html;
 
         _.each(conf, function (value, key) {

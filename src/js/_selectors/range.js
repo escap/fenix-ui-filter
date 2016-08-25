@@ -6,9 +6,9 @@ define([
     "jquery",
     "loglevel",
     'underscore',
-    '__config/errors',
-    '__config/events',
-    '__config/config',
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
     "ion-rangeslider",
     "amplify"
 ], function ($, log, _, ERR, EVT, C) {

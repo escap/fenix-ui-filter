@@ -6,13 +6,13 @@ define([
     "jquery",
     "loglevel",
     'underscore',
-    '__html/selectors/input.hbs',
-    '__config/errors',
-    '__config/events',
-    '__config/config',
-    'handlebars',
+    '../../html/selectors/inputList.hbs',
+    '../../html/selectors/inputItem.hbs',
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
     "amplify"
-], function ($, log, _, templates, ERR, EVT, C, Handlebars) {
+], function ($, log, _, templateList, templateItem, ERR, EVT, C) {
 
     'use strict';
 
@@ -240,14 +240,11 @@ define([
         var data = this.selector.source || [],
             config = this.selector.config || {},
             $list = this.$el.find(s.TEMPLATE_LIST),
-            item = $(templates).find(s.TEMPLATE_ITEM)[0].outerHTML,
             list;
 
         if ($list.length === 0) {
             log.info("Injecting input list");
-            var ulContainers =  $(templates).find(s.TEMPLATE_LIST_CONTAINER)[0].outerHTML,
-                tmpl = Handlebars.compile(ulContainers),
-                $list = $(tmpl({
+            var $list = $(templateList({
                     isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
                 }));
 
@@ -264,14 +261,13 @@ define([
 
             window.fx_filter_input_id >= 0 ? window.fx_filter_input_id++ : window.fx_filter_input_id = 0;
 
-            var tmpl = Handlebars.compile(item),
-                m = $.extend(true, model, config, {
+            var m = $.extend(true, model, config, {
                     name: this.id + window.fx_filter_input_id,
                     id: "fx_input_" + window.fx_filter_input_id,
                     type: this.type,
                     isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
                 }),
-                $input = $(tmpl(m));
+                $input = $(templateItem(m));
 
             initValidation($input, config);
 
@@ -301,11 +297,8 @@ define([
                         $(this).find('input').val(config.max)
                     }
                 });
-
             }
-
         }
-
     };
 
     Input.prototype._printDefaultSelection = function () {

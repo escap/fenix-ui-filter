@@ -6,15 +6,15 @@ define([
     "jquery",
     "loglevel",
     'underscore',
-    '__config/errors',
-    '__config/events',
-    '__config/config',
-    'handlebars',
-    '__nls/filter',
-    '__html/selectors/tree.hbs',
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
+    '../../nls/labels',
+    '../../html/selectors/tree.hbs',
+    '../../html/selectors/treeItem.hbs',
     "amplify",
     "jstree"
-], function ($, log, _, ERR, EVT, C, Handlebars, i18n, template) {
+], function ($, log, _, ERR, EVT, C, i18n, template, templateItem) {
 
     'use strict';
 
@@ -235,8 +235,7 @@ define([
         if ($el.length === 0) {
 
             log.info("Injecting template for: " + this.id);
-            var tmpl = Handlebars.compile($(template).find(s.TEMPLATE_TREE)[0].outerHTML);
-            this.$el.append(tmpl($.extend(true, {}, i18n, this, this.selector)));
+            this.$el.append(template($.extend(true, {}, i18n[this.lang], this, this.selector)));
         }
 
     };
@@ -582,9 +581,7 @@ define([
             $(this).off();
         });
 
-        var tmpl = Handlebars.compile($(template).find(s.TEMPLATE_SUMMARY_ITEM)[0].outerHTML);
-
-        this.$summaryItems = $(tmpl({values: model}));
+        this.$summaryItems = $(templateItem({values: model}));
 
         //bind click listener
         this.$summaryItems.each(function () {

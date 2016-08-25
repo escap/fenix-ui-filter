@@ -6,15 +6,14 @@ define([
     "jquery",
     "loglevel",
     'underscore',
-    '__config/errors',
-    '__config/events',
-    '__config/config',
-    '__nls/filter',
-    'handlebars',
-    '__html/selectors/time.hbs',
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
+    '../../nls/labels',
+    '../../html/selectors/time.hbs',
     "eonasdan-bootstrap-datetimepicker",
     "amplify"
-], function ($, log, _, ERR, EVT, C, i18n, Handlebars, template) {
+], function ($, log, _, ERR, EVT, C, i18n, template) {
 
     'use strict';
 
@@ -183,8 +182,7 @@ define([
         if ($el.length === 0) {
 
             log.info("Injecting template for: " + this.id);
-            var tmpl = Handlebars.compile($(template).find(s.PICKER_CONTAINER)[0].outerHTML);
-            this.$el.append(tmpl($.extend(true, {}, i18n, this, this.selector)));
+            this.$el.append(template($.extend(true, {}, i18n[this.lang], this, this.selector)));
         }
 
     };

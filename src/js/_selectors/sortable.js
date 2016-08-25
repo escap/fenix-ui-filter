@@ -6,14 +6,14 @@ define([
     "jquery",
     "loglevel",
     'underscore',
-    '__html/selectors/sortable.hbs',
-    '__config/errors',
-    '__config/events',
-    '__config/config',
-    'handlebars',
+    '../../html/selectors/sortableList.hbs',
+    '../../html/selectors/sortableItem.hbs',
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
     'sortablejs',
     "amplify"
-], function ($, log, _, templates, ERR, EVT, C, Handlebars, SortableJS) {
+], function ($, log, _, templateList, templateItem, ERR, EVT, C, SortableJS) {
 
     'use strict';
 
@@ -267,12 +267,11 @@ define([
             if ($list.length === 0) {
                 log.info("Injecting sortable list");
 
-                var tmplGroup = Handlebars.compile(list),
-                    m = {
+                var m = {
                         group: name,
                         label: groupsObjs[name].label
                     },
-                    $group = $(tmplGroup(m));
+                    $group = $(templateList(m));
 
                 this.$el.append($group);
 
@@ -285,9 +284,8 @@ define([
             //loop over groups' items
             _.each(group.items, _.bind(function (i) {
 
-                var tmpl = Handlebars.compile(item),
-                    $content = this.itemRender.call(this, i),
-                    $li = $(tmpl(i));
+                var $content = this.itemRender.call(this, i),
+                    $li = $(templateItem(i));
 
                 $li.html($content);
 
