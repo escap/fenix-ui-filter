@@ -1,15 +1,17 @@
-/*global define, Promise, amplify */
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
 
 define([
     "jquery",
     "loglevel",
     'underscore',
-    'text!fx-filter/html/selectors/sortable.hbs',
-    'fx-filter/config/errors',
-    'fx-filter/config/events',
-    'fx-filter/config/config',
+    '__html/selectors/sortable.hbs',
+    '__config/errors',
+    '__config/events',
+    '__config/config',
     'handlebars',
-    'sortable',
+    'sortablejs',
     "amplify"
 ], function ($, log, _, templates, ERR, EVT, C, Handlebars, SortableJS) {
 

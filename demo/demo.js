@@ -48,7 +48,7 @@ require([
     var filterConfig = Filter;
     filterConfig.baseUrl = submodules_path + 'fenix-ui-filter/src/js';
 
-    Compiler.resolve([commonConfig, filterConfig],
+    Compiler.resolve([commonConfig],
         {
             placeholders: {"FENIX_CDN": "http://fenixrepo.fao.org/cdn"},
 
@@ -74,6 +74,9 @@ require([
                     
                     demo: projectRoot + submoduleRoot + "demo",
 
+                    'vendors' : projectRoot + submoduleRoot +"dist/vendors",
+                    'fx-ui-filter' : projectRoot  + submoduleRoot + "dist/fenix-ui-filter",
+
                     domReady: "{FENIX_CDN}/js/requirejs/plugins/domready/2.0.1/domReady",
                     i18n: "{FENIX_CDN}/js/requirejs/plugins/i18n/2.0.4/i18n",
                     text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
@@ -84,7 +87,11 @@ require([
 
                 // Underscore and Backbone are not AMD-capable per default,
                 // so we need to use the AMD wrapping of RequireJS
-                shim: { },
+                shim: {
+                    'fx-ui-filter' : {
+                        deps : ["vendors"]
+                    }
+                },
 
                 //waitSeconds : 15
 
@@ -102,7 +109,7 @@ require([
     ], function (log, Test) {
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('silent');
+        log.setLevel('trace');
 
         log.warn("~~~~~ FENIX Filter: test");
         log.info("===== Start testing:...");

@@ -1,20 +1,19 @@
-/*global define, amplify, JSON*/
 define([
     'jquery',
     'require',
     'underscore',
     'loglevel',
-    'fx-filter/config/errors',
-    'fx-filter/config/events',
-    'fx-filter/config/config',
-    'text!fx-filter/html/filter.hbs',
-    'i18n!fx-filter/nls/filter',
-    "fx-common/bridge",
-    "fx-common/utils",
+    '__config/errors',
+    '__config/events',
+    '__config/config',
+    '__html/filter.hbs',
+    '__nls/filter',
+    "fenix-ui-bridge",
+    "fenix-ui-converter",
     'handlebars',
     'amplify',
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, templates, i18nLabels, Bridge, Utils, Handlebars) {
+], function ($, require, _, log, ERR, EVT, C, templates, i18nLabels, Bridge, Converter, Handlebars) {
 
     'use strict';
 
@@ -1343,13 +1342,13 @@ define([
 
     Filter.prototype._format_fenix = function (values) {
 
-        return Utils.toD3P(this.items, values);
+        return Converter.toD3P(this.items, values);
 
     };
 
     Filter.prototype._format_catalog = function (values) {
 
-        return Utils.toFilter(this.items, values);
+        return Converter.toFilter(this.items, values);
 
     };
 

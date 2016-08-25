@@ -1,16 +1,18 @@
-/*global define, Promise, amplify */
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
 
 define([
     "jquery",
     "loglevel",
     'underscore',
-    'fx-filter/config/errors',
-    'fx-filter/config/events',
-    'fx-filter/config/config',
-    'i18n!fx-filter/nls/filter',
+    '__config/errors',
+    '__config/events',
+    '__config/config',
+    '__nls/filter',
     'handlebars',
-    'text!fx-filter/html/selectors/time.hbs',
-    "bootstrap.datetimepicker",
+    '__html/selectors/time.hbs',
+    "eonasdan-bootstrap-datetimepicker",
     "amplify"
 ], function ($, log, _, ERR, EVT, C, i18n, Handlebars, template) {
 

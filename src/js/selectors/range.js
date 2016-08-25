@@ -1,13 +1,15 @@
-/*global define, Promise, amplify */
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
 
 define([
     "jquery",
     "loglevel",
     'underscore',
-    'fx-filter/config/errors',
-    'fx-filter/config/events',
-    'fx-filter/config/config',
-    "ion.rangeSlider",
+    '__config/errors',
+    '__config/events',
+    '__config/config',
+    "ion-rangeslider",
     "amplify"
 ], function ($, log, _, ERR, EVT, C) {
 

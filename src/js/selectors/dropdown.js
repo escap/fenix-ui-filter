@@ -1,14 +1,16 @@
-/*global define, Promise, amplify */
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
 
 define([
     "jquery",
     "loglevel",
     'underscore',
-    'fx-filter/config/errors',
-    'fx-filter/config/events',
-    'fx-filter/config/config',
-    'text!fx-filter/html/selectors/dropdown.hbs',
-    'i18n!fx-filter/nls/filter',
+    '__config/errors',
+    '__config/events',
+    '__config/config',
+    '__html/selectors/dropdown.hbs',
+    '__nls/filter',
     'handlebars',
     'amplify',
     'selectize'

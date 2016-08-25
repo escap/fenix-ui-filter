@@ -2,10 +2,10 @@ define([
     'loglevel',
     'jquery',
     'underscore',
-    'fx-filter/start',
-    'fx-common/utils',
+    'vendors',
+    'fx-ui-filter',
     'demo/models/all'
-], function (log, $, _, Filter, Utils, AllModel) {
+], function (log, $, _, Filter, AllModel) {
 
     'use strict';
 
@@ -14,7 +14,8 @@ define([
             ALL_SUMMARY: "#all-summary"
         };
 
-    function Test() { }
+    function Test() {
+    }
 
     Test.prototype.start = function () {
 
@@ -26,7 +27,7 @@ define([
     Test.prototype._render = function () {
 
         this._bindEventListeners();
-        
+
         this._renderAll();
     };
 
@@ -53,11 +54,15 @@ define([
 
     Test.prototype._renderAll = function () {
 
+        console.log(Filter)
+
         var filter = new Filter({
             items: AllModel,
             el: s.ALL,
             summaryEl: s.ALL_SUMMARY
         });
+
+        console.log(filter)
 
     };
     
