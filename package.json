@@ -4,7 +4,7 @@
   "description": "FENIX Filter",
   "main": "dist/fenix-ui-filter.min.js",
   "scripts": {
-    "test": "COVERAGE=true karma start ./karma.config.js",
+    "test": "NODE_ENV=test karma start ./karma.config.js",
     "build:production": "NODE_ENV=production webpack",
     "build": "NODE_ENV=develop webpack"
   },

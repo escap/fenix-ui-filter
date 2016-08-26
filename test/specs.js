@@ -1,9 +1,9 @@
 /*global describe, it, require*/
-var expect = require("chai").expect;
-var Filter = require("../src/js/index");
+//var Filter = require("../src/js/index");
 
 describe("Converter", function () {
     it("should be not null", function () {
+        //expect(Filter).to.exist;
         expect(true).to.be.true;
     });
 });

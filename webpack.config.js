@@ -1,102 +1,81 @@
-NODE_ENV = process.env.NODE_ENV;
-
 var distFolderPath = "dist",
     webpack = require('webpack'),
     packageJson = require("./package.json"),
     CleanWebpackPlugin = require('clean-webpack-plugin'),
     Path = require('path'),
-    production = NODE_ENV === "production",
-    plugins = [
-        new CleanWebpackPlugin([distFolderPath], {
-            //root: '/full/project/path',
-            //verbose: true,
-            //dry: false
-        }),
-    ],
     entry = {},
-    dependecies = Object.keys(packageJson.dependencies),
-    nodeModulesDir = Path.resolve(__dirname, '../node_modules');
-
-// plugins included only in production environment
-if (production) {
-
-    plugins = plugins.concat([
-        //clean dist folder before build
-        // uglify
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-            },
-            output: {
-                comments: false,
-            },
-        }),
-    ]);
-}
+    dependencies = Object.keys(packageJson.dependencies);
 
 entry["app"] = ["src/js/index.js"];
 
 module.exports = {
-    debug: !production, //switch loader to debug mode
-    devtool: production ? false : 'eval', //source map generation
+
+    debug: isProduction(false, true),
+
+    devtool: isProduction('source-map', 'eval'),
+
     entry: entry,
+
     output: {
         path: Path.join(__dirname, distFolderPath),
-        filename: production ? packageJson.name + '.min.js' : packageJson.name + ".js", //add min
+        filename: isProduction(packageJson.name + '.min.js', packageJson.name + ".js"),
         chunkFilename: 'chunk-[id].' + packageJson.name + '.min.js',
-        libraryTarget: 'umd'
+        libraryTarget: 'amd'
     },
+
     resolve: {
         root: Path.resolve(__dirname),
         alias: {
             //handlebars: 'handlebars/dist/handlebars.min.js',
-            jquery: "jquery/src/jquery"
+            //jquery: "jquery/src/jquery"
         }
     },
-    //externals: dependecies,
+
+    externals: dependencies,
+
     module: {
-        //jshint
-        preLoaders: [
-            //jshint
-            {
-                test: /\.js$/, // include .js files
-                exclude: [nodeModulesDir], // exclude any and all files in the node_modules folder
-                loader: "jshint-loader"
-            }
-        ],
-        loaders: [
-            //{test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
-            {test: /\.hbs$/, loader: "handlebars-loader"},
-            //{test: /\.json$/, loader: "json-loader"},
-            //{test: /\.(jpg|png)$/, loader: 'url?limit=30000&name=img/[name].[hash].[ext]'}, //inline images with size less than 30kb
-        ],
+        loaders: [{test: /\.hbs$/, loader: "handlebars-loader"}]
     },
 
-    plugins: plugins.concat([
-        // define global scoped variable, force JSON.stringify()
-        new webpack.DefinePlugin({
-            __DEVELOPMENT__: !production,
-            VERSION: JSON.stringify(packageJson.version)
-        }),
-    ]),
+    plugins: clearArray(([
+        new CleanWebpackPlugin([distFolderPath]),
+        isProduction(new webpack.optimize.UglifyJsPlugin({
+            compress: {warnings: false},
+            output: {comments: false}
+        }))
+    ]))
 
-    // more options in the optional jshint object
-    jshint: {
-        // any jshint option http://www.jshint.com/docs/options/
-        // i. e.
-        camelcase: true,
-
-        // jshint errors are displayed by default as warnings
-        // set emitErrors to true to display them as errors
-        emitErrors: false,
-
-        // jshint to not interrupt the compilation
-        // if you want any file with jshint errors to fail
-        // set failOnHint to true
-        failOnHint: false,
-
-        // custom reporter function
-        reporter: function (errors) {
-        }
-    }
 };
+
+// utils
+
+function clearArray(array) {
+
+    var result = [];
+
+    array.forEach(function (s) {
+        s ? result.push(s) : null;
+    });
+
+    return result;
+
+}
+
+function isProduction(valid, invalid) {
+
+    return isEnvironment('production') ? valid : invalid;
+}
+
+function isDevelop(valid, invalid) {
+
+    return isEnvironment('develop') ? valid : invalid;
+}
+
+function isTest(valid, invalid) {
+
+    return isEnvironment('develop') ? valid : invalid;
+}
+
+function isEnvironment(env) {
+    return process.env.NODE_ENV === env;
+}
