@@ -2,24 +2,23 @@ define([
     'loglevel',
     'jquery',
     'underscore',
-    'fx-filter/start',
-    'fx-common/utils',
-    'test/models/model-1',
-    'test/models/semantic',
-    'test/models/fx-resource',
-    'test/models/to-sync',
-    'test/models/tab-table-toolbar-config',
-    'test/models/fx-process',
-    'test/models/aggregation',
-    'test/models/model-2',
-    'test/models/dependencies',
-    'test/models/countrystat',
-    'test/models/setSources',
-    'test/models/amis',
-    'text!test/html/model-1-base.hbs',
-    'i18n!test/nls/labels',
-    'handlebars'
-], function (log, $, _, Filter, Utils, Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars) {
+    'fenix-ui-filter',
+    /*'fx-common/utils',*/
+    'dev/models/model-1',
+    'dev/models/semantic',
+    'dev/models/fx-resource',
+    'dev/models/to-sync',
+    'dev/models/tab-table-toolbar-config',
+    'dev/models/fx-process',
+    'dev/models/aggregation',
+    'dev/models/model-2',
+    'dev/models/dependencies',
+    'dev/models/countrystat',
+    'dev/models/setSources',
+    'dev/models/amis',
+    'dev/html/model-1-base.hbs',
+    'dev/nls/labels'
+], function (log, $, _, Filter, /* Utils, */Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels) {
 
     'use strict';
 
@@ -43,12 +42,12 @@ define([
             EVENT_COUNTERS: "#event-counters",
             EVENT_VALUES_BTN: "#event-values-btn",
             EVENT_DISPOSE: "#event-dispose",
-            MODEL_2 : "#model2",
+            MODEL_2: "#model2",
             DEPENDENCIES: "#dependencies",
             COUNTRYSTAT: "#countrystat",
             SOURCES: "#sources",
             SOURCES_BTN: "#sources-btn",
-            AMIS : "#amis"
+            AMIS: "#amis"
         },
         empty_model = {data: []},
         error_model = {},
@@ -56,12 +55,12 @@ define([
         filters = [],
         environment = 'production';
 
-    function Test() {
+    function Dev() {
     }
 
-    Test.prototype.start = function () {
+    Dev.prototype.start = function () {
 
-        log.trace("Test started");
+        log.trace("Dev started");
 
         this._render();
 
@@ -69,7 +68,7 @@ define([
 
     };
 
-    Test.prototype._renderDependencies = function () {
+    Dev.prototype._renderDependencies = function () {
 
         var filter = this.createFilter({
             items: ModelDependencies,
@@ -77,7 +76,7 @@ define([
         });
     };
 
-    Test.prototype._renderAmis = function () {
+    Dev.prototype._renderAmis = function () {
 
         var filter = this.createFilter({
             items: AmisModel,
@@ -86,7 +85,7 @@ define([
 
     };
 
-    Test.prototype._renderCountrystat = function () {
+    Dev.prototype._renderCountrystat = function () {
 
         var filter = this.createFilter({
             items: CountryStatModel,
@@ -95,7 +94,7 @@ define([
 
     };
 
-    Test.prototype._renderModel2 = function () {
+    Dev.prototype._renderModel2 = function () {
 
         var filter = this.createFilter({
             items: Model2,
@@ -103,7 +102,7 @@ define([
         });
     };
 
-    Test.prototype._createConfiguration = function () {
+    Dev.prototype._createConfiguration = function () {
 
         var configuration = Utils.createConfiguration({
             model: FxResource
@@ -121,7 +120,7 @@ define([
         });
     };
 
-    Test.prototype._render = function () {
+    Dev.prototype._render = function () {
 
         this._renderAmis();
 
@@ -147,7 +146,7 @@ define([
 
     };
 
-    Test.prototype._renderSetSources = function () {
+    Dev.prototype._renderSetSources = function () {
 
         var filter = this.createFilter({
             items: this._createFilterConfiguration(SetSourcesModel),
@@ -157,16 +156,16 @@ define([
         $(s.SOURCES_BTN).on('click', function () {
 
             filter.setSources({
-                tree: [{value : "item_01", label: "Item 1"}, {value : "item_02", label: "Item 2"}],
-                dropdown : [{value : "item_03", label: "Item 3"}, {value : "item_04", label: "Item 4"}],
-                range :  [{value : "10", label: "10", parent: 'from'}, {value : "99", label: "99", parent: 'to'}],
+                tree: [{value: "item_01", label: "Item 1"}, {value: "item_02", label: "Item 2"}],
+                dropdown: [{value: "item_03", label: "Item 3"}, {value: "item_04", label: "Item 4"}],
+                range: [{value: "10", label: "10", parent: 'from'}, {value: "99", label: "99", parent: 'to'}],
 
             })
         });
 
     };
 
-    Test.prototype._renderEvents = function () {
+    Dev.prototype._renderEvents = function () {
 
         var filterIsReady = false;
 
@@ -179,7 +178,7 @@ define([
 
                 incrementCount("ready");
             })
-            .on("change", function ( payload ) {
+            .on("change", function (payload) {
 
                 if (filterIsReady !== true) {
                     alert("'change' event should be triggered after 'ready' event!");
@@ -209,7 +208,7 @@ define([
         }
     };
 
-    Test.prototype._renderModel1BaseTemplate = function () {
+    Dev.prototype._renderModel1BaseTemplate = function () {
 
         log.trace("Rendering Model 1 base: start");
 
@@ -231,7 +230,7 @@ define([
 
     };
 
-    Test.prototype._renderDynamicModel1 = function () {
+    Dev.prototype._renderDynamicModel1 = function () {
 
         log.trace("Rendering Dynamic Model 1 base: start");
 
@@ -265,7 +264,7 @@ define([
 
     };
 
-    Test.prototype._renderSynch = function () {
+    Dev.prototype._renderSynch = function () {
 
         log.trace("Rendering sync: start");
 
@@ -298,11 +297,11 @@ define([
 
     //Utils
 
-    Test.prototype.createFilter = function (params) {
+    Dev.prototype.createFilter = function (params) {
 
         var instance = new Filter(
-            $.extend(true, params,{
-                environment : environment
+            $.extend(true, params, {
+                environment: environment
             }));
 
         filters.push(instance);
@@ -310,7 +309,7 @@ define([
         return instance;
     };
 
-    Test.prototype._createFilterConfiguration = function (Base) {
+    Dev.prototype._createFilterConfiguration = function (Base) {
 
         var self = this,
             c = $.extend(true, {}, Base);
@@ -323,7 +322,7 @@ define([
         return c;
     };
 
-    Test.prototype._createSelectorConfiguration = function (name, obj) {
+    Dev.prototype._createSelectorConfiguration = function (name, obj) {
 
         if (!obj.template) {
             obj.template = {};
@@ -343,7 +342,7 @@ define([
         });
     };
 
-    Test.prototype._pickRandomProperty = function (obj) {
+    Dev.prototype._pickRandomProperty = function (obj) {
         var result;
         var count = 0;
         for (var prop in obj)

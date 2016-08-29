@@ -2,8 +2,8 @@ var Path = require('path'),
     webpackConfig = require('./webpack.config');
 
 var preprocessors = {};
-preprocessors[Path.resolve(__dirname, './test/*.js')] = ['webpack'];
-preprocessors[Path.resolve(__dirname, './src/*.js')] = ['webpack'];
+preprocessors["../../src/*.js"] = ['webpack'];
+preprocessors["../../test/*.js"] = ['webpack'];
 
 module.exports = function (config) {
 
@@ -19,19 +19,14 @@ module.exports = function (config) {
 
         autoWatchBatchDelay: 300,
 
-        files: [
-            Path.resolve(__dirname, "./dist/*.js"),
-            Path.resolve(__dirname, "./test/*.js")
-        ],
+        files: Object.keys(preprocessors),
 
         exclude: [],
 
         preprocessors: preprocessors,
 
         webpack: webpackConfig,
-        webpackMiddleware: {
-            noInfo: true
-        },
+        webpackMiddleware: {noInfo: true},
 
         //autoWatch: !ci,
 
@@ -66,8 +61,8 @@ function isEnvironment(env) {
 
 /* Coverage and report
 
-//
-/!*reporters: getReporters(),
+ //
+ /!*reporters: getReporters(),
  coverageReporter: {
  reporters: [
  {type: 'lcov', dir: 'coverage/', subdir: '.'},
@@ -76,10 +71,10 @@ function isEnvironment(env) {
  ]
  },*!/
 
-function getReporters() {
-    var reps = ['progress'];
-    if (coverage) {
-        reps.push('coverage');
-    }
-    return reps;
-}*/
+ function getReporters() {
+ var reps = ['progress'];
+ if (coverage) {
+ reps.push('coverage');
+ }
+ return reps;
+ }*/

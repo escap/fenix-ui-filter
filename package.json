@@ -5,8 +5,9 @@
   "main": "dist/fenix-ui-filter.min.js",
   "scripts": {
     "test": "NODE_ENV=test karma start ./karma.config.js",
-    "build:production": "NODE_ENV=production webpack",
-    "build": "NODE_ENV=develop webpack"
+    "build": "NODE_ENV=production webpack --display-error-details",
+    "build:demo": "NODE_ENV=demo webpack --display-error-details",
+    "dev": "NODE_ENV=develop webpack --display-error-details"
   },
   "repository": {
     "type": "git",
@@ -22,9 +23,8 @@
     "amplify": "^0.0.11",
     "bootstrap": "^3.3.6",
     "eonasdan-bootstrap-datetimepicker": "^4.17.42",
-    "fenix-ui-bridge": "^1.0.0-beta.3",
-    "fenix-ui-converter": "^1.0.0-beta.2",
-    "handlebars": "^4.0.5",
+    "fenix-ui-bridge": "^1.0.0-beta.4",
+    "fenix-ui-converter": "^1.0.0-beta.3",
     "ion-rangeslider": "^2.1.4",
     "jquery": "^3.1.0",
     "jstree": "^3.3.1",

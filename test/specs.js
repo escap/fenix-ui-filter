@@ -1,5 +1,5 @@
 /*global describe, it, require*/
-//var Filter = require("../src/js/index");
+var Filter = require("../src/js/index");
 
 describe("Converter", function () {
     it("should be not null", function () {
