@@ -16,13 +16,13 @@ define([
     '../nls/labels',
     "fenix-ui-bridge",
     "fenix-ui-converter",
-    'amplifyjs',
+    "amplify-pubsub",
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter) {
+], function ($, require, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter, amplify) {
 
     'use strict';
 
-    var codePluginsFolder = "fx-filter/js/selectors/",
+    var codePluginsFolder = "./selectors/",
         defaultOptions = {
             summaryRender: function (params) {
                 return this._summaryRender(params);
@@ -411,7 +411,7 @@ define([
 
     };
 
-    Filter.prototype._initVariables = function () {
+    Filter.prototype._initVariables = function (plugin) {
 
         this.semanticIds = [];
         this.semantics = {};
@@ -447,7 +447,10 @@ define([
         this.bridge = new Bridge({
             environment: this.environment,
             cache: this.cache
-        })
+        });
+
+        //force to do not chunk codes
+        return require(codePluginsFolder + this.corePlugins[0]);
     };
 
     Filter.prototype._initDynamicVariables = function () {
@@ -549,7 +552,6 @@ define([
         amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
 
         this.$tabs.on('shown.bs.tab', _.bind(function () {
-
             amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT));
         }, this));
 
@@ -1271,7 +1273,7 @@ define([
                 if (!process.params) {
                     process.params = {};
                 }
-                process.params.lang = this.lang;
+                process.params.language = this.lang;
 
                 this.bridge.getProcessedResource(process).then(
                     _.bind(function (result) {
@@ -1372,7 +1374,7 @@ define([
     };
 
     Filter.prototype._onReady = function () {
-        log.info("Filter [" + this.id + "] is ready");
+        log.info("~~~~ Filter [" + this.id + "] is ready");
 
         this.$switches.on("change", _.bind(function (e) {
 

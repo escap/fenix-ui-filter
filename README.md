@@ -1,7 +1,7 @@
 # FENIX Filter
 
 ```javascript
-var Filter = require('fx-filter/start');
+var Filter = require('fenix-ui-filter');
 
 var filter = new Filter({
         el : "#filter",
@@ -11,6 +11,13 @@ var filter = new Filter({
         }
     });
 ```
+
+# Commands
+
++ `npm run build` : builds in production mode
++ `npm run build:demo` : called after `npm run build`, builds the `demo` folder
++ `npm run dev` : launch `webpack-dev-server` for develop. Once server is started, its default url is `http://localhost:8080/webpack-dev-server/`
++ `npm t` : automated test
 
 # Configuration
 

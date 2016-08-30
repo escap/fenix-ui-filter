@@ -33,8 +33,7 @@ module.exports = {
     plugins: clearArray([
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery",
-            amplify : "amplifyjs"
+            jQuery: "jquery"
         }),
         isDemo(undefined, new CleanWebpackPlugin([distFolderPath])),
         isProduction(new webpack.optimize.UglifyJsPlugin({

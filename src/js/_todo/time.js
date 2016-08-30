@@ -11,9 +11,9 @@ define([
     '../../config/config',
     '../../nls/labels',
     '../../html/selectors/time.hbs',
-    "eonasdan-bootstrap-datetimepicker",
-    'amplifyjs'
-], function ($, log, _, ERR, EVT, C, i18n, template) {
+    'amplify-pubsub',
+    'eonasdan-bootstrap-datetimepicker'
+], function ($, log, _, ERR, EVT, C, i18n, template, amplify, DatetimePicker) {
 
     'use strict';
 
@@ -34,17 +34,24 @@ define([
         this._initVariables();
 
         this._renderSelector();
+        console.log(3)
 
         this._bindEventListeners();
+        console.log(5)
+
 
         this.printDefaultSelection();
+        console.log(6)
 
         //force async execution
         window.setTimeout(function () {
+            console.log(7)
 
             self.status.ready = true;
 
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+            console.log(8)
+
         }, 0);
 
         return this;
@@ -201,8 +208,16 @@ define([
 
     Time.prototype._renderSelector = function () {
 
-        this.$el.find(s.PICKER_CONTAINER).datetimepicker(
+        console.log("Prima")
+        console.log($.fn.datetimepicker)
+        console.log(DatetimePicker)
+
+        console.log('---------------------------------')
+
+
+        new DatetimePicker (
             $.extend(true, {
+                el : this.$el.find(s.PICKER_CONTAINER).datetimepicker,
                 icons: {
                     time: "icojam_time time-selector-icon",
                     date: "icojam_calendar_4 time-selector-icon",
@@ -211,6 +226,9 @@ define([
                 }
             }, /*here*/ this.selector.config) //add calculated properties
         );
+
+        console.log("dopo")
+
 
     };
 

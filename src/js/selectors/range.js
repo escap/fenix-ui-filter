@@ -9,9 +9,9 @@ define([
     '../../config/errors',
     '../../config/events',
     '../../config/config',
-    "ion-rangeslider",
-    'amplifyjs',
-], function ($, log, _, ERR, EVT, C) {
+    'amplify-pubsub',
+    "ion-rangeslider"
+], function ($, log, _, ERR, EVT, C, amplify) {
 
     'use strict';
 

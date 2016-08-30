@@ -11,9 +11,9 @@ define([
     '../../config/config',
     '../../html/selectors/dropdown.hbs',
     '../../nls/labels',
-    'amplifyjs',
+    'amplify-pubsub',
     'selectize'
-], function ($, log, _, ERR, EVT, C, template, i18n) {
+], function ($, log, _, ERR, EVT, C, template, i18n, amplify) {
 
     'use strict';
 
@@ -213,7 +213,7 @@ define([
 
         if ($el.length === 0) {
             log.info("Injecting template for: " + this.id);
-            this.$el.append(template($.extend(true, {}, i18n[this.lang], this, this.selector)));
+            this.$el.append(template($.extend(true, {}, i18n[this.lang.toLowerCase()], this, this.selector)));
         }
 
     };

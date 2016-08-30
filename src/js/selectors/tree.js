@@ -12,9 +12,9 @@ define([
     '../../nls/labels',
     '../../html/selectors/tree.hbs',
     '../../html/selectors/treeItem.hbs',
-    'amplifyjs',
+    'amplify-pubsub',
     "jstree"
-], function ($, log, _, ERR, EVT, C, i18n, template, templateItem) {
+], function ($, log, _, ERR, EVT, C, i18n, template, templateItem, amplify) {
 
     'use strict';
 
@@ -235,7 +235,8 @@ define([
         if ($el.length === 0) {
 
             log.info("Injecting template for: " + this.id);
-            this.$el.append(template($.extend(true, {}, i18n[this.lang], this, this.selector)));
+
+            this.$el.append(template($.extend(true, {}, i18n[this.lang.toLowerCase()], this, this.selector)));
         }
 
     };

@@ -12,8 +12,8 @@ define([
     '../../config/events',
     '../../config/config',
     'sortablejs',
-    'amplifyjs',
-], function ($, log, _, templateList, templateItem, ERR, EVT, C, SortableJS) {
+    'amplify-pubsub'
+], function ($, log, _, templateList, templateItem, ERR, EVT, C, SortableJS, amplify) {
 
     'use strict';
 
@@ -255,9 +255,7 @@ define([
             groupsObjs = v || this.groups,
             groups = Object.keys(this.groups),
             group,
-            $list,
-            item = $(templates).find(s.TEMPLATE_ITEM)[0].outerHTML,
-            list = $(templates).find(s.TEMPLATE_LIST)[0].outerHTML;
+            $list;
 
         //loop over groups
         _.each(groups, _.bind(function (name) {

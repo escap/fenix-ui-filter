@@ -1,7 +1,7 @@
-/* Fenix Common CSS */
+/*!* Fenix Common CSS *!
 @import '../../../fenix-ui-common/css/themes/fx-variables';
 
-/* Boostrap Queries */
+!* Boostrap Queries *!
 @import '../../../fenix-ui-common/css/themes/fx-bootstrap-queries';
 $fx-ui-common: '../../../fenix-ui-common/';
 
@@ -13,9 +13,6 @@ $fx-ui-common: '../../../fenix-ui-common/';
 @import '../../../fenix-ui-common/css/components/fx-buttons';
 @import '../../../fenix-ui-common/css/components/fx-icons';
 @import '../../../fenix-ui-common/css/vendor/fx-jstree';
-@import '../../../fenix-ui-common/css/components/fx-radio-checkbox';
+@import '../../../fenix-ui-common/css/components/fx-radio-checkbox';*/
 
-@import '../../src/css/filter';
-
-
-
+@import '../../../src/css/filter';

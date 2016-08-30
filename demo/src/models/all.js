@@ -402,7 +402,7 @@ define(function () {
             }
         },
 
-        time: {
+/*        time: {
 
             selector: {
                 id: "time",
@@ -429,7 +429,7 @@ define(function () {
                 hideSwitch: false,
                 hideRemoveButton: false
             }
-        }
+        }*/
 
     }
 

@@ -11,8 +11,8 @@ define([
     '../../config/errors',
     '../../config/events',
     '../../config/config',
-    'amplifyjs',
-], function ($, log, _, templateList, templateItem, ERR, EVT, C) {
+    'amplify-pubsub'
+], function ($, log, _, templateList, templateItem, ERR, EVT, C, amplify) {
 
     'use strict';
 
