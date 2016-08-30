@@ -17,8 +17,9 @@ define([
     'dev/src/models/setSources',
     'dev/src/models/amis',
     'dev/src/html/model-1-base.hbs',
-    'dev/src/nls/labels'
-], function (log, $, _, Filter, /* Utils, */Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels) {
+    'dev/src/nls/labels',
+    'handlebars'
+], function (log, $, _, Filter, /* Utils, */Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 

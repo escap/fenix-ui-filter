@@ -17,8 +17,9 @@ define([
     "fenix-ui-bridge",
     "fenix-ui-converter",
     "amplify-pubsub",
+    'handlebars',
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter, amplify) {
+], function ($, require, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter, amplify, Handlebars) {
 
     'use strict';
 
@@ -294,7 +295,7 @@ define([
             $(this).off();
         });
 
-        this.summary$el.html(templateSelector(model));
+        this.summary$el.html(templateSummary(model));
 
         //bind click listener
         this.summary$el.find(s.SUMMARY_ITEM).each(function () {
@@ -411,7 +412,7 @@ define([
 
     };
 
-    Filter.prototype._initVariables = function (plugin) {
+    Filter.prototype._initVariables = function () {
 
         this.semanticIds = [];
         this.semantics = {};
@@ -1254,7 +1255,7 @@ define([
 
                 } else {
 
-                    if (!Array.isArray(payload)){
+                    if (!Array.isArray(payload)) {
                         payload = [payload];
                     }
                     model[o.src] = payload;
@@ -1306,7 +1307,7 @@ define([
                 return typeof p === "object" ? p.value : p;
             });
 
-             result = result.join('","');
+            result = result.join('","');
 
             return result;
         }
