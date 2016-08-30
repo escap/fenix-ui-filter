@@ -1268,7 +1268,7 @@ define([
                 if (!process.params) {
                     process.params = {};
                 }
-                process.params.lang = this.lang;
+                process.params.language = this.lang;
 
                 this.bridge.getProcessedResource(process).then(
                     _.bind(function (result) {
