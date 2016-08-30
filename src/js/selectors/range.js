@@ -10,7 +10,7 @@ define([
     '../../config/events',
     '../../config/config',
     "ion-rangeslider",
-    "amplify"
+    'amplifyjs',
 ], function ($, log, _, ERR, EVT, C) {
 
     'use strict';

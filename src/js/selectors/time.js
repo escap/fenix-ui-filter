@@ -12,7 +12,7 @@ define([
     '../../nls/labels',
     '../../html/selectors/time.hbs',
     "eonasdan-bootstrap-datetimepicker",
-    "amplify"
+    'amplifyjs'
 ], function ($, log, _, ERR, EVT, C, i18n, template) {
 
     'use strict';

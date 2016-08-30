@@ -2,22 +2,22 @@ define([
     'loglevel',
     'jquery',
     'underscore',
-    'fenix-ui-filter',
+    '../../../src/js/index',
     /*'fx-common/utils',*/
-    'dev/models/model-1',
-    'dev/models/semantic',
-    'dev/models/fx-resource',
-    'dev/models/to-sync',
-    'dev/models/tab-table-toolbar-config',
-    'dev/models/fx-process',
-    'dev/models/aggregation',
-    'dev/models/model-2',
-    'dev/models/dependencies',
-    'dev/models/countrystat',
-    'dev/models/setSources',
-    'dev/models/amis',
-    'dev/html/model-1-base.hbs',
-    'dev/nls/labels'
+    'dev/src/models/model-1',
+    'dev/src/models/semantic',
+    'dev/src/models/fx-resource',
+    'dev/src/models/to-sync',
+    'dev/src/models/tab-table-toolbar-config',
+    'dev/src/models/fx-process',
+    'dev/src/models/aggregation',
+    'dev/src/models/model-2',
+    'dev/src/models/dependencies',
+    'dev/src/models/countrystat',
+    'dev/src/models/setSources',
+    'dev/src/models/amis',
+    'dev/src/html/model-1-base.hbs',
+    'dev/src/nls/labels'
 ], function (log, $, _, Filter, /* Utils, */Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels) {
 
     'use strict';
@@ -56,6 +56,14 @@ define([
         environment = 'production';
 
     function Dev() {
+
+        console.clear();
+
+        //trace, debug, info, warn, error, silent
+        log.setLevel('trace');
+
+        this.start();
+
     }
 
     Dev.prototype.start = function () {
@@ -351,6 +359,6 @@ define([
         return result;
     };
 
-    return new Test();
+    return new Dev();
 
 });

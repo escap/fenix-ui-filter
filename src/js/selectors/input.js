@@ -11,7 +11,7 @@ define([
     '../../config/errors',
     '../../config/events',
     '../../config/config',
-    "amplify"
+    'amplifyjs',
 ], function ($, log, _, templateList, templateItem, ERR, EVT, C) {
 
     'use strict';

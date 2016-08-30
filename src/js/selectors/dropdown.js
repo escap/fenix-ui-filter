@@ -11,7 +11,7 @@ define([
     '../../config/config',
     '../../html/selectors/dropdown.hbs',
     '../../nls/labels',
-    'amplify',
+    'amplifyjs',
     'selectize'
 ], function ($, log, _, ERR, EVT, C, template, i18n) {
 

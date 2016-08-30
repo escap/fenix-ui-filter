@@ -12,7 +12,7 @@ define([
     '../../nls/labels',
     '../../html/selectors/tree.hbs',
     '../../html/selectors/treeItem.hbs',
-    "amplify",
+    'amplifyjs',
     "jstree"
 ], function ($, log, _, ERR, EVT, C, i18n, template, templateItem) {
 

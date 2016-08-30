@@ -16,7 +16,7 @@ define([
     '../nls/labels',
     "fenix-ui-bridge",
     "fenix-ui-converter",
-    'amplify',
+    'amplifyjs',
     'bootstrap'
 ], function ($, require, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter) {
 
@@ -1745,7 +1745,7 @@ define([
             }
         });
 
-        $html = $(template($.extend(true, {classNames: classNames}, conf)));
+        $html = $(templateSelector($.extend(true, {classNames: classNames}, conf)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});

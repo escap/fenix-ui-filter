@@ -12,7 +12,7 @@ define([
     '../../config/events',
     '../../config/config',
     'sortablejs',
-    "amplify"
+    'amplifyjs',
 ], function ($, log, _, templateList, templateItem, ERR, EVT, C, SortableJS) {
 
     'use strict';

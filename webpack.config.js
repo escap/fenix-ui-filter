@@ -1,10 +1,9 @@
 var distFolderPath = "dist",
     demoFolderPath = "demo",
-    devFolderPath = "demo",
+    devFolderPath = "dev",
     webpack = require('webpack'),
     packageJson = require("./package.json"),
     CleanWebpackPlugin = require('clean-webpack-plugin'),
-    HtmlWebpackPlugin = require('html-webpack-plugin'),
     Path = require('path'),
     dependencies = Object.keys(packageJson.dependencies);
 
@@ -12,7 +11,7 @@ module.exports = {
 
     debug: isProduction(false, true),
 
-    devtool: isProduction('source-map', 'eval'),
+    devtool: 'eval',
 
     entry: getEntry(),
 
@@ -25,7 +24,7 @@ module.exports = {
         }
     },
 
-    externals: isDemo(undefined, dependencies),
+    externals: isProduction(dependencies, undefined),
 
     module: {
         loaders: [{test: /\.hbs$/, loader: "handlebars-loader"}]
@@ -34,16 +33,13 @@ module.exports = {
     plugins: clearArray([
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
+            amplify : "amplifyjs"
         }),
         isDemo(undefined, new CleanWebpackPlugin([distFolderPath])),
         isProduction(new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},
             output: {comments: false}
-        })),
-        isDemo(new HtmlWebpackPlugin({
-            filename: "../index.html",
-            template: "./demo/index.template.html"
         }))
     ])
 
@@ -90,7 +86,8 @@ function getOutput() {
             break;
         case "develop" :
             output = {
-                path: Path.join(__dirname, distFolderPath, devFolderPath),
+                path: Path.join(__dirname, devFolderPath, distFolderPath),
+                //publicPath: "/dev/",
                 filename: "index.js"
             };
             break;
