@@ -11,7 +11,7 @@ module.exports = {
 
     debug: isProduction(false, true),
 
-    devtool: 'eval',
+    devtool: isProduction('source-map', 'eval'),
 
     entry: getEntry(),
 
@@ -20,21 +20,21 @@ module.exports = {
     resolve: {
         root: Path.resolve(__dirname),
         alias: {
-            handlebars: 'handlebars/dist/handlebars.min.js'
+            handlebars: 'handlebars/dist/handlebars.min.js',
+            jquery: Path.join(__dirname, 'node_modules/jquery/dist/jquery')
         }
     },
 
     externals: isProduction(dependencies, undefined),
 
     module: {
-        loaders: [{test: /\.hbs$/, loader: "handlebars-loader"}]
+        loaders: [
+            {test: /\.hbs$/, loader: "handlebars-loader"},
+            {test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'}
+        ]
     },
 
     plugins: clearArray([
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
-        }),
         isDemo(undefined, new CleanWebpackPlugin([distFolderPath])),
         isProduction(new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},

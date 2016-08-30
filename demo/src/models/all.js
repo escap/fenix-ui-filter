@@ -1,6 +1,9 @@
 /*global define*/
 
-define(function () {
+define([
+        'jquery'
+    ],
+    function ($) {
 
     'use strict';
 
@@ -402,7 +405,7 @@ define(function () {
             }
         },
 
-/*        time: {
+        time: {
 
             selector: {
                 id: "time",
@@ -429,7 +432,7 @@ define(function () {
                 hideSwitch: false,
                 hideRemoveButton: false
             }
-        }*/
+        }
 
     }
 

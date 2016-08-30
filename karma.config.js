@@ -2,8 +2,10 @@ var Path = require('path'),
     webpackConfig = require('./webpack.config');
 
 var preprocessors = {};
-preprocessors["../../src/*.js"] = ['webpack'];
-preprocessors["../../test/*.js"] = ['webpack'];
+preprocessors[Path.join(__dirname, "./src/*.js")] = ['webpack'];
+preprocessors[Path.join(__dirname, "./test/*.js")] = ['webpack'];
+
+console.log(Path.join(__dirname,"./src/**/*.js"))
 
 module.exports = function (config) {
 

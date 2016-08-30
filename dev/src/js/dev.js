@@ -5,6 +5,7 @@ define([
     '../../../src/js/index',
     /*'fx-common/utils',*/
     'dev/src/models/model-1',
+    'dev/src/models/all',
     'dev/src/models/semantic',
     'dev/src/models/fx-resource',
     'dev/src/models/to-sync',
@@ -19,7 +20,7 @@ define([
     'dev/src/html/model-1-base.hbs',
     'dev/src/nls/labels',
     'handlebars'
-], function (log, $, _, Filter, /* Utils, */Model1, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, /* Utils, */Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
 
@@ -85,6 +86,14 @@ define([
         });
     };
 
+    Dev.prototype._renderAll = function () {
+
+        var filter = this.createFilter({
+            items: AllModel,
+            el: s.AMIS
+        });
+    };
+
     Dev.prototype._renderAmis = function () {
 
         var filter = this.createFilter({
@@ -131,7 +140,7 @@ define([
 
     Dev.prototype._render = function () {
 
-        this._renderAmis();
+        this._renderAll();
 
         return;
 
