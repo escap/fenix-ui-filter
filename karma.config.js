@@ -1,17 +1,14 @@
-var Path = require('path'),
-    webpackConfig = require('./webpack.config');
+var webpackConfig = require('./webpack.config');
 
 var preprocessors = {};
-preprocessors[Path.join(__dirname, "./src/*.js")] = ['webpack'];
-preprocessors[Path.join(__dirname, "./test/*.js")] = ['webpack'];
-
-console.log(Path.join(__dirname,"./src/**/*.js"))
+preprocessors["src/**/*.js"] = ['webpack', 'coverage'];
+preprocessors["test/**/*.js"] = ['webpack'];
 
 module.exports = function (config) {
 
     config.set({
 
-        basePath: Path.resolve(__dirname, './src/js'),
+        basePath: __dirname,
 
         frameworks: ['chai', 'mocha'],
 
@@ -21,7 +18,10 @@ module.exports = function (config) {
 
         autoWatchBatchDelay: 300,
 
-        files: Object.keys(preprocessors),
+        files: [
+            "./test/**/*.js"
+         //   "./src/js/index.js"
+        ],
 
         exclude: [],
 
@@ -38,6 +38,16 @@ module.exports = function (config) {
 
         browserNoActivityTimeout: 180000,
 
+        reporters : ['progress', 'coverage'],
+
+        coverageReporter: {
+            reporters: [
+                {type: 'lcov', dir: 'coverage/', subdir: '.'},
+                {type: 'json', dir: 'coverage/', subdir: '.'},
+                {type: 'text-summary'}
+            ]
+        },
+
         plugins: [
             'karma-webpack',
             'karma-mocha',
@@ -48,35 +58,3 @@ module.exports = function (config) {
         ]
     });
 };
-
-
-// utils
-
-function isTest(valid, invalid) {
-
-    return isEnvironment('develop') ? valid : invalid;
-}
-
-function isEnvironment(env) {
-    return process.env.NODE_ENV === env;
-}
-
-/* Coverage and report
-
- //
- /!*reporters: getReporters(),
- coverageReporter: {
- reporters: [
- {type: 'lcov', dir: 'coverage/', subdir: '.'},
- {type: 'json', dir: 'coverage/', subdir: '.'},
- {type: 'text-summary'}
- ]
- },*!/
-
- function getReporters() {
- var reps = ['progress'];
- if (coverage) {
- reps.push('coverage');
- }
- return reps;
- }*/

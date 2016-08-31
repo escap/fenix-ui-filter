@@ -240,9 +240,7 @@ define([
 
         if ($list.length === 0) {
             log.info("Injecting input list");
-            var $list = $(templateList({
-                    isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
-                }));
+            var $list = $(templateList({ isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')}));
 
             this.$el.append($list);
 

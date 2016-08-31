@@ -1,16 +1,9 @@
 /*global describe, it, require*/
-//var Filter = require("../src/js/index");
+var Component = require("../src/js/index"),
+    $ = require("jquery");
 
-describe("Converter", function () {
-    it("should be true", function () {
-        //expect(Filter).to.exist;
-        expect(true).to.be.true;
-    });
-});
-
-describe("Converter", function () {
+describe("Filter", function () {
     it("should be not null", function () {
-        //expect(Filter).to.exist;
-        expect(true).to.be.not.null;
+        expect(Component).to.be.not.null;
     });
 });

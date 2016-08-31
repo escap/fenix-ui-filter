@@ -57,7 +57,7 @@ function getEntry() {
             entry["app"] = ["dev/src/js/dev.js"];
             break;
         default :
-            entry["app"] = ["src/js/index.js"];
+            entry["app"] = ["./src/js/index.js"];
     }
 
     return entry;
@@ -93,10 +93,9 @@ function getOutput() {
         default :
             output = {
                 path: Path.join(__dirname, distFolderPath),
-                filename: packageJson.name + ".js",
-                chunkFilename: 'chunk-[id].' + packageJson.name + '.js',
-                libraryTarget: 'amd'
+                filename: "index.js"
             };
+            break;
     }
 
     return output;

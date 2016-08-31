@@ -1707,7 +1707,7 @@ define([
 
         }, this));
 
-        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels[this.lang]);
+        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels[this.lang.toLowerCase()]);
 
         _.each(model, function (value, key) {
             if (value === true) {
