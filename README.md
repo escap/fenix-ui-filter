@@ -319,7 +319,7 @@ NB: not all dependencies are compatible with all the available selectors. Check 
 - `focus` : if the payload value is equal to the selector id, set the selector state to focused
 - `ensure_unset` : ensure that the payload value is not selected in the specific selector
 - `disable` : disable selector
-- `process` : use a D3P process to populate a selector. The dependency configuration will be `[{id: "process", event:"...", args : { uid: <resource_uid>, version: <resource_version>, body: <place_d3p_process_here>, indexValueColumn: <number>, indexLabelColumn: <number>, payloadIncludes: [ <selector_id>, <"@all"> ]}]` and if the string `{{codes}}` will be found within the `<place_d3p_process_here>` it will be replaced with the concatenation of the codes that triggered the dependency call.
+- `process` : use a D3P process to populate a selector. The dependency configuration will be `[{id: "process", event:"...", args : { uid: <resource_uid>, version: <resource_version>, body: <place_d3p_process_here>, indexValueColumn: <number>, indexLabelColumn: <number>, payloadIncludes: [ <selector_id>, <"@all"> ]}]` and if the string `{{{codes}}}` (NB: three brackets!) will be found within the `<place_d3p_process_here>` it will be replaced with the concatenation of the codes that triggered the dependency call.
 
 ### Available events
 

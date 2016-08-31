@@ -1239,10 +1239,9 @@ define([
 
                 templ = Handlebars.compile(body);
 
-                if (o.args.hasOwnProperty("payloadIncludes")) {
+                if (process.hasOwnProperty("payloadIncludes")) {
 
-                    var selectors = _.without(this._getModelValues(o.args.payloadIncludes), o.target);
-
+                    var selectors = _.without(this._getModelValues(process.payloadIncludes), o.target);
                     log.info("Selectors included in process: " + JSON.stringify(selectors));
 
                     var values = this.getValues(null, selectors) || {};
@@ -1278,10 +1277,10 @@ define([
                         var data = Array.isArray(result.data) ? result.data : [],
                             source = [];
 
-                        _.each(data.data, function (s) {
+                        _.each(data, function (s) {
                             source.push({
-                                value: s[o.args.indexValueColumn || 0],
-                                label: s[o.args.indexLabelColumn || 1]
+                                value: s[process.indexValueColumn || 0],
+                                label: s[process.indexLabelColumn || 1]
                             });
                         });
 
