@@ -21,7 +21,7 @@ module.exports = {
         root: Path.resolve(__dirname),
         alias: {
             handlebars: 'handlebars/dist/handlebars.min.js',
-            jquery: Path.join(__dirname, 'node_modules/jquery/dist/jquery')
+            jquery: Path.join(__dirname, 'node_modules/jquery/dist/jquery') //neede by eonasdan-bootstrap-datetimepicker
         }
     },
 
@@ -30,11 +30,11 @@ module.exports = {
     module: {
         loaders: [
             {test: /\.hbs$/, loader: "handlebars-loader"},
-            {test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'}
-        ]
+            {test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'}]
     },
 
     plugins: clearArray([
+        new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery"}),
         isDemo(undefined, new CleanWebpackPlugin([distFolderPath])),
         isProduction(new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},

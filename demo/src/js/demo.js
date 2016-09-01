@@ -58,8 +58,6 @@ define([
             summaryEl: s.ALL_SUMMARY
         });
 
-        console.log(filter)
-
     };
 
     return new Demo();
