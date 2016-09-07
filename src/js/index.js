@@ -447,7 +447,7 @@ define([
         });
 
         //force to do not chunk codes
-        return require(codePluginsFolder + this.corePlugins[0]);
+        return require(codePluginsFolder + this.corePlugins[0] + ".js");
     };
 
     Filter.prototype._initDynamicVariables = function () {
@@ -1583,7 +1583,7 @@ define([
 
     Filter.prototype._getSelectorRender = function (name, callback) {
 
-        return require([this._getSelectorScriptPath(name)], callback);
+        return require([this._getSelectorScriptPath(name)+ ".js"], callback);
     };
 
     Filter.prototype._getActiveSelectorBySemantic = function (name) {
