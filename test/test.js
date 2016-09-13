@@ -78,7 +78,8 @@ require([
                     i18n: "{FENIX_CDN}/js/requirejs/plugins/i18n/2.0.4/i18n",
                     text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
 
-                    loglevel: '{FENIX_CDN}/js/loglevel/1.4.0/loglevel'
+                    loglevel: '{FENIX_CDN}/js/loglevel/1.4.0/loglevel',
+                    moment : '{FENIX_CDN}/js/moment/2.12.0/min/moment.min'
 
                 },
 
