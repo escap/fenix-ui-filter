@@ -19,7 +19,12 @@ define([
     var defaultOptions = {
             selector: {
                 hideSelectAllButton: true,
-                hideClearAllButton : true
+                hideClearAllButton : true,
+                emptyOption : {
+                    enabled: false,
+                    text: "All",
+                    value: "all"
+                }
             }
         },
         s = {
@@ -310,6 +315,11 @@ define([
 
         for (var i = config.to; i >= config.from; i--) {
             data.push({value: i.toString(), text: i.toString()});
+        }
+
+        // Add Empty Option
+        if(config.emptyOption.enabled){
+            data.splice(0,0,{value:config.emptyOption.value,  text:config.emptyOption.text,  parent:"#"});
         }
 
         opt = $.extend(true, {}, selectize, {
