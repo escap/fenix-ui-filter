@@ -52,6 +52,8 @@ define([
         log.info("FENIX filter");
         log.info(o);
 
+        require("../css/fenix-ui-filter.css");
+
         $.extend(true, this, C, {initial: o}, defaultOptions);
 
         this._parseInput(o);

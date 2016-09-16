@@ -3,6 +3,8 @@ var distFolderPath = "dist",
     devFolderPath = "dev",
     webpack = require('webpack'),
     packageJson = require("./package.json"),
+    ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    HtmlWebpackPlugin = require('html-webpack-plugin'),
     CleanWebpackPlugin = require('clean-webpack-plugin'),
     Path = require('path'),
     dependencies = Object.keys(packageJson.dependencies);
@@ -20,7 +22,7 @@ module.exports = {
     resolve: {
         root: Path.resolve(__dirname),
         alias: {
-            handlebars: 'handlebars/dist/handlebars.min.js',
+            handlebars: Path.join(__dirname, 'node_modules/handlebars/dist/handlebars.js'),
             jquery: Path.join(__dirname, 'node_modules/jquery/dist/jquery') //neede by eonasdan-bootstrap-datetimepicker
         }
     },
@@ -29,18 +31,30 @@ module.exports = {
 
     module: {
         loaders: [
+            {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
             {test: /\.hbs$/, loader: "handlebars-loader"},
-            {test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'}]
+            {test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'},
+            {test: /\.(jpe?g|png|gif|svg)$/i,
+                loaders: [
+                    'file?hash=sha512&digest=hex&name=[hash].[ext]',
+                    'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                ]
+            }]
     },
 
     plugins: clearArray([
-        new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery"}),
-        isDemo(undefined, new CleanWebpackPlugin([distFolderPath])),
         isProduction(new webpack.optimize.UglifyJsPlugin({
             compress: {warnings: false},
             output: {comments: false}
+        })),
+        new ExtractTextPlugin(packageJson.name + '.min.css'),
+        isDevelop(new HtmlWebpackPlugin({
+            inject: "body",
+            template: devFolderPath + "/index.template.html"
         }))
     ])
+
+
 
 };
 
