@@ -551,6 +551,7 @@ define([
         }, this));
 
         amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this, this._onSelectorItemSelect);
+        amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_CLICK), this, this._onSelectorItemClick);
         amplify.subscribe(this._getEventName(EVT.SELECTOR_DISABLED), this, this._updateSummary);
         amplify.subscribe(this._getEventName(EVT.SELECTOR_ENABLED), this, this._updateSummary);
         amplify.subscribe(this._getEventName(EVT.ITEM_REMOVED), this, this._onRemoveItem);
@@ -1430,6 +1431,15 @@ define([
         }
 
         this._updateSummary();
+    };
+
+
+    Filter.prototype._onSelectorItemClick = function (values) {
+
+        if (this.ready === true) {
+            this._trigger('click', values);
+        }
+
     };
 
     Filter.prototype._addSelector = function (name, obj) {
