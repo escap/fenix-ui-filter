@@ -59,6 +59,8 @@ define([
 
     function Dev() {
 
+        this._importThirdPartyCss();
+
         console.clear();
 
         //trace, debug, info, warn, error, silent
@@ -367,6 +369,23 @@ define([
             if (Math.random() < 1 / ++count)
                 result = prop;
         return result;
+    };
+
+    // utils
+
+    Dev.prototype._importThirdPartyCss = function () {
+
+        //Bootstrap
+        require("bootstrap-loader");
+        //dropdown selector
+        require("../../../node_modules/selectize/dist/css/selectize.bootstrap3.css");
+        //tree selector
+        require("../../../node_modules/jstree/dist/themes/default/style.min.css");
+        //range selector
+        require("../../../node_modules/ion-rangeslider/css/ion.rangeSlider.skinHTML5.css");
+        //time selector
+        require("../../../node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css");
+
     };
 
     return new Dev();
