@@ -413,6 +413,7 @@ Wrapped lib: [ion.rangeSlider.js](http://ionden.com/a/plugins/ion.rangeSlider/en
 ...
 selector : {
     ...
+    format: "YYYY/MM/DD", //any moment js format
     config: {
         min: 100, /min range
         max: 200, // max range

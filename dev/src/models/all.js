@@ -8,7 +8,6 @@ define([
         'use strict';
 
         return {
-/*
             checkbox: {
 
                 selector: {
@@ -403,7 +402,7 @@ define([
                     hideSwitch: false,
                     hideRemoveButton: false
                 }
-            },*/
+            },
 
             time: {
 
@@ -419,7 +418,7 @@ define([
                 }
             },
 
-           /* timeDisabled: {
+            timeDisabled: {
 
                 selector: {
                     id: "time",
@@ -432,7 +431,7 @@ define([
                     hideSwitch: false,
                     hideRemoveButton: false
                 }
-            }*/
+            }
 
         }
 
