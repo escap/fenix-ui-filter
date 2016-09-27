@@ -1124,6 +1124,7 @@ define([
 
     Filter.prototype._dep_min = function (payload, o) {
         log.info("_dep_min invokation");
+        log.info(payload);
         log.info(o);
 
         this._callSelectorInstanceMethod(o.target, "_dep_min", {data: payload});
