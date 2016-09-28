@@ -180,8 +180,8 @@ define([
 
         source = _.map(source, function (d) {
             return {
-                value: d.value,
-                text: d.label
+                id: d.value || d.id,
+                text: d.label || d.text
             }
         });
 
@@ -285,7 +285,6 @@ define([
                 });
             }
         }
-
         return data;
     };
 
@@ -301,6 +300,7 @@ define([
 
         _.each(fxResource, _.bind(function (item) {
 
+
             if (!_.contains(bl, item.code.toString())) {
 
                 data.push({
@@ -308,6 +308,7 @@ define([
                     text: item.title[selector.lang],
                     parent: parent || '#'
                 });
+
 
                 if (Array.isArray(item.children) && item.children.length > 0) {
                     data = _.union(data, this._buildTreeModelFromCodelist(item.children, item.code, cl));
@@ -326,28 +327,6 @@ define([
             if (a.text > b.text) return 1;
             return 0;
         });
-
-
-        //Merge static static data
-        if (this.selector.data) {
-
-            var staticData = this.selector.data;
-
-            if (!Array.isArray(data)) {
-                log.error(ERR.INVALID_DATA);
-            } else {
-
-                var convertedData = staticData.map(function (i) {
-                    return {id: i.value, text: i.text, parent: '#'};
-                });
-
-                data = _.uniq(_.union(this.data || [], data), false, function (item, key, a) {
-                    return item.a;
-                });
-
-            }
-
-        }
 
         return data;
     };
@@ -615,13 +594,18 @@ define([
             tree;
 
         _.each(data, function (item) {
-            model = _.unique(model.concat(item.children));
+            model.push(item);
+            model.concat(item.children)
         });
+
+        model = _.unique(model);
 
         if ($container.length > 0 && Array.isArray(model)) {
 
             tree = $container.find(s.TREE_CONTAINER).jstree(true);
+
             var treeData = this._buildTreeModel(model, null);
+
             this.setSource(treeData);
 
         } else {
