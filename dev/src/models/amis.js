@@ -1,6 +1,6 @@
 /*global define*/
 
-define(function () {
+define(["moment"],function (moment) {
 
     'use strict';
 
@@ -161,12 +161,32 @@ define(function () {
 
                     selector: {
                         id: "range",
+                        //config: {
+                        //    min: 2011,
+                        //    max: 2014,
+                        //    from: 2012,
+                        //    to: 2013,
+                        //    type: "double"
+                        //}
+                        //config: {
+                        //    type: "double",
+                        //    min: +moment().subtract(1, "years").format("X"),
+                        //    max: +moment().format("X"),
+                        //    from: +moment().subtract(6, "months").format("X"),
+                        //    prettify: function (num) {
+                        //        console.log(num)
+                        //        return moment(num, "X").format("LL");
+                        //    }
+                        //}
                         config: {
-                            min: 2011,
-                            max: 2014,
-                            from: 2012,
-                            to: 2013,
-                            type: "double"
+                            type: "double",
+                            min: +moment('2011-01-01').format("X"),
+                            max: +moment('2014-01-01').format("X"),
+                            from: +moment('2012-01-01').format("X"),
+                            to: +moment('2013-01-01').format("X"),
+                            prettify: function (num) {
+                                return moment(num, "X").format("MM/YYYY");
+                            }
                         }
                     },
 

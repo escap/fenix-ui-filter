@@ -16,7 +16,12 @@ define([
     var defaultOptions = {
             selector: {
                 hideSelectAllButton: true,
-                hideClearAllButton : true
+                hideClearAllButton : true,
+                emptyOption : {
+                    enabled: false,
+                    text: "All",
+                    value: "all"
+                }
             }
         },
         s = {
@@ -308,6 +313,11 @@ define([
             data.push({value: i.toString(), text: i.toString()});
         }
 
+        // Add Empty Option
+        if(config.emptyOption.enabled){
+            data.splice(0,0,{value:config.emptyOption.value,  text:config.emptyOption.text,  parent:"#"});
+        }
+
         opt = $.extend(true, {}, selectize, {
             options: data
         });
@@ -376,7 +386,14 @@ define([
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), result);
                 amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT), {id: self.id, values: self.getValues()});
             }
+            
+        });
 
+
+        this.$el.find('.selectize-control').on('click', function () {
+            if (self.status.ready === true) {
+                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_CLICK), {id: self.id});
+            }
         });
 
         this.$el.find(s.CLEAR_ALL_CONTAINER).on("click", function () {

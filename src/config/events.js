@@ -8,6 +8,7 @@ define(function () {
 
         SELECTORS_READY: prefix + "selectors.ready",
         SELECTORS_ITEM_SELECT: prefix + "selectors.select.",
+        SELECTORS_ITEM_CLICK: prefix + "selectors.click.",
         SELECTOR_READY: prefix + "selector.ready",
         SELECTOR_DISABLED: prefix + "selector.disabled.",
         SELECTOR_ENABLED: prefix + "selector.enabled.",

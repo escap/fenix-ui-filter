@@ -53,17 +53,23 @@ define([
             result = {
                 values: [],
                 labels: {}
-            };
+            },
+            from, to;
+
+        from = this.selector.format ? moment(values.from,"X").format(this.selector.format) : values.from;
 
         //add always from
-        result.values.push(values.from);
+        result.values.push(from);
         result.labels[values.from] = 'From';
 
         //add to is double slider
         if (this.selector.config && this.selector.config.type === "double") {
             result.values = [];
-            result.values.push({value: values.to, parent: 'to'});
-            result.values.push({value: values.from, parent: 'from'});
+            to = this.selector.format ? moment(values.to,"X").format(this.selector.format) : values.to;
+            from = this.selector.format ? moment(values.from,"X").format(this.selector.format) : values.from;
+
+            result.values.push({value: to, parent: 'to'});
+            result.values.push({value: from, parent: 'from'});
             result.labels[values.to] = 'To';
         }
 
@@ -294,6 +300,7 @@ define([
 
             }, self)
         }, this.selector.config));
+
 
     };
 
