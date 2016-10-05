@@ -486,7 +486,16 @@ define([
         var v = from > originalValue ? from : originalValue;
 
         if (v) {
-            instance.setValue(v.toString());
+            var found = _.find(data, function(option){
+                return option.value === v
+            });
+
+            if(found) {
+                instance.setValue(v.toString());
+            }
+            else {
+                this.printDefaultSelection();
+            }
         }
 
     };
