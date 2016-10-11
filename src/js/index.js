@@ -1,6 +1,5 @@
 define([
     'jquery',
-    'require',
     'underscore',
     'loglevel',
     '../config/errors',
@@ -15,7 +14,7 @@ define([
     "amplify-pubsub",
     'handlebars',
     'bootstrap'
-], function ($, require, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter, amplify, Handlebars) {
+], function ($, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter, amplify, Handlebars) {
 
     'use strict';
 
