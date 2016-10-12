@@ -8,7 +8,7 @@ define([
     'amplify-pubsub',
     "moment",
     "ion-rangeslider"
-], function ($, log, _, ERR, EVT, C, amplify, moment) {
+], function ($, log, _, ERR, EVT, C, amplify) {
 
     'use strict';
 
