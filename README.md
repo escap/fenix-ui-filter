@@ -58,27 +58,7 @@ Check `fx-filter/config/config.js` to have a look of the default configuration.
       <tr>
          <td>pluginRegistry</td>
          <td>object</td>
-         <td>{
-            'dropdown': {
-            path: selectorPath + 'dropdown'
-            },
-            'tree': {
-            path: selectorPath + 'tree'
-            },
-            'input': {
-            path: selectorPath + 'input'
-            },
-            'range': {
-            path: selectorPath + 'range'
-            },
-            'time': {
-            path: selectorPath + 'time'
-            },
-            'sortable': {
-            path: selectorPath + 'sortable'
-            }
-            }
-         </td>
+         <td>{ }</td>
          <td>-</td>
          <td>Keyset: plugins' ids. Value: object. path: plugin module path</td>
       </tr>
@@ -401,6 +381,22 @@ Wrapped lib: native HTML elements
 selector : {
     ...
     type : "...", // to specify the input type. Every HTML input type is allowed
+}
+...
+```
+
+## Textarea
+Wrapped lib: native HTML elements
+
+```javascript
+//specific configuration
+...
+selector : {
+    ...
+    config : {
+        row: 100,
+        cols: 150
+    }
 }
 ...
 ```

@@ -64,7 +64,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('trace');
+        log.setLevel('silent');
 
         this.start();
 
@@ -118,7 +118,7 @@ define([
 
         var filter = this.createFilter({
             items: Model2,
-            el: s.MODEL_2
+            el: s.AMIS
         });
     };
 
@@ -142,9 +142,11 @@ define([
 
     Dev.prototype._render = function () {
 
-        this._renderAll();
+        this._renderModel2();
 
         return;
+
+        this._renderAll();
 
         this._renderDependencies();
 
@@ -153,8 +155,6 @@ define([
         this._renderCountrystat();
 
         this._renderEvents();
-
-        this._renderModel2();
 
         this._renderSynch();
 

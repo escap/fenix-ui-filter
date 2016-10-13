@@ -6,7 +6,7 @@ define(function () {
 
         validityTimeout: 10000, //10 secs
 
-        corePlugins : ['dropdown', 'tree', 'input', 'range', 'time', 'sortable'],
+        corePlugins : ['dropdown', 'tree', 'input', 'range', 'time', 'sortable', 'textarea'],
 
         pluginRegistry: { },
 

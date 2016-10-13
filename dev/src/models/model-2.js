@@ -6,14 +6,22 @@ define(function () {
 
     return {
 
-        "Year": {
-            "selector": {
-                "config": {}, "id": "tree", "from": 1960, "to": 2016,
-                hideSummary : true},
-            "format": {"output": "time", "dimension": "Year"},
-            "template": {"title": "Year"}
+        textarea: {
+            selector: {
+                id: "textarea",
+                source : [{value: "Label", label: "Label"}],
+                default : "Hello world!",
+                config : {
+                    //rows : 100
+                }
+            },
+            template: {
+                title: "Year",
+                hideRemoveButton: false,
+                hideSwitch: false,
+                hideHeaderIcon: false
+            }
         }
     }
-
 
 });
