@@ -459,6 +459,11 @@ define([
 
     Dropdown.prototype._updateDropdown = function (data) {
 
+        // Add Empty Option
+        if(this.selector.emptyOption.enabled){
+           data.splice(0,0,{value:this.selector.emptyOption.value,  text:this.selector.emptyOption.text,  parent:"#"});
+        }
+
         var originalValue = this.getValues().values[0],
             instance = this.dropdown[0].selectize;
 
@@ -477,7 +482,16 @@ define([
         var v = from > originalValue ? from : originalValue;
 
         if (v) {
-            instance.setValue(v.toString());
+            var found = _.find(data, function(option){
+                return option.value === v
+            });
+
+            if(found) {
+                instance.setValue(v.toString());
+            }
+            else {
+                this.printDefaultSelection();
+            }
         }
 
     };
@@ -494,6 +508,11 @@ define([
     Dropdown.prototype._dep_process = function (opts) {
 
         var data = opts.data || [];
+
+        // Add Empty Option
+       // if(this.selector.config.emptyOption.enabled){
+           // data.splice(0,0,{value:this.selector.emptyOption.value,  text:this.selector.emptyOption.text,  parent:"#"});
+       // }
 
         this.setSource(data);
 
