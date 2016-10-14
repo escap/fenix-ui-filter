@@ -1176,6 +1176,7 @@ define([
         if (this.selectors[o.target]) {
 
             var c = this.selectors[o.target].cl;
+            var selector = this.selectors[o.target].selector;
 
             if (c) {
 
@@ -1188,9 +1189,26 @@ define([
 
                 c.codes = [];
 
-                _.each(payload, function (item) {
-                    c.codes.push(item.value);
-                });
+                // skip empty option as it does not exist in the code list
+               if(selector && selector.emptyOption) {
+
+                    if(selector.emptyOption.enabled) {
+                        _.each(payload, function (item) {
+                            if(selector.emptyOption.value && selector.emptyOption.value !== item.value )
+                                c.codes.push(item.value);
+                        });
+                    }
+                    else {
+                        _.each(payload, function (item) {
+                           c.codes.push(item.value);
+                        });
+                    }
+                } else {
+                    _.each(payload, function (item) {
+                        c.codes.push(item.value);
+                    });
+                }
+
 
                 this._getPromise(c).then(
                     _.bind(function (data) {
