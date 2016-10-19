@@ -178,7 +178,7 @@ This is the schema of a selector configuration
      
     selector : {}, // configuration of the selector
     
-    selectors : {}, // in case of semantic selector 
+    selectors : {}, // in case of group selector 
     
     cl : {}, // specifies the code-list to use as selector source
      
@@ -462,15 +462,22 @@ summaryRender : function ( item ) {} // custom summary render function
 ...
 ```
 
-# Semantic
+# Groups
 
-It is possible to define a semantic selector. A semantic selector is a group of selectors in which only one
+It is possible to define a group selector. There are two kind of group selectors:
+- standard group selector 
+- semantic group selector 
+
+A standard group selector is a group of selectors in each selector is active at the same time. It is a selector that contains many selectors. 
+This is useful, for example, when a specific information can be described with different attributes (e.g. contact information contains name, surname, role, etc.).
+
+A semantic group selector is a group of selectors in which only one
  can be active. This is useful, for example, when a specific information can be selected in different manners (e.g. time selection, 
  with a calendar or a range).
  
 # Filter layout definition
 It is possible to specify where a selector has to be rendered.
-FENIX Filter looks for `data-selector=":id"` or `data-semantic=":id"` where `:id` is the selector/semantic id within its `el`.
+FENIX Filter looks for `data-selector=":id"` or `data-group=":id"` where `:id` is the selector/group id within its `el`.
 In case no container will be found, FENIX filter will add (append/prepend according to configuration) the container to its `el`.
 
 It is possible to pass an HTML template using the `template` configuration that will be attached to the `el`.

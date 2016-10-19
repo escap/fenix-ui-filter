@@ -6,7 +6,8 @@ define([
     '../config/events',
     '../config/config',
     '../html/selector.hbs',
-    '../html/semantic.hbs',
+    '../html/group.hbs',
+    '../html/semanticGroup.hbs',
     '../html/summary.hbs',
     '../nls/labels',
     "fenix-ui-bridge",
@@ -14,7 +15,7 @@ define([
     "amplify-pubsub",
     'handlebars',
     'bootstrap'
-], function ($, _, log, ERR, EVT, C, templateSelector, templateSemantic, templateSummary, i18nLabels, Bridge, Converter, amplify, Handlebars) {
+], function ($, _, log, ERR, EVT, C, templateSelector, templateGroup, templateSemanticGroup, templateSummary, i18nLabels, Bridge, Converter, amplify, Handlebars) {
 
     'use strict';
 
@@ -28,19 +29,19 @@ define([
             SELECTORS_CLASS: ".fx-selector",
             SELECTOR_DISABLED_CLASS: "fx-selector-disabled",
             SELECTORS: "[data-selector]",
-            SEMANTICS: "[data-semantic]",
+            GROUPS: "[data-group]",
             TREE_CONTAINER: "[data-role='tree']",
             FILTER_CONTAINER: "[data-role='filter']",
             CLEAR_ALL_CONTAINER: "[data-role='clear']",
             AMOUNT_CONTAINER: "[data-role='amount']",
             COMPARE_RADIO_BTNS: "input:radio[name='compare']",
             COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
-            ACTIVE_TAB: "ul[data-semantic-list] li.active",
-            SEMANTIC_TABS: "[data-semantic] a[data-toggle='tab']",
+            ACTIVE_TAB: "ul[data-group-list] li.active",
+            GROUP_TABS: "[data-group] a[data-toggle='tab']",
             SWITCH: "input[data-role='switch'][name='disable-selector']",
             TEMPLATE_SELECTOR: "[data-template-selector]",
             TEMPLATE_SELECTOR_CONTAINER: "[data-container]",
-            TEMPLATE_SEMANTIC: "[data-template-semantic]",
+            TEMPLATE_GROUP: "[data-template-group]",
             TEMPLATE_SUMMARY: "[data-summary]",
             SUMMARY_ITEM: "[data-code]",
             REMOVE_BTN: "[data-role='remove']",
@@ -191,7 +192,7 @@ define([
      */
     Filter.prototype.clear = function () {
 
-        _.each(this.semanticIds, _.bind(function (id) {
+        _.each(this.groupIds, _.bind(function (id) {
             this.remove(id);
         }, this));
 
@@ -318,8 +319,8 @@ define([
 
                     if (Array.isArray(obj) && obj.length > 0) {
 
-                        var id = this.semantic2selectors[name][0],
-                            model = this.selectors[id] || this.semantics[id];
+                        var id = this.group2selectors[name][0],
+                            model = this.selectors[id] || this.groups[id];
 
                         var s = {
                             label: model.template ? model.template.title : "",
@@ -411,13 +412,13 @@ define([
 
     Filter.prototype._initVariables = function () {
 
-        this.semanticIds = [];
-        this.semantics = {};
-        this.semanticToResolve = [];
+        this.groupIds = [];
+        this.groups = {};
+        this.groupToResolve = [];
 
         this.selectors = {};
-        this.semantic2selectors = {};
-        this.selector2semantic = {};
+        this.group2selectors = {};
+        this.selector2group = {};
         this.selectorTypes = [];
 
         this.dependeciesToDestory = [];
@@ -458,7 +459,7 @@ define([
         this.codelists = _.uniq(this.codelists);
         this.enumerations = _.uniq(this.enumerations);
 
-        this.$tabs = this.$el.find(s.SEMANTIC_TABS);
+        this.$tabs = this.$el.find(s.GROUP_TABS);
 
         this.$switches = this.$el.find(s.SWITCH);
 
@@ -467,21 +468,21 @@ define([
     Filter.prototype._removeItemReferences = function (id) {
 
         //remove id from result
-        this.semanticIds = _.without(this.semanticIds, id);
+        this.groupIds = _.without(this.groupIds, id);
 
-        if (this.semantics.hasOwnProperty(id)) {
+        if (this.groups.hasOwnProperty(id)) {
 
-            var semantic = $.extend(true, {}, this.semantics[id]);
+            var group = $.extend(true, {}, this.groups[id]);
 
-            _.each(semantic.selectors, _.bind(function (v, k) {
+            _.each(group.selectors, _.bind(function (v, k) {
                 this._removeSelectorReferences(k);
             }, this));
 
-            semantic.$el.remove();
+            group.$el.remove();
 
-            this.semanticToResolve = _.without(this.semanticToResolve, id);
+            this.groupToResolve = _.without(this.groupToResolve, id);
 
-            delete this.semantics[id];
+            delete this.groups[id];
 
         }
 
@@ -501,10 +502,10 @@ define([
 
         this.mandatorySelectorIds = _.without(this.mandatorySelectorIds, id);
 
-        var semantic = this.selector2semantic[id];
-        this.semantic2selectors[semantic] = _.without(this.semantic2selectors[semantic], id);
+        var group = this.selector2group[id];
+        this.group2selectors[group] = _.without(this.group2selectors[group], id);
 
-        delete this.selector2semantic[id];
+        delete this.selector2group[id];
 
         this.selectorsId = _.without(this.selectorsId, id);
 
@@ -512,30 +513,33 @@ define([
 
     Filter.prototype._evaluateSelectorConfiguration = function (value, key) {
 
-        this.semanticIds.push(key);
+        this.groupIds.push(key);
 
-        if (!this._isSemantic(value)) {
+        if (!this._isGroup(value)) {
 
             this._processSelector(value, key, key);
 
         } else {
 
-            this.semantics[key] = value;
-            this.semanticToResolve.push(key);
+            this.groups[key] = value;
+            this.groupToResolve.push(key);
 
-            var semantic = $.extend(true, {}, value);
+            var group = $.extend(true, {}, value);
 
-            this.semantics[key].$el = this._getSemanticContainer(key);
+            this.groups[key].$el = this._getGroupContainer(key);
 
-            delete semantic.selectors;
+            delete group.selectors;
 
             _.each(value.selectors, _.bind(function (v, k) {
 
                 //Hide selector switch by default
                 //remove className by default
-                var model = $.extend(true, {}, semantic, v, {
+                var model = $.extend(true, {}, group, v, {
                     className: "",
-                    template: {hideHeader: true}
+                    template: {
+                        hideSwitch: true,
+                        hideRemoveButton: true
+                    }
                 });
 
                 this._processSelector(model, k, key);
@@ -561,7 +565,7 @@ define([
 
     };
 
-    Filter.prototype._isSemantic = function (value) {
+    Filter.prototype._isGroup = function (value) {
         return value.hasOwnProperty("selectors");
     };
 
@@ -767,7 +771,7 @@ define([
         log.info("Add class to mandatory selectors");
         _.each(this.mandatorySelectorIds, _.bind(function (id) {
 
-            this._getSelectorContainer(id).closest(s.SEMANTICS).addClass(this.mandatorySelectorClassName);
+            this._getSelectorContainer(id).closest(s.GROUPS).addClass(this.mandatorySelectorClassName);
             this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.mandatorySelectorClassName);
         }, this));
 
@@ -782,17 +786,17 @@ define([
 
             var status = this._callSelectorInstanceMethod(s, "getStatus");
 
-            var semantic = this.selector2semantic[s];
+            var group = this.selector2group[s];
 
             if (status.disabled === true) {
 
-                _.each(this.semantic2selectors[semantic], _.bind(function (n) {
+                _.each(this.group2selectors[group], _.bind(function (n) {
                     this._disableSelectorAndSwitch(n);
                 }, this));
 
             } else {
 
-                _.each(this.semantic2selectors[semantic], _.bind(function (n) {
+                _.each(this.group2selectors[group], _.bind(function (n) {
                     this._enableSelectorAndSwitch(n);
                 }, this));
 
@@ -869,33 +873,27 @@ define([
 
     Filter.prototype._getValues = function (includedSelectors) {
 
-        var result = {
-            valid: false,
-            labels: {},
-            values: {}
-        };
+        var self = this,
+            result = {
+                valid: false,
+                labels: {},
+                values: {}
+            },
+            v;
 
         if (this.ready !== true) {
             log.warn("Abort getValues() because filter is not ready");
             return result;
         }
 
-        _.each(this.semanticIds, _.bind(function (n) {
+        _.each(this.groupIds, _.bind(function (n) {
 
-            var name = this._resolveSelectorName(n),
-                status = this._callSelectorInstanceMethod(name, "getStatus");
+            var group = this.groups[n];
 
-            if (includeSelector(name) && status.disabled !== true) {
+            v = group && !group.semantic ? getValuesFromGroup(group) : getValuesFromSelectorOrSemanticGroup(n);
 
-                var v = this._callSelectorInstanceMethod(name, "getValues");
-
-                result.values[n] = v.values;
-                result.labels[n] = v.labels;
-
-            } else {
-
-                log.warn(n + " selector not included in filter result.");
-            }
+            result.values[n] = v.values;
+            result.labels[n] = v.labels;
 
         }, this));
 
@@ -920,6 +918,54 @@ define([
             }
 
             return include;
+        }
+
+        function getValuesFromSelectorOrSemanticGroup(id) {
+
+            var v = {},
+                name = self._resolveSelectorName(id),
+                status = self._callSelectorInstanceMethod(name, "getStatus");
+
+            if (includeSelector(name) && status.disabled !== true) {
+
+                v = self._callSelectorInstanceMethod(name, "getValues");
+
+            } else {
+
+                log.warn(id + " selector not included in filter result.");
+            }
+
+            return v;
+        }
+
+        function getValuesFromGroup(group) {
+
+            var values = {},
+                labels = {};
+
+            _.each(group.selectors, _.bind(function (g) {
+
+                var name = this._resolveSelectorName(g.id),
+                    status = this._callSelectorInstanceMethod(name, "getStatus");
+
+                if (includeSelector(name) && status.disabled !== true) {
+
+                    var v = self._callSelectorInstanceMethod(name, "getValues");
+
+                    values[name] = v.values;
+                    labels[name] = v.labels;
+
+                } else {
+
+                    log.warn(name + " selector not included in filter result.");
+                }
+
+            }, self));
+
+            return {
+                values: values,
+                labels: labels
+            }
         }
 
     };
@@ -981,7 +1027,7 @@ define([
     Filter.prototype._getEnabledSelectors = function () {
 
         var result = [];
-        _.each(this.semanticIds, _.bind(function (n) {
+        _.each(this.groupIds, _.bind(function (n) {
 
             var name = this._resolveSelectorName(n),
                 status = this._callSelectorInstanceMethod(name, "getStatus");
@@ -1006,7 +1052,7 @@ define([
             if (!s.values.hasOwnProperty(id) || !s.values[id] || s.values[id] < 1) {
 
                 errors.code = 'missing_mandatory_field';
-                errors.details = this.selector2semantic[id];
+                errors.details = this.selector2group[id];
 
                 return errors;
             }
@@ -1318,7 +1364,7 @@ define([
         if (this.selectors[o.target]) {
 
             this._callSelectorInstanceMethod(o.target, "_dep_ensure_unset", {
-                value: this.selector2semantic[o.src],
+                value: this.selector2group[o.src],
                 enabled: this._getEnabledSelectors()
             });
         }
@@ -1378,8 +1424,8 @@ define([
         this.$switches.on("change", _.bind(function (e) {
 
             var $this = $(e.currentTarget),
-                semantic = $(e.currentTarget).attr("data-target"),
-                selectors = this.semantic2selectors[semantic];
+                group = $(e.currentTarget).attr("data-target"),
+                selectors = this.group2selectors[group];
 
             log.info("Switch change status: " + $this.is(':checked'));
 
@@ -1454,7 +1500,7 @@ define([
             willBeAdded = false;
         }
 
-        if (this._isSemantic(obj)) {
+        if (this._isGroup(obj)) {
 
             _.each(obj.selectors, _.bind(function (obj, key) {
 
@@ -1466,7 +1512,7 @@ define([
         }
 
         if (!willBeAdded) {
-            log.warn(name + " selector will not be added because it already exist or, if semantic, contains id that already exist.");
+            log.warn(name + " selector will not be added because it already exist or, if group, contains id that already exist.");
         } else {
             this.items[name] = obj;
             this._evaluateSelectorConfiguration(obj, name);
@@ -1522,7 +1568,7 @@ define([
         var Instance = this._getSelectorInstance(name);
 
         if (!Instance) {
-            log.warn(id + " is not a current selector.");
+            log.warn(name + " is not a current selector.");
 
             return
         }
@@ -1537,7 +1583,7 @@ define([
 
     };
 
-    Filter.prototype._processSelector = function (obj, selectorId, semanticId) {
+    Filter.prototype._processSelector = function (obj, selectorId, groupId) {
 
         if (!obj.hasOwnProperty('selector')) {
             alert(selectorId + " does not have a valid configuration. Missing 'selector' configuration.");
@@ -1580,27 +1626,27 @@ define([
         }
 
         //
-        if (!Array.isArray(this.semantic2selectors[semanticId])) {
-            this.semantic2selectors[semanticId] = [];
+        if (!Array.isArray(this.group2selectors[groupId])) {
+            this.group2selectors[groupId] = [];
         }
-        this.semantic2selectors[semanticId].push(selectorId);
+        this.group2selectors[groupId].push(selectorId);
 
         //
-        if (this.selector2semantic[selectorId]) {
-            log.warn("Duplication of selector id for filter configuration: " + semanticId);
+        if (this.selector2group[selectorId]) {
+            log.warn("Duplication of selector id for filter configuration: " + groupId);
         }
-        this.selector2semantic[selectorId] = semanticId;
+        this.selector2group[selectorId] = groupId;
 
     };
 
     Filter.prototype._getSelectorRender = function (name, callback) {
 
-        return require([this._getSelectorScriptPath(name)+ ".js"], callback);
+        return require([this._getSelectorScriptPath(name) + ".js"], callback);
     };
 
-    Filter.prototype._getActiveSelectorBySemantic = function (name) {
+    Filter.prototype._getActiveSelectorByGroup = function (name) {
 
-        var active = this.$el.find("[data-semantic='" + name + "']")
+        var active = this.$el.find("[data-group='" + name + "']")
             .find(s.SELECTORS)
             .filter(".active")
             .data("selector");
@@ -1612,8 +1658,8 @@ define([
 
         var selector;
 
-        if (_.contains(this.semanticToResolve, name)) {
-            selector = this._getActiveSelectorBySemantic(name);
+        if (_.contains(this.groupToResolve, name)) {
+            selector = this._getActiveSelectorByGroup(name);
         } else {
             selector = name;
         }
@@ -1668,15 +1714,15 @@ define([
         return $cont;
     };
 
-    Filter.prototype._getSemanticContainer = function (id) {
+    Filter.prototype._getGroupContainer = function (id) {
 
-        var $cont = this.$el.find('[data-semantic="' + id + '"]'),
-            conf = this.semantics[id] || {};
+        var $cont = this.$el.find('[data-group="' + id + '"]'),
+            conf = this.groups[id] || {};
 
         if ($cont.length === 0) {
-            log.warn("Impossible to find semantic container: " + id);
+            log.warn("Impossible to find group container: " + id);
 
-            $cont = $("<div data-semantic='" + id + "' class='" + conf.className + "'></div>");
+            $cont = $("<div data-group='" + id + "' class='" + conf.className + "'></div>");
 
             if (this.direction === "append") {
                 this.$el.append($cont);
@@ -1687,56 +1733,73 @@ define([
 
         if (conf.templateIsInitialized !== true) {
             conf.templateIsInitialized = true;
-            $cont.append(this._createSemanticContainer(id));
+            $cont.append(this._createGroupContainer(id));
         }
 
         return $cont;
     };
 
-    Filter.prototype._createSemanticContainer = function (id) {
-        log.info("Create container for semantic: " + id);
+    Filter.prototype._createGroupContainer = function (id) {
+        log.info("Create container for group: " + id);
 
         var classNames = "",
-            semantic = this.semantics[id],
+            group = this.groups[id],
             conf = $.extend(true, {}, C.template, this.common.template),
             $html,
             model;
 
-        _.each(semantic.selectors, _.bind(function (obj, name) {
-            obj.id = name;
-            obj.ref = name.concat(this.id).replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '_');
+        if (group.semantic === true) {
+            log.info("Group : [" + group.id + "] is a semantic group");
 
-            if (!obj.selector) {
-                obj.selector = {};
-            }
+            _.each(group.selectors, _.bind(function (obj, name) {
+                obj.id = name;
+                obj.ref = name.concat(this.id).replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '_');
 
-            if (!obj.template) {
-                obj.template = {};
-            }
+                if (!obj.selector) {
+                    obj.selector = {};
+                }
 
-            obj.selector.title = obj.template.title ? obj.template.title : "Missing title: " + obj.id;
+                if (!obj.template) {
+                    obj.template = {};
+                }
 
-        }, this));
+                obj.selector.title = obj.template.title ? obj.template.title : "Missing title: " + obj.id;
 
-        model = $.extend(true, {id: id}, conf, semantic, semantic.template, i18nLabels[this.lang.toLowerCase()]);
+            }, this));
 
-        _.each(model, function (value, key) {
-            if (value === true) {
-                classNames = classNames.concat(key + " ");
-            }
-        });
+            model = $.extend(true, {id: id}, conf, group, group.template, i18nLabels[this.lang.toLowerCase()]);
 
-        model.classNames = classNames;
+            _.each(model, function (value, key) {
+                if (value === true) {
+                    classNames = classNames.concat(key + " ");
+                }
+            });
 
-        $html = $(templateSemantic(model));
+            model.classNames = classNames;
+
+            $html = $(templateSemanticGroup(model));
+
+            //TODO active tab by conf
+            $html.find("ul").children().first().addClass("active");
+            $html.find(".tab-content").children().first().addClass("active");
+
+        } else {
+            log.info("Group : [" + group.id + "] is NOT a semantic group");
+
+            _.each(group.selectors, _.bind(function (obj, name) {
+                obj.id = name;
+            }, this));
+
+            model = $.extend(true, {id: id}, conf, group, group.template, i18nLabels[this.lang.toLowerCase()]);
+
+            $html = $(templateGroup(model));
+
+        }
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
             amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
         }, this));
 
-        //TODO active tab by conf
-        $html.find("ul").children().first().addClass("active");
-        $html.find(".tab-content").children().first().addClass("active");
 
         return $html;
     };
@@ -1767,10 +1830,10 @@ define([
     Filter.prototype._disableSelectorAndSwitch = function (d) {
 
         this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).addClass(this.disabledSelectorClassName);
-        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).addClass(this.disabledSelectorClassName);
+        this._getSelectorContainer(d).closest(s.GROUPS).children().children().not(s.TEMPLATE_HEADER).addClass(this.disabledSelectorClassName);
 
         this._getSelectorContainer(d).closest(s.SELECTORS).find(s.SWITCH).prop('checked', false);
-        this._getSelectorContainer(d).closest(s.SEMANTICS).find(s.SWITCH).prop('checked', false);
+        this._getSelectorContainer(d).closest(s.GROUPS).find(s.SWITCH).prop('checked', false);
 
         this._callSelectorInstanceMethod(d, 'disable');
 
@@ -1785,10 +1848,10 @@ define([
     Filter.prototype._enableSelectorAndSwitch = function (d) {
 
         this._getSelectorContainer(d).closest(s.SELECTORS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.disabledSelectorClassName);
-        this._getSelectorContainer(d).closest(s.SEMANTICS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.disabledSelectorClassName);
+        this._getSelectorContainer(d).closest(s.GROUPS).children().children().not(s.TEMPLATE_HEADER).removeClass(this.disabledSelectorClassName);
 
         this._getSelectorContainer(d).closest(s.SELECTORS).find(s.SWITCH).prop('checked', true);
-        this._getSelectorContainer(d).closest(s.SEMANTICS).find(s.SWITCH).prop('checked', true);
+        this._getSelectorContainer(d).closest(s.GROUPS).find(s.SWITCH).prop('checked', true);
 
         this._callSelectorInstanceMethod(d, 'enable');
 

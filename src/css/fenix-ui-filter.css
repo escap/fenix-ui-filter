@@ -5235,9 +5235,6 @@ button_new_2:before {
 .fa-caret-right:before {
   content: ""; }
 
-.fa-sort:before {
-  content: ""; }
-
 .fa-rss-square:before {
   content: ""; }
 
@@ -5370,34 +5367,34 @@ input[type="radio"]:disabled + label {
     .fx-selector.hideSwitch.hideRemoveButton .fx-selector-title {
       margin-right: 0; } }
 
-[data-selector], [data-semantic] {
+[data-selector], [data-group] {
   /* Focused */
   /* Mandatory */
   /* Disabled */
   /* Hovered */ }
-  [data-selector] .controller, [data-semantic] .controller {
+  [data-selector] .controller, [data-group] .controller {
     position: absolute;
     right: 0;
     top: 17px; }
-    [data-selector] .controller input[type="checkbox"] + label:before, [data-semantic] .controller input[type="checkbox"] + label:before {
+    [data-selector] .controller input[type="checkbox"] + label:before, [data-group] .controller input[type="checkbox"] + label:before {
       -webkit-border-radius: 50% !important;
       -moz-border-radius: 50% !important;
       -ms-border-radius: 50% !important;
       border-radius: 50% !important; }
-    [data-selector] .controller .btn-round, [data-semantic] .controller .btn-round {
+    [data-selector] .controller .btn-round, [data-group] .controller .btn-round {
       -webkit-border-radius: 50% !important;
       -moz-border-radius: 50% !important;
       -ms-border-radius: 50% !important;
       border-radius: 50% !important; }
-  [data-selector] .disabled, [data-semantic] .disabled {
+  [data-selector] .disabled, [data-group] .disabled {
     cursor: no-drop;
     opacity: 0.4; }
   @media screen and (max-width: 480px) {
-    [data-selector] .controller, [data-semantic] .controller {
+    [data-selector] .controller, [data-group] .controller {
       opacity: 1;
       pointer-events: auto; } }
   @media screen and (min-width: 768px) {
-    [data-selector] .controller, [data-semantic] .controller {
+    [data-selector] .controller, [data-group] .controller {
       opacity: 0;
       pointer-events: none;
       -webkit-transition: all 0.3s ease 0.2s;
@@ -5405,7 +5402,7 @@ input[type="radio"]:disabled + label {
       -ms-transition: all 0.3s ease 0.2s;
       -o-transition: all 0.3s ease 0.2s;
       transition: all 0.3s ease 0.2s; }
-    [data-selector]:hover .controller, [data-semantic]:hover .controller {
+    [data-selector]:hover .controller, [data-group]:hover .controller {
       opacity: 1;
       pointer-events: auto; } }
 

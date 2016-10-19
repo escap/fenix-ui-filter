@@ -6,20 +6,48 @@ define(function () {
 
     return {
 
-        textarea: {
+        input: {
             selector: {
-                id: "textarea",
-                source : [{value: "Label", label: "Label"}],
-                default : "Hello world!",
-                config : {
-                    //rows : 100
+                id: "input",
+                type: "text",
+                source: [{value: "Label", label: "e.g. John Smith"}]
+            },
+            template: {
+                title: "Name"
+            }
+        },
+
+        contact: {
+            className: "well",
+            semantic: false,
+            selectors: {
+                name: {
+                    selector: {
+                        id: "input",
+                        type: "text",
+                        source: [{value: "Label", label: "e.g. John Smith"}]
+                    },
+                    template: {
+                        title: "Name"
+                    }
+                },
+                role: {
+                    selector: {
+                        id: "dropdown",
+                        source: [{label: "Project Manager", value: "item_1"}, {label: "Data Owner", value: "item_2"}],
+                        default: "item_1",
+                        config: {
+                            maxItems: 1
+                        }
+                    },
+                    template: {
+                        title: "Role"
+                    }
                 }
             },
             template: {
-                title: "Year",
-                hideRemoveButton: false,
-                hideSwitch: false,
-                hideHeaderIcon: false
+                hideHeader: false,
+                title: "Contact"
             }
         }
     }

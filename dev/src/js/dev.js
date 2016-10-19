@@ -49,7 +49,8 @@ define([
             COUNTRYSTAT: "#countrystat",
             SOURCES: "#sources",
             SOURCES_BTN: "#sources-btn",
-            AMIS: "#amis"
+            AMIS: "#amis",
+            AMIS_BTN: "#amis-get-values-btn",
         },
         empty_model = {data: []},
         error_model = {},
@@ -64,7 +65,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('silent');
+        log.setLevel('trace');
 
         this.start();
 
@@ -120,6 +121,10 @@ define([
             items: Model2,
             el: s.AMIS
         });
+
+        $(s.AMIS_BTN).on("click", function () {
+            console.log(filter.getValues())
+        })
     };
 
     Dev.prototype._createConfiguration = function () {

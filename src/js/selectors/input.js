@@ -71,7 +71,7 @@ define([
             var val = $(element).val();
 
             result.values.push(val);
-            result.labels[val] = $(element).siblings("label").text()
+            result.labels[val] = $(element).siblings("label").text() || val;
 
         });
 
