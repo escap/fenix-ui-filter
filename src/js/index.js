@@ -26,8 +26,8 @@ define([
             }
         },
         s = {
-            SELECTORS_CLASS: ".fx-selector",
-            SELECTOR_DISABLED_CLASS: "fx-selector-disabled",
+            CLASSNAME: ".fx-selector",
+            SELECTOR_DISABLED_CLASSNAME: "fx-selector-disabled",
             SELECTORS: "[data-selector]",
             GROUPS: "[data-group]",
             TREE_CONTAINER: "[data-role='tree']",
@@ -43,7 +43,7 @@ define([
             TEMPLATE_SELECTOR_CONTAINER: "[data-container]",
             TEMPLATE_GROUP: "[data-template-group]",
             TEMPLATE_SUMMARY: "[data-summary]",
-            SUMMARY_ITEM: "[data-code]",
+            SUMMARY_SELECTOR: "[data-code]",
             REMOVE_BTN: "[data-role='remove']",
             TEMPLATE_HEADER: "[data-selector-header]"
         };
@@ -242,7 +242,7 @@ define([
 
     Filter.prototype._parseInput = function () {
 
-        this.items = this.initial.items || {};
+        this._selectors = this.initial.selectors || {};
         this.$el = $(this.initial.el);
         this.template = this.initial.template;
         this.summary$el = this.initial.summaryEl;
@@ -259,6 +259,7 @@ define([
         this.common = this.initial.common || C.common;
         this.environment = this.initial.environment;
         this.lang = this.initial.lang || C.lang;
+
     };
 
     Filter.prototype._renderFilter = function () {
@@ -273,8 +274,8 @@ define([
         );
     };
 
-    Filter.prototype._summaryRender = function (item) {
-        return item.label + "<span class='code-brk'>[" + item.code + "]</span>";
+    Filter.prototype._summaryRender = function (selector) {
+        return selector.label + "<span class='code-brk'>[" + selector.code + "]</span>";
     };
 
     Filter.prototype._updateSummary = function () {
@@ -289,14 +290,14 @@ define([
             model = {summary: createSummaryModel(this._getValues())};
 
         //unbind click listener
-        this.summary$el.find(s.SUMMARY_ITEM).each(function () {
+        this.summary$el.find(s.SUMMARY_SELECTOR).each(function () {
             $(this).off();
         });
 
         this.summary$el.html(templateSummary(model));
 
         //bind click listener
-        this.summary$el.find(s.SUMMARY_ITEM).each(function () {
+        this.summary$el.find(s.SUMMARY_SELECTOR).each(function () {
             var $this = $(this);
             $this.on("click", function () {
 
@@ -331,15 +332,15 @@ define([
                         _.each(obj, _.bind(function (v) {
 
                             var code = typeof v === 'object' ? v.value : v,
-                                item = {
+                                selector = {
                                     code: code,
                                     label: labels[name][code],
                                     selector: name
                                 };
 
-                            item.value = self.summaryRender(item);
+                            selector.value = self.summaryRender(selector);
 
-                            s.values.push(item)
+                            s.values.push(selector)
 
                         }, this));
 
@@ -385,7 +386,7 @@ define([
         }
 
         //check for selectors
-        if (!this.items) {
+        if (!this._selectors) {
             log.warn("Impossible to find selectors for filter: " + this.id);
             log.warn("Filer will wait for selectors dynamically");
         }
@@ -432,7 +433,7 @@ define([
         this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
 
         //Process selectors
-        _.each(this.items, _.bind(function (selectorConf, selectorId) {
+        _.each(this._selectors, _.bind(function (selectorConf, selectorId) {
 
             this._evaluateSelectorConfiguration(selectorConf, selectorId);
 
@@ -465,7 +466,7 @@ define([
 
     };
 
-    Filter.prototype._removeItemReferences = function (id) {
+    Filter.prototype._removeSelectorReferences = function (id) {
 
         //remove id from result
         this.groupIds = _.without(this.groupIds, id);
@@ -554,14 +555,14 @@ define([
         amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
 
         this.$tabs.on('shown.bs.tab', _.bind(function () {
-            amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT));
+            amplify.publish(this._getEventName(EVT.SELECTOR_SELECT));
         }, this));
 
-        amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this, this._onSelectorItemSelect);
-        amplify.subscribe(this._getEventName(EVT.SELECTORS_ITEM_CLICK), this, this._onSelectorItemClick);
+        amplify.subscribe(this._getEventName(EVT.SELECTOR_SELECT), this, this._onSelectorSelectorSelect);
+        amplify.subscribe(this._getEventName(EVT.SELECTOR_CLICK), this, this._onSelectorSelectorClick);
         amplify.subscribe(this._getEventName(EVT.SELECTOR_DISABLED), this, this._updateSummary);
         amplify.subscribe(this._getEventName(EVT.SELECTOR_ENABLED), this, this._updateSummary);
-        amplify.subscribe(this._getEventName(EVT.ITEM_REMOVED), this, this._onRemoveItem);
+        amplify.subscribe(this._getEventName(EVT.SELECTOR_REMOVED), this, this._onRemoveSelector);
 
     };
 
@@ -768,12 +769,14 @@ define([
     Filter.prototype._initPage = function () {
 
         //add attribute to mandatory selectors
-        log.info("Add class to mandatory selectors");
         _.each(this.mandatorySelectorIds, _.bind(function (id) {
 
             this._getSelectorContainer(id).closest(s.GROUPS).addClass(this.mandatorySelectorClassName);
             this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.mandatorySelectorClassName);
         }, this));
+
+        log.info("Add class to mandatory selectors");
+
 
     };
 
@@ -963,7 +966,7 @@ define([
             }, self));
 
             return {
-                values: values,
+                values: [values],
                 labels: labels
             }
         }
@@ -979,14 +982,14 @@ define([
 
             source[key] = [];
 
-            _.each(array, function (item) {
+            _.each(array, function (selector) {
 
-                if (typeof item === 'object' && !item.label) {
+                if (typeof selector === 'object' && !selector.label) {
                     var labels = o.labels[key];
-                    item.label = labels ? o.labels[key][item.value] : "Missing label";
+                    selector.label = labels ? o.labels[key][selector.value] : "Missing label";
                 }
 
-                source[key].push(item);
+                source[key].push(selector);
 
             });
 
@@ -1106,7 +1109,7 @@ define([
                 event = this._getEventName(EVT.SELECTOR_DISABLED);
                 break;
             case 'select':
-                event = this._getEventName(EVT.SELECTORS_ITEM_SELECT);
+                event = this._getEventName(EVT.SELECTOR_SELECT);
                 break;
             default:
                 log.error(ERR.UNKNOWN_DEPENDENCY_EVENT);
@@ -1196,8 +1199,8 @@ define([
 
                 c.codes = [];
 
-                _.each(payload, function (item) {
-                    c.codes.push(item.value);
+                _.each(payload, function (selector) {
+                    c.codes.push(selector.value);
                 });
 
                 this._getPromise(c).then(
@@ -1237,8 +1240,8 @@ define([
 
                 c.codes = [];
 
-                _.each(payload, function (item) {
-                    c.codes.push(item.value);
+                _.each(payload, function (selector) {
+                    c.codes.push(selector.value);
                 });
 
                 this._getPromise(c).then(
@@ -1393,13 +1396,13 @@ define([
 
     Filter.prototype._format_fenix = function (values) {
 
-        return Converter.toD3P(this.items, values);
+        return Converter.toD3P(this._selectors, values);
 
     };
 
     Filter.prototype._format_catalog = function (values) {
 
-        return Converter.toFilter(this.items, values);
+        return Converter.toFilter(this._selectors, values);
 
     };
 
@@ -1450,11 +1453,11 @@ define([
 
         this._configureSelectorsStatus();
 
-        this._checkItemsAmount();
+        this._checkSelectorsAmount();
 
         window.clearTimeout(this.validTimeout);
 
-        amplify.publish(this._getEventName(EVT.SELECTORS_READY));
+        amplify.publish(this._getEventName(EVT.FILTER_READY));
 
         // set default values
         if (!$.isEmptyObject(this.values)) {
@@ -1474,7 +1477,7 @@ define([
         return this.id.concat(evt);
     };
 
-    Filter.prototype._onSelectorItemSelect = function (values) {
+    Filter.prototype._onSelectorSelectorSelect = function (values) {
 
         if (this.ready === true) {
             this._trigger('change', values);
@@ -1484,7 +1487,7 @@ define([
     };
 
 
-    Filter.prototype._onSelectorItemClick = function (values) {
+    Filter.prototype._onSelectorSelectorClick = function (values) {
 
         if (this.ready === true) {
             this._trigger('click', values);
@@ -1514,19 +1517,19 @@ define([
         if (!willBeAdded) {
             log.warn(name + " selector will not be added because it already exist or, if group, contains id that already exist.");
         } else {
-            this.items[name] = obj;
+            this._selectors[name] = obj;
             this._evaluateSelectorConfiguration(obj, name);
             this._renderFilter();
-            this._checkItemsAmount();
+            this._checkSelectorsAmount();
         }
 
     };
 
-    Filter.prototype._onRemoveItem = function (obj) {
+    Filter.prototype._onRemoveSelector = function (obj) {
 
         this.remove(obj.id);
 
-        this._checkItemsAmount();
+        this._checkSelectorsAmount();
 
     };
 
@@ -1538,13 +1541,13 @@ define([
         this.$el.find(s.REMOVE_BTN).attr("disabled", false);
     };
 
-    Filter.prototype._checkItemsAmount = function () {
+    Filter.prototype._checkSelectorsAmount = function () {
 
         if (this.ensureAtLeast < 0) {
             return;
         }
 
-        if (Object.keys(this.items).length <= this.ensureAtLeast) {
+        if (Object.keys(this._selectors).length <= this.ensureAtLeast) {
             this._lockRemoveButtons();
         } else {
             this._unlockRemoveButtons();
@@ -1553,9 +1556,9 @@ define([
 
     Filter.prototype._removeSelector = function (id) {
 
-        delete this.items[id];
+        delete this._selectors[id];
 
-        this._removeItemReferences(id);
+        this._removeSelectorReferences(id);
 
         this._updateSummary();
 
@@ -1797,7 +1800,7 @@ define([
         }
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
-            amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
+            amplify.publish(this._getEventName(EVT.SELECTOR_REMOVED), {id: id});
         }, this));
 
 
@@ -1821,7 +1824,7 @@ define([
         $html = $(templateSelector($.extend(true, {classNames: classNames}, conf)));
 
         $html.find(s.REMOVE_BTN).on("click", _.bind(function () {
-            amplify.publish(this._getEventName(EVT.ITEM_REMOVED), {id: id});
+            amplify.publish(this._getEventName(EVT.SELECTOR_REMOVED), {id: id});
         }, this));
 
         return $html.append();
@@ -1890,10 +1893,10 @@ define([
     Filter.prototype._unbindEventListeners = function () {
 
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
-        amplify.unsubscribe(this._getEventName(EVT.SELECTORS_ITEM_SELECT), this._onSelectorItemSelect);
+        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_SELECT), this._onSelectorSelectorSelect);
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_DISABLED), this._updateSummary);
         amplify.unsubscribe(this._getEventName(EVT.SELECTOR_ENABLED), this._updateSummary);
-        amplify.unsubscribe(this._getEventName(EVT.ITEM_REMOVED), this._onRemoveItem);
+        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_REMOVED), this._onRemoveSelector);
 
         //destroy selectors dependencies
         this._destroyDependencies();

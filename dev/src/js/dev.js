@@ -84,7 +84,7 @@ define([
     Dev.prototype._renderDependencies = function () {
 
         var filter = this.createFilter({
-            items: ModelDependencies,
+            selectors: ModelDependencies,
             el: s.DEPENDENCIES
         });
     };
@@ -92,7 +92,7 @@ define([
     Dev.prototype._renderAll = function () {
 
         var filter = this.createFilter({
-            items: AllModel,
+            selectors: AllModel,
             el: s.AMIS
         });
     };
@@ -100,7 +100,7 @@ define([
     Dev.prototype._renderAmis = function () {
 
         var filter = this.createFilter({
-            items: AmisModel,
+            selectors: AmisModel,
             el: s.AMIS
         });
 
@@ -109,7 +109,7 @@ define([
     Dev.prototype._renderCountrystat = function () {
 
         var filter = this.createFilter({
-            items: CountryStatModel,
+            selectors: CountryStatModel,
             el: s.COUNTRYSTAT
         });
 
@@ -118,7 +118,7 @@ define([
     Dev.prototype._renderModel2 = function () {
 
         var filter = this.createFilter({
-            items: Model2,
+            selectors: Model2,
             el: s.AMIS
         });
 
@@ -139,7 +139,7 @@ define([
 
         var filter = this.createFilter({
             id: s.FENIX_RESOURCE,
-            items: this._createFilterConfiguration(configuration),
+            selectors: this._createFilterConfiguration(configuration),
             el: s.FENIX_RESOURCE,
             summaryEl: s.FENIX_RESOURCE_SUMMARY
         });
@@ -174,15 +174,15 @@ define([
     Dev.prototype._renderSetSources = function () {
 
         var filter = this.createFilter({
-            items: this._createFilterConfiguration(SetSourcesModel),
+            selectors: this._createFilterConfiguration(SetSourcesModel),
             el: s.SOURCES
         });
 
         $(s.SOURCES_BTN).on('click', function () {
 
             filter.setSources({
-                tree: [{value: "item_01", label: "Item 1"}, {value: "item_02", label: "Item 2"}],
-                dropdown: [{value: "item_03", label: "Item 3"}, {value: "item_04", label: "Item 4"}],
+                tree: [{value: "selector_01", label: "Item 1"}, {value: "selector_02", label: "Item 2"}],
+                dropdown: [{value: "selector_03", label: "Item 3"}, {value: "selector_04", label: "Item 4"}],
                 range: [{value: "10", label: "10", parent: 'from'}, {value: "99", label: "99", parent: 'to'}],
 
             })
@@ -195,7 +195,7 @@ define([
         var filterIsReady = false;
 
         var filter = this.createFilter({
-            items: this._createFilterConfiguration(AggregationModel),
+            selectors: this._createFilterConfiguration(AggregationModel),
             el: s.TABLE_TAB
         })
             .on("ready", function () {
@@ -241,7 +241,7 @@ define([
 
         var filter = this.createFilter({
             id: s.MODEL_1_BASE,
-            items: this._createFilterConfiguration(Model1),
+            selectors: this._createFilterConfiguration(Model1),
             el: s.MODEL_1_BASE,
             template: templ(i18nLabels),
             summaryEl: s.MODEL_1_BASE_SUMMARY
@@ -298,14 +298,14 @@ define([
 
         var source = this.createFilter({
                 id: s.SYNC_SRC,
-                items: this._createFilterConfiguration(Model),
+                selectors: this._createFilterConfiguration(Model),
                 el: s.SYNC_SRC,
                 //template: templ(i18nLabels),
                 summaryEl: s.SYNC_SRC_SUMMARY
             }),
             target = this.createFilter({
                 id: s.SYNC_TARGET,
-                items: this._createFilterConfiguration(Model),
+                selectors: this._createFilterConfiguration(Model),
                 el: s.SYNC_TARGET,
                 //template: templ(i18nLabels)
             });

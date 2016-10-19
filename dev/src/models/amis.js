@@ -153,7 +153,7 @@ define(["moment"],function (moment) {
 
         year: {
 
-            selectors: {
+            items: {
 
                 YearSlider: {
 

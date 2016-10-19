@@ -23,7 +23,7 @@ define(function () {
                 "hideHeader": false,
             },
 
-            //dependencies with other selectors
+            //dependencies with other items
             "dependencies": {
                 //@ for special selection
                 //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
@@ -51,7 +51,7 @@ define(function () {
                 //"hideSwitch": true
             },
 
-            //dependencies with other selectors
+            //dependencies with other items
             "dependencies": {
                 //@ for special selection
                 //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
@@ -80,7 +80,7 @@ define(function () {
                 "hideSwitch": true
             },
 
-            //dependencies with other selectors
+            //dependencies with other items
             "dependencies": {
                 //@ for special selection
                 "@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
@@ -98,7 +98,7 @@ define(function () {
 
             //"className" : "myclass mysecondclass", //Add custom class[s] to selector container
 
-            "selectors": {
+            "items": {
 
                 //selector id
                 "country-country": {
@@ -163,7 +163,7 @@ define(function () {
                 "dimension": "recipientcode",
             },
 
-            //dependencies with other selectors
+            //dependencies with other items
             "dependencies": {
                 "compare": {id: "focus", event: "select"} //obj or array of obj
             },

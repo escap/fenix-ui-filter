@@ -10,7 +10,7 @@ define(function () {
 
             //"className" : "myclass mysecondclass", //Add custom class[s] to selector container
 
-            "selectors": {
+            "items": {
 
                 //selector id
                 "country-country": {
@@ -77,7 +77,7 @@ define(function () {
                 "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2016", "codes": [{{{codes}}}] } ]}}'
             },
 
-            //dependencies with other selectors
+            //dependencies with other items
             "dependencies": {
                 "compare": {id: "focus", event: "select"} //obj or array of obj
             },

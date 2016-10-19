@@ -67,7 +67,7 @@ define(function () {
                 //"hideSwitch": true
             },
 
-            //dependencies with other selectors
+            //dependencies with other items
             "dependencies": {
                 //@ for special selection
                 //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj
@@ -117,7 +117,7 @@ define(function () {
                 //"hideSwitch": true
             },
 
-            //dependencies with other selectors
+            //dependencies with other items
             "dependencies": {
                 //@ for special selection
                 //"@all": {id: "ensure_unset", event: "disable"} // obj, array of obj

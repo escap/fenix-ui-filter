@@ -18,8 +18,11 @@ define(function () {
         },
 
         contact: {
+
             className: "well",
+
             semantic: false,
+
             selectors: {
                 name: {
                     selector: {
@@ -45,6 +48,7 @@ define(function () {
                     }
                 }
             },
+
             template: {
                 hideHeader: false,
                 title: "Contact"

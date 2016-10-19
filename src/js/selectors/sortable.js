@@ -15,8 +15,8 @@ define([
 
     var defaultOptions = {
             checkableInputs: ["radio", "checkbox"],
-            itemRender : function ( params ) {
-                return this._itemRender(params);
+            selectorRender : function ( params ) {
+                return this._selectorRender(params);
             }
         },
         s = {
@@ -278,7 +278,7 @@ define([
             //loop over groups' items
             _.each(group.items, _.bind(function (i) {
 
-                var $content = this.itemRender.call(this, i),
+                var $content = this.selectorRender.call(this, i),
                     $li = $(templateItem(i));
 
                 $li.html($content);
@@ -334,7 +334,7 @@ define([
 
     };
 
-    Sortable.prototype._itemRender = function ( model ) {
+    Sortable.prototype._selectorRender = function ( model ) {
 
         return model.label || "Missing label";
 
@@ -351,8 +351,8 @@ define([
         this.status = {};
         this.status.disabled = this.selector.disabled;
 
-        if (this.selector.hasOwnProperty("config") && $.isFunction(this.selector.config.itemRender)) {
-            this.itemRender = this.selector.config.itemRender;
+        if (this.selector.hasOwnProperty("config") && $.isFunction(this.selector.config.selectorRender)) {
+            this.selectorRender = this.selector.config.selectorRender;
         }
 
     };

@@ -12,7 +12,7 @@ define(function () {
 
         // css class names
         focusedSelectorClassName: "focused", // highlight a selector
-        
+
         mandatorySelectorClassName: "mandatory", // mandatory selectors
         
         disabledSelectorClassName: "disabled", // disabled selectors

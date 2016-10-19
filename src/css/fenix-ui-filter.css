@@ -5536,7 +5536,7 @@ input[type="radio"]:disabled + label {
     height: auto !important; }
 
 /* Sortable */
-.filter-sortable-list .list-item {
+.filter-sortable-list .list-selector {
   cursor: pointer;
   margin: 3px;
   padding: 1px 3px;

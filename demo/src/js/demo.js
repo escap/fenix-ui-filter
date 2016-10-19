@@ -53,7 +53,7 @@ define([
     Demo.prototype._renderAll = function () {
 
         var filter = new Filter({
-            items: AllModel,
+            selectors: AllModel,
             el: s.ALL,
             summaryEl: s.ALL_SUMMARY
         });

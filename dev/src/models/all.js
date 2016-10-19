@@ -106,7 +106,7 @@ define([
 
             treeTriple: {
 
-                selectors: {
+                items: {
 
                     first: {
 

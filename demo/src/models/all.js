@@ -15,8 +15,8 @@ define([
                 id: "input",
                 type: "checkbox",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_2", label: "Item 2"}
                 ]
             },
 
@@ -33,10 +33,10 @@ define([
                 id: "input",
                 type: "radio",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_2", label: "Item 2"}
                 ],
-                default: ["item_1"]
+                default: ["selector_1"]
             },
 
             template: {
@@ -52,7 +52,7 @@ define([
                 id: "input",
                 type: "text",
                 source: [
-                    {value: "item_1", label: "Item 1"}
+                    {value: "selector_1", label: "Item 1"}
                 ]
             },
 
@@ -69,7 +69,7 @@ define([
                 id: "input",
                 type: "text",
                 source: [
-                    {value: "item_1", label: "Item 1"}
+                    {value: "selector_1", label: "Item 1"}
                 ],
                 disabled: true
             },
@@ -86,16 +86,16 @@ define([
             selector: {
                 id: "tree",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_11", label: "Item 11", parent: "item_1"},
-                    {value: "item_2", label: "Item 2"},
-                    {value: "item_22", label: "Item 22", parent: "item_2"},
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_11", label: "Item 11", parent: "selector_1"},
+                    {value: "selector_2", label: "Item 2"},
+                    {value: "selector_22", label: "Item 22", parent: "selector_2"},
                 ],
-                default: ["item_1"],
+                default: ["selector_1"],
             },
 
-            summaryRender : function (item) {
-              return "<u><mark> " + item.label + "</mark></u>"
+            summaryRender : function (selector) {
+              return "<u><mark> " + selector.label + "</mark></u>"
             },
 
             template: {
@@ -107,6 +107,8 @@ define([
 
         treeTriple: {
 
+            semantic: true,
+
             selectors: {
 
                 first: {
@@ -114,10 +116,10 @@ define([
                     selector: {
                         id: "tree",
                         source: [
-                            {value: "item_1", label: "Item 1"},
-                            {value: "item_2", label: "Item 2"}
+                            {value: "selector_1", label: "Item 1"},
+                            {value: "selector_2", label: "Item 2"}
                         ],
-                        default: ["item_1"]
+                        default: ["selector_1"]
                     },
 
                     template: {
@@ -130,10 +132,10 @@ define([
                     selector: {
                         id: "tree",
                         source: [
-                            {value: "item_3", label: "Item 3"},
-                            {value: "item_4", label: "Item 4"}
+                            {value: "selector_3", label: "Item 3"},
+                            {value: "selector_4", label: "Item 4"}
                         ],
-                        default: ["item_4"]
+                        default: ["selector_4"]
                     },
 
                     template: {
@@ -145,10 +147,10 @@ define([
                     selector: {
                         id: "tree",
                         source: [
-                            {value: "item_5", label: "Item 5"},
-                            {value: "item_6", label: "Item 6"}
+                            {value: "selector_5", label: "Item 5"},
+                            {value: "selector_6", label: "Item 6"}
                         ],
-                        default: ["item_5"]
+                        default: ["selector_5"]
                     },
 
                     template: {
@@ -169,10 +171,10 @@ define([
             selector: {
                 id: "tree",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_2", label: "Item 2"}
                 ],
-                default: ["item_1"],
+                default: ["selector_1"],
                 disabled: true
             },
 
@@ -188,10 +190,10 @@ define([
             selector: {
                 id: "tree",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_2", label: "Item 2"}
                 ],
-                default: ["item_1"],
+                default: ["selector_1"],
                 config: {
                     core: {
                         multiple: false
@@ -211,8 +213,8 @@ define([
             selector: {
                 id: "dropdown",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_2", label: "Item 2"}
                 ]
             },
 
@@ -228,8 +230,8 @@ define([
             selector: {
                 id: "dropdown",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_2", label: "Item 2"}
                 ],
                 config: {
                     maxItems: 1
@@ -248,8 +250,8 @@ define([
             selector: {
                 id: "dropdown",
                 source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"}
+                    {value: "selector_1", label: "Item 1"},
+                    {value: "selector_2", label: "Item 2"}
                 ],
                 disabled: true
             },
@@ -313,8 +315,8 @@ define([
             selector: {
                 id: "sortable",
                 source: [
-                    {value: 'item_1', label: "Item 1"},
-                    {value: 'item_2', label: "Item 2"}
+                    {value: 'selector_1', label: "Item 1"},
+                    {value: 'selector_2', label: "Item 2"}
                 ]
             },
 
@@ -330,14 +332,14 @@ define([
             selector: {
                 id: "sortable",
                 source: [
-                    {value: 'item_1', label: "Item 1", parent: "parent_1"},
-                    {value: 'item_2', label: "Item 2", parent: "parent_1"},
-                    {value: 'item_3', label: "Item 3", parent: "parent_1"},
-                    {value: 'item_4', label: "Item 4", parent: "parent_1"},
-                    {value: 'item_5', label: "Item 5", parent: "parent_1"},
-                    {value: 'item_6', label: "Item 6", parent: "parent_2"},
-                    {value: 'item_7', label: "Item 7", parent: "parent_2"},
-                    {value: 'item_8', label: "Item 8", parent: "parent_2"}
+                    {value: 'selector_1', label: "Item 1", parent: "parent_1"},
+                    {value: 'selector_2', label: "Item 2", parent: "parent_1"},
+                    {value: 'selector_3', label: "Item 3", parent: "parent_1"},
+                    {value: 'selector_4', label: "Item 4", parent: "parent_1"},
+                    {value: 'selector_5', label: "Item 5", parent: "parent_1"},
+                    {value: 'selector_6', label: "Item 6", parent: "parent_2"},
+                    {value: 'selector_7', label: "Item 7", parent: "parent_2"},
+                    {value: 'selector_8', label: "Item 8", parent: "parent_2"}
                 ],
                 config: {
                     groups: {
@@ -359,12 +361,12 @@ define([
             selector: {
                 id: "sortable",
                 source: [
-                    {value: 'item_1', label: "Item 1"},
-                    {value: 'item_2', label: "Item 2"},
-                    {value: 'item_3', label: "Item 3"},
-                    {value: 'item_4', label: "Item 4"},
-                    {value: 'item_5', label: "Item 5"},
-                    {value: 'item_6', label: "Item 6"}
+                    {value: 'selector_1', label: "Item 1"},
+                    {value: 'selector_2', label: "Item 2"},
+                    {value: 'selector_3', label: "Item 3"},
+                    {value: 'selector_4', label: "Item 4"},
+                    {value: 'selector_5', label: "Item 5"},
+                    {value: 'selector_6', label: "Item 6"}
                 ],
                 disabled: true
             },
@@ -381,15 +383,15 @@ define([
             selector: {
                 id: "sortable",
                 source: [
-                    {value: 'item_1', label: "Item 1"},
-                    {value: 'item_2', label: "Item 2"},
-                    {value: 'item_3', label: "Item 3"},
-                    {value: 'item_4', label: "Item 4"},
-                    {value: 'item_5', label: "Item 5"},
-                    {value: 'item_6', label: "Item 6"}
+                    {value: 'selector_1', label: "Item 1"},
+                    {value: 'selector_2', label: "Item 2"},
+                    {value: 'selector_3', label: "Item 3"},
+                    {value: 'selector_4', label: "Item 4"},
+                    {value: 'selector_5', label: "Item 5"},
+                    {value: 'selector_6', label: "Item 6"}
                 ],
                 config: {
-                    itemRender: function (model) {
+                    selectorRender: function (model) {
 
                         var $el = $("<u><mark> " + model.label + "</mark></u>");
 
