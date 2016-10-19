@@ -120,6 +120,8 @@ define([
         var filter = this.createFilter({
             selectors: Model2,
             el: s.AMIS
+        }).on("change", function ( evt ) {
+            console.log(evt)
         });
 
         $(s.AMIS_BTN).on("click", function () {

@@ -309,8 +309,9 @@ NB: these are different events from filter global events
 
 - `select` : triggered when an selector's selector  is selected
 - `disable` :  triggered when an selector is disabled
-- `change` :  triggered when an selector is disabled
-
+- `change` :  triggered when an selector change its state
+- `ready` :  triggered each selector is rendered
+- `remove` :  triggered each selector is removed
 
 ## Compatibility tables
 

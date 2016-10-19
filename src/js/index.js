@@ -1865,7 +1865,7 @@ define([
         amplify.publish(this._getEventName(EVT.SELECTOR_DISABLED.concat(d)), {value: true});
 
         if (this.ready === true) {
-            this._trigger('change');
+            this._trigger('change', {});
         }
 
     };

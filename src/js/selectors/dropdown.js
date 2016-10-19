@@ -383,8 +383,7 @@ define([
                     });
                 });
 
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), result);
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT), {id: self.id, values: self.getValues()});
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
             }
             
         });
@@ -392,7 +391,7 @@ define([
 
         this.$el.find('.selectize-control').on('click', function () {
             if (self.status.ready === true) {
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_CLICK), {id: self.id});
+                amplify.publish(self._getEventName(EVT.SELECTOR_CLICK), {id: self.id});
             }
         });
 

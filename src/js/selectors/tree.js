@@ -530,8 +530,7 @@ define([
 
         this._updateSummary();
 
-        amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT), {id: this.id, values: this.getValues()});
-        amplify.publish(this._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), payload);
+        amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
 
     };
 

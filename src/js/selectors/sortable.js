@@ -15,7 +15,7 @@ define([
 
     var defaultOptions = {
             checkableInputs: ["radio", "checkbox"],
-            selectorRender : function ( params ) {
+            selectorRender: function (params) {
                 return this._selectorRender(params);
             }
         },
@@ -28,7 +28,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
+        $.extend(true, this, defaultOptions, o, {$el: $(o.el)});
 
         this._initVariables();
 
@@ -63,13 +63,13 @@ define([
 
             _.each(values, _.bind(function (item) {
 
-                var label =  this.$el.find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]')
+                var label = this.$el.find(s.TEMPLATE_LIST).filter('[data-group="' + name + '"]')
                     .find(s.TEMPLATE_ITEM).filter('[data-id="' + item + '"]').text().trim();
 
                 result.values.push({
                     value: item,
                     parent: name,
-                    label : label
+                    label: label
                 });
 
                 result.labels[item] = label;
@@ -315,13 +315,13 @@ define([
                             //workaround for silent change
                             if (this.silentMode !== true) {
 
-                                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
+                                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), {
+                                    id: this.id,
                                     value: $itemEl.data('id'),
                                     label: $itemEl.text(),
                                     parent: name
                                 });
 
-                                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
                             }
                             delete this.silentMode;
 
@@ -334,7 +334,7 @@ define([
 
     };
 
-    Sortable.prototype._selectorRender = function ( model ) {
+    Sortable.prototype._selectorRender = function (model) {
 
         return model.label || "Missing label";
 

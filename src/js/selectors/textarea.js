@@ -229,13 +229,12 @@ define([
                     value = r.values[0] || "",
                     label = r.labels[value];
 
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + self.id), {
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), {
+                    id : self.id,
                     value: value,
                     label: label,
                     parent: null
                 });
-
-                amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
             }
 
         });

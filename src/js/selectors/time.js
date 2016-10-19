@@ -234,7 +234,7 @@ define([
 
                 //workaround for silent change
                 if (this.silentMode !== true) {
-                    amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT));
+                    amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
                 }
                 delete this.silentMode;
 
