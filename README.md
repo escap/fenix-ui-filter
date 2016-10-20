@@ -266,13 +266,17 @@ This configuration proxies the information to D3S code-list / enumeration servic
     
         hideSwitch: true, // hide selector enable/disable switcher
         
-        hideTitle : true, // Hide Title
+        hideTitle : true, // Hide Title,
+        
+        hideDescription : true, // Hide description,
         
         hideHeader : true, // Hide Header,
         
         hideRemoveButton : false, // Hide remove button
         
-        title : "..." // selector title
+        title : "..." // selector title,
+        
+        description : "..." // selector title,
 
     }
 ...

@@ -13,7 +13,8 @@ define(function () {
                 source: [{value: "Label", label: "e.g. John Smith"}]
             },
             template: {
-                title: "Name"
+                title: "Name",
+                description : "My custom description"
             }
         },
 
@@ -46,7 +47,8 @@ define(function () {
                         }
                     },
                     template: {
-                        title: "Role"
+                        title: "Role",
+                        description : "The function assumed or part played by a person or thing in a particular situation."
                     }
                 }
             },
