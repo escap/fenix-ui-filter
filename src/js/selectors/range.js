@@ -8,7 +8,7 @@ define([
     'amplify-pubsub',
     "moment",
     "ion-rangeslider"
-], function ($, log, _, ERR, EVT, C, amplify) {
+], function ($, log, _, ERR, EVT, C, amplify, Moment) {
 
     'use strict';
 
@@ -57,7 +57,7 @@ define([
             },
             from, to;
 
-        from = this.selector.format ? moment(values.from, "X").format(this.selector.format) : values.from;
+        from = this.selector.format ? Moment(values.from, "X").format(this.selector.format) : values.from;
 
         //add always from
         result.values.push(from);
@@ -66,8 +66,8 @@ define([
         //add to is double slider
         if (this.selector.config && this.selector.config.type === "double") {
             result.values = [];
-            to = this.selector.format ? moment(values.to, "X").format(this.selector.format) : values.to;
-            from = this.selector.format ? moment(values.from, "X").format(this.selector.format) : values.from;
+            to = this.selector.format ? Moment(values.to, "X").format(this.selector.format) : values.to;
+            from = this.selector.format ? Moment(values.from, "X").format(this.selector.format) : values.from;
 
             result.values.push({value: to, parent: 'to'});
             result.values.push({value: from, parent: 'from'});
@@ -279,7 +279,7 @@ define([
 
                 if (this.status.ready === true) {
                     //amplify.publish(self._getEventName(EVT.SELECTORS_ITEM_SELECT + this.id), data); //format payload
-                    amplify.publish(self._getEventName(EVT.SELECTOR_SELECT));
+                    amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
 
                     delete this.silentMode;
                 }

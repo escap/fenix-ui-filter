@@ -6,6 +6,22 @@ define(function () {
 
     return {
 
+        coverageTime: {
+            selector: {
+                id: "range",
+                format: "DD/MM/YYYY",
+                config: {
+                    type: "double"
+                }
+
+            },
+            template: {
+                "title": "Coverage period",
+                "description": "Information about the time period for which data are available. It requests to report the time window of reference (reporting the starting date and the ending date) even if it presents some lacks.",
+
+            }
+        },
+/*
         input: {
             selector: {
                 id: "input",
@@ -57,7 +73,7 @@ define(function () {
                 hideHeader: false,
                 title: "Contact"
             }
-        }
+        }*/
     }
 
 });
