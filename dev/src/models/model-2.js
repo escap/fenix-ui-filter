@@ -21,7 +21,6 @@ define(function () {
 
             }
         },
-/*
         input: {
             selector: {
                 id: "input",
@@ -73,7 +72,7 @@ define(function () {
                 hideHeader: false,
                 title: "Contact"
             }
-        }*/
+        }
     }
 
 });

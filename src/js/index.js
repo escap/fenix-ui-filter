@@ -963,8 +963,9 @@ define([
 
     Filter.prototype._setValues = function (o, silent) {
 
-        var source = {},
-            values = flatten(o.values);
+        var oLabels = o.labels || {},
+            source = {},
+            values = flatten(o.values) || {};
 
         //Extend obj with
         _.each(values, _.bind(function (array, k) {
@@ -977,8 +978,8 @@ define([
            _.each([array], function (selector) {
 
                 if (typeof selector === 'object' && !selector.label) {
-                    var labels = o.labels[key];
-                    selector.label = labels ? o.labels[key][selector.value] : "Missing label";
+                    var labels = oLabels[key];
+                    selector.label = labels ? oLabels[key][selector.value] : "Missing label";
                 }
 
                 source[key].push(selector);
