@@ -39,10 +39,6 @@ define([
             ACTIVE_TAB: "ul[data-group-list] li.active",
             GROUP_TABS: "[data-group] a[data-toggle='tab']",
             SWITCH: "input[data-role='switch'][name='disable-selector']",
-            TEMPLATE_SELECTOR: "[data-template-selector]",
-            TEMPLATE_SELECTOR_CONTAINER: "[data-container]",
-            TEMPLATE_GROUP: "[data-template-group]",
-            TEMPLATE_SUMMARY: "[data-summary]",
             SUMMARY_SELECTOR: "[data-code]",
             REMOVE_BTN: "[data-role='remove']",
             TEMPLATE_HEADER: "[data-selector-header]"
@@ -71,7 +67,7 @@ define([
             return this;
 
         } else {
-            log.error("Impossible to create Filter");
+            log.error("Impossible to create Filter!");
             log.error(valid)
         }
     }
@@ -387,7 +383,7 @@ define([
 
         //check for selectors
         if (!this._selectors) {
-            log.warn("Impossible to find selectors for filter: " + this.id);
+            log.warn("Impossible to find 'selectors' for filter: " + this.id);
             log.warn("Filer will wait for selectors dynamically");
         }
 
@@ -775,37 +771,27 @@ define([
             this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.mandatorySelectorClassName);
         }, this));
 
-        log.info("Add class to mandatory selectors");
-
+        log.info("Add class to mandatory selectors: success");
 
     };
 
     Filter.prototype._configureSelectorsStatus = function () {
 
         //default disabled selectors
-        log.info("Disabling disabled selectors by default");
 
         _.each(this.selectorsId, _.bind(function (s) {
 
             var status = this._callSelectorInstanceMethod(s, "getStatus");
 
-            var group = this.selector2group[s];
-
             if (status.disabled === true) {
-
-                _.each(this.group2selectors[group], _.bind(function (n) {
-                    this._disableSelectorAndSwitch(n);
-                }, this));
-
+                this._disableSelectorAndSwitch(s);
             } else {
-
-                _.each(this.group2selectors[group], _.bind(function (n) {
-                    this._enableSelectorAndSwitch(n);
-                }, this));
-
+                this._enableSelectorAndSwitch(s);
             }
 
         }, this));
+
+        log.info("Disable/enable selectors by default: success");
 
     };
 
@@ -946,6 +932,8 @@ define([
             var values = {},
                 labels = {};
 
+            console.log(group)
+
             _.each(group.selectors, _.bind(function (g) {
 
                 var name = this._resolveSelectorName(g.id),
@@ -1047,17 +1035,17 @@ define([
     Filter.prototype._validateSelection = function (s) {
 
         var valid = true,
-            errors = {};
+            errors = [];
 
         //mandatory fields
         _.each(this.mandatorySelectorIds, _.bind(function (id) {
 
             if (!s.values.hasOwnProperty(id) || !s.values[id] || s.values[id] < 1) {
+                var e = {};
+                e.code = 'missing_mandatory_field';
+                e.details = {id: this.selector2group[id]};
+                errors.push(e)
 
-                errors.code = 'missing_mandatory_field';
-                errors.details = this.selector2group[id];
-
-                return errors;
             }
 
         }, this));

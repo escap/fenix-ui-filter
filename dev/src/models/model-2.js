@@ -23,6 +23,8 @@ define(function () {
 
             semantic: false,
 
+            incremental: true,
+
             selectors: {
                 name: {
                     selector: {
