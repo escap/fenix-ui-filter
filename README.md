@@ -123,10 +123,15 @@ Check `fx-filter/config/config.js` to have a look of the default configuration.
          <td>Object</td>
          <td> - </td>
          <td>{
-            indicator : ["cod_001"],
-            year : [{value: "2000", parent: "from"}, {value: "2016", parent: "to"}]}
+                values : { 
+                            indicator : ["cod_001"],
+                            year : [{value: "2000", parent: "from"}, {value: "2016", parent: "to"}]}
+                         },
+                labels: {
+                         ...
+                         }
          </td>
-         <td>Custom renderer for summary</td>
+         <td>Initial filter values, use plain format</td>
       </tr>
       <tr>
          <td>cache</td>

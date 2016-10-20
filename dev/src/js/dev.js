@@ -65,7 +65,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('trace');
+        log.setLevel('silent');
 
         this.start();
 
@@ -119,7 +119,16 @@ define([
 
         var filter = this.createFilter({
             selectors: Model2,
-            el: s.AMIS
+            el: s.AMIS,
+            values : {
+                values : {
+                    input : ["Daniele"],
+                    contact : {
+                        name : ["Luigi"],
+                        role : ["item_2"]
+                    }
+                }
+            }
         }).on("change", function ( evt ) {
             console.log(evt)
         });

@@ -963,14 +963,18 @@ define([
 
     Filter.prototype._setValues = function (o, silent) {
 
-        var source = {};
+        var source = {},
+            values = flatten(o.values);
 
         //Extend obj with
-        _.each(o.values, _.bind(function (array, key) {
+        _.each(values, _.bind(function (array, k) {
+
+            var path = k.split("."),
+                key = path[path.length - 2];
 
             source[key] = [];
 
-            _.each(array, function (selector) {
+           _.each([array], function (selector) {
 
                 if (typeof selector === 'object' && !selector.label) {
                     var labels = o.labels[key];
@@ -996,6 +1000,31 @@ define([
         }, this));
 
         log.info("Filter values set");
+
+        function flatten(data) {
+            var result = {};
+            function recurse (cur, prop) {
+                if (Object(cur) !== cur) {
+                    result[prop] = cur;
+                } else if (Array.isArray(cur)) {
+                    for(var i=0, l=cur.length; i<l; i++)
+                        recurse(cur[i], prop ? prop+"."+i : ""+i);
+                    if (l == 0)
+                        result[prop] = [];
+                } else {
+                    var isEmpty = true;
+                    for (var p in cur) {
+                        isEmpty = false;
+                        recurse(cur[p], prop ? prop+"."+p : p);
+                    }
+                    if (isEmpty)
+                        result[prop] = {};
+                }
+            }
+            recurse(data, "");
+            return result;
+        }
+
     };
 
     Filter.prototype._setSources = function (o) {
