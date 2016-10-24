@@ -13,8 +13,7 @@ define([
     "fenix-ui-bridge",
     "fenix-ui-converter",
     "amplify-pubsub",
-    'handlebars',
-    'bootstrap'
+    'handlebars'
 ], function ($, _, log, ERR, EVT, C, templateSelector, templateGroup, templateSemanticGroup, templateSummary, i18nLabels, Bridge, Converter, amplify, Handlebars) {
 
     'use strict';
