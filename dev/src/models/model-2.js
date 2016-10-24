@@ -18,6 +18,8 @@ define(function () {
             template: {
                 "title": "Coverage period",
                 "description": "Information about the time period for which data are available. It requests to report the time window of reference (reporting the starting date and the ending date) even if it presents some lacks.",
+                hideRemoveButton : false,
+                hideSwitch : false,
 
             }
         },

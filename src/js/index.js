@@ -9,12 +9,14 @@ define([
     '../html/group.hbs',
     '../html/semanticGroup.hbs',
     '../html/summary.hbs',
+    './modes/standard',
+    './modes/nls',
     '../nls/labels',
     "fenix-ui-bridge",
     "fenix-ui-converter",
     "amplify-pubsub",
     'handlebars'
-], function ($, _, log, ERR, EVT, C, templateSelector, templateGroup, templateSemanticGroup, templateSummary, i18nLabels, Bridge, Converter, amplify, Handlebars) {
+], function ($, _, log, ERR, EVT, C, templateSelector, templateGroup, templateSemanticGroup, templateSummary, standardMode, nlsMode, i18nLabels, Bridge, Converter, amplify, Handlebars) {
 
     'use strict';
 
@@ -491,7 +493,7 @@ define([
     Filter.prototype._removeSelectorReferences = function (id) {
 
         var selector = this.selectors[id];
-        selector.instance.dispose();
+        this._callSelectorInstanceMethod(id, "dispose");
         selector.el.remove();
 
         delete this.selectors[id];
@@ -823,9 +825,12 @@ define([
                 obj.initialized = true;
 
                 var selectorId = obj.selector.id,
-                    rawCl;
+                    rawCl,
+                    Mode;
 
                 rawCl = this._getStoredCodelist(obj.cl || obj.enumeration);
+
+                Mode = this._getMode(obj);
 
                 this._getSelectorRender(selectorId, _.bind(function (Selector) {
 
@@ -833,10 +838,12 @@ define([
                         id: name,
                         data: rawCl ? rawCl : null,
                         controller: this,
-                        lang: this.lang
+                        lang: this.lang,
+                        plugin : Selector
                     });
 
-                    this.selectors[name].instance = new Selector(model);
+                    this.selectors[name].instance = new Mode(model);
+
                 }, this));
 
             } else {
@@ -1593,9 +1600,9 @@ define([
             return
         }
 
-        if ($.isFunction(Instance[method])) {
+        if ($.isFunction(Instance['callPluginMethod'])) {
 
-            return Instance[method](opts1, opts2);
+            return Instance.callPluginMethod(method, opts1, opts2);
 
         } else {
             log.error(name + " selector does not implement the mandatory " + method + "() fn");
@@ -1662,6 +1669,33 @@ define([
     Filter.prototype._getSelectorRender = function (name, callback) {
 
         return require([this._getSelectorScriptPath(name) + ".js"], callback);
+    };
+
+    Filter.prototype._getSelectorRender = function (name, callback) {
+
+        return require([this._getSelectorScriptPath(name) + ".js"], callback);
+    };
+
+    Filter.prototype._getMode = function (obj) {
+
+        var instance,
+            mode = obj.mode || "standard";
+
+        switch (mode.toLowerCase()) {
+            case "nls" :
+                instance = nlsMode;
+                break;
+            case "incremental" :
+                instance = incrementalMode;
+                break;
+            default :
+                instance = standardMode;
+        }
+
+        log.info("Selector mode: " + mode);
+
+        return instance;
+
     };
 
     Filter.prototype._getActiveSelectorByGroup = function (name) {
@@ -1927,8 +1961,7 @@ define([
 
         //dispose selectors
         _.each(this.selectors, _.bind(function (obj, name) {
-            var Instance = this._getSelectorInstance(name);
-            Instance.dispose();
+            this._callSelectorInstanceMethod(name, "dispose")
         }, this));
 
         //unbind event listeners
