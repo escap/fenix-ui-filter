@@ -21,6 +21,7 @@ define(function () {
 
             }
         },
+
         input: {
             selector: {
                 id: "input",
