@@ -329,24 +329,44 @@ define([
 
         this.dropdown = dropdown;
 
-        this.printDefaultSelection();
+        this.printDefaultSelection(data);
 
     };
 
-    Dropdown.prototype.printDefaultSelection = function () {
+    Dropdown.prototype.printDefaultSelection = function (data) {
 
-        return this._printDefaultSelection();
+        return this._printDefaultSelection(data);
     };
 
-    Dropdown.prototype._printDefaultSelection = function () {
+    Dropdown.prototype._printDefaultSelection = function (data) {
 
         var config = this.selector,
             instance = this.dropdown[0].selectize;
 
         if (config.default) {
+
+            if (data) {
+                //check for default value
+                var found = _.find(data, function (option) {
+                    return option.value === config.default[0].toString();
+                });
+
+                //print default values
+                if (found)
+                    instance.setValue(config.default)
+                else if(config.emptyOption && config.emptyOption.value)
+                    instance.setValue(config.emptyOption.value);
+
+            } else {
+                //print default values
+                instance.setValue(config.default);
+            }
+        }
+
+        /**if (config.default) {
             //print default values
             instance.setValue(config.default);
-        }
+        }**/
 
     };
 
@@ -489,7 +509,7 @@ define([
                 instance.setValue(v.toString());
             }
             else {
-                this.printDefaultSelection();
+                this.printDefaultSelection(data);
             }
         }
 
