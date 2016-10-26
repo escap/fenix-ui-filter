@@ -1210,7 +1210,7 @@ define([
 
         if (this.selectors[o.target]) {
 
-            var c = this.selectors[o.target].cl;
+            var c = this.selectors[o.target].cl, cloneCodeList = $.extend( {}, this.selectors[o.target].cl);
 
             if (c) {
 
@@ -1232,9 +1232,20 @@ define([
 
                         var source = [];
 
-                        _.each(data, function (s) {
+                       /** _.each(data, function (s) {
                             source = source.concat(s.children);
-                        });
+                        });**/
+
+                        _.each(data, function (s) {
+                            if(cloneCodeList.level) {
+                                c.level = cloneCodeList.level;
+                                source = this._filterByPropValue(s.children, "level", c.level, []);
+                            }
+                            else {
+                                source = source.concat(s.children);
+                            }
+
+                        }, this);
 
                         source = _.uniq(source);
                         this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: source});
@@ -1247,45 +1258,20 @@ define([
         }
     };
 
-    Filter.prototype._dep_parent = function (payload, o) {
 
-        if (this.selectors[o.target]) {
+    Filter.prototype._filterByPropValue = function(object, prop, propValue,result){
 
-            var c = this.selectors[o.target].cl;
+        if(object.hasOwnProperty(prop) && object.level==propValue) {
+            result.push(object);
+        }
 
-            if (c) {
-
-                log.info("_dep_parent invokation");
-                log.info(o);
-
-                //delete c.levels;
-                //c.levels = 2;
-                delete c.level;
-
-                c.codes = [];
-
-                _.each(payload, function (selector) {
-                    c.codes.push(selector.value);
-                });
-
-                this._getPromise(c).then(
-                    _.bind(function (data) {
-
-                        var source = [];
-
-                        _.each(data, function (s) {
-                            source = source.concat(s.children);
-                        });
-
-                        source = _.uniq(source);
-                        this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: source});
-                    }, this),
-                    function (r) {
-                        log.error(r);
-                    }
-                )
+        for(var i=0;i<Object.keys(object).length;i++){
+            if(typeof object[Object.keys(object)[i]]=="object"){
+                this._filterByPropValue(object[Object.keys(object)[i]], prop, propValue, result);
             }
         }
+
+        return result;
     };
 
     Filter.prototype._dep_process = function (payload, o) {
