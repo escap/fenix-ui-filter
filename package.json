@@ -1,11 +1,11 @@
 {
   "name": "fenix-ui-filter",
-  "version": "3.0.0-beta.15",
+  "version": "3.0.0-beta.16",
   "description": "FENIX Filter",
   "main": "dist/fenix-ui-filter.min.js",
   "scripts": {
     "test": "NODE_ENV=test karma start ./karma.config.js",
-    "build": "NODE_ENV=production webpack --display-error-details",
+    "build": "cross-env NODE_ENV=production webpack --display-error-details",
     "build:demo": "NODE_ENV=demo webpack --display-error-details",
     "dev": "NODE_ENV=develop webpack-dev-server --display-error-details --progress --color --content-base dev  --inline --hot",
     "w-test": "SET NODE_ENV=test&& karma start ./karma.config.js",
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/FENIX-Platform/fenix-ui-filter#readme",
   "dependencies": {
     "amplify-pubsub": "^0.0.1",
+    "cross-env": "^3.1.3",
     "eonasdan-bootstrap-datetimepicker": "^4.17.42",
     "fenix-ui-bridge": "^1.0.0-beta.6",
     "fenix-ui-converter": "^1.0.0-beta.3",
