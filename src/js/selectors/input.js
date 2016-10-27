@@ -25,7 +25,7 @@ define([
 
         var self = this;
 
-        $.extend(true, this, defaultOptions, o, {$el : $(o.el)});
+        $.extend(true, this, defaultOptions, o, {$el: $(o.el)});
 
         this._checkConfiguration();
 
@@ -45,6 +45,8 @@ define([
             self.status.ready = true;
 
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+            self._trigger("ready", {id: self.id});
+
         }, 0);
 
         return this;
@@ -171,10 +173,14 @@ define([
     Input.prototype.setValue = function (v, silent) {
         log.info("Set input value: " + v);
 
-        var $input;
+        var self = this,
+            $input = $();
 
-        if(this.type === 'checkbox' || this.type === 'radio') {
-            $input = this.$inputs.filter("[value='" + v + "']").prop('checked', true);
+        if (this.type === 'checkbox' || this.type === 'radio') {
+            self.$inputs.prop('checked', false);
+            _.each(v, function (x) {
+                $input = self.$inputs.filter("[value='" + x + "']").prop('checked', true);
+            })
         } else {
             $input = this.$inputs.val(v);
         }
@@ -220,6 +226,8 @@ define([
 
         this.values = [];
 
+        this.channels = {};
+
         this.$inputs.each(function () {
             self.values.push($(this).attr("value"));
         });
@@ -240,7 +248,7 @@ define([
 
         if ($list.length === 0) {
             log.info("Injecting input list");
-            var $list = $(templateList({ isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')}));
+            var $list = $(templateList({isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')}));
 
             this.$el.append($list);
 
@@ -324,14 +332,17 @@ define([
 
                 var r = self.getValues(),
                     value = r.values[0] || "",
-                    label = r.labels[value];
+                    label = r.labels[value],
+                    payload = {
+                        id: self.id,
+                        value: value,
+                        label: label,
+                        parent: null
+                    };
 
-                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), {
-                    id : self.id,
-                    value: value,
-                    label: label,
-                    parent: null
-                });
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), payload);
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT + self.id), payload);
+
             }
         });
     };
@@ -345,6 +356,8 @@ define([
         this._unbindEventListeners();
 
         this._destroyInput();
+
+        this.$el.empty();
 
     };
 
@@ -373,6 +386,33 @@ define([
             }
 
         }
+    };
+
+    /**
+     * pub/sub
+     * @return {Object} component instance
+     */
+    Input.prototype.on = function (channel, fn, context) {
+        var _context = context || this;
+        if (!this.channels[channel]) {
+            this.channels[channel] = [];
+        }
+        this.channels[channel].push({context: _context, callback: fn});
+        return this;
+    };
+
+    Input.prototype._trigger = function (channel) {
+
+        if (!this.channels[channel]) {
+            return false;
+        }
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0, l = this.channels[channel].length; i < l; i++) {
+            var subscription = this.channels[channel][i];
+            subscription.callback.apply(subscription.context, args);
+        }
+
+        return this;
     };
 
     return Input;

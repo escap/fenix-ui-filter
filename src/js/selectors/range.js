@@ -38,6 +38,8 @@ define([
             self.status.ready = true;
 
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+            self._trigger("ready", {id: self.id});
+
         }, 0);
 
         return this;
@@ -245,6 +247,8 @@ define([
 
         this.values = [];
 
+        this.channels = {};
+
         this.$rangeContainer = this.$el.find("[data-selector-range]");
 
     };
@@ -329,12 +333,42 @@ define([
         this._unbindEventListeners();
 
         this.$rangeContainer.data("ionRangeSlider").destroy();
+
+        this.$el.empty();
+
     };
 
     // dependency handler
 
     Range.prototype._dep_ensure_unset = function (opts) {
         log.warn("_dep_ensure_unset method not implemented for range selector");
+    };
+
+    /**
+     * pub/sub
+     * @return {Object} component instance
+     */
+    Range.prototype.on = function (channel, fn, context) {
+        var _context = context || this;
+        if (!this.channels[channel]) {
+            this.channels[channel] = [];
+        }
+        this.channels[channel].push({context: _context, callback: fn});
+        return this;
+    };
+
+    Range.prototype._trigger = function (channel) {
+
+        if (!this.channels[channel]) {
+            return false;
+        }
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0, l = this.channels[channel].length; i < l; i++) {
+            var subscription = this.channels[channel][i];
+            subscription.callback.apply(subscription.context, args);
+        }
+
+        return this;
     };
 
     return Range;

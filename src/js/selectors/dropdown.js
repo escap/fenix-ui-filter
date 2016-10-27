@@ -48,6 +48,7 @@ define([
         window.setTimeout(function () {
             self.status.ready = true;
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+            self._trigger("ready", {id: self.id});
 
         }, 0);
 
@@ -227,6 +228,10 @@ define([
 
         this.$dropdownEl = this.$el.find(s.DROPDOWN_CONTAINER);
 
+        this.lang = this.lang.toUpperCase();
+
+        this.channels = {};
+
     };
 
     Dropdown.prototype._buildDropdownModel = function (fxResource) {
@@ -404,6 +409,7 @@ define([
                 });
 
                 amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT + self.id), $.extend({id: self.id }, self.getValues()));
             }
             
         });
@@ -412,6 +418,7 @@ define([
         this.$el.find('.selectize-control').on('click', function () {
             if (self.status.ready === true) {
                 amplify.publish(self._getEventName(EVT.SELECTOR_CLICK), {id: self.id});
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT + self.id), $.extend({id: self.id }, self.getValues()));
             }
         });
 
@@ -444,6 +451,9 @@ define([
 
         this._destroyDropdown();
 
+        this.$el.empty();
+
+
     };
 
     Dropdown.prototype._getEventName = function (evt) {
@@ -453,11 +463,10 @@ define([
 
     // dependency handler
 
-
     Dropdown.prototype._dep_min = function (opts) {
 
-        var codes = opts.data.length > 0 ? opts.data : [{value: this.selector.from || 0}],
-            from = codes[0].value,
+        var codes = opts.data && Array.isArray(opts.data.values) && opts.data.values.length > 0 ? opts.data.values : [{value: this.selector.from || 0}],
+            from = codes[0],
             data = [];
 
         if (!this.selector.to) {
@@ -537,6 +546,33 @@ define([
 
         this.setSource(data);
 
+    };
+
+    /**
+     * pub/sub
+     * @return {Object} component instance
+     */
+    Dropdown.prototype.on = function (channel, fn, context) {
+        var _context = context || this;
+        if (!this.channels[channel]) {
+            this.channels[channel] = [];
+        }
+        this.channels[channel].push({context: _context, callback: fn});
+        return this;
+    };
+
+    Dropdown.prototype._trigger = function (channel) {
+
+        if (!this.channels[channel]) {
+            return false;
+        }
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0, l = this.channels[channel].length; i < l; i++) {
+            var subscription = this.channels[channel][i];
+            subscription.callback.apply(subscription.context, args);
+        }
+
+        return this;
     };
 
     return Dropdown;

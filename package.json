@@ -34,9 +34,9 @@
     "jquery": "^2.2.4",
     "jstree": "^3.3.3",
     "loglevel": "^1.4.1",
-    "moment": "^2.15.2",
-    "node-sass": "^3.11.1",
-    "selectize": "^0.12.4",
+    "moment": "^2.14.1",
+    "q": "^1.4.1",
+    "selectize": "^0.12.0",
     "sortablejs": "^1.4.2",
     "underscore": "^1.8.3"
   },

@@ -35,6 +35,7 @@ define([
             self.status.ready = true;
 
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+            self._trigger("ready", {id: self.id});
         }, 0);
 
         return this;
@@ -169,6 +170,8 @@ define([
         this.status = {};
         this.status.disabled = this.selector.disabled;
 
+        this.channels = {};
+
     };
 
     Textarea.prototype.renderTaxtarea = function () {
@@ -227,14 +230,17 @@ define([
 
                 var r = self.getValues(),
                     value = r.values[0] || "",
-                    label = r.labels[value];
+                    label = r.labels[value],
+                    payload = {
+                        id : self.id,
+                        value: value,
+                        label: label,
+                        parent: null
+                    };
 
-                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), {
-                    id : self.id,
-                    value: value,
-                    label: label,
-                    parent: null
-                });
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), payload);
+                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT + self.id), payload);
+
             }
 
         });
@@ -250,6 +256,8 @@ define([
         this._unbindEventListeners();
 
         this._destroyTextarea();
+
+        this.$el.empty();
 
     };
 
@@ -278,6 +286,34 @@ define([
             }
 
         }
+    };
+
+
+    /**
+     * pub/sub
+     * @return {Object} component instance
+     */
+    Textarea.prototype.on = function (channel, fn, context) {
+        var _context = context || this;
+        if (!this.channels[channel]) {
+            this.channels[channel] = [];
+        }
+        this.channels[channel].push({context: _context, callback: fn});
+        return this;
+    };
+
+    Textarea.prototype._trigger = function (channel) {
+
+        if (!this.channels[channel]) {
+            return false;
+        }
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0, l = this.channels[channel].length; i < l; i++) {
+            var subscription = this.channels[channel][i];
+            subscription.callback.apply(subscription.context, args);
+        }
+
+        return this;
     };
 
     return Textarea;

@@ -202,6 +202,8 @@ define([
             log.warn("Selector is disabled. Impossible to unset tree value: " + v);
         }
 
+        this._updateSummary();
+
     };
 
     /**
@@ -245,6 +247,10 @@ define([
         this.status = {};
 
         this.status.disabled = this.selector.disabled;
+
+        this.channels = {};
+
+        this.lang = this.lang.toUpperCase();
 
     };
 
@@ -342,6 +348,7 @@ define([
 
                 //Always async
                 amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
+                this._trigger("ready", {id: this.id});
 
             }, this))
 
@@ -531,6 +538,7 @@ define([
         this._updateSummary();
 
         amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
+        amplify.publish(self._getEventName(EVT.SELECTOR_SELECT+self.id), $.extend({id: self.id }, self.getValues()));
 
     };
 
@@ -618,15 +626,17 @@ define([
         var config = this.selector,
             tree = this.tree.jstree(true);
 
-        if (config.default && Array.isArray(config.default) && $.isFunction(tree.select_node) && $.isFunction(tree.deselect_all)) {
+        //clear current selection
+        tree.deselect_all(true);
 
-            //clear current selection
-            tree.deselect_all(true);
+        if (config.default && Array.isArray(config.default) && $.isFunction(tree.select_node) && $.isFunction(tree.deselect_all)) {
 
             _.each(config.default, function (k) {
                 tree.select_node(k)
             });
         }
+
+        this._updateSummary();
 
     };
 
@@ -640,6 +650,8 @@ define([
 
         $container.find(s.CLEAR_ALL_CONTAINER).off();
 
+        $container.empty();
+
         log.info("Destroyed tree: " + this.id);
     };
 
@@ -649,6 +661,33 @@ define([
 
         this.setDomain(opts);
 
+    };
+
+    /**
+     * pub/sub
+     * @return {Object} component instance
+     */
+    Tree.prototype.on = function (channel, fn, context) {
+        var _context = context || this;
+        if (!this.channels[channel]) {
+            this.channels[channel] = [];
+        }
+        this.channels[channel].push({context: _context, callback: fn});
+        return this;
+    };
+
+    Tree.prototype._trigger = function (channel) {
+
+        if (!this.channels[channel]) {
+            return false;
+        }
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0, l = this.channels[channel].length; i < l; i++) {
+            var subscription = this.channels[channel][i];
+            subscription.callback.apply(subscription.context, args);
+        }
+
+        return this;
     };
 
     return Tree;

@@ -40,6 +40,7 @@ define([
             self.status.ready = true;
 
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+            self._trigger("ready", {id: self.id});
         }, 0);
 
         return this;
@@ -351,6 +352,8 @@ define([
         this.status = {};
         this.status.disabled = this.selector.disabled;
 
+        this.channels = {};
+
         if (this.selector.hasOwnProperty("config") && $.isFunction(this.selector.config.selectorRender)) {
             this.selectorRender = this.selector.config.selectorRender;
         }
@@ -401,6 +404,8 @@ define([
 
         }, this));
 
+        this.$el.empty();
+
     };
 
     // dependency handler
@@ -409,6 +414,7 @@ define([
 
         log.warn('TODO implement: Sortable selector from FENIX filter');
     };
+r
 
     return Sortable;
 

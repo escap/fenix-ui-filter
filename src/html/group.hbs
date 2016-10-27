@@ -1,4 +1,4 @@
-<div data-template-semantic class="fx-selector {{classNames}}">
+<div class="fx-selector {{classNames}}">
 
     {{#unless hideHeader}}
 
@@ -14,7 +14,7 @@
 
                 {{#if incremental}}
 
-                    <button type="button" class="btn btn-default">
+                    <button data-role="add" type="button" class="btn btn-default">
                         <span class=" glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </button>
 
@@ -43,9 +43,5 @@
         </div>
 
     {{/unless}}
-
-    {{#each selectors}}
-        <div data-selector="{{this.id}}"></div>
-    {{/each}}
 
 </div>

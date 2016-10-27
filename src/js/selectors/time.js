@@ -41,6 +41,7 @@ define([
             self.status.ready = true;
 
             amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
+            self._trigger("ready", {id: self.id});
 
         }, 0);
 
@@ -192,6 +193,8 @@ define([
 
         this.values = [];
 
+        this.channels = {};
+
         this.$pickerEl = this.$el.find(s.PICKER_CONTAINER);
 
     };
@@ -253,12 +256,42 @@ define([
         this._unbindEventListeners();
 
         this.$pickerEl.data("DateTimePicker").destroy();
+
+        this.$el.empty();
+
     };
 
     // dependency handler
 
     Time.prototype._dep_ensure_unset = function (opts) {
         log.warn("_dep_ensure_unset method not implemented for time selector");
+    };
+
+    /**
+     * pub/sub
+     * @return {Object} component instance
+     */
+    Time.prototype.on = function (channel, fn, context) {
+        var _context = context || this;
+        if (!this.channels[channel]) {
+            this.channels[channel] = [];
+        }
+        this.channels[channel].push({context: _context, callback: fn});
+        return this;
+    };
+
+    Time.prototype._trigger = function (channel) {
+
+        if (!this.channels[channel]) {
+            return false;
+        }
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0, l = this.channels[channel].length; i < l; i++) {
+            var subscription = this.channels[channel][i];
+            subscription.callback.apply(subscription.context, args);
+        }
+
+        return this;
     };
 
     return Time;

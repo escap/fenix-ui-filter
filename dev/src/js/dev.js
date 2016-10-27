@@ -120,17 +120,18 @@ define([
         var filter = this.createFilter({
             selectors: Model2,
             el: s.AMIS,
-            values : {
-                values : {
-                    input : ["Daniele"],
-                    contact : {
-                        name : ["Luigi"],
-                        role : ["item_2"]
-                    }
-                }
-            }
-        }).on("change", function ( evt ) {
-            console.log(evt)
+            summaryEl: "#amis-summary",
+            /*            values : {
+             values : {
+             input : ["Daniele"],
+             contact : {
+             name : ["Luigi"],
+             role : ["item_2"]
+             }
+             }
+             }*/
+        }).on("change", function (evt) {
+            //console.log(evt)
         });
 
         $(s.AMIS_BTN).on("click", function () {

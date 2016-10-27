@@ -8,6 +8,8 @@ define(function () {
 
         corePlugins : ['dropdown', 'tree', 'input', 'range', 'time', 'sortable', 'textarea'],
 
+        languages : ['EN', 'FR', 'ES', 'PR', 'AR', 'CZ'],
+
         pluginRegistry: { },
 
         // css class names
