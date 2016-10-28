@@ -511,6 +511,8 @@ define([
             else {
                 this.printDefaultSelection(data);
             }
+        } else {
+            this.printDefaultSelection(data);
         }
 
     };
