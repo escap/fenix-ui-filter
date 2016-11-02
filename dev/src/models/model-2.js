@@ -5,64 +5,166 @@ define(function () {
     'use strict';
 
     return {
-/*
-        bb: {
 
-            selector: {
-                id: "tree",
-                source: [
-                    {value: "item_1", label: "Item 1"},
-                    {value: "item_2", label: "Item 2"},
-                    {value: "item_3", label: "Item 3"},
-                    {value: "item_4", label: "Item 4"}
-                ]
-            },
+        item : {
 
-            template: {
-                title: "NLS internal",
-                hideRemoveButton: false,
-                hideSwitch: false,
-            }
-        },
-*/
-
-
-        group: {
+            className : "well",
 
             incremental : true,
+
+            selectors : {
+
+                first : {
+                    selector : {
+                        id : 'dropdown',
+                        source : [
+                            {value : 'item_1', label : "Item 1"},
+                            {value : 'item_2', label : "Item 2"},
+                            {value : 'item_3', label : "Item 3"}
+                        ],
+                        default : ['item_1']
+                    },
+                    template : {
+                        title : "First"
+                    }
+                },
+
+                second : {
+                    selector : {
+                        id : 'tree',
+                        source : [
+                            {value : 'item_1', label : "Item 1"},
+                            {value : 'item_2', label : "Item 2"},
+                            {value : 'item_3', label : "Item 3"}
+                        ],
+                        default : ['item_2']
+                    },
+                    template : {
+                        title : "Second"
+                    }
+                }
+
+            }
+
+        }
+
+/*        item : {
+
+            selectors: {
+
+                first: {
+                    selector: {
+                        id: 'tree',
+                        source: [
+                            {value: 'item_1', label: "Item 1"},
+                            {value: 'item_2', label: "Item 2"},
+                            {value: 'item_3', label: "Item 3"}
+                        ],
+                        default: ['item_1']
+                    }
+                },
+
+                second: {
+                    selector: {
+                        id: 'tree',
+                        source: [
+                            {value: 'item_1', label: "Item 1"},
+                            {value: 'item_2', label: "Item 2"},
+                            {value: 'item_3', label: "Item 3"}
+                        ],
+                        default: ['item_2']
+                    }
+                }
+
+            }
+        }*/
+
+
+
+        /*        bb: {
+
+         nls: true,
+
+         selector: {
+
+         id: "tree",
+
+         source: [
+         {value: "item_1", label: "Item 1"},
+         {value: "item_2", label: "Item 2"},
+         {value: "item_3", label: "Item 3"},
+         {value: "item_4", label: "Item 4"}
+         ]
+         },
+
+         template: {
+         title: "NLS selector",
+         hideRemoveButton: false,
+         hideSwitch: false
+         }
+         },*/
+/*
+
+        contacts: {
+
+            //incremental: true,
 
             className: "well",
 
             template: {
-                title: "Hello Group!",
-                hideRemoveButton: false,
-                hideSwitch: false
+                title: "Contacts:",
+                hideRemoveButton: true,
+                hideSwitch: true
             },
 
             selectors: {
+
                 name: {
+
+                    //nls: true,
+
                     selector: {
                         id: "input",
                         type: "text",
-                        source: [{value: "name", label: "Name"}],
-                        default : ["Daniele"]
+                        source: [{value: "name", label: "Name"}]
                     },
-                    template : {
-                        title : "Name"
+                    template: {
+                        title: "Name"
                     }
                 },
+
                 surname: {
                     selector: {
                         id: "input",
                         type: "text",
                         source: [{value: "surname", label: "Surname"}]
                     },
-                    template : {
-                        title : "Surname"
+                    template: {
+                        title: "Surname"
                     }
+                },
+
+                role : {
+
+                    selector: {
+                        id: "dropdown",
+                        source: [
+                            {value: "role_1", label: "Operations manager"},
+                            {value: "role_2", label: "Quality control, safety, environmental manager"},
+                            {value: "role_3", label: "Receptionist"}
+                        ],
+                        config : {
+                            maxItems : 1
+                        }
+                    },
+                    template: {
+                        title: "Role"
+                    }
+
                 }
             }
         }
+*/
 
         /*
          policyMeasure: {

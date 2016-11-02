@@ -7,9 +7,8 @@ define([
     '../../config/errors',
     '../../config/events',
     '../../config/config',
-    'sortablejs',
-    'amplify-pubsub'
-], function ($, log, _, templateList, templateItem, ERR, EVT, C, SortableJS, amplify) {
+    'sortablejs'
+], function ($, log, _, templateList, templateItem, ERR, EVT, C, SortableJS) {
 
     'use strict';
 
@@ -39,8 +38,7 @@ define([
 
             self.status.ready = true;
 
-            amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
-            self._trigger("ready", {id: self.id});
+            self._trigger(EVT.SELECTOR_READY, {id: self.id});
         }, 0);
 
         return this;
@@ -316,7 +314,7 @@ define([
                             //workaround for silent change
                             if (this.silentMode !== true) {
 
-                                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), {
+                                this._trigger(self._getEventName(EVT.SELECTOR_SELECTED), {
                                     id: this.id,
                                     value: $itemEl.data('id'),
                                     label: $itemEl.text(),

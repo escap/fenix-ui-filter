@@ -5,59 +5,19 @@ define([
     '../../config/errors',
     '../../config/events',
     '../../config/config',
+    '../../html/selector.hbs',
     '../../html/group.hbs',
     '../../nls/labels',
     './selector',
-    'amplify-pubsub'
-], function (log, $, _, ERR, EVT, C, template, i18nLabels, Selector, amplify) {
+], function (log, $, _, ERR, EVT, C, templateSelector, templateGroup, i18nLabels, Selector) {
 
     'use strict';
 
     var s = {
-        CLASSNAME: ".fx-selector",
-        SELECTOR_DISABLED_CLASSNAME: "fx-selector-disabled",
-        SELECTORS: "[data-selector]",
-        GROUPS: "[data-group]",
-        TREE_CONTAINER: "[data-role='tree']",
-        FILTER_CONTAINER: "[data-role='filter']",
-        CLEAR_ALL_CONTAINER: "[data-role='clear']",
-        AMOUNT_CONTAINER: "[data-role='amount']",
-        COMPARE_RADIO_BTNS: "input:radio[name='compare']",
-        COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
-        ACTIVE_TAB: "ul[data-group-list] li.active",
-        GROUP_TABS: "[data-group] a[data-toggle='tab']",
         SWITCH: "input[data-role='switch'][name='disable-selector']",
-        SUMMARY_SELECTOR: "[data-code]",
         REMOVE_BTN: "[data-role='remove']",
         ADD_BTN: "[data-role='add']",
-        TEMPLATE_HEADER: "[data-selector-header]"
-    };
-
-    Group.prototype._initVariables = function () {
-
-        this.channels = {};
-
-        this.id = this.initial.id;
-        this.controller = this.initial.controller;
-        this.template = this.initial.template;
-        this.lang = this.initial.lang;
-
-        this.environment = this.initial.environment;
-        this.cache = this.initial.cache;
-        this.plugins = this.initial.plugins;
-
-        this.groups = {};
-        this.selectors = {};
-        this._selectors = this.initial.selectors;
-        var key = Object.keys(this._selectors)[0];
-        this.mainSelector = this._selectors[key];
-
-        this.incremental = this.initial.incremental;
-
-        this.className = this.initial.className;
-
-        this.amount = 0;
-
+        GROUPS_CONTAINER: '[data-role="groups"]'
     };
 
     function Group(obj) {
@@ -110,12 +70,17 @@ define([
     Group.prototype.getValues = function (format) {
 
         var result = {
-            values: {},
-            labels: {},
-            valid: false
-        }, v, values = {}, labels = {};
+                values: {},
+                labels: {},
+                valid: false
+            }, v,
+            values,
+            labels = {};
 
-        if (Object.keys(this.groups).length === 1) {
+
+        if (!this.incremental) {
+
+            values = {};
 
             var key = Object.keys(this.groups)[0];
 
@@ -134,6 +99,33 @@ define([
 
             }, this));
 
+        } else {
+            values = [];
+
+            _.each(this.groups, _.bind(function (group) {
+
+                var obj = {};
+
+                _.each(group, _.bind(function (selector) {
+
+                    var instance = selector.instance;
+
+                    if (instance) {
+
+                        var values = instance.getValues();
+
+                        obj[selector.id] = values.values.length === 1 ? values.values[0] : values.values;
+
+                        labels[selector.id] = $.extend(true, labels[selector.id], values.labels);
+
+                    }
+
+                }, this));
+
+                values.push(obj);
+
+            }, this));
+
         }
 
         result.values = values;
@@ -147,8 +139,6 @@ define([
      * @return {Object}
      */
     Group.prototype.setSource = function (values) {
-
-
 
         _.each(this.selectors, _.bind(function (obj) {
 
@@ -164,13 +154,44 @@ define([
      * @return {Object}
      */
     Group.prototype.setValue = function (values) {
-        console.log("TODO")
 
-        _.each(this.selectors, _.bind(function (obj) {
+        if (!this.incremental) {
 
-            obj.instance.setValue(values)
+            _.each(this.groups, function (group) {
 
-        }, this));
+                _.each(group, function (selector) {
+
+                    var id = selector.id;
+
+                    if (values.hasOwnProperty(id)) {
+                        selector.instance.setValue(values[id])
+                    }
+
+                });
+
+            });
+
+        } else {
+
+            if (Array.isArray(values)) {
+
+                _.each(values, _.bind(function (obj, index) {
+
+                    var group = this.groups["group_" + (index + 1)] || {};
+                    _.each(obj, function (v, key) {
+
+                        if (group[key] && group[key].instance) {
+                            group[key].instance.setValue(v);
+                        }
+                    })
+
+                }, this));
+
+            } else {
+                log.warn("Group is incremental and values should be an array of object")
+            }
+
+        }
 
     };
 
@@ -182,12 +203,100 @@ define([
 
         console.log("TODO")
 
+
         _.each(this.selectors, _.bind(function (obj) {
 
             obj.instance.unsetValue(values)
 
         }, this));
 
+    };
+
+    /**
+     * enable
+     * @return {Object}
+     */
+    Group.prototype.enable = function (silent) {
+
+        _.each(this.groups, _.bind(function (group) {
+
+            _.each(group, _.bind(function (selector) {
+
+                var instance = selector.instance;
+
+                if (instance) {
+                    instance.enable(true)
+                }
+
+            }, this));
+
+        }, this));
+
+        this.status.disabled = false;
+
+        this.$el.find(s.SWITCH).prop("checked", true);
+
+        if (!silent) {
+            this._trigger(EVT.SELECTOR_ENABLED);
+        }
+    };
+
+    /**
+     * disable
+     * @return {Object}
+     */
+    Group.prototype.disable = function (silent) {
+
+        _.each(this.groups, _.bind(function (group) {
+
+            _.each(group, _.bind(function (selector) {
+
+                var instance = selector.instance;
+
+                if (instance) {
+                    instance.disable(true)
+                }
+
+            }, this));
+
+        }, this));
+
+        this.status.disabled = true;
+
+        this.$el.find(s.SWITCH).prop("checked", false);
+
+        if (!silent) {
+            this._trigger(EVT.SELECTOR_DISABLED);
+        }
+
+    };
+
+    Group.prototype._initVariables = function () {
+
+        this.channels = {};
+
+        this.id = this.initial.id;
+        this.controller = this.initial.controller;
+        this.template = this.initial.template;
+        this.lang = this.initial.lang;
+
+        this.environment = this.initial.environment;
+        this.cache = this.initial.cache;
+        this.plugins = this.initial.plugins;
+
+        this.groups = {};
+        this.selectors = {};
+        this._selectors = this.initial.selectors;
+
+        this.incremental = !!this.initial.incremental;
+
+        this.className = this.initial.className;
+
+        this.status = {
+            disable: false
+        };
+
+        this.amount = 0;
 
     };
 
@@ -197,33 +306,86 @@ define([
      */
     Group.prototype.getStatus = function () {
 
-        return this.mainSelector.instance.getStatus();
+        return this.status;
     };
 
+    /*   Group.prototype._attach = function () {
+
+     var classNames = this.initial.className || "",
+     obj = this.template,
+     conf = $.extend(true, {id: this.id}, i18nLabels[this.lang], obj);
+
+     _.each(conf, function (value, key) {
+     if (value === true) {
+     classNames = classNames.concat(" " + key);
+     }
+     });
+
+     var model = $.extend(true, {
+     classNames: classNames,
+     id: this.id,
+     template: this.template,
+     incremental: this.incremental
+     }, this.template, i18nLabels[this.lang.toLowerCase()]),
+     $el = $(templateSelector(model));
+
+     this.$el.append($el);
+
+     this.$el = $el;
+
+     };
+     */
     Group.prototype._attach = function () {
 
-        var classNames = this.initial.className || "",
-            obj = this.template,
-            conf = $.extend(true, {id: this.id}, i18nLabels[this.lang], obj);
+        this.$el = this._getGroupContainer(this.id);
 
-        _.each(conf, function (value, key) {
-            if (value === true) {
-                classNames = classNames.concat(" " + key);
-            }
-        });
+        this._bindEventListeners();
 
-        var model = $.extend(true, {
-                classNames: classNames,
-                id: this.id,
-                template: this.template,
+        return this.$el;
+    };
+
+    Group.prototype._getGroupContainer = function (id) {
+
+        var $cont = this.$el.find('[data-group="' + id + '"]'),
+            conf = this,
+            model;
+
+        if ($cont.length === 0) {
+            log.warn("Impossible to find selector container: " + id);
+
+            model = $.extend(true, {
+                classNames: conf.className,
+                id: id,
                 incremental: this.incremental
-            }, this.template, i18nLabels[this.lang.toLowerCase()]),
-            $el = $(template(model));
+            }, conf.template, i18nLabels[this.lang]);
 
-        this.$el.append($el);
+            $cont = $(templateGroup(model));
 
-        this.$el = $el;
+            if (this.direction === "append") {
+                this.$el.append($cont);
+            } else {
+                this.$el.prepend($cont);
+            }
 
+        }
+
+        return $cont;
+    };
+
+    Group.prototype._createSelectorContainer = function (id) {
+        log.info("Create container for selector: " + id);
+
+        var conf = $.extend(true, {
+                id: id,
+                incremental: this.incremental,
+                hideRemoveButton: !this.incremental,
+                hideSwitch: !this.incremental ? true : this.template.hideSwitch
+            }, i18nLabels[this.lang]),
+            $html;
+
+        $html = $(templateSelector(conf));
+
+        return $html;
     };
 
     Group.prototype._render = function () {
@@ -236,10 +398,21 @@ define([
 
     };
 
-    Group.prototype._addGroup = function() {
+    Group.prototype._addGroup = function () {
 
+        // increase the group amount
         this.amount++;
+
+        //create new group
         this.groups["group_" + this.amount] = {};
+
+        //create group $el and cache it
+        var $el = this._createSelectorContainer("group_" + this.amount);
+        this.groups["group_" + this.amount].$el = $el;
+
+        this._bindSelectorEventListeners($el, "group_" + this.amount);
+
+        this.$el.find(s.GROUPS_CONTAINER).prepend($el);
 
         _.each(this._selectors, _.bind(function (obj) {
 
@@ -249,32 +422,46 @@ define([
                 lang: this.lang,
                 languages: this.languages,
                 plugins: this.plugins,
-                el: this.$el,
+                el: $el,
                 cache: this.cache,
                 environment: this.environment,
                 template: {
-                    hideRemoveButton : true,
-                    hideSwitch : true
+                    hideRemoveButton: true,
+                    hideSwitch: true,
                 }
             }, obj);
 
-            obj.instance = new Selector(model);
+            model.instance = new Selector(model);
 
-            obj.instance.on("ready", _.bind(this._onSelectorReady, this));
+            model.instance.on(EVT.SELECTOR_READY, _.bind(this._onSelectorReady, this));
 
-            this.groups["group_" + this.amount][obj.id] = obj;
+            model.instance.on(EVT.SELECTOR_ENABLED, _.bind(this._onSelectorEnabled, this));
 
-        }, this))
+            model.instance.on(EVT.SELECTOR_SELECTED, _.bind(this._onSelectorSelected, this));
 
+            this.groups["group_" + this.amount][model.id] = model;
+
+        }, this));
+
+    };
+
+    Group.prototype._onSelectorSelected = function (payload) {
+
+        this._trigger(EVT.SELECTOR_SELECTED, payload)
+    };
+
+    Group.prototype._onSelectorEnabled = function () {
+
+        this.enable();
     };
 
     Group.prototype._onSelectorReady = function () {
 
         this.selectorsReady++;
 
-        if (this.selectorsReady === Object.keys(this._selectors).length) {
+        log.info("Ready event listened from group: " + this.id);
 
-            log.info("All selectors are ready");
+        if (this.selectorsReady === Object.keys(this._selectors).length) {
 
             this._onReady();
         }
@@ -282,11 +469,10 @@ define([
 
     Group.prototype._onReady = function () {
 
-        this._bindEventListeners();
-
-        this._trigger("ready", {id: this.id});
-
         log.info("Group is ready: " + this.id);
+
+        this._trigger(EVT.SELECTOR_READY, {id: this.id});
+
     };
 
     Group.prototype._unbindEventListeners = function () {
@@ -308,32 +494,96 @@ define([
         this.$el.find(s.ADD_BTN).on("click", _.bind(this._onAddClick, this));
     };
 
+    Group.prototype._bindSelectorEventListeners = function ($el, group) {
+
+        $el.find(s.SWITCH).on("click", _.bind(this._onSelectorSwitchClick, this, group));
+
+        $el.find(s.REMOVE_BTN).on("click", _.bind(this._onSelectorRemoveClick, this, group));
+
+    };
+
+    Group.prototype._unbindSelectorEventListeners = function ($el) {
+
+        $el.find(s.SWITCH).off();
+
+        $el.find(s.REMOVE_BTN).off();
+
+    };
+
+    Group.prototype._onSelectorSwitchClick = function (g, evt) {
+
+        var checked = $(evt.target).is(":checked"),
+            group = this.groups[g];
+
+        if (group) {
+            _.each(group, _.bind(function (s) {
+
+                var instance = s.instance;
+
+                if (!instance) {
+                    return;
+                }
+
+                if (!!checked) {
+                    s.instance.enable();
+                } else {
+                    s.instance.disable();
+                }
+            }, this));
+        }
+    };
+
+    Group.prototype._onSelectorRemoveClick = function (g) {
+
+        var group = this.groups[g];
+
+        if (group) {
+            _.each(group, _.bind(function (s) {
+
+                var instance = s.instance;
+
+                if (!instance) {
+                    return;
+                }
+
+                s.instance.dispose();
+            }, this))
+        }
+
+        this._unbindSelectorEventListeners(this.groups[g].$el);
+
+        this.groups[g].$el.remove();
+
+        delete this.groups[g];
+
+    };
+
     Group.prototype._onSwitchClick = function (e) {
 
         var checked = $(e.target).is(":checked");
 
-        _.each(this.groups, _.bind(function (group) {
-
-            _.each(group, _.bind(function (selector) {
-
-                if (checked === true) {
-                    selector.instance.enable()
-                } else {
-                    selector.instance.disable()
-                }
-
-            }, this));
-
-        }, this));
+        if (!!checked) {
+            this.enable();
+        } else {
+            this.disable();
+        }
 
     };
 
     Group.prototype._onRemoveClick = function () {
-        amplify.publish(this._getEventName(EVT.SELECTOR_REMOVED), {id: this.id});
+
+        this.dispose();
+
+        this._trigger(EVT.SELECTOR_REMOVED, {id: this.id});
+
     };
 
     Group.prototype._onAddClick = function () {
-       this._addGroup();
+
+        //force to be enabled
+        this.enable();
+
+        this._addGroup();
     };
 
     Group.prototype._getEventName = function (evt) {

@@ -7,9 +7,8 @@ define([
     '../../config/config',
     '../../html/selectors/dropdown.hbs',
     '../../nls/labels',
-    'amplify-pubsub',
     'selectize'
-], function ($, log, _, ERR, EVT, C, template, i18n, amplify) {
+], function ($, log, _, ERR, EVT, C, template, i18n) {
 
     'use strict';
 
@@ -46,9 +45,10 @@ define([
 
         //force async execution
         window.setTimeout(function () {
+
             self.status.ready = true;
-            amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
-            self._trigger("ready", {id: self.id});
+
+            self._trigger(EVT.SELECTOR_READY, {id: self.id});
 
         }, 0);
 
@@ -130,6 +130,11 @@ define([
     Dropdown.prototype.enable = function () {
 
         var instance = this.dropdown[0].selectize;
+
+        console.log(this)
+        console.log(this.dropdown)
+        console.log(this.dropdown[0])
+        console.log(this.dropdown[0].selectize)
 
         //print default values
         instance.enable();
@@ -379,7 +384,6 @@ define([
 
         var instance = this.dropdown[0].selectize;
 
-        //print default values
         instance.destroy();
 
         log.info("Destroyed dropdown: " + this.id);
@@ -408,17 +412,15 @@ define([
                     });
                 });
 
-                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
-                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT + self.id), $.extend({id: self.id }, self.getValues()));
+                self._trigger(EVT.SELECTOR_SELECTED, $.extend({id: self.id}, self.getValues()) )
+
             }
             
         });
 
-
         this.$el.find('.selectize-control').on('click', function () {
             if (self.status.ready === true) {
-                amplify.publish(self._getEventName(EVT.SELECTOR_CLICK), {id: self.id});
-                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT + self.id), $.extend({id: self.id }, self.getValues()));
+                self._trigger(EVT.SELECTOR_SELECTED, $.extend({id: self.id}, self.getValues()) )
             }
         });
 
@@ -452,7 +454,6 @@ define([
         this._destroyDropdown();
 
         this.$el.empty();
-
 
     };
 

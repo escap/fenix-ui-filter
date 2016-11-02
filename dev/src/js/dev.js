@@ -19,7 +19,8 @@ define([
     'dev/src/models/amis',
     'dev/src/html/model-1-base.hbs',
     'dev/src/nls/labels',
-    'handlebars'
+    'handlebars',
+    'bootstrap'
 ], function (log, $, _, Filter, /* Utils, */Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars) {
 
     'use strict';
@@ -45,12 +46,13 @@ define([
             EVENT_VALUES_BTN: "#event-values-btn",
             EVENT_DISPOSE: "#event-dispose",
             MODEL_2: "#model2",
-            DEPENDENCIES: "#dependencies",
+            DEPENDENCIES: "#amis",
             COUNTRYSTAT: "#countrystat",
             SOURCES: "#sources",
             SOURCES_BTN: "#sources-btn",
             AMIS: "#amis",
             AMIS_BTN: "#amis-get-values-btn",
+            AMIS_REMOVE_BTN: "#amis-remove-btn",
         },
         empty_model = {data: []},
         error_model = {},
@@ -130,12 +132,26 @@ define([
              }
              }
              }*/
-        }).on("change", function (evt) {
-            //console.log(evt)
+        }).on("ready", function (evt) {
+
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.getValues())
+            console.log(filter.setValues({
+                item: [{
+                    first: ["item_2"],
+                    second: ["item_1"]
+                },
+                    {
+                        first: ["item_3"],
+                        second: ["item_3"]
+                    }
+                ]
+            }))
+        })
+
+        $(s.AMIS_REMOVE_BTN).on("click", function () {
+            console.log(filter.dispose())
         })
     };
 
@@ -161,11 +177,13 @@ define([
 
         this._renderModel2();
 
+        //this._renderDependencies();
+
         return;
 
-        this._renderAll();
+        this._renderAmis();
 
-        this._renderDependencies();
+        this._renderAll();
 
         this._renderSetSources();
 

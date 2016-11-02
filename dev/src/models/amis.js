@@ -114,7 +114,7 @@ define(["moment"],function (moment) {
                 title: "Policy Measure"
             }
         },
-
+/*
         commodityClass: {
 
             selector: {
@@ -131,9 +131,9 @@ define(["moment"],function (moment) {
             template: {
                 title: "Commodity Class"
             }
-        },
+        },*/
 
-        country: {
+        /*country: {
 
             selector: {
                 id: "dropdown",
@@ -153,7 +153,7 @@ define(["moment"],function (moment) {
 
         year: {
 
-            items: {
+            selectors: {
 
                 YearSlider: {
 
@@ -227,10 +227,11 @@ define(["moment"],function (moment) {
                     //}
                 }
             },
+
             template: {
                 hideHeader: true
             }
-        }
+        }*/
 
     }
 });

@@ -2,7 +2,7 @@ var webpackConfig = require('./webpack.config');
 
 var preprocessors = {};
 preprocessors["src/**/*.js"] = ['webpack', 'coverage'];
-preprocessors["test/**/*.js"] = ['webpack'];
+preprocessors["test/specs.js"] = ['webpack'];
 
 module.exports = function (config) {
 
@@ -19,7 +19,7 @@ module.exports = function (config) {
         autoWatchBatchDelay: 300,
 
         files: [
-            "./test/**/*.js"
+            "test/specs.js"
          //   "./src/js/index.js"
         ],
 
@@ -38,15 +38,15 @@ module.exports = function (config) {
 
         browserNoActivityTimeout: 180000,
 
-        reporters : ['progress', 'coverage'],
+        reporters : ['progress', 'mocha'/*, 'coverage'*/],
 
-        coverageReporter: {
+       /* coverageReporter: {
             reporters: [
                 {type: 'lcov', dir: 'coverage/', subdir: '.'},
                 {type: 'json', dir: 'coverage/', subdir: '.'},
                 {type: 'text-summary'}
             ]
-        },
+        },*/
 
         plugins: [
             'karma-webpack',
@@ -54,7 +54,8 @@ module.exports = function (config) {
             'karma-chai',
             'karma-coverage',
             'karma-chrome-launcher',
-            'karma-firefox-launcher'
+            'karma-firefox-launcher',
+            'karma-mocha-reporter'
         ]
     });
 };

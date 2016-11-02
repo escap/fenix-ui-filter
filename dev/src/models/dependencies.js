@@ -59,9 +59,9 @@ define(function () {
             },
             dependencies: {
                 "parentsector_code": {
-                    id: "process",
+                    id: "parent",
                     event: "select",
-                    args: {body: {uid: "dani"}}
+                    //args: {body: {uid: "dani"}}
                 }, //obj or array of obj
             }
         },
@@ -83,6 +83,7 @@ define(function () {
             },
 
             "template": {
+                title : "From",
                 "hideSwitch": true
             }
         },
@@ -109,6 +110,8 @@ define(function () {
             },
 
             "template": {
+                title : "to",
+
                 "hideSwitch": true
             }
 

@@ -8,9 +8,8 @@ define([
     '../../nls/labels',
     '../../html/selectors/tree.hbs',
     '../../html/selectors/treeItem.hbs',
-    'amplify-pubsub',
     "jstree"
-], function ($, log, _, ERR, EVT, C, i18n, template, templateItem, amplify) {
+], function ($, log, _, ERR, EVT, C, i18n, template, templateItem) {
 
     'use strict';
 
@@ -62,7 +61,6 @@ define([
             _.each(result.values, function (c) {
                 result.labels[c] = instance.get_node(c).text;
             });
-
         }
 
         return result;
@@ -347,8 +345,7 @@ define([
                 this.status.ready = true;
 
                 //Always async
-                amplify.publish(this._getEventName(EVT.SELECTOR_READY), this);
-                this._trigger("ready", {id: this.id});
+                this._trigger(EVT.SELECTOR_READY, {id: this.id});
 
             }, this))
 
@@ -537,8 +534,7 @@ define([
 
         this._updateSummary();
 
-        amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
-        amplify.publish(self._getEventName(EVT.SELECTOR_SELECT+self.id), $.extend({id: self.id }, self.getValues()));
+        this._trigger(EVT.SELECTOR_SELECTED, $.extend({id: self.id }, self.getValues()) )
 
     };
 

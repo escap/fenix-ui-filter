@@ -1,3 +1,4 @@
+/*global define, require*/
 define([
     'jquery',
     'underscore',
@@ -10,9 +11,9 @@ define([
     './modes/group',
     '../nls/labels',
     "fenix-ui-converter",
-    "amplify-pubsub",
-    'handlebars'
-], function ($, _, log, ERR, EVT, C, templateSummary, Selector, Group, i18nLabels, Converter, amplify, Handlebars) {
+    'handlebars',
+    'bootstrap'
+], function ($, _, log, ERR, EVT, C, templateSummary, Selector, Group, i18nLabels, Converter, Handlebars) {
 
     'use strict';
 
@@ -23,22 +24,8 @@ define([
             }
         },
         s = {
-            CLASSNAME: ".fx-selector",
-            SELECTOR_DISABLED_CLASSNAME: "fx-selector-disabled",
-            SELECTORS: "[data-selector]",
-            GROUPS: "[data-group]",
-            TREE_CONTAINER: "[data-role='tree']",
-            FILTER_CONTAINER: "[data-role='filter']",
-            CLEAR_ALL_CONTAINER: "[data-role='clear']",
-            AMOUNT_CONTAINER: "[data-role='amount']",
-            COMPARE_RADIO_BTNS: "input:radio[name='compare']",
-            COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
-            ACTIVE_TAB: "ul[data-group-list] li.active",
-            GROUP_TABS: "[data-group] a[data-toggle='tab']",
-            SWITCH: "input[data-role='switch'][name='disable-selector']",
             SUMMARY_SELECTOR: "[data-code]",
-            REMOVE_BTN: "[data-role='remove']",
-            TEMPLATE_HEADER: "[data-selector-header]"
+            REMOVE_BTN: "[data-role='remove']"
         };
 
     function Filter(o) {
@@ -185,6 +172,8 @@ define([
             this._removeSelector(i);
         }, this));
 
+        this._updateSummary();
+
         this._trigger("remove", {id: id});
 
     };
@@ -241,6 +230,7 @@ define([
 
         this.environment = this.initial.environment;
         this.lang = this.initial.lang || C.lang;
+        $.extend(this.lang, C.lang, this.initial.lang);
         this.lang = this.lang.toLowerCase();
 
     };
@@ -266,7 +256,7 @@ define([
 
         //check for selectors
         if (!this._selectors) {
-            log.warn("Impossible to find 'selectors' for filter: " + this.id);
+            log.warn("Imposerrors.length sible to find 'selectors' for filter: " + this.id);
             log.warn("Filer will wait for selectors dynamically");
         }
 
@@ -299,9 +289,6 @@ define([
 
         this.mandatorySelectorIds = [];
 
-        this.codelists = [];
-        this.enumerations = [];
-
         //Summary
         this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
 
@@ -313,7 +300,6 @@ define([
         //pub/sub
         this.channels = {};
 
-
         //force to do not chunk codes
         return require(codePluginsFolder + this.corePlugins[0] + ".js");
     };
@@ -321,7 +307,7 @@ define([
     Filter.prototype._evaluateSelectorConfiguration = function (obj, key) {
 
         if (this.selectors.hasOwnProperty(key)) {
-            log.warn("Duplication of selector id not allowed: " + key);
+            log.error("Duplication of selector id not allowed: " + key);
             return
         }
 
@@ -346,11 +332,11 @@ define([
     Filter.prototype._evaluateModeSelector = function (obj) {
 
         if (obj.mode === "selector" && !obj.hasOwnProperty('selector')) {
-            alert(key + ": does not have a valid configuration. Missing 'selector'configuration ");
+            alert(obj.id + ": does not have a valid configuration. Missing 'selector'configuration ");
         }
 
         if (obj.selector && !obj.selector.hasOwnProperty('id')) {
-            alert(key + ": does not have a valid configuration. Missing 'selector.id' configuration.");
+            alert(obj.id + ": does not have a valid configuration. Missing 'selector.id' configuration.");
         }
 
         //Selector id
@@ -368,17 +354,20 @@ define([
             alert(key + ": is configured to be a group but not selectors are provided. Check the 'selectors' parameter");
         }
 
-        _.each(obj.selectors, _.bind(function (obj, key) {
-            obj.mode = "selector";
-            obj.id = key;
-            this._evaluateModeSelector(obj);
+        _.each(obj.selectors, _.bind(function (s, key) {
+
+            if (typeof s !== "object") {
+                alert("Invalid selector configuration for: [" + key + "] of selector [" + obj.id + "]");
+                return;
+            }
+            s.mode = "selector";
+            s.id = key;
+            this._evaluateModeSelector(s);
         }, this))
 
     };
 
     Filter.prototype._renderFilter = function () {
-
-        this._bindEventListeners();
 
         this._renderSelectors();
     };
@@ -433,11 +422,21 @@ define([
                     el: this.$el,
                     cache: this.cache,
                     environment: this.environment
-                } );
+                });
 
-                this.selectors[name].instance = new Mode(model);
+                var instance = new Mode(model);
 
-                this.selectors[name].instance.on("ready", _.bind(this._onSelectorReady, this))
+                instance.on(EVT.SELECTOR_READY, _.bind(this._onSelectorReady, this));
+
+                instance.on(EVT.SELECTOR_REMOVED, _.bind(this._onSelectorRemoved, this));
+
+                instance.on(EVT.SELECTOR_DISABLED, _.bind(this._onSelectorChange, this));
+
+                instance.on(EVT.SELECTOR_ENABLED, _.bind(this._onSelectorChange, this));
+
+                instance.on(EVT.SELECTOR_SELECTED, _.bind(this._onSelectorSelected, this));
+
+                this.selectors[name].instance = instance;
 
             }, this));
 
@@ -460,24 +459,21 @@ define([
 
         this.selectorsReady++;
 
-        if (this.selectorsReady === this.selectorsId.length) {
+        log.info("Ready event listened from filter: " + this.id);
 
-            log.info("All selectors are ready");
+        if (this.selectorsReady === this.selectorsId.length) {
 
             this._onReady();
         }
     };
 
     Filter.prototype._onReady = function () {
-        log.info("~~~~ Filter [" + this.id + "] is ready");
 
         this._initDependencies();
 
         this._checkSelectorsAmount();
 
         window.clearTimeout(this.validTimeout);
-
-        amplify.publish(this._getEventName(EVT.FILTER_READY));
 
         // set default values
         if (!$.isEmptyObject(this.values)) {
@@ -487,6 +483,8 @@ define([
         this.ready = true;
 
         this._updateSummary();
+
+        log.info("~~~~ Filter [" + this.id + "] is ready");
 
         this._trigger('ready');
 
@@ -608,58 +606,13 @@ define([
 
     Filter.prototype._removeSelectorReferences = function (id) {
 
-        this._callSelectorInstanceMethod(id, "dispose");
-
         delete this.selectors[id];
 
         delete this._selectors[id];
 
         this.selectorsId = _.without(this.selectorsId, id);
 
-    };
-
-    Filter.prototype._bindEventListeners = function () {
-
-        amplify.subscribe(this._getEventName(EVT.SELECTOR_SELECT), this, this._onSelectorSelectorSelect);
-        amplify.subscribe(this._getEventName(EVT.SELECTOR_CLICK), this, this._onSelectorSelectorClick);
-        amplify.subscribe(this._getEventName(EVT.SELECTOR_DISABLED), this, this._updateSummary);
-        amplify.subscribe(this._getEventName(EVT.SELECTOR_ENABLED), this, this._updateSummary);
-        amplify.subscribe(this._getEventName(EVT.SELECTOR_REMOVED), this, this._onRemoveSelector);
-
-    };
-
-    // END Preload scripts and codelists
-
-    Filter.prototype._initPage = function () {
-
-        //add attribute to mandatory selectors
-        _.each(this.mandatorySelectorIds, _.bind(function (id) {
-
-            this._getSelectorContainer(id).closest(s.GROUPS).addClass(this.mandatorySelectorClassName);
-            this._getSelectorContainer(id).closest(s.SELECTORS).addClass(this.mandatorySelectorClassName);
-        }, this));
-
-        log.info("Add class to mandatory selectors: success");
-
-    };
-
-    Filter.prototype._configureSelectorsStatus = function () {
-
-        //default disabled selectors
-
-        _.each(this.selectorsId, _.bind(function (s) {
-
-            var status = this._callSelectorInstanceMethod(s, "getStatus");
-
-            if (status.disabled === true) {
-                this._disableSelectorAndSwitch(s);
-            } else {
-                this._enableSelectorAndSwitch(s);
-            }
-
-        }, this));
-
-        log.info("Disable/enable selectors by default: success");
+        this._trigger("remove", {id: id});
 
     };
 
@@ -841,10 +794,10 @@ define([
 
         switch (id.toLowerCase()) {
             case 'disable':
-                event = this._getEventName(EVT.SELECTOR_DISABLED);
+                event = EVT.SELECTOR_DISABLED;
                 break;
             case 'select':
-                event = this._getEventName(EVT.SELECTOR_SELECT);
+                event = EVT.SELECTOR_SELECTED;
                 break;
             default:
                 log.error(ERR.UNKNOWN_DEPENDENCY_EVENT);
@@ -877,7 +830,7 @@ define([
                     }
 
                     var toAdd = {
-                        event: this._resolveDependencyEvent(d.event).concat(s),
+                        event: "dep_" + d.event + "_" + s,
                         callback: function (payload) {
 
                             var call = self["_dep_" + d.id];
@@ -891,7 +844,7 @@ define([
                     };
                     this.dependeciesToDestory.push(toAdd);
 
-                    amplify.subscribe(toAdd.event, this, toAdd.callback);
+                    this.on(toAdd.event, toAdd.callback, this);
 
                 }, this));
 
@@ -901,11 +854,10 @@ define([
     };
 
     Filter.prototype._destroyDependencies = function () {
-        var self = this;
 
-        _.each(this.dependeciesToDestory, function (d) {
-            amplify.unsubscribe(self._getEventName(d.event), d.callback);
-        });
+        _.each(this.dependeciesToDestory, _.bind(function (d) {
+            delete this.channels[d.event];
+        }, this));
     };
 
     Filter.prototype._dep_min = function (payload, o) {
@@ -937,23 +889,7 @@ define([
                     c.codes.push(value);
                 });
 
-                this._getPromise(c).then(
-                    _.bind(function (data) {
-
-                        var source = [];
-
-                        _.each(data, function (s) {
-                            source = source.concat(s.children);
-                        });
-
-                        source = _.uniq(source);
-
-                        this._callSelectorInstanceMethod(o.target, "_dep_parent", {data: source});
-                    }, this),
-                    function (r) {
-                        log.error(r);
-                    }
-                )
+                this._callSelectorInstanceMethod(o.target, "_dep_parent", c);
             }
         }
     };
@@ -1018,28 +954,11 @@ define([
                 }
                 process.params.language = this.lang;
 
-                this.bridge.getProcessedResource(process).then(
-                    _.bind(function (result) {
+                this._callSelectorInstanceMethod(o.target, "_dep_process", process);
 
-                        var data = Array.isArray(result.data) ? result.data : [],
-                            source = [];
-
-                        _.each(data, function (s) {
-                            source.push({
-                                value: s[process.indexValueColumn || 0],
-                                label: s[process.indexLabelColumn || 1]
-                            });
-                        });
-
-                        source = _.uniq(source);
-
-                        this._callSelectorInstanceMethod(o.target, "_dep_process", {data: source});
-
-                    }, this),
-                    function (r) {
-                        log.error(r);
-                    }
-                )
+            }
+            else {
+                log.warn("Impossible to find process.body configuration.")
             }
         }
         else {
@@ -1107,39 +1026,40 @@ define([
 
     // Handlers
 
-    Filter.prototype._getEventName = function (evt) {
-
-        return this.id.concat(evt);
-    };
-
-    Filter.prototype._onSelectorSelectorSelect = function (values) {
+    Filter.prototype._onSelectorChange = function (values) {
 
         if (this.ready === true) {
             this._trigger('change', values);
+
+            //call dependencies
+            this._trigger("dep_change_" + values.id, values);
+
             this._updateSummary();
         }
     };
 
-    Filter.prototype._onSelectorSelectorClick = function (values) {
+    Filter.prototype._onSelectorSelected = function (values) {
 
         if (this.ready === true) {
+
             this._trigger('click', values);
+
+            //call dependencies
+            this._trigger("dep_select_" + values.id, values);
+
+            this._updateSummary();
         }
 
     };
 
     Filter.prototype._addSelector = function (name, obj) {
 
-        if (_.contains(this.selectorsId, name)) {
-            log.warn(name + " selector will not be added because 'id' is already used");
-            return;
-        }
+        this._evaluateSelectorConfiguration(obj, name);
 
         this._selectors[name] = obj;
 
-        this._evaluateSelectorConfiguration(obj, name);
-
-        this._unbindEventListeners();
+        //destroy selectors dependencies
+        this._destroyDependencies();
 
         this._renderFilter();
 
@@ -1147,9 +1067,12 @@ define([
 
     };
 
-    Filter.prototype._onRemoveSelector = function (obj) {
+    Filter.prototype._onSelectorRemoved = function (obj) {
 
         this.remove(obj.id);
+
+        //call dependencies
+        this._trigger("dep_change_" + obj.id, obj);
 
         this._checkSelectorsAmount();
 
@@ -1160,8 +1083,6 @@ define([
         delete this._selectors[id];
 
         this._removeSelectorReferences(id);
-
-        this._updateSummary();
 
     };
 
@@ -1206,9 +1127,9 @@ define([
 
         _.each(plugins, _.bind(function (p) {
 
-            var path = this._getSelectorScriptPath(p).concat(".js");
+            var path = this._getSelectorScriptPath(p);
 
-            require([path], function (Selector) {
+            require([path + ".js"], function (Selector) {
                 ready++;
                 result[p] = Selector;
 
@@ -1307,18 +1228,6 @@ define([
 
     //disposition
 
-    Filter.prototype._unbindEventListeners = function () {
-
-        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_SELECT), this._onSelectorSelectorSelect);
-        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_DISABLED), this._updateSummary);
-        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_ENABLED), this._updateSummary);
-        amplify.unsubscribe(this._getEventName(EVT.SELECTOR_REMOVED), this._onRemoveSelector);
-
-        //destroy selectors dependencies
-        this._destroyDependencies();
-
-    };
-
     Filter.prototype.dispose = function () {
 
         //dispose selectors
@@ -1326,11 +1235,12 @@ define([
             this._callSelectorInstanceMethod(name, "dispose")
         }, this));
 
-        //unbind event listeners
-        this._unbindEventListeners();
-
         //remove filter container
         this.$el.remove();
+
+        if (this.hasSummary) {
+            this.summary$el.remove();
+        }
 
     };
 

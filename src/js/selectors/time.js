@@ -7,9 +7,8 @@ define([
     '../../config/config',
     '../../nls/labels',
     '../../html/selectors/time.hbs',
-    'amplify-pubsub',
     'eonasdan-bootstrap-datetimepicker'
-], function ($, log, _, ERR, EVT, C, i18n, template, amplify ) {
+], function ($, log, _, ERR, EVT, C, i18n, template ) {
 
     'use strict';
 
@@ -40,8 +39,7 @@ define([
 
             self.status.ready = true;
 
-            amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
-            self._trigger("ready", {id: self.id});
+            self._trigger(EVT.SELECTOR_READY, {id: self.id});
 
         }, 0);
 
@@ -237,7 +235,8 @@ define([
 
                 //workaround for silent change
                 if (this.silentMode !== true) {
-                    amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), $.extend({id: self.id }, self.getValues()));
+                    this._trigger(EVT.SELECTOR_SELECTED, $.extend({id: self.id }, self.getValues()) )
+
                 }
                 delete this.silentMode;
 

@@ -7,12 +7,12 @@ define(function () {
     return {
 
         FILTER_READY: prefix + "selectors.ready",
-        SELECTOR_SELECT: prefix + "selectors.select.",
-        SELECTOR_CLICK: prefix + "selectors.click.",
+        SELECTOR_CLICKED: prefix + "selectors.clicked",
+        SELECTOR_SELECTED: prefix + "selectors.selected",
         SELECTOR_READY: prefix + "selector.ready",
-        SELECTOR_DISABLED: prefix + "selector.disabled.",
-        SELECTOR_ENABLED: prefix + "selector.enabled.",
-        SELECTOR_REMOVED: prefix + "selector.removed."
+        SELECTOR_DISABLED: prefix + "selector.disabled",
+        SELECTOR_ENABLED: prefix + "selector.enabled",
+        SELECTOR_REMOVED: prefix + "selector.removed"
 
     };
 });

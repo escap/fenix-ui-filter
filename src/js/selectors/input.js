@@ -6,9 +6,8 @@ define([
     '../../html/selectors/inputItem.hbs',
     '../../config/errors',
     '../../config/events',
-    '../../config/config',
-    'amplify-pubsub'
-], function ($, log, _, templateList, templateItem, ERR, EVT, C, amplify) {
+    '../../config/config'
+], function ($, log, _, templateList, templateItem, ERR, EVT, C) {
 
     'use strict';
 
@@ -44,8 +43,7 @@ define([
 
             self.status.ready = true;
 
-            amplify.publish(self._getEventName(EVT.SELECTOR_READY), self);
-            self._trigger("ready", {id: self.id});
+            self._trigger(EVT.SELECTOR_READY, {id: self.id});
 
         }, 0);
 
@@ -340,9 +338,8 @@ define([
                         parent: null
                     };
 
-                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT), payload);
-                amplify.publish(self._getEventName(EVT.SELECTOR_SELECT + self.id), payload);
 
+                self._trigger(EVT.SELECTOR_SELECTED, payload)
             }
         });
     };

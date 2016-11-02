@@ -8,30 +8,15 @@ define([
     '../../html/selector.hbs',
     '../../html/nls.hbs',
     '../../nls/labels',
-    'amplify-pubsub',
     "fenix-ui-bridge",
     'q'
-], function (log, $, _, ERR, EVT, C, templateSelector, templateNls, i18nLabels, amplify, Bridge, Q) {
+], function (log, $, _, ERR, EVT, C, templateSelector, templateNls, i18nLabels, Bridge, Q) {
 
     'use strict';
 
     var s = {
-        CLASSNAME: ".fx-selector",
-        SELECTOR_DISABLED_CLASSNAME: "fx-selector-disabled",
-        SELECTORS: "[data-selector]",
-        GROUPS: "[data-group]",
-        TREE_CONTAINER: "[data-role='tree']",
-        FILTER_CONTAINER: "[data-role='filter']",
-        CLEAR_ALL_CONTAINER: "[data-role='clear']",
-        AMOUNT_CONTAINER: "[data-role='amount']",
-        COMPARE_RADIO_BTNS: "input:radio[name='compare']",
-        COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
-        ACTIVE_TAB: "ul[data-group-list] li.active",
-        GROUP_TABS: "[data-group] a[data-toggle='tab']",
         SWITCH: "input[data-role='switch'][name='disable-selector']",
-        SUMMARY_SELECTOR: "[data-code]",
-        REMOVE_BTN: "[data-role='remove']",
-        TEMPLATE_HEADER: "[data-selector-header]"
+        REMOVE_BTN: "[data-role='remove']"
     };
 
     function Selector(obj) {
@@ -92,10 +77,11 @@ define([
             if (!this.internalNls) {
                 _.each(this.languages, _.bind(function (l) {
 
-                    var selector = this.selectors[this.selectorId + "_" + l],
+                    var selector = this.selectors[this.id + "_" + l],
                         instance;
 
                     if (selector) {
+
                         instance = selector.instance;
                         v = instance.getValues(format);
                         values[l] = v.values;
@@ -266,26 +252,37 @@ define([
      * enable
      * @return {Object}
      */
-    Selector.prototype.enable = function () {
+    Selector.prototype.enable = function (silent) {
 
         _.each(this.selectors, _.bind(function (obj) {
-            obj.instance.enable()
-
+            obj.instance.enable(silent);
         }, this));
+
+        this.$el.find(s.SWITCH).prop("checked", true);
+
+        if (!silent) {
+            this._trigger(EVT.SELECTOR_ENABLED);
+        }
+
     };
 
     /**
      * disable
      * @return {Object}
      */
-    Selector.prototype.disable = function () {
+    Selector.prototype.disable = function (silent) {
 
         _.each(this.selectors, _.bind(function (obj) {
-            obj.instance.disable()
-
+            obj.instance.disable(silent)
         }, this));
-    };
 
+        this.$el.find(s.SWITCH).prop("checked", false);
+
+        if (!silent) {
+            this._trigger(EVT.SELECTOR_DISABLED);
+        }
+
+    };
 
     Selector.prototype._render = function () {
 
@@ -411,27 +408,39 @@ define([
                 el: this._getSelectorContainer(obj.id)
             }, obj);
 
-        this.selectors[obj.id].instance = new Selector(model);
+        var instance = new Selector(model);
 
-        this.selectors[obj.id].instance.on("ready", _.bind(this._onSelectorReady, this));
+        instance.on(EVT.SELECTOR_READY, _.bind(this._onSelectorReady, this));
 
+        instance.on(EVT.SELECTOR_SELECTED, _.bind(this._onSelectorSelected, this));
+
+        this.selectors[obj.id].instance = instance;
+
+    };
+
+    Selector.prototype._onSelectorSelected = function (payload) {
+
+        this._trigger(EVT.SELECTOR_SELECTED, payload);
     };
 
     Selector.prototype._onSelectorReady = function () {
 
         this.selectorsReady++;
 
-        if (this.selectorsReady === Object.keys(this.selectors).length) {
+        log.info("Ready event listened from selector: " + this.id);
 
-            log.info("All selectors are ready");
+        if (this.selectorsReady === Object.keys(this.selectors).length) {
 
             this._onReady();
         }
     };
 
     Selector.prototype._onReady = function () {
-        this._trigger("ready", {id: this.id});
+
         log.info("Selector is ready: " + this.id);
+
+        this._trigger(EVT.SELECTOR_READY, {id: this.id});
+
     };
 
     Selector.prototype._getSelector = function () {
@@ -488,7 +497,7 @@ define([
 
         $html = $(templateSelector($.extend(true, {classNames: classNames}, conf)));
 
-        return $html.append();
+        return $html;
     };
 
     Selector.prototype._attachNls = function () {
@@ -525,7 +534,7 @@ define([
 
         if (!!checked) {
             this.enable();
-        }else {
+        } else {
             this.disable();
         }
 
@@ -533,7 +542,10 @@ define([
 
     Selector.prototype._onRemoveClick = function () {
 
-        amplify.publish(this._getEventName(EVT.SELECTOR_REMOVED), {id: this.id});
+        this.dispose();
+
+        this._trigger(EVT.SELECTOR_REMOVED, {id: this.id});
+
     };
 
     Selector.prototype._getEventName = function (evt) {
@@ -703,6 +715,83 @@ define([
         }
 
         return this;
+    };
+
+    //dependencies
+    Selector.prototype._dep_min = function (data) {
+
+        _.each(this.selectors, function (selector) {
+            selector.instance._dep_min(data);
+        });
+    };
+
+    Selector.prototype._dep_parent = function (c) {
+
+        this._getPromise(c).then(
+            _.bind(function (data) {
+
+                var source = [];
+
+                _.each(data, function (s) {
+                    source = source.concat(s.children);
+                });
+
+                source = _.uniq(source);
+
+                _.each(this.selectors, function (selector) {
+                    selector.instance._dep_parent({data: source});
+                });
+
+            }, this),
+            function (r) {
+                log.error(r);
+            }
+        )
+
+    };
+
+    Selector.prototype._dep_process = function (process) {
+
+        var self = this;
+
+        this.bridge.getProcessedResource(process).then(
+            _.bind(function (result) {
+
+                var data = Array.isArray(result.data) ? result.data : [],
+                    source = [];
+
+                _.each(data, function (s) {
+                    source.push({
+                        value: s[process.indexValueColumn || 0],
+                        label: s[process.indexLabelColumn || 1]
+                    });
+                });
+
+                source = _.uniq(source);
+
+                _.each(self.selectors, function (selector) {
+                    selector.instance._dep_process(source);
+                });
+
+            }, this),
+            function (r) {
+                log.error(r);
+            }
+        )
+    };
+
+    Selector.prototype._dep_ensure_unset = function (data) {
+
+        _.each(this.selectors, function (selector) {
+            selector.instance._dep_ensure_unset(data);
+        });
+    };
+
+    Selector.prototype._dep_disable = function (data) {
+
+        _.each(this.selectors, function (selector) {
+            selector.instance._dep_disable(data);
+        });
     };
 
     return Selector;
