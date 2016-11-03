@@ -131,11 +131,6 @@ define([
 
         var instance = this.dropdown[0].selectize;
 
-        console.log(this)
-        console.log(this.dropdown)
-        console.log(this.dropdown[0])
-        console.log(this.dropdown[0].selectize)
-
         //print default values
         instance.enable();
 

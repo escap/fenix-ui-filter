@@ -1031,8 +1031,10 @@ define([
         if (this.ready === true) {
             this._trigger('change', values);
 
-            //call dependencies
-            this._trigger("dep_change_" + values.id, values);
+            if (values) {
+                //call dependencies
+                this._trigger("dep_change_" + values.id, values);
+            }
 
             this._updateSummary();
         }
@@ -1044,8 +1046,10 @@ define([
 
             this._trigger('click', values);
 
-            //call dependencies
-            this._trigger("dep_select_" + values.id, values);
+            if (values) {
+                //call dependencies
+                this._trigger("dep_select_" + values.id, values);
+            }
 
             this._updateSummary();
         }
@@ -1069,12 +1073,14 @@ define([
 
     Filter.prototype._onSelectorRemoved = function (obj) {
 
-        this.remove(obj.id);
+        if (obj) {
+            this.remove(obj.id);
 
-        //call dependencies
-        this._trigger("dep_change_" + obj.id, obj);
+            this._trigger("dep_change_" + obj.id, obj);
 
-        this._checkSelectorsAmount();
+            this._checkSelectorsAmount();
+
+        }
 
     };
 
