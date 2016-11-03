@@ -5305,6 +5305,49 @@ button_new_2:before {
 .fx-icon-close {
   background-position: 0 -15px; }
 
+/* Fenix - Js tree */
+.jstree-default .jstree-search {
+  color: #333;
+  font-weight: 300;
+  font-style: normal; }
+.jstree-default .jstree-node:not(.jstree-open) {
+  position: relative; }
+  .jstree-default .jstree-node:not(.jstree-open) .jstree-wholerow {
+    height: 100%; }
+
+.jstree-default .jstree-themeicon {
+  display: none;
+  /* It hides folder icon */ }
+
+.jstree-default .jstree-node,
+.jstree-default .jstree-icon {
+  background-image: url("img/treejs-32px.svg"); }
+
+.jstree-default .jstree-wholerow-clicked {
+  background: none;
+  background-color: #cce4ff; }
+
+.jstree-default .jstree-wholerow-hovered {
+  background: none;
+  background-color: #e6f1ff; }
+
+.jstree-default .jstree-disabled.jstree-clicked {
+  background: none;
+  background-color: #cce4ff; }
+
+.jstree-container-ul .jstree-anchor {
+  white-space: normal;
+  height: auto;
+  width: 90%; }
+.jstree-container-ul [role="group"].jstree-children [role='treeitem'] {
+  position: relative; }
+
+li[role="treeitem"]:nth-child(odd) {
+  background-color: #f2f2f2 !important; }
+
+ul[role="group"] {
+  background-color: white; }
+
 /* Radio Buttons */
 input[type="radio"] {
   display: none; }
@@ -5388,6 +5431,25 @@ input[type="radio"]:disabled + label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; }
+
+.fx-text-primary-color {
+  color: #0076ff; }
+
+.fx-background-color-primary-color {
+  background-color: #0076ff; }
+
+.fx-button-primary-color {
+  color: white;
+  border-color: #005ecc;
+  background-color: #0076ff; }
+  .fx-button-primary-color:hover {
+    color: white;
+    border-color: #005ecc;
+    background-color: #006ae6; }
+  .fx-button-primary-color:focus {
+    color: white;
+    border-color: #004799;
+    background-color: #0053b3; }
 
 .fx-selector.hideSwitch .fx-selector-title {
   margin-right: 30px;
