@@ -301,7 +301,7 @@ define([
             externalResource.type = "enumeration";
         }
 
-        this._getExternalResource(externalResource.obj, externalResource.type).then(_.bind(function (rawCl) {
+        this.getExternalResource(externalResource.obj, externalResource.type).then(_.bind(function (rawCl) {
 
             this.data = rawCl;
 
@@ -404,9 +404,11 @@ define([
     Selector.prototype._renderSelector = function (obj) {
 
         var Selector = this._getSelector(),
-            model = $.extend({
-                el: this._getSelectorContainer(obj.id)
-            }, obj);
+            model = $.extend(obj, {
+                el: this._getSelectorContainer(obj.id),
+                controller : this,
+                cl : this.cl
+            });
 
         var instance = new Selector(model);
 
@@ -554,7 +556,7 @@ define([
 
     // Preload scripts and external resources
 
-    Selector.prototype._getExternalResource = function (obj, type) {
+    Selector.prototype.getExternalResource = function (obj, type) {
 
         if (!obj) {
             log.info("No external resource needed");
@@ -562,6 +564,14 @@ define([
                 resolve();
             });
         }
+
+        if (!obj.initialized && this.selector.lazy === true) {
+            log.warn("Lazy loading for selector: " + this.id);
+            obj.levels = 1;
+            obj.level = 1;
+        }
+
+        delete obj.initialized;
 
         //Check if codelist is cached otherwise query
         var stored = this._getStoredCodelist(obj);

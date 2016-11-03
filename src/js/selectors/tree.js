@@ -484,7 +484,6 @@ define([
         }
 
         cb(data);
-
     };
 
     Tree.prototype._getChildrenItems = function (config, node, cb) {
@@ -492,12 +491,11 @@ define([
         var self = this,
             body = $.extend(true, {}, this.cl, {
                 levels: 2,
-                codes: [node.id]
+                codes: [node.id],
+                initialized : true
             });
 
-        delete body.level;
-
-        this.controller.getCodelist(body)
+        this.controller.getExternalResource(body)
             .then(function (data) {
                 var model = self._buildTreeModel(data[0].children || [], node.id);
                 cb(model);

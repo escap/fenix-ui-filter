@@ -1079,7 +1079,6 @@ define([
             this._trigger("dep_change_" + obj.id, obj);
 
             this._checkSelectorsAmount();
-
         }
 
     };
