@@ -67,7 +67,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('silent');
+        log.setLevel('trace');
 
         this.start();
 
@@ -119,20 +119,63 @@ define([
 
     Dev.prototype._renderModel2 = function () {
 
-        var filter = this.createFilter({
-            selectors: Model2,
+        var model = {
+            "selectors": {
+                "DIMENSION0": {
+                    "selector": {
+                        "config": {},
+                        "id": "tree",
+                        "from": 1970,
+                        "to": 2017,
+                        "hideFilter": true,
+                        "hideSummary": true
+                    },
+                    "format": {"output": "time", "dimension": "DIMENSION0"},
+                    "template": {"title": "année", "hideSwitch": true}
+                },
+                "DIMENSION2": {
+                    "cl": {"uid": "Indicateurs_Recensement"},
+                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
+                    "template": {"title": "Indicateur", "hideSwitch": true},
+                    "format": {"dimension": "DIMENSION2"}
+                },
+                "DIMENSION3": {
+                    "cl": {"uid": "GAUL", "version": "2014"},
+                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
+                    "template": {"title": "département", "hideSwitch": true},
+                    "format": {"dimension": "DIMENSION3"}
+                },
+                "DIMENSION4": {
+                    "cl": {"uid": "CountrySTAT_Gender"},
+                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
+                    "template": {"title": "sexe", "hideSwitch": true},
+                    "format": {"dimension": "DIMENSION4"}
+                },
+                "VALUE0": {
+                    "selector": {"id": "input", "type": "number", "hideSummary": true},
+                    "format": {"output": "time", "dimension": "VALUE0"},
+                    "template": {"title": "valeur", "hideSwitch": true}
+                },
+                "OTHER0": {
+                    "selector": {"id": "input", "type": "text", "hideSummary": true},
+                    "format": {"output": "enumeration", "dimension": "OTHER0"},
+                    "template": {"title": "flag", "hideSwitch": true}
+                },
+                "OTHER1": {
+                    "cl": {"uid": "CountrySTAT_UM"},
+                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
+                    "template": {"title": "unite", "hideSwitch": true},
+                    "format": {"dimension": "OTHER1"}
+                }
+            },
             el: s.AMIS,
-            summaryEl: "#amis-summary",
-            /*            values : {
-             values : {
-             input : ["Daniele"],
-             contact : {
-             name : ["Luigi"],
-             role : ["item_2"]
-             }
-             }
-             }*/
-        }).on("ready", function (evt) {
+
+            "template": "<div data-role=\"filter-filter-template\">\n\n    <!-- Slider main container -->\n    <div data-role='filter-rows-swiper' class=\"swiper-container\">\n        <!-- Additional required wrapper -->\n        <div class=\"swiper-wrapper\">\n\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION0\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION2\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION3\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION4\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"OTHER0\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"OTHER1\"></div>\n                </div>\n\n        </div>\n        <!-- If we need pagination -->\n        <div class=\"swiper-pagination\"></div>\n\n        <!-- If we need navigation buttons -->\n        <div class=\"swiper-button-prev\"></div>\n        <div class=\"swiper-button-next\"></div>\n\n    </div>\n\n</div>",
+            "common": {},
+            "values": {},
+        }
+
+        var filter = this.createFilter(model).on("ready", function (evt) {
 
         });
 
