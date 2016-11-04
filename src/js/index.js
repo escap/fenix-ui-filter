@@ -778,25 +778,6 @@ define([
 
     };
 
-    Filter.prototype._resolveDependencyEvent = function (id) {
-
-        var event;
-
-        switch (id.toLowerCase()) {
-            case 'disable':
-                event = EVT.SELECTOR_DISABLED;
-                break;
-            case 'select':
-                event = EVT.SELECTOR_SELECTED;
-                break;
-            default:
-                log.error(ERR.UNKNOWN_DEPENDENCY_EVENT);
-                break;
-        }
-
-        return event;
-    };
-
     Filter.prototype._processSelectDependencies = function (d, id) {
 
         var self = this;
