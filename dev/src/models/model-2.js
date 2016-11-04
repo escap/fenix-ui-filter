@@ -34,7 +34,8 @@ define(function () {
                     },
 
                     constraints: {
-                        presence: true
+                        presence: true,
+                        url : true
                     }
                 },
 

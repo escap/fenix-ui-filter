@@ -72,7 +72,7 @@ define([
         var result = {
             values: {},
             labels: {},
-            valid : true,
+            valid: true,
             errors: {}
         }, v, valid, values = {}, labels = {};
 
@@ -164,13 +164,13 @@ define([
         function process(v) {
 
             if (Array.isArray(v)) {
-                return cleanArray(v);
+                return cleanArray(v).length === 1 ? cleanArray(v)[0] : cleanArray(v);
             }
 
             var cleaned = {};
 
             _.each(v, function (obj, key) {
-                cleaned[key] = Array.isArray(obj) ? cleanArray(obj) : cleanObject(obj);
+                cleaned[key] = Array.isArray(obj) ? cleanArray(obj).length === 1 ? cleanArray(obj)[0] : cleanArray(obj) : cleanObject(obj);
             });
 
             return cleaned;
