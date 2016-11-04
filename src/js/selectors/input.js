@@ -192,9 +192,9 @@ define([
     Input.prototype._checkConfiguration = function () {
 
         if (!this.selector.type) {
-            log.trace("Set input type to 'radio'");
+            log.trace("Set input type to 'text'");
 
-            this.type = "radio";
+            this.type = "text";
 
         } else {
             this.type = this.selector.type;

@@ -287,18 +287,19 @@ define([
         this.selectorTypes = [];
         this.dependeciesToDestory = [];
 
-        this.mandatorySelectorIds = [];
+        //validation
+        this.constraints = {};
 
         //Summary
         this.hasSummary = (this.summary$el && this.summary$el.length) > 0;
+
+        //pub/sub
+        this.channels = {};
 
         //Process selectors
         _.each(this._selectors, _.bind(function (selectorConf, selectorId) {
             this._evaluateSelectorConfiguration(selectorConf, selectorId);
         }, this));
-
-        //pub/sub
-        this.channels = {};
 
         //force to do not chunk codes
         return require(codePluginsFolder + this.corePlugins[0] + ".js");
@@ -346,12 +347,17 @@ define([
             this.selectorTypes.push(selectorType);
         }
 
+        if (obj.hasOwnProperty('constraints')) {
+            var key = obj.parent ? obj.parent + "." + obj.id : obj.id;
+            this.constraints[key] = obj.constraints;
+        }
+
     };
 
     Filter.prototype._evaluateModeGroup = function (obj) {
 
         if (obj.mode === "group" && Object.keys(obj.selectors).length === 0) {
-            alert(key + ": is configured to be a group but not selectors are provided. Check the 'selectors' parameter");
+            alert(obj.id + ": is configured to be a group but not selectors are provided. Check the 'selectors' parameter");
         }
 
         _.each(obj.selectors, _.bind(function (s, key) {
@@ -362,8 +368,9 @@ define([
             }
             s.mode = "selector";
             s.id = key;
+            s.parent = obj.id;
             this._evaluateModeSelector(s);
-        }, this))
+        }, this));
 
     };
 
@@ -390,6 +397,9 @@ define([
             }, C.validityTimeout);
 
         } else {
+
+            log.warn("No selectors found for filter: " + this.id);
+
             //no selectors by default
             window.setTimeout(_.bind(function () {
                 this._onReady();
@@ -621,9 +631,10 @@ define([
     Filter.prototype._getValues = function (includedSelectors) {
 
         var result = {
-            valid: false,
+            valid: true,
             labels: {},
-            values: {}
+            values: {},
+            errors: {}
         };
 
         if (this.ready !== true) {
@@ -642,8 +653,12 @@ define([
             if (!status.disabled) {
 
                 var v = this._callSelectorInstanceMethod(key, "getValues");
+
                 result.values[key] = v.values;
                 result.labels[key] = v.labels;
+                result.valid = result.valid && !!v.valid;
+
+                $.extend(true, result.errors, v.errors);
 
             } else {
                 log.warn("Disabled selector not included in result: " + key)
@@ -651,17 +666,12 @@ define([
 
         }, this));
 
-        //validate result but return it in any case
-        var valid = this._validateSelection(result);
 
-        if (valid === true) {
-            result.valid = true;
-        } else {
-            result.errors = valid;
+        if (result.errors.length == 0) {
+            delete result.errors;
         }
 
         return result;
-
     };
 
     Filter.prototype._setValues = function (o, silent) {
@@ -718,6 +728,7 @@ define([
     Filter.prototype._getEnabledSelectors = function () {
 
         var result = [];
+
         _.each(this.selectors, _.bind(function (name) {
 
             var status = this._callSelectorInstanceMethod(name, "getStatus");
@@ -729,27 +740,6 @@ define([
         }, this));
 
         return result;
-    };
-
-    Filter.prototype._validateSelection = function (s) {
-
-        var valid = true,
-            errors = [];
-
-        //mandatory fields
-        _.each(this.mandatorySelectorIds, _.bind(function (id) {
-
-            if (!s.values.hasOwnProperty(id) || !s.values[id] || s.values[id] < 1) {
-                var e = {};
-                e.code = 'missing_mandatory_field';
-                e.details = {id: this.selector2group[id]};
-                errors.push(e)
-
-            }
-
-        }, this));
-
-        return _.isEmpty(errors) ? valid : errors;
     };
 
     // dependencies fns

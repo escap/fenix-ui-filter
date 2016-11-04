@@ -271,6 +271,33 @@ define([
 
     };
 
+    /**
+     * tag selector container
+     * */
+    Group.prototype.tagAsInvalid = function () {
+
+        this.$el.find(".form-group").addClass("has-error");
+
+    };
+
+    /**
+     * tag selector container
+     * */
+    Group.prototype.tagAsValid = function () {
+
+        this.$el.find(".form-group").addClass("has-success");
+    };
+
+
+    /**
+     * untag selector container
+     * */
+    Group.prototype.untag = function () {
+
+        this.$el.find(".form-group").removeClass("has-error");
+        this.$el.find(".form-group").removeClass("has-success");
+    };
+
     Group.prototype._initVariables = function () {
 
         this.channels = {};
@@ -283,6 +310,8 @@ define([
         this.environment = this.initial.environment;
         this.cache = this.initial.cache;
         this.plugins = this.initial.plugins;
+
+        this.constraints = this.initial.constraints;
 
         this.groups = {};
         this.selectors = {};

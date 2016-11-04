@@ -9,8 +9,9 @@ define([
     '../../html/nls.hbs',
     '../../nls/labels',
     "fenix-ui-bridge",
-    'q'
-], function (log, $, _, ERR, EVT, C, templateSelector, templateNls, i18nLabels, Bridge, Q) {
+    'q',
+    'validate.js'
+], function (log, $, _, ERR, EVT, C, templateSelector, templateNls, i18nLabels, Bridge, Q, ValidateJs) {
 
     'use strict';
 
@@ -66,15 +67,19 @@ define([
      */
     Selector.prototype.getValues = function (format) {
 
+        this.untag();
+
         var result = {
             values: {},
             labels: {},
-            valid: false
-        }, v, values = {}, labels = {};
+            valid : true,
+            errors: {}
+        }, v, valid, values = {}, labels = {};
 
         if (this.nls) {
 
             if (!this.internalNls) {
+
                 _.each(this.languages, _.bind(function (l) {
 
                     var selector = this.selectors[this.id + "_" + l],
@@ -86,6 +91,17 @@ define([
                         v = instance.getValues(format);
                         values[l] = v.values;
                         labels[l] = v.labels;
+
+                        valid = this._validateSelection(v.values);
+
+                        if (valid !== true) {
+                            result.errors[this.id] = valid;
+                            result.valid = false;
+                            this.tagAsInvalid(selector.$el, valid);
+                        } else {
+                            this.tagAsValid(selector.$el);
+                        }
+
                     } else {
                         log.warn(l + " skip language");
                     }
@@ -97,13 +113,34 @@ define([
                 v = this.mainSelector.instance.getValues(format);
                 values[this.lang.toUpperCase()] = v.values;
                 labels[this.lang.toUpperCase()] = v.labels;
+
+                valid = this._validateSelection(v.values);
+
+                if (valid !== true) {
+                    result.errors[this.id] = valid;
+                    result.valid = false;
+                    this.tagAsInvalid(this.mainSelector.$el, valid);
+                } else {
+                    this.tagAsValid(this.mainSelector.$el);
+                }
             }
 
-        } else {
+        }
+        else {
 
             v = this.mainSelector.instance.getValues(format);
             values = v.values;
             labels = v.labels;
+
+            valid = this._validateSelection(v.values);
+
+            if (valid !== true) {
+                result.errors[this.mainSelector.id] = valid;
+                result.valid = false;
+                this.tagAsInvalid(this.mainSelector.$el, valid);
+            } else {
+                this.tagAsValid(this.mainSelector.$el);
+            }
 
         }
 
@@ -111,6 +148,54 @@ define([
         result.labels = labels;
 
         return result;
+    };
+
+    Selector.prototype._validateSelection = function (s) {
+
+        var values = process(s);
+
+        log.info("Selection constraints:");
+        log.info(this.constraints);
+        log.info("applied to:");
+        log.info(values);
+
+        return ValidateJs.single(values, this.constraints) || true;
+
+        function process(v) {
+
+            if (Array.isArray(v)) {
+                return cleanArray(v);
+            }
+
+            var cleaned = {};
+
+            _.each(v, function (obj, key) {
+                cleaned[key] = Array.isArray(obj) ? cleanArray(obj) : cleanObject(obj);
+            });
+
+            return cleaned;
+
+            function cleanArray(actual) {
+
+                var newArray = [];
+                for (var i = 0; i < actual.length; i++) {
+                    if (actual[i] && actual[i] !== "") {
+
+                        newArray.push(actual[i]);
+                    }
+                }
+                return newArray;
+            }
+
+            function cleanObject(actual) {
+                var newObj = {};
+                _.each(actual, function (value, key) {
+                    newObj[key] = cleanArray(value);
+                });
+                return newObj;
+            }
+        }
+
     };
 
     /**
@@ -284,6 +369,10 @@ define([
 
     };
 
+    /**
+     * mark selector container
+     * */
+
     Selector.prototype._render = function () {
 
         this.ready = false;
@@ -321,6 +410,40 @@ define([
 
         }, this), _.bind(this._onGetExternalResourceError, this));
 
+    };
+
+    /**
+     * tag selector container
+     * */
+    Selector.prototype.tagAsInvalid = function (el, message) {
+
+        var $el = el || this.$el,
+            text = message.join(", ");
+
+        $el.find(".form-group").addClass("has-error");
+        $el.find(".help-block.error").html(ValidateJs.capitalize(text));
+    };
+
+    /**
+     * tag selector container
+     * */
+    Selector.prototype.tagAsValid = function (el) {
+
+        var $el = el || this.$el;
+
+        $el.find(".form-group").addClass("has-success");
+        $el.find(".help-block.error").empty();
+    };
+
+    /**
+     * untag selector container
+     * */
+    Selector.prototype.untag = function (el) {
+        var $el = el || this.$el;
+
+        $el.find(".form-group").removeClass("has-error");
+        $el.find(".form-group").removeClass("has-success");
+        $el.find(".help-block.error").empty();
     };
 
     Selector.prototype._activateCurrentLang = function () {
@@ -386,6 +509,8 @@ define([
         this.environment = this.initial.environment;
         this.cache = this.initial.cache;
 
+        this.constraints = this.initial.constraints;
+
         this.nls = !!this.initial.nls;
         this.internalNls = typeof this.initial.nls === "object" && this.initial.nls.gui === false;
 
@@ -406,8 +531,8 @@ define([
         var Selector = this._getSelector(),
             model = $.extend(obj, {
                 el: this._getSelectorContainer(obj.id),
-                controller : this,
-                cl : this.cl
+                controller: this,
+                cl: this.cl
             });
 
         var instance = new Selector(model);

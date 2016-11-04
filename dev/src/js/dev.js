@@ -20,8 +20,9 @@ define([
     'dev/src/html/model-1-base.hbs',
     'dev/src/nls/labels',
     'handlebars',
+    'validate.js',
     'bootstrap'
-], function (log, $, _, Filter, /* Utils, */Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars) {
+], function (log, $, _, Filter, /* Utils, */Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
 
     'use strict';
 
@@ -119,79 +120,16 @@ define([
 
     Dev.prototype._renderModel2 = function () {
 
-        var model = {
-            "selectors": {
-                "DIMENSION0": {
-                    "selector": {
-                        "config": {},
-                        "id": "tree",
-                        "from": 1970,
-                        "to": 2017,
-                        "hideFilter": true,
-                        "hideSummary": true
-                    },
-                    "format": {"output": "time", "dimension": "DIMENSION0"},
-                    "template": {"title": "année", "hideSwitch": true}
-                },
-                "DIMENSION2": {
-                    "cl": {"uid": "Indicateurs_Recensement"},
-                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
-                    "template": {"title": "Indicateur", "hideSwitch": true},
-                    "format": {"dimension": "DIMENSION2"}
-                },
-                "DIMENSION3": {
-                    "cl": {"uid": "GAUL", "version": "2014"},
-                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
-                    "template": {"title": "département", "hideSwitch": true},
-                    "format": {"dimension": "DIMENSION3"}
-                },
-                "DIMENSION4": {
-                    "cl": {"uid": "CountrySTAT_Gender"},
-                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
-                    "template": {"title": "sexe", "hideSwitch": true},
-                    "format": {"dimension": "DIMENSION4"}
-                },
-                "VALUE0": {
-                    "selector": {"id": "input", "type": "number", "hideSummary": true},
-                    "format": {"output": "time", "dimension": "VALUE0"},
-                    "template": {"title": "valeur", "hideSwitch": true}
-                },
-                "OTHER0": {
-                    "selector": {"id": "input", "type": "text", "hideSummary": true},
-                    "format": {"output": "enumeration", "dimension": "OTHER0"},
-                    "template": {"title": "flag", "hideSwitch": true}
-                },
-                "OTHER1": {
-                    "cl": {"uid": "CountrySTAT_UM"},
-                    "selector": {"id": "tree", "lazy": true, "hideFilter": true, "hideSummary": true},
-                    "template": {"title": "unite", "hideSwitch": true},
-                    "format": {"dimension": "OTHER1"}
-                }
-            },
+        var filter = this.createFilter({
             el: s.AMIS,
-
-            "template": "<div data-role=\"filter-filter-template\">\n\n    <!-- Slider main container -->\n    <div data-role='filter-rows-swiper' class=\"swiper-container\">\n        <!-- Additional required wrapper -->\n        <div class=\"swiper-wrapper\">\n\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION0\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION2\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION3\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"DIMENSION4\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"OTHER0\"></div>\n                </div>\n                <div class=\"swiper-slide filter-slide \">\n                    <div data-selector=\"OTHER1\"></div>\n                </div>\n\n        </div>\n        <!-- If we need pagination -->\n        <div class=\"swiper-pagination\"></div>\n\n        <!-- If we need navigation buttons -->\n        <div class=\"swiper-button-prev\"></div>\n        <div class=\"swiper-button-next\"></div>\n\n    </div>\n\n</div>",
-            "common": {},
-            "values": {},
-        }
-
-        var filter = this.createFilter(model).on("ready", function (evt) {
-
+            selectors : Model2
+        }).on("ready", function (evt) {
+            console.log("Ready");
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.setValues({
-                item: [{
-                    first: ["item_2"],
-                    second: ["item_1"]
-                },
-                    {
-                        first: ["item_3"],
-                        second: ["item_3"]
-                    }
-                ]
-            }))
-        })
+            console.log(filter.getValues())
+        });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {
             console.log(filter.dispose())
@@ -220,11 +158,11 @@ define([
 
         this._renderModel2();
 
-        //this._renderDependencies();
-
         return;
 
-        this._renderAmis();
+        //this._renderAmis();
+
+        //this._renderDependencies();
 
         this._renderAll();
 
