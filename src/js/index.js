@@ -666,7 +666,6 @@ define([
 
         }, this));
 
-
         if (result.errors.length == 0) {
             delete result.errors;
         }

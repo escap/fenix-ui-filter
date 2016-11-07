@@ -72,7 +72,7 @@ define([
         var result = {
                 values: {},
                 labels: {},
-                valid: false
+                valid: true
             }, v,
             values,
             labels = {};
@@ -202,7 +202,6 @@ define([
     Group.prototype.unsetValue = function (values) {
 
         console.log("TODO")
-
 
         _.each(this.selectors, _.bind(function (obj) {
 
