@@ -6,7 +6,25 @@ define(function () {
 
     return {
 
-        resourceType: {
+        freeText: {
+
+            selector : {
+                id : "input",
+                type : "text"
+            },
+
+            template : {
+                hideRemoveButton : false
+            },
+
+            format : {
+                output : "freeText",
+                metadataAttribute: "freetext"
+            }
+
+        },
+
+/*        resourceType: {
 
             enumeration : {
                 uid: "RepresentationType"
@@ -205,24 +223,7 @@ define(function () {
                 output : "enumeration",
                 metadataAttribute: "dsd.contextSystem"
             }
-        },
-
-        freetext : {
-
-            selector : {
-                id : "input",
-                type : "text"
-            },
-
-            template : {
-                hideRemoveButton : false
-            },
-
-            format : {
-                output : "enumeration",
-                metadataAttribute: "dsd.contextSystem"
-            }
-        }
+        },*/
 
 /*
         "organization": {
