@@ -1,6 +1,6 @@
 {
   "name": "fenix-ui-filter",
-  "version": "3.0.0-beta.25",
+  "version": "3.0.0-beta.26",
   "description": "FENIX Filter",
   "main": "dist/fenix-ui-filter.min.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "eonasdan-bootstrap-datetimepicker": "^4.17.43",
-    "fenix-ui-bridge": "^1.0.0-beta.6",
+    "fenix-ui-bridge": "^1.0.0-beta.7",
     "fenix-ui-converter": "^1.0.0-beta.3",
     "ion-rangeslider": "^2.1.4",
     "jquery": "^2.2.4",

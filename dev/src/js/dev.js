@@ -128,7 +128,7 @@ define([
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.getValues())
+            console.log(filter.getValues("catalog"))
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {
