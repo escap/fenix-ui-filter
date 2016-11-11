@@ -9,12 +9,14 @@ define(function () {
         time: {
 
             selector : {
-                id : "time",
+                id : "tree",
+                source : [{value: "1", label : "dd"}]
                 //default : ["Fri Nov 11 2016 13:57:00 GMT+0100"]
             },
 
             template : {
-                hideRemoveButton : false
+                hideRemoveButton : false,
+                hideSwitch : false,
             },
 
             format : {

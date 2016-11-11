@@ -123,6 +123,7 @@ define([
         var filter = this.createFilter({
             el: s.AMIS,
             selectors : Model2,
+            lang :"Fr",
             values : {
                 time : ["Fri Nov 11 2016 13:57:00 GMT+0100"]
             }
