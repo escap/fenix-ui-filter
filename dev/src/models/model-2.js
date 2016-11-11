@@ -6,11 +6,11 @@ define(function () {
 
     return {
 
-        freeText: {
+        time: {
 
             selector : {
-                id : "input",
-                type : "text"
+                id : "time",
+                //default : ["Fri Nov 11 2016 13:57:00 GMT+0100"]
             },
 
             template : {

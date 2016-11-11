@@ -122,7 +122,11 @@ define([
 
         var filter = this.createFilter({
             el: s.AMIS,
-            selectors : Model2
+            selectors : Model2,
+            values : {
+                time : ["Fri Nov 11 2016 13:57:00 GMT+0100"]
+            }
+
         }).on("ready", function (evt) {
             console.log("Ready");
         });
