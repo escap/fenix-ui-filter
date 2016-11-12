@@ -135,6 +135,7 @@ describe("Single Selector", function () {
 
 });
 
+/*
 describe("Single Group", function () {
 
     // inject the HTML for the tests
@@ -281,3 +282,4 @@ describe("Single Group", function () {
     });
 
 });
+*/

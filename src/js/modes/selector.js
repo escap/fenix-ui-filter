@@ -239,7 +239,6 @@ define([
         }
     };
 
-
     /**
      * set value
      * @return {Object}
@@ -280,7 +279,6 @@ define([
             }
         }
     };
-
 
     /**
      * unset value
@@ -331,7 +329,6 @@ define([
 
         return this.mainSelector.instance.getStatus();
     };
-
 
     /**
      * enable
@@ -390,15 +387,15 @@ define([
             externalResource.type = "enumeration";
         }
 
+        this._createSelectors();
+
+        this._attach();
+
+        this._attachNls();
+
         this.getExternalResource(externalResource.obj, externalResource.type).then(_.bind(function (rawCl) {
 
             this.data = rawCl;
-
-            this._createSelectors();
-
-            this._attach();
-
-            this._attachNls();
 
             _.each(this.selectors, _.bind(function (obj) {
                 this._renderSelector(obj)
@@ -508,6 +505,7 @@ define([
         this.plugins = this.initial.plugins;
         this.environment = this.initial.environment;
         this.cache = this.initial.cache;
+        this.values = this.initial.values;
 
         this.constraints = this.initial.constraints;
 
@@ -532,7 +530,10 @@ define([
             model = $.extend(obj, {
                 el: this._getSelectorContainer(obj.id),
                 controller: this,
-                cl: this.cl
+                cl: this.cl,
+                selector : {
+                    default : this.values
+                }
             });
 
         var instance = new Selector(model);

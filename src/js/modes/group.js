@@ -99,7 +99,8 @@ define([
 
             }, this));
 
-        } else {
+        }
+        else {
             values = [];
 
             _.each(this.groups, _.bind(function (group) {
@@ -155,9 +156,13 @@ define([
      */
     Group.prototype.setValue = function (values) {
 
+        var valuesAmount = values.length,
+            initialized = 0;
+
         if (!this.incremental) {
 
             _.each(this.groups, function (group) {
+                set++;
 
                 _.each(group, function (selector) {
 
@@ -177,20 +182,27 @@ define([
 
                 _.each(values, _.bind(function (obj, index) {
 
-                    var group = this.groups["group_" + (index + 1)] || {};
-                    _.each(obj, function (v, key) {
+                    var group = this.groups["group_" + (index + 1)];
 
-                        if (group[key] && group[key].instance) {
-                            group[key].instance.setValue(v);
-                        }
-                    })
+                    if (group) {
+                        _.each(obj, function (v, key) {
+
+                            if (group[key] && group[key].instance) {
+                                group[key].instance.setValue(v);
+                            }
+                        });
+
+                    } else {
+                        this._addGroup(obj);
+                    }
+
 
                 }, this));
 
-            } else {
+            }
+            else {
                 log.warn("Group is incremental and values should be an array of object")
             }
-
         }
 
     };
@@ -318,7 +330,7 @@ define([
 
         this.incremental = !!this.initial.incremental;
 
-        this.className = this.initial.className;
+        this.classNames = this.initial.classNames;
 
         this.status = {
             disable: false
@@ -378,11 +390,12 @@ define([
             conf = this,
             model;
 
+
         if ($cont.length === 0) {
             log.warn("Impossible to find selector container: " + id);
 
             model = $.extend(true, {
-                classNames: conf.className,
+                classNames: conf.classNames,
                 id: id,
                 incremental: this.incremental
             }, conf.template, i18nLabels[this.lang]);
@@ -422,11 +435,13 @@ define([
 
         this.selectorsReady = 0; //used for "ready" event
 
-        this._addGroup();
+        window.setTimeout(_.bind(function () {
+            this._onReady();
+        }, this), 10);
 
     };
 
-    Group.prototype._addGroup = function () {
+    Group.prototype._addGroup = function ( values ) {
 
         // increase the group amount
         this.amount++;
@@ -451,11 +466,12 @@ define([
                 languages: this.languages,
                 plugins: this.plugins,
                 el: $el,
+                values : values[obj.id],
                 cache: this.cache,
                 environment: this.environment,
                 template: {
                     hideRemoveButton: true,
-                    hideSwitch: true,
+                    hideSwitch: true
                 }
             }, obj);
 
@@ -490,7 +506,6 @@ define([
         log.info("Ready event listened from group: " + this.id);
 
         if (this.selectorsReady === Object.keys(this._selectors).length) {
-
             this._onReady();
         }
     };
@@ -500,7 +515,6 @@ define([
         log.info("Group is ready: " + this.id);
 
         this._trigger(EVT.SELECTOR_READY, {id: this.id});
-
     };
 
     Group.prototype._unbindEventListeners = function () {
@@ -510,7 +524,6 @@ define([
         this.$el.find(s.REMOVE_BTN).off();
 
         this.$el.find(s.ADD_BTN).off();
-
     };
 
     Group.prototype._bindEventListeners = function () {

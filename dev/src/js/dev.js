@@ -68,7 +68,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('trace');
+        log.setLevel('silent');
 
         this.start();
 
@@ -122,24 +122,34 @@ define([
 
         var filter = this.createFilter({
             el: s.AMIS,
-            selectors : Model2,
-            lang :"Fr",
-            values : {
-                time : ["Fri Nov 11 2016 13:57:00 GMT+0100"]
+            selectors: Model2,
+            lang: "Fr",
+            values: {
+                title : ["test"],
+                contacts: [
+                    {
+                        "organization": ["organization_1"],
+                        "phone": ["2015201200"]
+                    },
+                    {
+                        "organization": ["organization_2"],
+                        "phone": ["555555555"]
+                    }
+                ]
             }
-
         }).on("ready", function (evt) {
             console.log("Ready");
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.getValues("catalog"))
+            console.log(filter.getValues())
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {
             console.log(filter.dispose())
         })
-    };
+    }
+    ;
 
     Dev.prototype._createConfiguration = function () {
 
@@ -336,7 +346,7 @@ define([
 
     };
 
-    //Utils
+//Utils
 
     Dev.prototype.createFilter = function (params) {
 
@@ -392,7 +402,7 @@ define([
         return result;
     };
 
-    // utils
+// utils
 
     Dev.prototype._importThirdPartyCss = function () {
 
@@ -413,4 +423,5 @@ define([
 
     return new Dev();
 
-});
+})
+;
