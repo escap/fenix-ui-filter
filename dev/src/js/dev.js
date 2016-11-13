@@ -123,7 +123,7 @@ define([
         var filter = this.createFilter({
             el: s.AMIS,
             selectors: Model2,
-            lang: "Fr",
+            //lang: "Fr",
             values: {
                 title : ["test"],
                 contacts: [

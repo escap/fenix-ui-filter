@@ -466,7 +466,7 @@ define([
                 languages: this.languages,
                 plugins: this.plugins,
                 el: $el,
-                values : values[obj.id],
+                values : values ? values[obj.id] : undefined,
                 cache: this.cache,
                 environment: this.environment,
                 template: {

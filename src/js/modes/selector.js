@@ -395,7 +395,9 @@ define([
 
         this.getExternalResource(externalResource.obj, externalResource.type).then(_.bind(function (rawCl) {
 
-            this.data = rawCl;
+            _.each(this.selectors, function(sel) {
+                sel.data = rawCl;
+            });
 
             _.each(this.selectors, _.bind(function (obj) {
                 this._renderSelector(obj)
@@ -460,7 +462,6 @@ define([
 
                 result[this.id + "_" + l] = {
                     id: this.id + "_" + l,
-                    data: this.data,
                     controller: this.controller,
                     lang: this.lang,
                     template: this.template,
@@ -469,16 +470,17 @@ define([
 
             }, this));
 
-        } else {
+        }
+        else {
 
             result[this.id] = {
                 id: this.id,
-                data: this.data,
                 controller: this.controller,
                 lang: this.lang,
                 template: this.template,
                 selector: this.selector
             };
+
         }
 
         this.selectors = result;
@@ -526,8 +528,8 @@ define([
 
     Selector.prototype._renderSelector = function (obj) {
 
-        var Selector = this._getSelector(),
-            model = $.extend(obj, {
+        var Plugin = this._getSelector(),
+            model = $.extend(true, obj, {
                 el: this._getSelectorContainer(obj.id),
                 controller: this,
                 cl: this.cl,
@@ -536,7 +538,7 @@ define([
                 }
             });
 
-        var instance = new Selector(model);
+        var instance = new Plugin(model);
 
         instance.on(EVT.SELECTOR_READY, _.bind(this._onSelectorReady, this));
 
