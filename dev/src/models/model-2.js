@@ -11,6 +11,16 @@ define(function () {
                 id : "dropdown",
                 //source : [{value : "it_1", label: "Test"}]
             }
+        },
+
+        down : {
+
+            cl : {uid: 'IANAcharacterSet'},
+
+            selector : {
+                id : "dropdown",
+                //source : [{value : "it_1", label: "Test"}]
+            }
         }
 
     }
