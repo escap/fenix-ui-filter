@@ -47,6 +47,8 @@ define([
 
         }, this));
 
+        this._destroyDependencies();
+
         this.$el.remove();
     };
 
@@ -338,6 +340,8 @@ define([
 
         this.amount = 0;
 
+        this.dependeciesToDestory = [];
+
     };
 
     /**
@@ -349,32 +353,6 @@ define([
         return this.status;
     };
 
-    /*   Group.prototype._attach = function () {
-
-     var classNames = this.initial.className || "",
-     obj = this.template,
-     conf = $.extend(true, {id: this.id}, i18nLabels[this.lang], obj);
-
-     _.each(conf, function (value, key) {
-     if (value === true) {
-     classNames = classNames.concat(" " + key);
-     }
-     });
-
-     var model = $.extend(true, {
-     classNames: classNames,
-     id: this.id,
-     template: this.template,
-     incremental: this.incremental
-     }, this.template, i18nLabels[this.lang.toLowerCase()]),
-     $el = $(templateSelector(model));
-
-     this.$el.append($el);
-
-     this.$el = $el;
-
-     };
-     */
     Group.prototype._attach = function () {
 
         this.$el = this._getGroupContainer(this.id);
@@ -441,19 +419,21 @@ define([
 
     };
 
-    Group.prototype._addGroup = function ( values ) {
+    Group.prototype._addGroup = function (values) {
 
         // increase the group amount
         this.amount++;
 
+        var groupName = "group_" + this.amount;
+
         //create new group
-        this.groups["group_" + this.amount] = {};
+        this.groups[groupName] = {};
 
         //create group $el and cache it
-        var $el = this._createSelectorContainer("group_" + this.amount);
-        this.groups["group_" + this.amount].$el = $el;
+        var $el = this._createSelectorContainer(groupName);
+        this.groups[groupName].$el = $el;
 
-        this._bindSelectorEventListeners($el, "group_" + this.amount);
+        this._bindSelectorEventListeners($el, groupName);
 
         this.$el.find(s.GROUPS_CONTAINER).prepend($el);
 
@@ -466,7 +446,7 @@ define([
                 languages: this.languages,
                 plugins: this.plugins,
                 el: $el,
-                values : values ? values[obj.id] : undefined,
+                values: values ? values[obj.id] : undefined,
                 cache: this.cache,
                 environment: this.environment,
                 template: {
@@ -477,19 +457,91 @@ define([
 
             model.instance = new Selector(model);
 
-            model.instance.on(EVT.SELECTOR_READY, _.bind(this._onSelectorReady, this));
+            model.instance.on(EVT.SELECTOR_READY, _.bind(this._onSelectorReady, this, groupName));
 
-            model.instance.on(EVT.SELECTOR_ENABLED, _.bind(this._onSelectorEnabled, this));
+            model.instance.on(EVT.SELECTOR_ENABLED, _.bind(this._onSelectorEnabled, this, groupName));
 
-            model.instance.on(EVT.SELECTOR_SELECTED, _.bind(this._onSelectorSelected, this));
+            model.instance.on(EVT.SELECTOR_SELECTED, _.bind(this._onSelectorSelected, this, groupName));
 
-            this.groups["group_" + this.amount][model.id] = model;
+            this.groups[groupName][model.id] = model;
+
+        }, this));
+
+        this._initDependencies();
+
+    };
+
+    Group.prototype._initDependencies = function () {
+
+        _.each(this.groups, _.bind(function (group, groupName) {
+
+            _.each(group, _.bind(function (sel, id) {
+
+                if (!sel.hasOwnProperty("dependencies")) {
+                    return;
+                }
+
+                this._processSelectDependencies(sel.dependencies, id, groupName);
+
+            }, this));
 
         }, this));
 
     };
 
-    Group.prototype._onSelectorSelected = function (payload) {
+    Group.prototype._processSelectDependencies = function (d, id, groupName) {
+
+        var self = this;
+
+        _.each(d, _.bind(function (dependencies, selectorId) {
+
+            //Ensure dependencies is an array
+            if (!Array.isArray(dependencies)) {
+                dependencies = [dependencies];
+            }
+
+            var selectors = [selectorId];
+
+            _.each(selectors, _.bind(function (s) {
+
+                _.each(dependencies, _.bind(function (d) {
+
+                    if (typeof d !== "object") {
+                        log.warn(JSON.stringify(d) + " is not a valid dependency configuration");
+                        return;
+                    }
+
+                    var toAdd = {
+                        event: "dep_" + d.event + "_" + s + "_" + groupName,
+                        callback: function (payload) {
+
+                            var call = self["_dep_" + d.id];
+
+                            if ($.isFunction(call)) {
+                                call.call(self, payload, {src: s, target: id, group: groupName, args: d.args});
+                            } else {
+
+                                console.log("Impossible to find : " + "_dep_" + d.id);
+                                log.error("Impossible to find : " + "_dep_" + d.id);
+                            }
+                        }
+                    };
+                    this.dependeciesToDestory.push(toAdd);
+
+                    this.on(toAdd.event, toAdd.callback, this);
+
+                }, this));
+
+            }, this));
+
+        }, this));
+    };
+
+    Group.prototype._onSelectorSelected = function (groupName, payload) {
+
+        if (payload) {
+            this._trigger("dep_select_" + payload.id + "_" + groupName, payload);
+        }
 
         this._trigger(EVT.SELECTOR_SELECTED, payload)
     };
@@ -593,10 +645,29 @@ define([
 
         this._unbindSelectorEventListeners(this.groups[g].$el);
 
+        this._destroyGroupDependencies(g);
+
         this.groups[g].$el.remove();
 
         delete this.groups[g];
 
+    };
+
+    Group.prototype._destroyDependencies = function() {
+
+        _.each(this.groups, _.bind(function(group, name) {
+            this._destroyGroupDependencies(name);
+        }, this))
+    };
+
+    Group.prototype._destroyGroupDependencies = function (group) {
+
+        _.each(this.dependeciesToDestory, _.bind(function (d) {
+
+            if (d.event.endsWith(group)) {
+                delete this.channels[d.event];
+            }
+        }, this));
     };
 
     Group.prototype._onSwitchClick = function (e) {
@@ -629,6 +700,27 @@ define([
 
     Group.prototype._getEventName = function (evt) {
         return this.controller.id + evt;
+    };
+
+    //Dependencies
+
+    Group.prototype._dep_readOnlyIfNotValue = function (payload, o) {
+        log.info("_dep_enableIfValue invokation");
+        log.info(o);
+
+        var forbiddenValue = o.args.value,
+            selectedValues = payload.values || [],
+            group = this.groups[o.group] || {},
+            target = group[o.target] || {},
+            instance = target.instance;
+
+        if (instance) {
+            if (_.contains(selectedValues, forbiddenValue)) {
+                instance.disableReadOnly()
+            } else {
+                instance.enableReadOnly()
+            }
+        }
     };
 
     //pub/sub

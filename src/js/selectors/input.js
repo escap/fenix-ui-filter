@@ -118,6 +118,30 @@ define([
     };
 
     /**
+     * Enable selector
+     * Mandatory method
+     */
+    Input.prototype.enableReadOnly = function () {
+
+        this.$inputs.attr('readonly', true);
+
+        log.info("Selector read only enabled : " + this.id);
+
+    };
+
+    /**
+     * Enable selector
+     * Mandatory method
+     */
+    Input.prototype.disableReadOnly = function () {
+
+        this.$inputs.attr('readonly', false);
+
+        log.info("Selector read only disabled : " + this.id);
+
+    };
+
+    /**
      * Disable selector
      * Mandatory method
      */

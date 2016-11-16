@@ -68,7 +68,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('trace');
+        log.setLevel('silent');
 
         this.start();
 
@@ -83,6 +83,35 @@ define([
         //this._createConfiguration();
 
     };
+
+    Dev.prototype._render = function () {
+
+        this._renderModel2();
+
+        return;
+
+        //this._renderAmis();
+
+        //this._renderDependencies();
+
+        this._renderAll();
+
+        this._renderSetSources();
+
+        this._renderCountrystat();
+
+        this._renderEvents();
+
+        this._renderSynch();
+
+        this._renderDynamicModel1();
+
+        this._renderModel1BaseTemplate();
+
+        this._renderSynch();
+
+    };
+
 
     Dev.prototype._renderDependencies = function () {
 
@@ -122,27 +151,17 @@ define([
 
         var filter = this.createFilter({
             el: s.AMIS,
-            selectors: Model2,
-            //lang: "Fr",
-            values: {
-                title : ["test"],
-                contacts: [
-                    {
-                        "organization": ["organization_1"],
-                        "phone": ["2015201200"]
-                    },
-                    {
-                        "organization": ["organization_2"],
-                        "phone": ["555555555"]
-                    }
-                ]
-            }
+            selectors: Model2
         }).on("ready", function (evt) {
             console.log("Ready");
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.getValues())
+            console.log(filter.setValues({
+                values : {
+                    text : ["Test"]
+                }
+            }))
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {
@@ -167,34 +186,6 @@ define([
             el: s.FENIX_RESOURCE,
             summaryEl: s.FENIX_RESOURCE_SUMMARY
         });
-    };
-
-    Dev.prototype._render = function () {
-
-        this._renderModel2();
-
-        return;
-
-        //this._renderAmis();
-
-        //this._renderDependencies();
-
-        this._renderAll();
-
-        this._renderSetSources();
-
-        this._renderCountrystat();
-
-        this._renderEvents();
-
-        this._renderSynch();
-
-        this._renderDynamicModel1();
-
-        this._renderModel1BaseTemplate();
-
-        this._renderSynch();
-
     };
 
     Dev.prototype._renderSetSources = function () {

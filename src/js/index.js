@@ -490,6 +490,8 @@ define([
             this.setValues(this.values, true);
         }
 
+        this._disableDisabledSelectorsByDefault();
+
         this.ready = true;
 
         this._updateSummary();
@@ -498,6 +500,15 @@ define([
 
         this._trigger('ready');
 
+    };
+
+    Filter.prototype._disableDisabledSelectorsByDefault = function() {
+
+        _.each(this.selectors, _.bind(function(s, name) {
+            if (s.selector && s.selector.disabled === true) {
+                this._callSelectorInstanceMethod(name, "disable");
+            }
+        }, this));
     };
 
     // dynamic selector add/remove
@@ -971,6 +982,36 @@ define([
             } else {
                 this._callSelectorInstanceMethod(o.target, "disable");
             }
+        }
+
+    };
+
+    Filter.prototype._dep_disableIfValue = function (payload, o) {
+        log.info("_dep_disableIfValue invokation");
+        log.info(o);
+
+        var forbiddenValue = o.args.value,
+            selectedValues = payload.values || [];
+
+        if (_.contains(selectedValues, forbiddenValue)) {
+            this._callSelectorInstanceMethod(o.target, "disable");
+        } else {
+            this._callSelectorInstanceMethod(o.target, "enable");
+        }
+
+    };
+
+    Filter.prototype._dep_enableIfValue = function (payload, o) {
+        log.info("_dep_enableIfValue invokation");
+        log.info(o);
+
+        var forbiddenValue = o.args.value,
+            selectedValues = payload.values || [];
+
+        if (_.contains(selectedValues, forbiddenValue)) {
+            this._callSelectorInstanceMethod(o.target, "enable");
+        } else {
+            this._callSelectorInstanceMethod(o.target, "disable");
         }
 
     };

@@ -281,6 +281,47 @@ define([
     };
 
     /**
+     * set value
+     * @return {Object}
+     */
+    Selector.prototype.enableReadOnly = function () {
+
+        if (this.nls) {
+
+            _.each(this.selectors, _.bind(function (selector) {
+                if (selector && typeof selector.instance === "object") {
+                    selector.instance.enableReadOnly();
+                }
+            }, this))
+
+
+        } else {
+
+            this.mainSelector.instance.enableReadOnly();
+        }
+    };
+
+    /**
+     * set value
+     * @return {Object}
+     */
+    Selector.prototype.disableReadOnly = function () {
+
+        if (this.nls) {
+
+            _.each(this.selectors, _.bind(function (selector) {
+                if (selector && typeof selector.instance === "object") {
+                    selector.instance.disableReadOnly();
+                }
+            }, this))
+
+        } else {
+
+            this.mainSelector.instance.disableReadOnly();
+        }
+    };
+
+    /**
      * unset value
      * @return {Object}
      */
@@ -395,7 +436,7 @@ define([
 
         this.getExternalResource(externalResource.obj, externalResource.type).then(_.bind(function (rawCl) {
 
-            _.each(this.selectors, function(sel) {
+            _.each(this.selectors, function (sel) {
                 sel.data = rawCl;
             });
 
@@ -533,8 +574,8 @@ define([
                 el: this._getSelectorContainer(obj.id),
                 controller: this,
                 cl: this.cl,
-                selector : {
-                    default : this.values
+                selector: {
+                    default: this.values
                 }
             });
 
