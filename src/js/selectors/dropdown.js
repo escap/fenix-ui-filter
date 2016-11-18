@@ -278,7 +278,7 @@ define([
 
                 data.push({
                     value: item.code,
-                    text: item.title[selector.lang],
+                    text: item.title[selector.lang] || item.title["EN"],
                     parent: parent || '#'
                 });
 

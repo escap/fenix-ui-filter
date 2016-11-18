@@ -1,4 +1,4 @@
-<li class="form-group">
+<li>
     {{#if isCheckboxOrRadio}}
         <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}">
         <label for="{{id}}">{{label}}</label>
@@ -6,5 +6,5 @@
         <input  {{#if readonly}} readonly {{/if}} type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}"
                                  class="form-control" placeholder="{{label}}" min="{{min}}" max="{{max}}">
     {{/if}}
-    <p class="help-block error"></p>
+
 </li>

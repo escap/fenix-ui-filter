@@ -471,7 +471,7 @@ define([
 
         var $el = el || this.$el;
 
-        $el.find(".form-group").addClass("has-success");
+        //$el.find(".form-group").addClass("has-success");
         $el.find(".help-block.error").empty();
     };
 
@@ -482,7 +482,7 @@ define([
         var $el = el || this.$el;
 
         $el.find(".form-group").removeClass("has-error");
-        $el.find(".form-group").removeClass("has-success");
+        //$el.find(".form-group").removeClass("has-success");
         $el.find(".help-block.error").empty();
     };
 

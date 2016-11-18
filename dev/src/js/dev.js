@@ -68,7 +68,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('silent');
+        log.setLevel('trace');
 
         this.start();
 
@@ -151,17 +151,14 @@ define([
 
         var filter = this.createFilter({
             el: s.AMIS,
+            lang : "FR",
             selectors: Model2
         }).on("ready", function (evt) {
             console.log("Ready");
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.setValues({
-                values : {
-                    text : ["Test"]
-                }
-            }))
+            console.log(filter.getValues())
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {
