@@ -257,7 +257,6 @@ define([
     };
 
     Input.prototype._renderInput = function () {
-
         this._createInputs();
     };
 
@@ -288,6 +287,7 @@ define([
             var m = $.extend(true, model, config, {
                     name: this.id + window.fx_filter_input_id,
                     id: "fx_input_" + window.fx_filter_input_id,
+                    label: this.template.title || model.label,
                     type: this.type,
                     isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
                 }),

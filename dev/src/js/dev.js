@@ -68,7 +68,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('trace');
+        log.setLevel('silent');
 
         this.start();
 
@@ -86,15 +86,15 @@ define([
 
     Dev.prototype._render = function () {
 
-        this._renderModel2();
-
-        return;
+        //this._renderModel2();
 
         //this._renderAmis();
 
         //this._renderDependencies();
 
         this._renderAll();
+
+        return;
 
         this._renderSetSources();
 
