@@ -62,11 +62,12 @@ define([
                 labels: {}
             };
 
-        momentdate = momentdate.unix()*1000;
+        if (momentdate != null && momentdate.isValid()) momentdate = momentdate.unix()*1000;
 
         //add always from
         result.values.push(momentdate);
         result.labels[momentdate] = "Date";
+
 
         return result;
     };
