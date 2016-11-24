@@ -165,7 +165,7 @@ define([
         this.silentMode = silent;
 
         var d = new Date(v).getTime();
-        (isNaN(v)) ? d = Moment(d).unix() : d = Moment(v,'x').unix();
+        d = (isNaN(v)) ?  Moment(d).unix() : Moment(v,'x').unix();
 
         log.info("Moment Object: ", Moment(d,'X'));
 

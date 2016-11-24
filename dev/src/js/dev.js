@@ -96,7 +96,7 @@ define([
 
         //this._renderDependencies();
 
-        //this._renderAll();
+        this._renderAll();
 
         return;
 
@@ -184,10 +184,10 @@ define([
             el: s.FENIX_RESOURCE,
             summaryEl: s.FENIX_RESOURCE_SUMMARY
         };
-
+/*
         log.warn(model);
-        log.warn(console.log(model));
-
+        console.log(model);
+*/
         var filter = this.createFilter(model);
     };
 

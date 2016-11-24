@@ -287,6 +287,17 @@ define([
                 });
             }
         }
+
+        if (!!this.selector.sort) {
+            data = data.sort(
+                (typeof this.selector.sort === 'function') ? this.selector.sort : function (a, b) {
+                    if (a.text < b.text) return -1;
+                    if (a.text > b.text) return 1;
+                    return 0;
+                });
+
+        }
+
         return data;
     };
 
@@ -322,13 +333,6 @@ define([
             }
 
         }, this));
-
-        //order alphabetically
-        data = data.sort(function (a, b) {
-            if (a.text < b.text) return -1;
-            if (a.text > b.text) return 1;
-            return 0;
-        });
 
         return data;
     };

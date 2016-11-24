@@ -878,8 +878,6 @@ define([
                     }
                 });
 
-                console.log(c)
-
                 this._callSelectorInstanceMethod(o.target, "_dep_parent", c);
             }
         }
