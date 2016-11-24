@@ -20,7 +20,8 @@ define([
                     enabled: false,
                     text: "All",
                     value: "all"
-                }
+                },
+                alphabeticallySorted: true
             }
         },
         s = {
@@ -51,6 +52,8 @@ define([
             self._trigger(EVT.SELECTOR_READY, {id: self.id});
 
         }, 0);
+
+        console.log(this);
 
         return this;
     }
@@ -294,11 +297,13 @@ define([
         }, this));
 
         //order alphabetically
-        data = data.sort(function (a, b) {
-            if (a.text < b.text) return -1;
-            if (a.text > b.text) return 1;
-            return 0;
-        });
+        if (this.selector.alphabeticallySorted) {
+            data = data.sort(function (a, b) {
+                if (a.text < b.text) return -1;
+                if (a.text > b.text) return 1;
+                return 0;
+            });
+        }
 
         return data;
     };
