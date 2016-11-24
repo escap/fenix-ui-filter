@@ -634,7 +634,7 @@ define([
         if ($cont.length === 0) {
             log.warn("Impossible to find selector container: " + id);
 
-            $cont = $("<div data-selector='" + id + "'  class='" + (conf.className || '') + "'></div>");
+            $cont = $("<div data-selector='" + id + "'  class='" + (conf.classNames || '') + "'></div>");
 
             if (this.direction === "append") {
                 this.$el.append($cont);
@@ -655,7 +655,7 @@ define([
     Selector.prototype._createSelectorContainer = function (id) {
         log.info("Create container for selector: " + id);
 
-        var classNames = this.initial.className || "",
+        var classNames = this.initial.classNames || "",
             obj = this.template,
             conf = $.extend(true, {id: id}, i18nLabels[this.lang], obj),
             $html;
@@ -905,6 +905,8 @@ define([
     };
 
     Selector.prototype._dep_parent = function (c) {
+
+        console.log(c)
 
         this._getPromise(c).then(
             _.bind(function (data) {

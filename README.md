@@ -179,7 +179,7 @@ This is the schema of a selector configuration
 {
  sel_1 : { // this will appear within the result of .getValues()
  
-    className : "...", //custom CSS class for selector container
+    classNames : "...", //custom CSS class for selector container
      
     selector : {}, // configuration of the selector
     

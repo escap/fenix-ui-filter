@@ -59,7 +59,7 @@ define([
         error_model = {},
         valid_model = {},
         filters = [],
-        environment = 'production';
+        environment = 'develop'; //'production';
 
     function Dev() {
 
@@ -86,13 +86,13 @@ define([
 
     Dev.prototype._render = function () {
 
-        //this._renderModel2();
+        this._renderModel2();
 
         //this._renderAmis();
 
         //this._renderDependencies();
 
-        this._renderAll();
+        //this._renderAll();
 
         return;
 

@@ -851,6 +851,10 @@ define([
 
     Filter.prototype._dep_parent = function (payload, o) {
 
+        var args = o.args || {},
+            body = args.body || {},
+            exclude = args.exclude || [];
+
         if (this.selectors[o.target]) {
 
             var c = this.selectors[o.target].cl;
@@ -864,11 +868,17 @@ define([
                 //c.levels = 2;
                 delete c.level;
 
+                $.extend(true, c, body);
+
                 c.codes = [];
 
                 _.each(payload.values, function (value) {
-                    c.codes.push(value);
+                    if (!_.contains(exclude, value)) {
+                        c.codes.push(value);
+                    }
                 });
+
+                console.log(c)
 
                 this._callSelectorInstanceMethod(o.target, "_dep_parent", c);
             }
