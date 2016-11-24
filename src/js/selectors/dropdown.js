@@ -53,8 +53,6 @@ define([
 
         }, 0);
 
-        console.log(this);
-
         return this;
     }
 
