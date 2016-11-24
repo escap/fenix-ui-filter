@@ -54,8 +54,8 @@ define([
      */
     Time.prototype.getValues = function () {
 
-        var date = this.$pickerEl.data('date'),
-            momentdate = this.$pickerEl.data("DateTimePicker").date(),
+        var momentdate = this.$pickerEl.data("DateTimePicker").date(),
+            //date = this.$pickerEl.data('date'),
             //date = new Date(this.$pickerEl.data('date')).getTime(),
             result = {
                 values: [],
@@ -164,11 +164,12 @@ define([
 
         this.silentMode = silent;
 
-        var MomentObject = Moment(v,'x');
+        var d = new Date(v).getTime();
+        (isNaN(v)) ? d = Moment(d).unix() : d = Moment(v,'x').unix();
 
-        log.info("Moment Object: " + MomentObject);
+        log.info("Moment Object: ", Moment(d,'X'));
 
-        this.$pickerEl.data("DateTimePicker").date(MomentObject);
+        this.$pickerEl.data("DateTimePicker").date(Moment(d,'X'));
     };
 
     Time.prototype._checkConfiguration = function () {

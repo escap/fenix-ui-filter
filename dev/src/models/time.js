@@ -39,11 +39,11 @@ define([
 
                 selector: {
                     id: "time",
-                    default: ["0"]
+                    default: ["01/01/1980"]
                 },
 
                 template: {
-                    title: "Time",
+                    title: "Time from string",
                     hideSwitch: false,
                     hideRemoveButton: false
                 }
