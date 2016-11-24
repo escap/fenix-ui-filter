@@ -3,20 +3,21 @@ define(function () {
 
     return {
 
-        "metadataCompletenessRate": {
-            "selector": {
-                "id": "time",
-                source : [{value: "1", label : "FIRST"}]
+        food : {
+            cl : {
+                uid : "GIFT_FoodGroups"
             },
-            constraints : {
-                presence : true
-            },
-            "format": {
-                "output": "string"
-            },
-            "template": {
-                "title": "Metadata completeness rate",
-                "description": "The percentage of completeness of metadata offers a numerical evaluation of the extent to which the resource is documented.",
+            selector : {
+                id : "tree",
+                hideFilter : true,
+                hideButtons: true,
+                hideSummary : true,
+                config: {
+                    core : {
+                        multiple : false
+                    },
+                    plugins : null
+                }
             }
         }
     }
