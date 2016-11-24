@@ -428,6 +428,11 @@ define([
             externalResource.type = "enumeration";
         }
 
+        if (this.distinct) {
+            externalResource.obj = this.distinct;
+            externalResource.type = "distinct";
+        }
+
         this._createSelectors();
 
         this._attach();
@@ -545,6 +550,7 @@ define([
         this.lang = this.initial.lang;
         this.cl = this.initial.cl;
         this.enumeration = this.initial.enumeration;
+        this.distinct = this.initial.distinct;
         this.plugins = this.initial.plugins;
         this.environment = this.initial.environment;
         this.cache = this.initial.cache;
@@ -854,6 +860,15 @@ define([
                 });
                 break;
 
+            case "distinct" :
+                promise = this.bridge.getColumnDistinctValues({
+                    uid: body.uid,
+                    version : body.version,
+                    columnId : body.columnId
+                });
+
+                break;
+
             default :
 
                 promise = this.bridge.getCodeList({
@@ -905,8 +920,6 @@ define([
     };
 
     Selector.prototype._dep_parent = function (c) {
-
-        console.log(c)
 
         this._getPromise(c).then(
             _.bind(function (data) {

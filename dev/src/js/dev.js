@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     '../../../src/js/index',
-    /*'fx-common/utils',*/
+    'fenix-ui-filter-utils',
     'dev/src/models/model-1',
     'dev/src/models/all',
     'dev/src/models/semantic',
@@ -18,12 +18,14 @@ define([
     'dev/src/models/setSources',
     'dev/src/models/amis',
     'dev/src/models/time',
+    'dev/src/models/uneca',
     'dev/src/html/model-1-base.hbs',
     'dev/src/nls/labels',
     'handlebars',
     'validate.js',
     'bootstrap'
-], function (log, $, _, Filter, /* Utils, */Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, TimeModel, model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
+], function (log, $, _, Filter,  Utils, Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, TimeModel, UnecaModel,  model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
+
 
     'use strict';
 
@@ -60,7 +62,7 @@ define([
         error_model = {},
         valid_model = {},
         filters = [],
-        environment = 'develop'; //'production';
+        environment = 'production'; //'production';
 
     function Dev() {
 
@@ -81,13 +83,14 @@ define([
 
         this._render();
 
-        //this._createConfiguration();
 
     };
 
     Dev.prototype._render = function () {
 
-        this._renderModel2();
+        this._createConfiguration();
+
+        //this._renderModel2();
 
         //this._renderAmis();
 
@@ -174,19 +177,18 @@ define([
     Dev.prototype._createConfiguration = function () {
 
         var configuration = Utils.createConfiguration({
-            model: FxResource
-        });
-
-        log.warn(configuration);
-
-        //return;
-
-        var filter = this.createFilter({
+            model: UnecaModel
+        }), model ={
             id: s.FENIX_RESOURCE,
             selectors: this._createFilterConfiguration(configuration),
             el: s.FENIX_RESOURCE,
             summaryEl: s.FENIX_RESOURCE_SUMMARY
-        });
+        };
+
+        log.warn(model);
+        log.warn(console.log(model));
+
+        var filter = this.createFilter(model);
     };
 
     Dev.prototype._renderSetSources = function () {
