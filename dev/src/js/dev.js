@@ -17,12 +17,13 @@ define([
     'dev/src/models/countrystat',
     'dev/src/models/setSources',
     'dev/src/models/amis',
+    'dev/src/models/time',
     'dev/src/html/model-1-base.hbs',
     'dev/src/nls/labels',
     'handlebars',
     'validate.js',
     'bootstrap'
-], function (log, $, _, Filter, /* Utils, */Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
+], function (log, $, _, Filter, /* Utils, */Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, TimeModel, model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
 
     'use strict';
 
@@ -152,16 +153,19 @@ define([
         var filter = this.createFilter({
             el: s.AMIS,
             lang : "FR",
-            selectors: Model2
+            selectors: TimeModel
         }).on("ready", function (evt) {
             console.log("Ready");
         });
 
         $(s.AMIS_BTN).on("click", function () {
+            console.log("AMIS_BTN")
             console.log(filter.getValues())
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {
+            console.log("AMIS_REMOVE_BTN")
+
             console.log(filter.dispose())
         })
     }

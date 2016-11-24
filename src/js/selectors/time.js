@@ -2,13 +2,15 @@ define([
     "jquery",
     "loglevel",
     'underscore',
+    'moment',
     '../../config/errors',
     '../../config/events',
     '../../config/config',
     '../../nls/labels',
     '../../html/selectors/time.hbs',
     'eonasdan-bootstrap-datetimepicker'
-], function ($, log, _, ERR, EVT, C, i18n, template ) {
+
+], function ($, log, _, Moment,  ERR, EVT, C, i18n, template ) {
 
     'use strict';
 
@@ -53,15 +55,18 @@ define([
     Time.prototype.getValues = function () {
 
         var date = this.$pickerEl.data('date'),
-        //date = new Date(this.$pickerEl.data('date')).getTime(),
+            momentdate = this.$pickerEl.data("DateTimePicker").date(),
+            //date = new Date(this.$pickerEl.data('date')).getTime(),
             result = {
                 values: [],
                 labels: {}
             };
 
+        momentdate = momentdate.unix()*1000;
+
         //add always from
-        result.values.push(date);
-        result.labels[date] = "Date";
+        result.values.push(momentdate);
+        result.labels[momentdate] = "Date";
 
         return result;
     };
@@ -159,7 +164,11 @@ define([
 
         this.silentMode = silent;
 
-        this.$pickerEl.data("DateTimePicker").date(new Date(v));
+        var MomentObject = Moment(v,'x');
+
+        log.info("Moment Object: " + MomentObject);
+
+        this.$pickerEl.data("DateTimePicker").date(MomentObject);
     };
 
     Time.prototype._checkConfiguration = function () {
@@ -207,6 +216,7 @@ define([
                     up: "icojam_arrow_up time-selector-icon",
                     down: "icojam_arrow_down time-selector-icon"
                 }
+                ,locale: this.lang.toLowerCase()
             }, /*here*/ this.selector.config) //add calculated properties
         );
 
