@@ -417,11 +417,12 @@ define([
             
         });
 
-        this.$el.find('.selectize-control').on('click', function () {
+       /* In conflict, with ON CHANGE EVENT
+           this.$el.find('.selectize-control').on('click', function () {
             if (self.status.ready === true) {
                 self._trigger(EVT.SELECTOR_SELECTED, $.extend({id: self.id}, self.getValues()) )
             }
-        });
+        });*/
 
         this.$el.find(s.CLEAR_ALL_CONTAINER).on("click", function () {
             if (selectize) {
