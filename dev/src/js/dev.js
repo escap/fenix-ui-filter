@@ -88,7 +88,7 @@ define([
 
     Dev.prototype._render = function () {
 
-        this._createConfiguration();
+        //this._createConfiguration();
 
         this._renderModel2();
 
@@ -156,7 +156,7 @@ define([
         var filter = this.createFilter({
             el: s.AMIS,
             lang : "FR",
-            selectors: TimeModel
+            selectors: Model2
         }).on("ready", function (evt) {
             console.log("Ready");
         });

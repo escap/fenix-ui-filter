@@ -22,6 +22,8 @@ define([
 
     function Selector(obj) {
 
+        console.log()
+
         $.extend(true, this, C, {initial: obj || {}, $el: $(obj.el)});
 
         this._initVariables();
@@ -556,6 +558,8 @@ define([
         this.cache = this.initial.cache;
         this.values = this.initial.values;
 
+        this.classNames = this.initial.classNames || "";
+
         this.constraints = this.initial.constraints;
 
         this.nls = !!this.initial.nls;
@@ -627,9 +631,8 @@ define([
 
     Selector.prototype._attach = function () {
 
-        this.$el = this._getSelectorContainer(this.id);
+        this._getSelectorContainer(this.id);
 
-        return this.$el;
     };
 
     Selector.prototype._getSelectorContainer = function (id) {
@@ -640,7 +643,7 @@ define([
         if ($cont.length === 0) {
             log.warn("Impossible to find selector container: " + id);
 
-            $cont = $("<div data-selector='" + id + "'  class='" + (conf.classNames || '') + "'></div>");
+            $cont = $("<div data-mario data-selector='" + id + "'  class='" + (conf.classNames || '') + "'></div>");
 
             if (this.direction === "append") {
                 this.$el.append($cont);
@@ -648,6 +651,8 @@ define([
                 this.$el.prepend($cont);
             }
 
+        } else {
+            $cont.addClass(this.classNames);
         }
 
         if (conf.templateIsInitialized !== true) {
@@ -661,7 +666,7 @@ define([
     Selector.prototype._createSelectorContainer = function (id) {
         log.info("Create container for selector: " + id);
 
-        var classNames = this.initial.classNames || "",
+        var classNames = "",
             obj = this.template,
             conf = $.extend(true, {id: id}, i18nLabels[this.lang], obj),
             $html;
@@ -672,7 +677,7 @@ define([
             }
         });
 
-        $html = $(templateSelector($.extend(true, {classNames: classNames}, conf)));
+        $html = $(templateSelector($.extend(true, /*{classNames: classNames}, */  conf)));
 
         return $html;
     };

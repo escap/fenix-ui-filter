@@ -8,7 +8,7 @@ define([
     '../../html/selector.hbs',
     '../../html/group.hbs',
     '../../nls/labels',
-    './selector',
+    './selector'
 ], function (log, $, _, ERR, EVT, C, templateSelector, templateGroup, i18nLabels, Selector) {
 
     'use strict';
@@ -41,9 +41,15 @@ define([
 
         this._unbindEventListeners();
 
-        _.each(this.selectors, _.bind(function (obj) {
+        _.each(this.groups, _.bind(function (group) {
 
-            obj.instance.dispose()
+            _.each(group, function(sel, id) {
+
+                if (sel && sel.instance && typeof sel.instance.dispose === "function") {
+                    sel.instance.dispose();
+                }
+
+            });
 
         }, this));
 
@@ -58,9 +64,15 @@ define([
      */
     Group.prototype.reset = function () {
 
-        _.each(this.selectors, _.bind(function (obj) {
+        _.each(this.groups, _.bind(function (group) {
 
-            obj.instance.reset()
+            _.each(group, function(sel, id) {
+
+                if (sel && sel.instance && typeof sel.instance.reset === "function") {
+                    sel.instance.reset();
+                }
+
+            });
 
         }, this));
     };
@@ -143,11 +155,9 @@ define([
      */
     Group.prototype.setSource = function (values) {
 
-        _.each(this.selectors, _.bind(function (obj) {
+        console.log("TODO setSource()");
 
-            obj.instance.setSource(values)
-
-        }, this));
+        return;
 
     };
 
@@ -158,13 +168,9 @@ define([
      */
     Group.prototype.setValue = function (values) {
 
-        var valuesAmount = values.length,
-            initialized = 0;
-
         if (!this.incremental) {
 
             _.each(this.groups, function (group) {
-                set++;
 
                 _.each(group, function (selector) {
 
@@ -215,13 +221,10 @@ define([
      */
     Group.prototype.unsetValue = function (values) {
 
-        console.log("TODO")
+        console.log("TODO unsetValue()");
 
-        _.each(this.selectors, _.bind(function (obj) {
+        return;
 
-            obj.instance.unsetValue(values)
-
-        }, this));
 
     };
 
@@ -327,18 +330,22 @@ define([
         this.constraints = this.initial.constraints;
 
         this.groups = {};
-        this.selectors = {};
         this._selectors = this.initial.selectors;
 
         this.incremental = !!this.initial.incremental;
 
         this.classNames = this.initial.classNames;
 
+        if (!this.incremental) {
+            this.initialAmount = 1;
+        } else {
+            this.initialAmount = !isNaN(this.initial.initialAmount) ? this.initial.initialAmount : 0;
+        }
+        this.amount = 0;
+
         this.status = {
             disable: false
         };
-
-        this.amount = 0;
 
         this.dependeciesToDestory = [];
 
@@ -355,11 +362,10 @@ define([
 
     Group.prototype._attach = function () {
 
-        this.$el = this._getGroupContainer(this.id);
+        this._getGroupContainer(this.id);
 
         this._bindEventListeners();
 
-        return this.$el;
     };
 
     Group.prototype._getGroupContainer = function (id) {
@@ -367,7 +373,6 @@ define([
         var $cont = this.$el.find('[data-group="' + id + '"]'),
             conf = this,
             model;
-
 
         if ($cont.length === 0) {
             log.warn("Impossible to find selector container: " + id);
@@ -413,10 +418,15 @@ define([
 
         this.selectorsReady = 0; //used for "ready" event
 
-        window.setTimeout(_.bind(function () {
-            this._onReady();
-        }, this), 10);
+        for (var i = 0; i < this.initialAmount; i++) {
+            this._addGroup();
+        }
 
+        if (this.initialAmount === 0) {
+            window.setTimeout(_.bind(function () {
+                this._trigger(EVT.SELECTOR_READY, {id: this.id});
+            }, this), 100);
+        }
     };
 
     Group.prototype._addGroup = function (values) {
@@ -430,7 +440,9 @@ define([
         this.groups[groupName] = {};
 
         //create group $el and cache it
-        var $el = this._createSelectorContainer(groupName);
+        var $el;
+
+        $el = this._createSelectorContainer(groupName);
         this.groups[groupName].$el = $el;
 
         this._bindSelectorEventListeners($el, groupName);
@@ -521,7 +533,6 @@ define([
                                 call.call(self, payload, {src: s, target: id, group: groupName, args: d.args});
                             } else {
 
-                                console.log("Impossible to find : " + "_dep_" + d.id);
                                 log.error("Impossible to find : " + "_dep_" + d.id);
                             }
                         }
@@ -653,9 +664,9 @@ define([
 
     };
 
-    Group.prototype._destroyDependencies = function() {
+    Group.prototype._destroyDependencies = function () {
 
-        _.each(this.groups, _.bind(function(group, name) {
+        _.each(this.groups, _.bind(function (group, name) {
             this._destroyGroupDependencies(name);
         }, this))
     };
@@ -705,7 +716,7 @@ define([
     //Dependencies
 
     Group.prototype._dep_readOnlyIfNotValue = function (payload, o) {
-        log.info("_dep_enableIfValue invokation");
+        log.info("_dep_readOnlyIfNotValue invokation");
         log.info(o);
 
         var forbiddenValue = o.args.value,

@@ -54,6 +54,9 @@ define([
      */
     Time.prototype.getValues = function () {
 
+        console.log(this.$pickerEl)
+        console.log(this.$pickerEl.data("DateTimePicker"))
+
         var momentdate = this.$pickerEl.data("DateTimePicker").date(),
             //date = this.$pickerEl.data('date'),
             //date = new Date(this.$pickerEl.data('date')).getTime(),
@@ -210,7 +213,7 @@ define([
 
     Time.prototype._renderSelector = function () {
 
-        this.$el.find(s.PICKER_CONTAINER).datetimepicker(
+        this.$pickerEl.datetimepicker(
             $.extend(true, {
                 icons: {
                     time: "icojam_time time-selector-icon",
@@ -266,7 +269,9 @@ define([
 
         this._unbindEventListeners();
 
-        this.$pickerEl.data("DateTimePicker").destroy();
+        if (this.$pickerEl.data("DateTimePicker") && typeof this.$pickerEl.data("DateTimePicker").destroy === "function") {
+            this.$pickerEl.data("DateTimePicker").destroy();
+        }
 
         this.$el.empty();
 

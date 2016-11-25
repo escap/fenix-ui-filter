@@ -2,70 +2,95 @@ define(function () {
 
 
     return {
+        /*
+         CountryCode: {
 
-        parentsector_code: {
+         className: 'col-md-6',
 
-            selector: {
-                id: "dropdown",
-                default: ["600"],
-                config: {
-                    placeholder: "Please select",
-                    plugins: ['remove_button'],
-                    mode: 'multi'
-                }
-            },
+         selector: {
+         id: "tree",
+         default: ["DZA"]
+         },
 
-            cl: {
-                uid: "crs_dac",
-                version: "2016",
-                level: 1,
-                levels: 1
-            },
+         cl: {
+         uid: "UNECA_ISO3"
+
+         },
+         template: {
+         title: "Multiple selection",
+         hideHeader: true
+         }
+         },
+         */
+
+
+        time: {
+
+            //incremental : true,
+
+            //initialAmount : 1,
 
             template: {
-                hideSwitch: true,
-                hideRemoveButton: true
-            }
-        },
-
-        purposecode: {
-
-            selector: {
-
-                id: "dropdown",
-
-                config: {
-                    //maxItems: 1,
-                    placeholder: "All",
-                    plugins: ['remove_button'],
-                    mode: 'multi'
-                }
+                title: "Time"
             },
 
-            cl: {
-                codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
-                "uid": "crs_dac",
-                "version": "2016",
-                "level": 2,
-                "levels": 2
-            },
-            template: {
-                hideSwitch: true,
-                hideRemoveButton: true
-            },
-            dependencies: {
-                "parentsector_code": {
-                    id: "parent",
-                    event: "select",
-                    args: {
-                        body: {
-                            levels: 9999
-                        },
-                        exclude: ["240", "600", "250", "910", "311"]
+            selectors: {
+
+                from: {
+                    classNames: "col-xs-6",
+
+                    selector: {
+                        id: "time"
+
+                    },
+                    template: {
+                        title: "From"
                     }
-                }, //obj or array of obj
+
+                },
+
+                to: {
+                    classNames: "col-xs-6",
+
+                    selector: {
+                        id: "time"
+
+                    },
+                    template: {
+                        title: "To"
+                    }
+                }
             }
+
         },
+
+        /*       first: {
+         selector: {
+         id: "dropdown",
+         config: {
+         maxItems: 1
+         },
+         source: [
+         {value: "test", label: "Test ('second' should be disabled)"},
+         {value: "other", label: "Other ('second' should be enabled)"}
+         ]
+         }
+         },
+
+         second: {
+         selector: {
+         id: "input",
+         type: "text",
+         config: {
+         readonly: true,
+         placeholder: "hi!"
+         }
+         },
+         dependencies: {
+         first: [{id: "readOnlyIfNotValue", event: "select", args: {value: "other"}}]
+         }
+         }*/
+
     }
 
 });

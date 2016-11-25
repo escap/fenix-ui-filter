@@ -387,6 +387,7 @@ define([
         this.selectorsReady = 0; //used for "ready" event
 
         //In case there are selectors set timeout
+
         if (this.selectorsId.length > 0) {
 
             this.validTimeout = window.setTimeout(function () {
@@ -1022,6 +1023,24 @@ define([
             this._callSelectorInstanceMethod(o.target, "disable");
         }
 
+    };
+
+    Filter.prototype._dep_readOnlyIfNotValue = function (payload, o) {
+        log.info("_dep_readOnlyIfNotValue invokation");
+        log.info(o);
+
+        var forbiddenValue = o.args.value,
+            selectedValues = payload.values || [],
+            selector = this.selectors[o.target] || {},
+            instance = selector.instance;
+
+        if (instance) {
+            if (_.contains(selectedValues, forbiddenValue)) {
+                instance.disableReadOnly()
+            } else {
+                instance.enableReadOnly()
+            }
+        }
     };
 
     Filter.prototype._getModelValues = function (ids) {
