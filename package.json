@@ -1,13 +1,13 @@
 {
   "name": "fenix-ui-filter",
-  "version": "3.0.0-beta.49",
+  "version": "3.0.0-beta.50",
   "description": "FENIX Filter",
   "main": "dist/fenix-ui-filter.min.js",
   "scripts": {
     "test": "NODE_ENV=test karma start ./karma.config.js",
     "build": "cross-env NODE_ENV=production webpack --display-error-details --profile --json > stats.json",
     "build:demo": "NODE_ENV=demo webpack --display-error-details",
-    "dev": "NODE_ENV=develop webpack-dev-server --display-error-details --progress --color --content-base dev  --inline --hot",
+    "dev": "cross-env NODE_ENV=develop webpack-dev-server --display-error-details --progress --color --content-base dev  --inline --hot",
     "w-test": "SET NODE_ENV=test&& karma start ./karma.config.js",
     "w-build": "SET NODE_ENV=production&&webpack --display-error-details",
     "w-build:demo": "SET NODE_ENV=demo&&webpack --display-error-details",
@@ -26,7 +26,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "eonasdan-bootstrap-datetimepicker": "^4.17.43",
-    "fenix-ui-bridge": "^1.0.0-beta.10",
+    "fenix-ui-bridge": "^1.0.0-beta.11",
     "fenix-ui-converter": "^1.0.0-beta.7",
     "ion-rangeslider": "^2.1.4",
     "jquery": "^2.2.4",
