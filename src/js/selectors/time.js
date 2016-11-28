@@ -54,9 +54,6 @@ define([
      */
     Time.prototype.getValues = function () {
 
-        console.log(this.$pickerEl)
-        console.log(this.$pickerEl.data("DateTimePicker"))
-
         var momentdate = this.$pickerEl.data("DateTimePicker").date(),
             //date = this.$pickerEl.data('date'),
             //date = new Date(this.$pickerEl.data('date')).getTime(),

@@ -86,9 +86,12 @@ define([
         var result = {
                 values: {},
                 labels: {},
+                errors: {},
                 valid: true
             }, v,
             values,
+            errors = {},
+            valid = {},
             labels = {};
 
 
@@ -106,6 +109,8 @@ define([
                     v = instance.getValues(format);
                     values[key] = v.values;
                     labels[key] = v.labels;
+                    result.valid = result.valid && !!v.valid;
+                    $.extend(true, result.errors, v.errors);
 
                 } else {
                     log.warn(key + " skip language");
@@ -113,8 +118,7 @@ define([
 
             }, this));
 
-        }
-        else {
+        } else {
             values = [];
 
             _.each(this.groups, _.bind(function (group) {

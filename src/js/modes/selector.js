@@ -22,8 +22,6 @@ define([
 
     function Selector(obj) {
 
-        console.log()
-
         $.extend(true, this, C, {initial: obj || {}, $el: $(obj.el)});
 
         this._initVariables();
@@ -130,6 +128,7 @@ define([
         }
         else {
 
+
             v = this.mainSelector.instance.getValues(format);
             values = v.values;
             labels = v.labels;
@@ -146,8 +145,11 @@ define([
 
         }
 
+
         result.values = values;
         result.labels = labels;
+
+        console.log(result);
 
         return result;
     };
@@ -464,6 +466,7 @@ define([
      * */
     Selector.prototype.tagAsInvalid = function (el, message) {
 
+
         var $el = el || this.$el,
             text = message.join(", ");
 
@@ -643,7 +646,7 @@ define([
         if ($cont.length === 0) {
             log.warn("Impossible to find selector container: " + id);
 
-            $cont = $("<div data-mario data-selector='" + id + "'  class='" + (conf.classNames || '') + "'></div>");
+            $cont = $("<div data-selector='" + id + "'  class='" + (conf.classNames || '') + "'></div>");
 
             if (this.direction === "append") {
                 this.$el.append($cont);

@@ -45,7 +45,8 @@ define(function () {
                     },
                     template: {
                         title: "From"
-                    }
+                    },
+                    constraints: {"presence": true}
 
                 },
 
@@ -58,7 +59,8 @@ define(function () {
                     },
                     template: {
                         title: "To"
-                    }
+                    },
+                    constraints: {"presence": true}
                 }
             }
 
