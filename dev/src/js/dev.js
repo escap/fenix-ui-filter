@@ -24,7 +24,7 @@ define([
     'handlebars',
     'validate.js',
     'bootstrap'
-], function (log, $, _, Filter,  Utils, Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, TimeModel, UnecaModel,  model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
+], function (log, $, _, Filter, Utils, Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, TimeModel, UnecaModel, model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
 
 
     'use strict';
@@ -151,12 +151,80 @@ define([
 
     };
 
+
     Dev.prototype._renderModel2 = function () {
 
         var filter = this.createFilter({
             el: s.AMIS,
-            lang : "FR",
-            selectors: Model2
+            lang: "FR",
+            selectors: Model2,
+            dependencies: {
+                disableSpecialCondition: function (payload, o) {
+
+                    var threshold = parseInt(o.args.threshold),
+                        forbiddenGender = o.args.forbiddenGender,
+                        forbiddenAgeGranularity = o.args.forbiddenAgeGranularity,
+                        selectedValues = payload.values || {},
+                        //age selector
+                        to = _.findWhere(selectedValues.age, {parent: "to"}) || {},
+                        toValue = !isNaN(parseInt(to.value)) ? parseInt(to.value) : -1,
+                        //gender selector
+                        gender = selectedValues.gender,
+                        toDisable = false,
+                        //age granularity
+                        ageGranularity = selectedValues.ageGranularity[0];
+
+                    //if 'to' value is less then threshold
+                    if (toValue < threshold) {
+                        toDisable = true
+                    }
+
+                    //if gender is forbidden
+                    if (_.contains(gender, forbiddenGender)) {
+                        toDisable = true
+                    }
+
+                    //if 'to' value is less then threshold
+                    if (forbiddenAgeGranularity === ageGranularity) {
+                        toDisable = true
+                    }
+
+                    if (!!toDisable) {
+                        this._callSelectorInstanceMethod(o.target, "disable");
+                    } else {
+                        this._callSelectorInstanceMethod(o.target, "enable");
+                    }
+
+                },
+                updateAge: function (payload, o) {
+
+                    var granularity = payload.values[0],
+                        yearConfig = {
+                            min: 0,
+                            max: 120,
+                            from: 0,
+                            to: 120,
+                            step : 0.5
+                        },
+                        monthConfig = {
+                            min: 0,
+                            max: 60,
+                            from: 0,
+                            to: 60,
+                            step : 1
+                        };
+
+                    switch (granularity.toLowerCase()) {
+                        case "year" :
+                            this._callSelectorInstanceMethod(o.target, "update", yearConfig);
+                            break;
+                        case "month" :
+                            this._callSelectorInstanceMethod(o.target, "update", monthConfig);
+                            break;
+                    }
+
+                }
+            }
         }).on("ready", function (evt) {
             console.log("Ready");
         });
@@ -178,16 +246,16 @@ define([
 
         var configuration = Utils.createConfiguration({
             model: UnecaModel
-        }), model ={
+        }), model = {
             id: s.FENIX_RESOURCE,
             selectors: this._createFilterConfiguration(configuration),
             el: s.FENIX_RESOURCE,
             summaryEl: s.FENIX_RESOURCE_SUMMARY
         };
-/*
-        log.warn(model);
-        console.log(model);
-*/
+        /*
+         log.warn(model);
+         console.log(model);
+         */
         var filter = this.createFilter(model);
     };
 

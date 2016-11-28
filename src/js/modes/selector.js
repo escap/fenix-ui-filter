@@ -152,7 +152,6 @@ define([
 
         }
 
-
         result.values = values;
         result.labels = labels;
 
@@ -307,6 +306,27 @@ define([
         } else {
 
             this.mainSelector.instance.enableReadOnly();
+        }
+    };
+
+    /**
+     * set value
+     * @return {Object}
+     */
+    Selector.prototype.update = function (opts) {
+
+        if (this.nls) {
+
+            _.each(this.selectors, _.bind(function (selector) {
+                if (selector && typeof selector.instance === "object") {
+                    selector.instance.update(opts);
+                }
+            }, this))
+
+
+        } else {
+
+            this.mainSelector.instance.update(opts);
         }
     };
 

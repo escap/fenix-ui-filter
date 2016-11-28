@@ -44,6 +44,16 @@ define([
     }
 
     /**
+     * update method
+     * Mandatory method
+     */
+
+    Range.prototype.update = function( opts ) {
+        var slider = this.$rangeContainer.data("ionRangeSlider");
+        slider.update(opts);
+    };
+
+    /**
      * getValues method
      * Mandatory method
      */

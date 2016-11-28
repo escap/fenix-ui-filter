@@ -230,8 +230,9 @@ define([
 
         this.environment = this.initial.environment;
         this.lang = this.initial.lang || C.lang;
-        $.extend(this.lang, C.lang, this.initial.lang);
         this.lang = this.lang.toLowerCase();
+
+        this.dependencies = this.initial.dependencies || {};
 
     };
 
@@ -757,6 +758,11 @@ define([
 
     Filter.prototype._initDependencies = function () {
 
+        //register custom dependencies
+        _.each(this.dependencies, _.bind(function(fn, id) {
+            this["_dep_" + id] = fn;
+        }, this));
+
         _.each(this.selectors, _.bind(function (sel, id) {
 
             if (!sel.hasOwnProperty("dependencies")) {
@@ -782,7 +788,7 @@ define([
                     return this.selectorsId;
                     break;
                 default:
-                    log.error(ERR.UNKNOWN_DEPENDENCY_ID);
+                    return id.split(",");
                     break;
             }
         }
@@ -816,6 +822,11 @@ define([
                         callback: function (payload) {
 
                             var call = self["_dep_" + d.id];
+
+                            if (d.args && d.args.payloadIncludes){
+                                var selectors = self._getModelValues(d.args.payloadIncludes);
+                                payload =  self.getValues(null,selectors)
+                            }
 
                             if ($.isFunction(call)) {
                                 call.call(self, payload, {src: s, target: id, args: d.args});

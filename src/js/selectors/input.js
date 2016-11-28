@@ -262,10 +262,21 @@ define([
 
     Input.prototype._createInputs = function () {
 
-        var data = this.selector.source || [],
+        var self = this,
+            data = this.selector.source || [],
             config = this.selector.config || {},
             $list = this.$el.find(s.TEMPLATE_LIST),
             list;
+
+        // add source from codelist/enumeration
+        var d = this.data ? this.data.map(function (i) {
+            return {
+                value: i.code,
+                label: i.title[self.lang] || i.title["EN"]
+            }
+        }) : [];
+
+        data = d.concat(data);
 
         if ($list.length === 0) {
             log.info("Injecting input list");
@@ -287,7 +298,7 @@ define([
             var m = $.extend(true, model, config, {
                     name: this.id + window.fx_filter_input_id,
                     id: "fx_input_" + window.fx_filter_input_id,
-                    label: this.template.title || model.label,
+                    label: model.label || this.template.title,
                     type: this.type,
                     isCheckboxOrRadio: (this.type === 'radio' || this.type === 'checkbox')
                 }),
@@ -354,14 +365,17 @@ define([
 
                 var r = self.getValues(),
                     value = r.values[0] || "",
-                    label = r.labels[value],
-                    payload = {
-                        id: self.id,
-                        value: value,
-                        label: label,
-                        parent: null
-                    };
+                    labels = {},
+                    payload;
 
+                labels[value] = r.labels[value];
+
+                payload = {
+                    id: self.id,
+                    values: [value],
+                    label: labels,
+                    parent: null
+                };
 
                 self._trigger(EVT.SELECTOR_SELECTED, payload)
             }
