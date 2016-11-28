@@ -47,8 +47,8 @@ define([
      * update method
      * Mandatory method
      */
-
     Range.prototype.update = function( opts ) {
+
         var slider = this.$rangeContainer.data("ionRangeSlider");
         slider.update(opts);
     };
@@ -339,7 +339,10 @@ define([
 
         this._unbindEventListeners();
 
-        this.$rangeContainer.data("ionRangeSlider").destroy();
+        if (this.$rangeContainer.data("ionRangeSlider")) {
+            //TODO check destroy
+            this.$rangeContainer.data("ionRangeSlider").destroy();
+        }
 
         this.$el.empty();
 

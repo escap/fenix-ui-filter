@@ -67,8 +67,6 @@ define([
      */
     Selector.prototype.getValues = function (format) {
 
-        //this.untag(); << too generic for groups of complex selector
-
         var result = {
             values: {},
             labels: {},

@@ -1,5 +1,47 @@
 define(function () {
 
+/*    return {
+
+        time: {
+
+            //incremental : true,
+
+            //initialAmount : 1,
+
+            template: {
+                title: "Time"
+            },
+
+            selectors: {
+
+                from: {
+                    classNames: "col-xs-6",
+                    selector: {
+                        id: "time"
+                    },
+                    template: {
+                        title: "From"
+                    },
+                    constraints: {"presence": true}
+
+                },
+
+                to: {
+                    classNames: "col-xs-6",
+                    selector: {
+                        id: "time"
+                    },
+                    template: {
+                        title: "To"
+                    },
+                    constraints: {"presence": true}
+                }
+            }
+
+        }
+
+    };*/
+
 
     return {
 
@@ -9,7 +51,8 @@ define(function () {
                 version: "2014"
             },
             selector: {
-                id: "tree"
+                id: "tree",
+                hideSummary : true
             },
 
             template: {
@@ -181,7 +224,8 @@ define(function () {
             },
 
             selector: {
-                id: "tree"
+                id: "tree",
+                hideSummary : true
             },
             template: {
                 title: "Food"
