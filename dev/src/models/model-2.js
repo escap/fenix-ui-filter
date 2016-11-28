@@ -38,10 +38,8 @@ define(function () {
 
                 from: {
                     classNames: "col-xs-6",
-
                     selector: {
                         id: "time"
-
                     },
                     template: {
                         title: "From"
@@ -52,10 +50,8 @@ define(function () {
 
                 to: {
                     classNames: "col-xs-6",
-
                     selector: {
                         id: "time"
-
                     },
                     template: {
                         title: "To"

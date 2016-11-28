@@ -162,7 +162,7 @@ define([
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log("AMIS_BTN")
+        //    console.log("AMIS_BTN")
             console.log(filter.getValues())
         });
 

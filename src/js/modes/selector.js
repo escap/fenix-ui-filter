@@ -67,7 +67,7 @@ define([
      */
     Selector.prototype.getValues = function (format) {
 
-        this.untag();
+        //this.untag(); << too generic for groups of complex selector
 
         var result = {
             values: {},
@@ -86,6 +86,8 @@ define([
                         instance;
 
                     if (selector) {
+
+                        this.untag(selector.$el);
 
                         instance = selector.instance;
                         v = instance.getValues(format);
@@ -110,11 +112,15 @@ define([
             }
 
             else {
+
+
                 v = this.mainSelector.instance.getValues(format);
                 values[this.lang.toUpperCase()] = v.values;
                 labels[this.lang.toUpperCase()] = v.labels;
 
                 valid = this._validateSelection(v.values);
+
+                this.untag(this.mainSelector.$el);
 
                 if (valid !== true) {
                     result.errors[this.id] = valid;
@@ -128,19 +134,20 @@ define([
         }
         else {
 
-
             v = this.mainSelector.instance.getValues(format);
             values = v.values;
             labels = v.labels;
+
+            this.untag(this.mainSelector.instance.$el);
 
             valid = this._validateSelection(v.values);
 
             if (valid !== true) {
                 result.errors[this.mainSelector.id] = valid;
                 result.valid = false;
-                this.tagAsInvalid(this.mainSelector.$el, valid);
+                this.tagAsInvalid(this.mainSelector.instance.$el, valid);
             } else {
-                this.tagAsValid(this.mainSelector.$el);
+                this.tagAsValid(this.mainSelector.instance.$el);
             }
 
         }
@@ -148,8 +155,6 @@ define([
 
         result.values = values;
         result.labels = labels;
-
-        console.log(result);
 
         return result;
     };
@@ -470,8 +475,12 @@ define([
         var $el = el || this.$el,
             text = message.join(", ");
 
+        //console.log('tagAsInvalid' , $el);
+
         $el.find(".form-group").addClass("has-error");
         $el.find(".help-block.error").html(ValidateJs.capitalize(text));
+
+        //console.log($el.find(".form-group").length);
     };
 
     /**
