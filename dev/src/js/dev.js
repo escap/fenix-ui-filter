@@ -22,9 +22,8 @@ define([
     'dev/src/html/model-1-base.hbs',
     'dev/src/nls/labels',
     'handlebars',
-    'validate.js',
     'bootstrap'
-], function (log, $, _, Filter, Utils, Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, TimeModel, UnecaModel, model1baseTemplate, i18nLabels, Handlebars, ValidateJS) {
+], function (log, $, _, Filter, Utils, Model1, AllModel, SemanticModel, FxResource, ModelToSync, TableTabModel, Process, AggregationModel, Model2, ModelDependencies, CountryStatModel, SetSourcesModel, AmisModel, TimeModel, UnecaModel, model1baseTemplate, i18nLabels, Handlebars) {
 
 
     'use strict';
@@ -56,7 +55,7 @@ define([
             SOURCES_BTN: "#sources-btn",
             AMIS: "#amis",
             AMIS_BTN: "#amis-get-values-btn",
-            AMIS_REMOVE_BTN: "#amis-remove-btn",
+            AMIS_REMOVE_BTN: "#amis-remove-btn"
         },
         empty_model = {data: []},
         error_model = {},
@@ -204,14 +203,14 @@ define([
                             max: 120,
                             from: 0,
                             to: 120,
-                            step : 0.5
+                            step: 0.5
                         },
                         monthConfig = {
                             min: 0,
                             max: 60,
                             from: 0,
                             to: 60,
-                            step : 1
+                            step: 1
                         };
 
                     switch (granularity.toLowerCase()) {
@@ -222,23 +221,23 @@ define([
                             this._callSelectorInstanceMethod(o.target, "update", monthConfig);
                             break;
                     }
-
                 }
             }
         }).on("ready", function (evt) {
             console.log("Ready");
+        }).on("click", function() {
+            filter.validate()
         });
 
         $(s.AMIS_BTN).on("click", function () {
-        //    console.log("AMIS_BTN")
-            console.log(filter.getValues())
+            console.log(filter.getValues("fenix"))
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {
-            console.log("AMIS_REMOVE_BTN")
-
             console.log(filter.dispose())
         })
+
+
     }
     ;
 

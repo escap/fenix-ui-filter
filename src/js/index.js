@@ -59,6 +59,24 @@ define([
     // API
 
     /**
+     * Validate
+     * @return {Object} validation result and errors
+     */
+    Filter.prototype.validate = function () {
+
+        var values = this.getValues(),
+            result = {
+                valid: values.valid
+            };
+
+            if (values.errors) {
+                result.errors =  values.errors
+            }
+
+        return result
+    };
+
+    /**
      * Return the current selection
      * @return {Object} Selection
      */
@@ -504,9 +522,9 @@ define([
 
     };
 
-    Filter.prototype._disableDisabledSelectorsByDefault = function() {
+    Filter.prototype._disableDisabledSelectorsByDefault = function () {
 
-        _.each(this.selectors, _.bind(function(s, name) {
+        _.each(this.selectors, _.bind(function (s, name) {
             if (s.selector && s.selector.disabled === true) {
                 this._callSelectorInstanceMethod(name, "disable");
             }
@@ -679,7 +697,7 @@ define([
 
         }, this));
 
-        if (result.errors.length == 0) {
+        if (Object.keys(result.errors).length === 0) {
             delete result.errors;
         }
 
@@ -759,7 +777,7 @@ define([
     Filter.prototype._initDependencies = function () {
 
         //register custom dependencies
-        _.each(this.dependencies, _.bind(function(fn, id) {
+        _.each(this.dependencies, _.bind(function (fn, id) {
             this["_dep_" + id] = fn;
         }, this));
 
@@ -823,9 +841,9 @@ define([
 
                             var call = self["_dep_" + d.id];
 
-                            if (d.args && d.args.payloadIncludes){
+                            if (d.args && d.args.payloadIncludes) {
                                 var selectors = self._getModelValues(d.args.payloadIncludes);
-                                payload =  self.getValues(null,selectors)
+                                payload = self.getValues(null, selectors)
                             }
 
                             if ($.isFunction(call)) {
@@ -1306,13 +1324,20 @@ define([
 
     Filter.prototype._format_fenix = function (values) {
 
-        return Converter.toD3P(this._selectors, values);
-
+        if (!!values.valid === false) {
+            return values
+        } else {
+            return Converter.toD3P(this._selectors, values);
+        }
     };
 
     Filter.prototype._format_catalog = function (values) {
 
-        return Converter.toFilter(this._selectors, values);
+        if (!!values.valid === false) {
+            return values
+        } else {
+            return Converter.toFilter(this._selectors, values);
+        }
 
     };
 

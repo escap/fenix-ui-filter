@@ -1,48 +1,5 @@
 define(function () {
 
-/*    return {
-
-        time: {
-
-            //incremental : true,
-
-            //initialAmount : 1,
-
-            template: {
-                title: "Time"
-            },
-
-            selectors: {
-
-                from: {
-                    classNames: "col-xs-6",
-                    selector: {
-                        id: "time"
-                    },
-                    template: {
-                        title: "From"
-                    },
-                    constraints: {"presence": true}
-
-                },
-
-                to: {
-                    classNames: "col-xs-6",
-                    selector: {
-                        id: "time"
-                    },
-                    template: {
-                        title: "To"
-                    },
-                    constraints: {"presence": true}
-                }
-            }
-
-        }
-
-    };*/
-
-
     return {
 
         country: {
@@ -52,15 +9,20 @@ define(function () {
             },
             selector: {
                 id: "tree",
-                hideSummary : true
+                hideSummary: true
             },
 
             template: {
                 title: "Country"
+            },
+            format: {
+                dimension: "meContent.seCoverage.coverageGeographic",
+                output: "code"
             }
         },
 
         time: {
+
             selector: {
                 id: "range",
                 config: {
@@ -77,8 +39,14 @@ define(function () {
             template: {
                 title: "Time"
             },
+
             dependencies: {
                 country: [{id: "test", event: "select"}]
+            },
+
+            format: {
+                dimension: "meContent.seCoverage.coverageTime",
+                output: "time"
             }
         },
 
@@ -137,10 +105,14 @@ define(function () {
             },
             template: {
                 title: "Gender"
+            },
+
+            format: {
+                output: "codes"
             }
         },
 
-        specialCondition: {
+        special_condition: {
 
             cl: {
                 uid: "GIFT_SpecialConditions_filter"
@@ -157,17 +129,26 @@ define(function () {
             },
 
             dependencies: {
-                "@gender,age": [
+                "@gender,age_year": [
                     {
                         id: "disableSpecialCondition",
                         event: "select",
                         args: {
-                            payloadIncludes : ["gender", "age", "ageGranularity"],
-                            forbiddenGender : "1",
-                            forbiddenAgeGranularity : "month",
-                            threshold: 15
+                            payloadIncludes: ["gender", "age_year", "ageGranularity"],
+                            forbiddenGender: "1",
+                            forbiddenAgeGranularity: "month",
+                            threshold: 14
                         }
-                    }]
+                    }
+                ]
+            },
+
+            constraints: {
+                presence: {message: "Please select at least one value."}
+            },
+
+            format: {
+                output: "codes"
             }
         },
 
@@ -195,7 +176,7 @@ define(function () {
                 config: {
                     min: 0,
                     max: 120,
-                    step : 0.5,
+                    step: 0.5,
                     from: 0,
                     to: 120,
                     type: "double",
@@ -212,11 +193,15 @@ define(function () {
             },
 
             dependencies: {
-                ageGranularity : [{id : "updateAge", event : "select"}]
+                ageGranularity: [{id: "updateAge", event: "select"}]
+            },
+
+            format: {
+                output: "number"
             }
         },
 
-        food: {
+        foodex2_code: {
 
             cl: {
                 uid: "GIFT_Foods",
@@ -225,7 +210,7 @@ define(function () {
 
             selector: {
                 id: "tree",
-                hideSummary : true
+                hideSummary: true
             },
             template: {
                 title: "Food"
