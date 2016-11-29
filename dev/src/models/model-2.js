@@ -1,222 +1,41 @@
 define(function () {
 
     return {
-
-        country: {
-            cl: {
-                uid: "GAUL0",
-                version: "2014"
-            },
-            selector: {
-                id: "tree",
-                hideSummary: true
-            },
-
-            template: {
-                title: "Country"
-            },
-            format: {
-                dimension: "meContent.seCoverage.coverageGeographic",
-                output: "code"
-            }
+        "DIMENSION0": {
+            "selector": {"config": {}, "id": "tree", "from": 1970, "to": 2017, "hideSummary": true},
+            "format": {"output": "time", "dimension": "DIMENSION0"},
+            "template": {"title": "Year", "hideSwitch": true}
         },
-
-        time: {
-
-            selector: {
-                id: "range",
-                config: {
-                    min: 1983,
-                    max: new Date().getFullYear(),
-                    type: "double",
-                    grid: true,
-                    force_edges: true,
-                    prettify: function (num) {
-                        return num;
-                    }
-                }
-            },
-            template: {
-                title: "Time"
-            },
-
-            dependencies: {
-                country: [{id: "test", event: "select"}]
-            },
-
-            format: {
-                dimension: "meContent.seCoverage.coverageTime",
-                output: "time"
-            }
+        "DIMENSION1": {
+            "distinct": {"uid": "D3S_3282308509609665355720826198320839709", "columnId": "DIMENSION1"},
+            "selector": {"id": "tree", "hideSummary": true},
+            "format": {"output": "code", "dimension": "DIMENSION1"},
+            "template": {"title": "Indicator", "hideSwitch": true}
         },
-
-        referenceArea: {
-
-            cl: {
-                uid: "GIFT_ReferenceArea_filter"
-            },
-
-            selector: {
-                id: "input",
-                type: "radio",
-                source: [
-                    {label: "All", value: "none"}
-                ],
-                default: ["none"]
-            },
-            template: {
-                title: "Reference Area"
-            }
+        "DIMENSION2": {
+            "distinct": {"uid": "D3S_3282308509609665355720826198320839709", "columnId": "DIMENSION2"},
+            "selector": {"id": "tree", "hideSummary": true},
+            "format": {"output": "code", "dimension": "DIMENSION2"},
+            "template": {"title": "Administrative level 1", "hideSwitch": true}
         },
-
-        coverageSector: {
-
-            cl: {
-                uid: "GIFT_CoverageSector_filter"
-            },
-
-            selector: {
-                id: "input",
-                type: "radio",
-                source: [
-                    {label: "All", value: "none"}
-                ],
-                default: ["none"]
-
-            },
-            template: {
-                title: "Coverage Sector"
-            }
+        "DIMENSION3": {
+            "distinct": {"uid": "D3S_3282308509609665355720826198320839709", "columnId": "DIMENSION3"},
+            "selector": {"id": "tree", "hideSummary": true},
+            "format": {"output": "code", "dimension": "DIMENSION3"},
+            "template": {"title": "Product", "hideSwitch": true}
         },
-
-        gender: {
-
-            cl: {
-                uid: "GIFT_Gender_filter"
-            },
-
-            selector: {
-                id: "input",
-                type: "radio",
-                source: [
-                    {label: "All", value: "none"}
-                ],
-                default: ["none"]
-            },
-            template: {
-                title: "Gender"
-            },
-
-            format: {
-                output: "codes"
-            }
+        "OTHER0": {
+            "distinct": {"uid": "D3S_3282308509609665355720826198320839709", "columnId": "OTHER0"},
+            "selector": {"id": "tree", "hideSummary": true},
+            "format": {"output": "code", "dimension": "OTHER0"},
+            "template": {"title": "Flag", "hideSwitch": true}
         },
-
-        special_condition: {
-
-            cl: {
-                uid: "GIFT_SpecialConditions_filter"
-            },
-
-            selector: {
-                id: "input",
-                type: "checkbox",
-                default: ["1", "2", "3", "4"]
-            },
-
-            template: {
-                title: "Special Condition"
-            },
-
-            dependencies: {
-                "@gender,age_year": [
-                    {
-                        id: "disableSpecialCondition",
-                        event: "select",
-                        args: {
-                            payloadIncludes: ["gender", "age_year", "ageGranularity"],
-                            forbiddenGender: "1",
-                            forbiddenAgeGranularity: "month",
-                            threshold: 14
-                        }
-                    }
-                ]
-            },
-
-            constraints: {
-                presence: {message: "Please select at least one value."}
-            },
-
-            format: {
-                output: "codes"
-            }
-        },
-
-        ageGranularity: {
-
-            selector: {
-                id: "input",
-                type: "radio",
-                source: [
-                    {label: "Year", value: "year"},
-                    {label: "Month", value: "month"}
-                ],
-                default: ["year"]
-            },
-
-            template: {
-                title: "Age Granularity"
-            }
-        },
-
-        age: {
-
-            selector: {
-                id: "range",
-                config: {
-                    min: 0,
-                    max: 120,
-                    step: 0.5,
-                    from: 0,
-                    to: 120,
-                    type: "double",
-                    grid: true,
-                    force_edges: true,
-                    prettify: function (num) {
-                        return num;
-                    }
-                }
-            },
-
-            template: {
-                title: "Age"
-            },
-
-            dependencies: {
-                ageGranularity: [{id: "updateAge", event: "select"}]
-            },
-
-            format: {
-                output: "number"
-            }
-        },
-
-        foodex2_code: {
-
-            cl: {
-                uid: "GIFT_Foods",
-                level: 2
-            },
-
-            selector: {
-                id: "tree",
-                hideSummary: true
-            },
-            template: {
-                title: "Food"
-            }
+        "OTHER1": {
+            "distinct": {"uid": "D3S_3282308509609665355720826198320839709", "columnId": "OTHER1"},
+            "selector": {"id": "tree", "hideSummary": true},
+            "format": {"output": "code", "dimension": "OTHER1"},
+            "template": {"title": "Unit", "hideSwitch": true}
         }
-
     }
 
 });

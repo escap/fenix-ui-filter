@@ -818,22 +818,6 @@ define([
 
                 var data = [];
 
-                if (!result) {
-                    log.error("Code List loaded returned empty! id: " + key);
-                    log.warn('Add placeholder code list');
-
-                    var title = {};
-                    title[self.lang.toUpperCase()] = "EMPTY_CODE_LIST :'(";
-
-                    data.push({
-                        code: "fake_code",
-                        leaf: true,
-                        level: 1,
-                        rid: "fake_rid",
-                        title: title
-                    });
-                }
-
                 if (!Array.isArray(result)) {
 
                     _.each(result, function (obj, key) {

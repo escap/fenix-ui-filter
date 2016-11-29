@@ -70,7 +70,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('silent');
+        log.setLevel('trace');
 
         this.start();
 
@@ -81,7 +81,6 @@ define([
         log.trace("Dev started");
 
         this._render();
-
 
     };
 
@@ -237,9 +236,7 @@ define([
             console.log(filter.dispose())
         })
 
-
-    }
-    ;
+    };
 
     Dev.prototype._createConfiguration = function () {
 
