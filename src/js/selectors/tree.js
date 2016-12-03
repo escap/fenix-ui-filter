@@ -79,6 +79,17 @@ define([
     };
 
     /**
+     * printDefaultSelection
+     * Mandatory method
+     */
+    Tree.prototype.printDefaultSelection = function () {
+
+        this.printDefaultSelection();
+
+        log.info("Selector printDefaultSelection successfully");
+    };
+
+    /**
      * Disposition method
      * Mandatory method
      */

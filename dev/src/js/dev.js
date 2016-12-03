@@ -229,7 +229,7 @@ define([
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.getValues())
+            console.log(filter.printDefaultSelection())
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {

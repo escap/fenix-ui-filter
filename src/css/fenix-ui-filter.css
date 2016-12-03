@@ -5657,7 +5657,7 @@ input[type="radio"]:disabled + label {
   -ms-border-radius: 3px;
   border-radius: 3px; }
 
-[data-group] ul {
+[data-sortable-group] ul.filter-sortable-list {
   min-height: 50px;
   padding: 6px 12px;
   -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.075);
@@ -5671,11 +5671,15 @@ input[type="radio"]:disabled + label {
   background-image: none;
   border: 1px solid #d8d8d8; }
 
-.group-item {
-  border: 1px solid #ccc;
-  padding: 15px;
-  background-color: white;
+.fx-group-item {
+  padding: 0 15px;
   margin-bottom: 20px; }
+
+.fx-boxed {
+  border: 1px solid #ccc; }
+
+[data-group] {
+  padding: 0 15px; }
 
 [data-group] .controller {
   opacity: 1; }

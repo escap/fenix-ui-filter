@@ -58,6 +58,30 @@ define([
     };
 
     /**
+     * Enable selector
+     * Mandatory method
+     */
+    Textarea.prototype.enableReadOnly = function () {
+
+        this.$textarea.attr('readonly', true);
+
+        log.info("Selector read only enabled : " + this.id);
+
+    };
+
+    /**
+     * Enable selector
+     * Mandatory method
+     */
+    Textarea.prototype.disableReadOnly = function () {
+
+        this.$textarea.attr('readonly', false);
+
+        log.info("Selector read only disabled : " + this.id);
+
+    };
+
+    /**
      * Reset method
      * Mandatory method
      */

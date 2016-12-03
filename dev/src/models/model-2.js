@@ -2,84 +2,62 @@ define(function () {
 
     return {
 
-        "coverageTime": {
-            classNames: "row",
-            "template": {
-                "title": "Data collection period",
-                "description": "Select the date on which data collection started and ended for this survey",
-                "footer": "Select the date on which data collection started and ended for this survey",
-            },
-            "format": {
-                "output": "period"
-            },
+        contact: {
+
+            //incremental: true,
+
             selectors: {
-                from: {
-                    template : { title: "To" },
-                    classNames: "col-xs-6",
-                    selector: {
-                        id: "time"
+
+                role: {
+
+                    template: {
+                        title: "This is the title",
+                        description: "This is the description",
+                        footer: "This is the footer"
                     },
-                    "constraints": {"presence": true}
+
+                    enumeration: {
+                        uid: "ResponsiblePartyRole"
+                    },
+
+                    selector: {
+                        id: "tree",
+                        config: {
+                            maxItems: 1
+                        }
+                    },
+
+                    format: {
+                        output: "label"
+                    }
 
                 },
-                to: {
-                    template : { title: "to" },
-                    classNames: "col-xs-6",
+
+                specify: {
+
                     selector: {
-                        id: "time"
+                        id: "textarea",
+                        source: [{"value": "specify", "label": "Specify"}],
+                        config: {
+                            readonly: true
+                        }
+
                     },
-                    "constraints": {"presence": true}
-                }
-            }
 
-        },
+                    format: {
+                        output: "label"
+                    },
 
-        role: {
+                    dependencies: {
+                        role: [{id: "readOnlyIfNotValue", event: "select", args: {value: "other"}}]
+                    }
 
-            template : {
-                title : "This is the title",
-                description : "This is the description",
-                footer : "This is the footer"
-            },
-
-            enumeration: {
-                uid: "ResponsiblePartyRole"
-            },
-
-            selector: {
-                id: "dropdown",
-                config: {
-                    maxItems: 1
                 }
             },
 
-            format: {
-                output: "label"
+            template: {
+                title: "Title"
             }
-
-        },
-
-        specify: {
-
-            selector: {
-                id: "input",
-                type: "text",
-                source: [{"value": "specify", "label": "Specify"}],
-                config: {
-                    readonly: true
-                }
-
-            },
-
-            format: {
-                output: "label"
-            },
-
-            dependencies: {
-                role: [{id: "readOnlyIfNotValue", event: "select", args: {value: "other"}}]
-            }
-
         }
     }
-
 });

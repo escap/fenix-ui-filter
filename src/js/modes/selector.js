@@ -22,7 +22,7 @@ define([
 
     function Selector(obj) {
 
-        $.extend(true, this, C, {initial: obj || {}, $el: $(obj.el)});
+        $.extend(true, this, C, {initial: obj || {}, $filterEl: $(obj.el)});
 
         this._initVariables();
 
@@ -30,6 +30,20 @@ define([
 
         return this;
     }
+
+    /**
+     * disposition
+     * @return {Object}
+     */
+    Selector.prototype.printDefaultSelection = function () {
+
+        _.each(this.selectors, _.bind(function (obj) {
+
+            obj.instance.printDefaultSelection();
+
+        }, this));
+
+    };
 
     /**
      * disposition
@@ -664,13 +678,13 @@ define([
 
     Selector.prototype._attach = function () {
 
-        this._getSelectorContainer(this.id);
+        this.$el = this._getSelectorContainer(this.id);
 
     };
 
     Selector.prototype._getSelectorContainer = function (id) {
 
-        var $cont = this.$el.find('[data-selector="' + id + '"]'),
+        var $cont = this.$filterEl.find('[data-selector="' + id + '"]'),
             conf = this;
 
         if ($cont.length === 0) {
@@ -679,9 +693,9 @@ define([
             $cont = $("<div data-selector='" + id + "'  class='" + (conf.classNames || '') + "'></div>");
 
             if (this.direction === "append") {
-                this.$el.append($cont);
+                this.$filterEl.append($cont);
             } else {
-                this.$el.prepend($cont);
+                this.$filterEl.prepend($cont);
             }
 
         } else {

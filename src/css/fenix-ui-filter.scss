@@ -610,7 +610,7 @@ $controller-elements-background: #bdbdbd;
 
 }
 
-[data-group] ul {
+[data-sortable-group] ul.filter-sortable-list {
   //position: relative;
   min-height: 50px;
   //border:1px solid $superlight-gray
@@ -622,14 +622,21 @@ $controller-elements-background: #bdbdbd;
   border: 1px solid $fenix-hr;
 }
 
-.group-item{
-  border: 1px solid #ccc;
-  padding: 15px;
-  background-color: white;
+.fx-group-item{
+  padding: 0 15px;
   margin-bottom: 20px;
 }
 
-[data-group="contacts"] .controller{
+.fx-boxed {
+  border: 1px solid #ccc;
+}
+
+[data-group]{
+  padding: 0 15px;
+
+}
+
+[data-group] .controller{
   opacity: 1;
 }
 

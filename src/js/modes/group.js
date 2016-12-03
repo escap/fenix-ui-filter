@@ -22,7 +22,7 @@ define([
 
     function Group(obj) {
 
-        $.extend(true, this, C, {initial: obj || {}, $el: $(obj.el)});
+        $.extend(true, this, C, {initial: obj || {}, $filterEl: $(obj.el)});
 
         this._initVariables();
 
@@ -56,6 +56,25 @@ define([
         this._destroyDependencies();
 
         this.$el.remove();
+    };
+
+    /**
+     * reset
+     * @return {Object}
+     */
+    Group.prototype.printDefaultSelection = function () {
+
+        _.each(this.groups, _.bind(function (group) {
+
+            _.each(group, function(sel, id) {
+
+                if (sel && sel.instance && typeof sel.instance.printDefaultSelection === "function") {
+                    sel.instance.printDefaultSelection();
+                }
+
+            });
+
+        }, this));
     };
 
     /**
@@ -160,9 +179,6 @@ define([
     Group.prototype.setSource = function (values) {
 
         console.log("TODO setSource()");
-
-        return;
-
     };
 
 
@@ -226,9 +242,6 @@ define([
     Group.prototype.unsetValue = function (values) {
 
         console.log("TODO unsetValue()");
-
-        return;
-
 
     };
 
@@ -366,7 +379,7 @@ define([
 
     Group.prototype._attach = function () {
 
-        this._getGroupContainer(this.id);
+        this.$el = this._getGroupContainer(this.id);
 
         this._bindEventListeners();
 
@@ -374,7 +387,7 @@ define([
 
     Group.prototype._getGroupContainer = function (id) {
 
-        var $cont = this.$el.find('[data-group="' + id + '"]'),
+        var $cont = this.$filterEl.find('[data-group="' + id + '"]'),
             conf = this,
             model;
 
@@ -390,9 +403,9 @@ define([
             $cont = $(templateGroup(model));
 
             if (this.direction === "append") {
-                this.$el.append($cont);
+                this.$filterEl.append($cont);
             } else {
-                this.$el.prepend($cont);
+                this.$filterEl.prepend($cont);
             }
 
         }
@@ -405,7 +418,7 @@ define([
 
         var conf = $.extend(true, {
                 id: id,
-                classNames: this.incremental ? "group-item" : "", // Nicola: guarda qua
+                classNames: this.incremental ? "fx-group-item fx-boxed" : "fx-group-item",
                 incremental: this.incremental,
                 hideHeader: !this.incremental,
                 hideRemoveButton: !this.incremental,
