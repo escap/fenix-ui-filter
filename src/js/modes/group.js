@@ -406,6 +406,7 @@ define([
         var conf = $.extend(true, {
                 id: id,
                 incremental: this.incremental,
+                hideHeader: !this.incremental,
                 hideRemoveButton: !this.incremental,
                 hideSwitch: !this.incremental ? true : this.template.hideSwitch
             }, i18nLabels[this.lang]),

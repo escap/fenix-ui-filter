@@ -2,6 +2,37 @@ define(function () {
 
     return {
 
+        "coverageTime": {
+            classNames: "row",
+            "template": {
+                "title": "Data collection period",
+                "description": "Select the date on which data collection started and ended for this survey",
+            },
+            "format": {
+                "output": "period"
+            },
+            selectors: {
+                from: {
+                    template : { title: "from" },
+                    classNames: "col-xs-6",
+                    selector: {
+                        id: "time"
+                    },
+                    "constraints": {"presence": true}
+
+                },
+                to: {
+                    template : { title: "to" },
+                    classNames: "col-xs-6",
+                    selector: {
+                        id: "time"
+                    },
+                    "constraints": {"presence": true}
+                }
+            }
+
+        },
+
         role: {
 
             template : {
