@@ -622,3 +622,15 @@ $controller-elements-background: #bdbdbd;
   border: 1px solid $fenix-hr;
 }
 
+.group-item{
+  border: 1px solid #ccc;
+  padding: 15px;
+  background-color: white;
+  margin-bottom: 20px;
+}
+
+[data-group="contacts"] .controller{
+  opacity: 1;
+}
+
+

@@ -405,6 +405,7 @@ define([
 
         var conf = $.extend(true, {
                 id: id,
+                classNames: this.incremental ? "group-item" : "",
                 incremental: this.incremental,
                 hideHeader: !this.incremental,
                 hideRemoveButton: !this.incremental,

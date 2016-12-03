@@ -7,13 +7,14 @@ define(function () {
             "template": {
                 "title": "Data collection period",
                 "description": "Select the date on which data collection started and ended for this survey",
+                "footer": "Select the date on which data collection started and ended for this survey",
             },
             "format": {
                 "output": "period"
             },
             selectors: {
                 from: {
-                    template : { title: "from" },
+                    template : { title: "To" },
                     classNames: "col-xs-6",
                     selector: {
                         id: "time"

@@ -5671,4 +5671,13 @@ input[type="radio"]:disabled + label {
   background-image: none;
   border: 1px solid #d8d8d8; }
 
+.group-item {
+  border: 1px solid #ccc;
+  padding: 15px;
+  background-color: white;
+  margin-bottom: 20px; }
+
+[data-group] .controller {
+  opacity: 1; }
+
 /*# sourceMappingURL=fenix-ui-filter.css.map */
