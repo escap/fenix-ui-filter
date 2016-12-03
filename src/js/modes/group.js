@@ -405,7 +405,7 @@ define([
 
         var conf = $.extend(true, {
                 id: id,
-                classNames: this.incremental ? "group-item" : "",
+                classNames: this.incremental ? "group-item" : "", // Nicola: guarda qua
                 incremental: this.incremental,
                 hideHeader: !this.incremental,
                 hideRemoveButton: !this.incremental,

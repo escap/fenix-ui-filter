@@ -37,11 +37,8 @@ define([
         $.extend(true, this, defaultOptions, o, {$el: $(o.el)});
 
         this._renderTemplate();
-
         this._initVariables();
-
         this._renderDropdown();
-
         this._bindEventListeners();
 
         //force async execution
