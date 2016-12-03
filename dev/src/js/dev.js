@@ -70,7 +70,7 @@ define([
         console.clear();
 
         //trace, debug, info, warn, error, silent
-        log.setLevel('trace');
+        log.setLevel('silent');
 
         this.start();
 
@@ -229,7 +229,7 @@ define([
         });
 
         $(s.AMIS_BTN).on("click", function () {
-            console.log(filter.getValues("fenix"))
+            console.log(filter.getValues())
         });
 
         $(s.AMIS_REMOVE_BTN).on("click", function () {

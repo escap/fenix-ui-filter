@@ -609,9 +609,12 @@ define([
 
     Selector.prototype._renderSelector = function (obj) {
 
+        var $container = this._getSelectorContainer(obj.id),
+            $el = $container.find("[data-el]").length > 0 ? $container.find("[data-el]") : $container;
+
         var Plugin = this._getSelector(),
             model = $.extend(true, obj, {
-                el: this._getSelectorContainer(obj.id),
+                el: $el,
                 controller: this,
                 cl: this.cl,
                 selector: {
@@ -707,7 +710,7 @@ define([
             }
         });
 
-        $html = $(templateSelector($.extend(true, /*{classNames: classNames}, */  conf)));
+        $html = $(templateSelector($.extend(true, {}, conf)));
 
         return $html;
     };
@@ -882,8 +885,8 @@ define([
             case "distinct" :
                 promise = this.bridge.getColumnDistinctValues({
                     uid: body.uid,
-                    version : body.version,
-                    columnId : body.columnId
+                    version: body.version,
+                    columnId: body.columnId
                 });
 
                 break;
